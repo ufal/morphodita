@@ -1,0 +1,15 @@
+.objs/
+benchmark_dictionary
+create_classes
+csts
+encode_dictionary
+libmorphodita.a
+libmorphodita.dyn.a
+libmorphodita.so
+morpho_accuracy
+remap_tags
+run_morpho
+run_tagger
+test_dictionary
+tagger_accuracy
+train_tagger

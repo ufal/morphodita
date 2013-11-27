@@ -1,0 +1,42 @@
+# platform settings
+ifdef WIN
+  exe = $(foreach f,$(1),$(f).exe)
+  lib = $(foreach f,$(1),$(f).a)
+  dynlib = $(foreach f,$(1),$(f).dll)
+  DYN_C_FLAGS += -DBUILDING_DLL
+  DYN_LD_FLAGS += -Wl,--out-implib,$(call lib,$@)
+else
+  exe = $(foreach f,$(1),$(f))
+  lib = $(foreach f,$(1),$(f).a)
+  dynlib = $(foreach f,$(1),$(f).so)
+  DYN_C_FLAGS += -fPIC
+endif
+
+# switches
+C_FLAGS += -std=c++11 -W -Wall -mtune=generic -I. -fvisibility=hidden
+LD_FLAGS += -static-libgcc -static-libstdc++
+ifdef DEBUG
+  C_FLAGS += -ggdb -DDEBUG -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
+else ifdef PROFILE
+  C_FLAGS += -O3 -ggdb -pg
+  LD_FLAGS += -pg
+else ifdef RELEASE
+  C_FLAGS += -O3 -DNDEBUG -flto
+  LD_FLAGS += -s
+else
+  C_FLAGS += -O3
+  LD_FLAGS += -s
+endif
+
+ifdef 32BIT
+  C_FLAGS += -m32 -march=i686
+  LD_FLAGS += -m32
+endif
+
+ifdef 64BIT
+  C_FLAGS += -m64
+  LD_FLAGS += -m64
+endif
+
+DYN_C_FLAGS += $(C_FLAGS)
+DYN_LD_FLAGS += -shared $(LD_FLAGS)
