@@ -23,7 +23,7 @@ One may wish to use either a larger, more precise, but slower model; or a more l
 : ``czech_<version>_fast.tagger``
   Faster tagger with slightly worse results (Viterbi of order 2). Reaches 94.45% tag accuracy, 97.66% lemma accuracy, 93.96% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~50k words/s.
 
-: ``czech_<version>_lemmatizer.tagger``
+: ``czech_<version>.lemmatizer``
   Very fast tagger using only first two tag positions. Can be used as a lemmatizator. Reaches 99.18% tag accuracy, 97.64% lemma accuracy, 97.59% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~200k words/s.
 
 
