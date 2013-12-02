@@ -70,7 +70,9 @@ těší
 
 An example of MorphoDiTa tagger running on commandline:
 
-``cat sample_tagger_input.txt | ./run_tagger tagger_model_best_accuracy``
+```
+cat sample_tagger_input.txt | ./run_tagger czech.best_accuracy_tagger
+```
 
 An example of MorphoDiTa tagger output:
 
@@ -95,6 +97,6 @@ Open the morpho dictionary and allow analysis and generation.
 
 Read from standard input, command on a line. If there is no space on a line, perform analysis on the given word. If there is one space on a line, perform generation on the word given at the beginning of the line, with the tag specified. If there is no tag specified (for example "pes "), generate all forms. MorphoDiTa assumes UTF-8 inputs.
 
-An example of MorphoDiTa dictionary running on Linux commandline:
+An example of MorphoDiTa dictionary running on commandline:
 
 ``run_dict czech.dict``
