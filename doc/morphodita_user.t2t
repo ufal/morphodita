@@ -17,13 +17,13 @@ Like any supervised machine learning tool, MorphoDiTa needs a trained linguistic
 
 One may wish to use either a larger, more precise, but slower model; or a more light-weight, faster, but less accurate model. The parameters of the two models distributed with MorphoDiTa are as follows:
 
-: ``czech_<version>.best_accuracy_tagger``
+: ``czech-<version>.tagger-best_accuracy``
   Best and slowest tagger (Viterbi of order 3). Reaches 95.44% tag accuracy, 97.80% lemma accuracy, 94.66% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] etest data. Speed: ~10k words/s.
 
-: ``czech_<version>.fast_tagger``
+: ``czech-<version>.tagger-fast``
   Faster tagger with slightly worse results (Viterbi of order 2). Reaches 94.45% tag accuracy, 97.66% lemma accuracy, 93.96% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~50k words/s.
 
-: ``czech_<version>.lemmatizer``
+: ``czech-<version>.lemmatizer``
   Very fast tagger using only first two tag positions. Can be used as a lemmatizator. Reaches 99.18% tag accuracy, 97.64% lemma accuracy, 97.59% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~200k words/s.
 
 
@@ -33,11 +33,11 @@ Please make sure you are using the linguistic models in a version corresponding 
 
 MorphoDiTa is distributed with two Czech morphologic dictionaries:
 
-: ``czech_<version>.dict``
-  Jan Hajič's ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]) morpho dictionary used by ``czech_<version>_best_accuracy.tagger`` and ``czech_<version>_fast.tagger``.
+: ``czech-<version>.dict``
+  Jan Hajič's ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]) morpho dictionary used by ``czech-<version>_best_accuracy.tagger`` and ``czech-<version>_fast.tagger``.
 
-: ``czech_<version>.lemmadict``
-  Jan Hajič ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]) morpho dictionary used by ``czech_<version>_lemmatizer.tagger``, using only first two tag positions.
+: ``czech-<version>.lemmadict``
+  Jan Hajič ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]) morpho dictionary used by ``czech-<version>_lemmatizer.tagger``, using only first two tag positions.
 
 
 ++ Segmentation and Tokenization ++
@@ -97,4 +97,4 @@ Read from standard input, command on a line. If there is no space on a line, per
 
 An example of MorphoDiTa dictionary running on Linux commandline:
 
-``run_dict czech_dict``
+``run_dict czech.dict``
