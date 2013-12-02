@@ -1,0 +1,100 @@
+MorphoDiTa User's Manual
+
+
+%!encoding: utf-8
+
+In a natural language text, the task of morphologic analysis is to assign for each token (word) in a sentence its lemma (cannonical form) and a part-of-speech tag (POS tag). This is usually achieved in two steps: a morphologic dictionary looks up all possible lemmas and POS tags for each word, and subsequently, a morphologic tagger picks for each word the best lemma-POS tag candidate. The second task is called a disambiguation.
+
+MorphoDiTa also performs these two steps of morphologic analysis: It first outputs all possible pairs of lemma and POS tag for each token. In Czech, this procedure is based on a well-known Jan Hajič's morphologic dictionary ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]). Consequently, the optimal combination of lemmas and POS tags is selected for the words in a sentence using an algorithm described in [Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
+
+++ Library ++
+
+MorphoDiTa is available as a C++ library with bindings for other languages. The source code is available under the [LGPL http://www.gnu.org/licenses/lgpl.html] license.
+
+++ Models ++
+
+Like any supervised machine learning tool, MorphoDiTa needs a trained linguistic model. Czech models trained on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] are distributed with the tool. The models are distributed under the [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
+
+One may wish to use either a larger, more precise, but slower model; or a more light-weight, faster, but less accurate model. The parameters of the two models distributed with MorphoDiTa are as follows:
+
+: ``czech_<version>_best_accuracy.tagger``
+  Best and slowest tagger (Viterbi of order 3). Reaches 95.44% tag accuracy, 97.80% lemma accuracy, 94.66% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] etest data. Speed: ~10k words/s.
+
+: ``czech_<version>_fast.tagger``
+  Faster tagger with slightly worse results (Viterbi of order 2). Reaches 94.45% tag accuracy, 97.66% lemma accuracy, 93.96% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~50k words/s.
+
+: ``czech_<version>_lemmatizer.tagger``
+  Very fast tagger using only first two tag positions. Can be used as a lemmatizator. Reaches 99.18% tag accuracy, 97.64% lemma accuracy, 97.59% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~200k words/s.
+
+
+Please make sure you are using the linguistic models in a version corresponding to your MorphoDiTa release. The best way to assure this is to use the most current MorphoDiTa release with the most current model release.
+
+++ Dictionaries ++
+
+MorphoDiTa is distributed with two Czech morphologic dictionaries:
+
+: ``czech_<version>.dict``
+  Jan Hajič's ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]) morpho dictionary used by ``czech_<version>_best_accuracy.tagger`` and ``czech_<version>_fast.tagger``.
+
+: ``czech_<version>.lemmadict``
+  Jan Hajič ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]) morpho dictionary used by ``czech_<version>_lemmatizer.tagger``, using only first two tag positions.
+
+
+++ Segmentation and Tokenization ++
+
+In beta version, the MorphoDiTa tagger accepts segmented and tokenized data in raw text as an input (the input format is described in the Tagger section). As our further work, we plan to include (optional) segmenter and tokenizer in MorphoDiTa.
+
+++ Tagger ++
+
+Probably the most common usage of MorphoDita is running a tagger to tag your data.
+
+``run_tagger tagger_model``
+
+Run the tagger with a model given as the first argument. Read from standard input, word on a line, empty line being end of sentence. Output to standard output, each line is a tab separated lemma-tag pair. MorphoDiTa assumes UTF-8 inputs.
+
+An example of input data ``sample_tagger_input.txt``:
+
+```
+Děti
+pojedou
+k
+babičce
+.
+
+Už
+se
+těší
+.
+
+```
+
+An example of MorphoDiTa tagger running on commandline:
+
+``cat sample_tagger_input.txt | ./run_tagger tagger_model_best_accuracy``
+
+An example of MorphoDiTa tagger output:
+
+```
+dítě    NNFP1-----A----
+jet-1_^(pohybovat_se,_ne_však_chůzí)    VB-P---3F-AA---
+k-1     RR--3----------
+babička NNFS3-----A----
+.       Z:-------------
+
+už-1    Db-------------
+se_^(zvr._zájmeno/částice)      P7-X4----------
+těšit_:T        VB-S---3P-AA---
+.       Z:-------------
+```
+
+++ Morphologic Dictionary Commandline Interface ++
+
+``run_dict morpho_dictionary``
+
+Open the morpho dictionary and allow analysis and generation.
+
+Read from standard input, command on a line. If there is no space on a line, perform analysis on the given word. If there is one space on a line, perform generation on the word given at the beginning of the line, with the tag specified. If there is no tag specified (for example "pes "), generate all forms. MorphoDiTa assumes UTF-8 inputs.
+
+An example of MorphoDiTa dictionary running on Linux commandline:
+
+``run_dict czech_dict``

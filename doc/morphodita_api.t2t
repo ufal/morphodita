@@ -1,0 +1,181 @@
+MorphoDiTa API
+
+
+%!encoding: utf-8
+
+The MorphoDiTa API is defined in header ``morphodita.h``. All API functions
+reside in ``ufal::morphodita`` namespace. The easiest way to use MorphoDita
+is therefore:
+
+```
+#include morphodita.h
+
+using namespace ufal::morphodita;
+```
+
+++ Encoding ++
+
+The strings used in the MorphoDiTa API are always UTF-8 encoded.
+
+++ Tagger API ++
+
+The main access to MorphoDiTa tagger is through class ``tagger``.  An example
+of this class usage can be found in program file ``run_tagger.cpp``. A typical
+tagger usage may look like this:
+
+```
+#include tagger/tagger.h;
+
+using namespace ufal::morphodita;
+
+//...
+
+// load model to memory and construct tagger
+tagger* my_tagger = tagger::load("path_to_model");
+
+if (!t) ...
+
+// create sample input
+vector<string> forms;
+forms.push_back("malý");
+forms.push_back("pes");
+
+vector<raw_form> raw_forms;
+for (auto& form : forms)
+  raw_forms.emplace_back(form.c_str(), form.size());
+
+// intialize output and tag
+vector<tagged_lemma> tags;
+my_tagger->tag(raw_forms, tags);
+
+// access to output
+for (auto& tag : tags)
+  printf("%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
+
+delete my_tagger;
+```
+
+The tagger is constructed by an overloaded factory method with one argument.
+The constructor either accepts a C file pointer (``FILE*``) pointing to a file
+with the model or a C string (``const char*``) with a file name of the model.
+The constructor loads the linguistic model to memory and returns the tagger
+pointer ready for tagging, returning ``NULL`` if unsuccessful. If a file
+pointer is used, it is not closed and is positioned right after the end of the
+model.
+
+The main tagging method is ``tagger::tag``:
+
+```
+virtual void tag(const vector<raw_form>& forms, vector<tagged_lemma>& tags) const = 0;
+```
+
+The input is a ``std::vector`` of ``raw_form`` which is a pair of ``const char*
+form`` and ``int form_len``.
+
+The ``tagger::tag`` method returns the tagged output in it's second argument,
+``vector<tagged_lemma>``. The calling procedure must provide a result vector
+and the tagger assigns the output to this vector. Obviously, the indexes in the
+output vector correspond to indexes in input vector.  ``tagged_lemma`` has two
+public members: ``std::string lemma`` and ``std:string tag``, corresponding to
+predicted lemma and tag, respectively.
+
+++ Morphologic Dictionary API ++
+
+The main access to MorphoDiTa morphologic dictionary is through class
+``morpho``. An example of this interface usage can be found in a program file
+`run_morpho.cpp``.
+
++++ Dictionary Construction +++
+
+Similarly to the tagger, MorphoDiTa morphologic dictionary is constructed by an
+overloaded factory method which accepts either a C file pointer (``FILE*``)
+or a C string ``const char*`` with the file name of the dictionary.
+The factory method returns a pointer to morphologic dictionary or ``NULL`` if
+unsuccessful.
+
+```
+#include morpho/morpho.h
+
+using namespace ufal::morphodita;
+
+//...
+
+// load dictionary to memory
+morpho* my_morpho = morpho::load("path_to_dictionary");
+
+//...
+
+delete(my_morpho);
+```
+
+Another way of obtaining a pointer to morphology dictionary is through an instance
+of ``tagger`` class -- every tagger has a morphology dictionary, which is available
+through the method
+
+```
+virtual const morpho* get_morpho() const = 0;
+```
+
+Please note that you should not delete this pointer as it is owned by the
+``tagger`` class instance.
+
++++ Morphologic Analysis +++
+
+MorphoDiTa morphologic dictionary offers two functionalities: It either
+//analyzes// the given word, that means it outputs all possible lemma-tag pairs
+candidates for the given form; or for a given lemma-tag pair, it //generates//
+a form or a whole list of possible forms.
+
+In the first case, one performs morphologic analysis for a given word by
+calling a method ``morpho::analyze``:
+
+```
+virtual int analyze(const char* form, int form_len, guesser_mode guesser, vector<tagged_lemma>& lemmas) const = 0;
+```
+
+An example (assuming that morphologic dictionary is already constructed, see
+previous example):
+
+```
+string my_string("pes");        // input
+vector<tagged_lemma> lemmas;    // output
+
+my_morpho->analyze(my_string.c_str(), my_string.size(), morpho::GUESSER, vector<tagged_lemma>& lemmas);
+
+for (auto& lemma: lemmas)
+  printf ("%s %s\n, lemma.lemma.c_str(), lemma.tag.c_str())
+```
+
+The input is a single token, C string (``const char*``), it's length, Guesser
+mode (whether to use some kind of guesser or strictly dictionary only, see
+question Guesser Mode in Questions and Answers) and output
+``std::vector<tagged_lemma>``.  The caller must provie an output
+vector ``std::vector<tagged_lemma>`` and the method ``morpho::analyze``
+assign the output to this vector.
+
++++ Generation +++
+
+For a given lemma and tag pair, MorphoDiTa can generate a corresponding form.
+Furthermore, for a given lemma, MorphoDiTa can generate all possible form-tag
+pairs. The corresponding methods are ``morpho::generate`` and ``morpho::generate_all``:
+
+```
+virtual int generate(const char* lemma, int lemma_len, const char* tag, guesser_mode guesser, std::string& form) const = 0;
+virtual int generate_all(const char* lemma, int lemma_len, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
+```
+
+Again, the last parameter is the output, which must be initialized empty by the
+caller and is filled by the method.
+
+++ API Questions and Answers ++
+
+: **What is a Guesser Mode?**
+  Morphologic analysis may try to guess the lemma and tag of an uknown word.
+  This option is turned on by ``morpho::GUESSER`` and off by
+  ``morpho::NO_GUESSER``.
+
+: **Why ``const char*`` and not ``std::string``? Why do I have to specify string lengths?**
+  We aim to make MorphoDiTa interface as effective as possible. Because the
+  input strings may be substrings of larger text or come from different than
+  C++ memory regions, we want to avoid the cost ``string`` conversion.
+  For C++ programmers, it is easy to use ``c_str()`` and ``size()``.

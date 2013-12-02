@@ -648,11 +648,11 @@ def getTags(config):
 	},
 	
 	'txt': {
-		'title1'               : '  \a'      ,
-		'title2'               : '\t\a'      ,
-		'title3'               : '\t\t\a'    ,
-		'title4'               : '\t\t\t\a'  ,
-		'title5'               : '\t\t\t\t\a',
+		'title1'               : '\a'        ,
+		'title2'               : '\a'        ,
+		'title3'               : '\a'        ,
+		'title4'               : '\a'        ,
+		'title5'               : '\a'        ,
 		'blockQuoteLine'       : '\t'        ,
 		'listItemOpen'         : '- '        ,
 		'numlistItemOpen'      : '\a. '      ,
@@ -898,7 +898,7 @@ def getTags(config):
 		'deflistOpenCompact'   : '\\begin{compactdesc}',
 		'deflistCloseCompact'  : '\\end{compactdesc}'  ,
 		'deflistItem1Open'     : '\\item['             ,
-		'deflistItem1Close'    : ']'                   ,
+		'deflistItem1Close'    : ']~\\\\'              ,
 		'bar1'                 : '\\hrulefill{}'       ,
 		'bar2'                 : '\\rule{\linewidth}{1mm}',
 		'url'                  : '\\htmladdnormallink{\a}{\a}',
@@ -3320,7 +3320,7 @@ class TitleMaster:
 				i = len(full_title.decode('utf-8'))
 			else:
 				i = len(full_title)
-			ret.append(regex['x'].sub('='*i, self.tag))
+			ret.append(regex['x'].sub(('=' if self.level == 1 else '-')*i, self.tag))
 		elif TARGET == 'art' and self.level == 1:
 			if CONF['slides'] :
 				AA_TITLE = tagged
@@ -4335,7 +4335,7 @@ def toc_formatter(toc, config):
 		if rules['autotocwithbars']:           # TOC between bars
 			para = TAGS['paragraphOpen']+TAGS['paragraphClose']
 			bar  = regex['x'].sub('-' * DFT_TEXT_WIDTH, TAGS['bar1'])
-			tocbar = [para, bar, para]
+			tocbar = [para, bar, para] if config['target'] != 'txt' else [bar]
 			if config['target'] == 'art' and config['headers']:
 				# exception: header already printed a bar
 				ret = [para] + ret + tocbar
