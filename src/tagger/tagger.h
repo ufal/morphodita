@@ -28,6 +28,7 @@ struct EXPORT_ATTRIBUTES raw_form {
   const char* form;
   int form_len;
 
+  raw_form() {}
   raw_form(const char* form, int form_len) : form(form), form_len(form_len) {}
 };
 

@@ -27,6 +27,7 @@ struct EXPORT_ATTRIBUTES tagged_form {
   string form;
   string tag;
 
+  tagged_form() {}
   tagged_form(const string& form, const string& tag) : form(form), tag(tag) {}
 };
 
@@ -34,6 +35,7 @@ struct EXPORT_ATTRIBUTES tagged_lemma {
   string lemma;
   string tag;
 
+  tagged_lemma() {}
   tagged_lemma(const string& lemma, const string& tag) : lemma(lemma), tag(tag) {}
 };
 
@@ -41,6 +43,7 @@ struct EXPORT_ATTRIBUTES tagged_lemma_forms {
   string lemma;
   vector<tagged_form> forms;
 
+  tagged_lemma_forms() {}
   tagged_lemma_forms(const string& lemma) : lemma(lemma) {}
 };
 

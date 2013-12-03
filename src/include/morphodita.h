@@ -37,6 +37,7 @@ struct MORPHODITA_IMPORT raw_form {
   const char* form;
   int form_len;
 
+  raw_form() {}
   raw_form(const char* form, int form_len) : form(form), form_len(form_len) {}
 };
 
@@ -44,6 +45,7 @@ struct MORPHODITA_IMPORT tagged_form {
   std::string form;
   std::string tag;
 
+  tagged_form() {}
   tagged_form(const std::string& form, const std::string& tag) : form(form), tag(tag) {}
 };
 
@@ -51,6 +53,7 @@ struct MORPHODITA_IMPORT tagged_lemma {
   std::string lemma;
   std::string tag;
 
+  tagged_lemma() {}
   tagged_lemma(const std::string& lemma, const std::string& tag) : lemma(lemma), tag(tag) {}
 };
 
@@ -58,6 +61,7 @@ struct MORPHODITA_IMPORT tagged_lemma_forms {
   std::string lemma;
   std::vector<tagged_form> forms;
 
+  tagged_lemma_forms() {}
   tagged_lemma_forms(const std::string& lemma) : lemma(lemma) {}
 };
 
