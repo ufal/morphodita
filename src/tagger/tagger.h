@@ -38,7 +38,11 @@ class EXPORT_ATTRIBUTES tagger {
   static tagger* load(FILE* f);
   static tagger* load(const char* fname);
 
+  // Return morpho associated with the tagger. Do not delete the pointer, it is
+  // owned by the tagger instance and deleted in the tagger destructor.
   virtual const morpho* get_morpho() const = 0;
+
+  // Perform morphologic analysis and subsequent disambiguation.
   virtual void tag(const vector<raw_form>& forms, vector<tagged_lemma>& tags) const = 0;
 };
 

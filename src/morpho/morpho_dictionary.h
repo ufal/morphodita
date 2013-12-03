@@ -34,8 +34,7 @@ class morpho_dictionary {
  public:
   void load(binary_decoder& data);
   void analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas) const;
-  void generate(const char* lemma, int lemma_len, const char* tag, string& form) const;
-  void generate_all(const char* lemma, int lemma_len, vector<tagged_lemma_forms>& lemmas_forms) const;
+  bool generate(const char* lemma, int lemma_len, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms) const;
  private:
   persistent_unordered_map lemmas, roots, suffixes;
 
@@ -192,65 +191,10 @@ void morpho_dictionary<LemmaAddinfo>::analyze(const char* form, int form_len, ve
 }
 
 template <class LemmaAddinfo>
-void morpho_dictionary<LemmaAddinfo>::generate(const char* lemma, int lemma_len, const char* wanted_tag, string& form) const {
-  enum { FULL_MATCH = 0, PARTIAL_MATCH = 1, ANY_MATCH = 2, MATCHES_TOTAL = 3 };
-  string candidates[MATCHES_TOTAL];
-
+bool morpho_dictionary<LemmaAddinfo>::generate(const char* lemma, int lemma_len, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms) const {
   LemmaAddinfo addinfo;
   int raw_lemma_len = addinfo.parse(lemma, lemma_len);
-
-  lemmas.iter(lemma, raw_lemma_len, [&](const char* raw_lemma_str, pointer_decoder& data) {
-    unsigned lemma_info_len = data.next_1B();
-    const auto* lemma_info = lemma_info_len ? data.next<unsigned char>(lemma_info_len) : nullptr;
-    unsigned lemma_roots_len = data.next_1B();
-    auto* lemma_roots_ptr = data.next<unsigned char>(lemma_roots_len * (sizeof(uint32_t) + sizeof(uint16_t)));
-
-    if (small_memeq(lemma, raw_lemma_str, raw_lemma_len) && addinfo.match_lemma_id(lemma_info, lemma_info_len)) {
-      string& candidate = candidates[addinfo.match_comments_full(lemma_info, lemma_info_len) ? FULL_MATCH :
-                                     addinfo.match_comments_partial(lemma_info, lemma_info_len) ? PARTIAL_MATCH : ANY_MATCH];
-
-      pointer_decoder lemma_roots(lemma_roots_ptr);
-      for (unsigned i = 0; i < lemma_roots_len; i++) {
-        unsigned root_encoded = lemma_roots.next_4B();
-        unsigned clas = lemma_roots.next_2B();
-
-        unsigned root_len = root_encoded & 0xFF;
-        const unsigned char* root_data = roots.data_start(root_len) + (root_encoded >> 8);
-        for (auto& suffix : classes[clas])
-          for (auto& tag : suffix.second)
-            if (tags[tag] == wanted_tag) {
-              string form; form.reserve(root_len + suffix.first.size());
-              form.append((const char*)root_data, root_len);
-              form.append(suffix.first);
-
-              if (candidate.empty())
-                candidate = form;
-              else if (candidate != form) {
-                // Choose whichever of candidate and form has longer common prefix
-                // with lemma, choose lexicographically smaller if equal.
-                int candidate_pref = 0;
-                while (candidate_pref < raw_lemma_len && candidate_pref < int(candidate.size()) && candidate[candidate_pref] == lemma[candidate_pref]) candidate_pref++;
-                int form_pref = 0;
-                while (form_pref < raw_lemma_len && form_pref < int(form.size()) && form[form_pref] == lemma[form_pref]) form_pref++;
-
-                if (form_pref > candidate_pref || (form_pref == candidate_pref && form < candidate))
-                  candidate = form;
-              }
-            }
-
-      }
-    }
-  });
-
-  form = !candidates[FULL_MATCH].empty() ? candidates[FULL_MATCH] :
-      !candidates[PARTIAL_MATCH].empty() ? candidates[PARTIAL_MATCH] :
-      candidates[ANY_MATCH];
-}
-
-template <class LemmaAddinfo>
-void morpho_dictionary<LemmaAddinfo>::generate_all(const char* lemma, int lemma_len, vector<tagged_lemma_forms>& lemmas_forms) const {
-  LemmaAddinfo addinfo;
-  int raw_lemma_len = addinfo.parse(lemma, lemma_len);
+  bool matched_lemma = false;
 
   lemmas.iter(lemma, raw_lemma_len, [&](const char* lemma_str, pointer_decoder& data) {
     unsigned lemma_info_len = data.next_1B();
@@ -259,9 +203,9 @@ void morpho_dictionary<LemmaAddinfo>::generate_all(const char* lemma, int lemma_
     auto* lemma_roots_ptr = data.next<unsigned char>(lemma_roots_len * (sizeof(uint32_t) + sizeof(uint16_t)));
 
     if (small_memeq(lemma, lemma_str, raw_lemma_len) && addinfo.match_lemma_id(lemma_info, lemma_info_len)) {
-      lemmas_forms.emplace_back(string(lemma, raw_lemma_len) + LemmaAddinfo::format(lemma_info, lemma_info_len));
-      auto& forms = lemmas_forms.back().forms;
+      matched_lemma = true;
 
+      vector<tagged_form>* forms = nullptr;
       pointer_decoder lemma_roots(lemma_roots_ptr);
       for (unsigned i = 0; i < lemma_roots_len; i++) {
         unsigned root_encoded = lemma_roots.next_4B();
@@ -269,15 +213,29 @@ void morpho_dictionary<LemmaAddinfo>::generate_all(const char* lemma, int lemma_
 
         unsigned root_len = root_encoded & 0xFF;
         const unsigned char* root_data = roots.data_start(root_len) + (root_encoded >> 8);
-        string root((const char*)root_data, root_len);
         for (auto& suffix : classes[clas]) {
-          string root_with_suffix = root + suffix.first;
+          string root_with_suffix;
           for (auto& tag : suffix.second)
-            forms.emplace_back(root_with_suffix, tags[tag]);
+            if (filter.matches(tags[tag].c_str())) {
+              if (!forms) {
+                lemmas_forms.emplace_back(string(lemma, raw_lemma_len) + LemmaAddinfo::format(lemma_info, lemma_info_len));
+                forms = &lemmas_forms.back().forms;
+              }
+
+              if (root_with_suffix.empty() && root_len + suffix.first.size()) {
+                root_with_suffix.reserve(root_len + suffix.first.size());
+                root_with_suffix.assign((const char*)root_data, root_len);
+                root_with_suffix.append(suffix.first);
+              }
+
+              forms->emplace_back(root_with_suffix, tags[tag]);
+            }
         }
       }
     }
   });
+
+  return matched_lemma;
 }
 
 } // namespace morphodita

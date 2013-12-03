@@ -33,30 +33,16 @@ tag_filter::tag_filter(const char* filter) {
 
       bool negate = false;
       if (*filter == '^') negate = true, filter++;
-      filters.emplace_back(tag_pos, negate);
 
-      for (bool first = true; *filter && (first || *filter != ']'); first = false, filter++)
-        filters.back().matches[(unsigned) *filter] = !negate;
+      const char* chars = filter;
+      for (bool first = true; *filter && (first || *filter != ']'); first = false) filter++;
+
+      filters.emplace_back(tag_pos, negate, chars, filter - chars);
+      if (!*filter) break;
     } else {
-      filters.emplace_back(tag_pos, false);
-      filters.back().matches[(unsigned) *filter] = true;
+      filters.emplace_back(tag_pos, false, filter, 1);
     }
   }
-}
-
-bool tag_filter::matches(const char* tag) const {
-  if (filters.empty()) return true;
-
-  int tag_pos = 0;
-  for (auto& filter : filters) {
-    while (tag_pos < filter.pos && tag[tag_pos]) tag_pos++;
-    if (!filter.matches[(unsigned) tag[tag_pos]]) return false;
-  }
-  return true;
-}
-
-tag_filter::char_filter::char_filter(int pos, bool def) : pos(pos) {
-  memset(matches, def, sizeof(matches));
 }
 
 } // namespace morphodita

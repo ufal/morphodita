@@ -32,8 +32,7 @@ namespace morphodita {
 class czech_morpho : public morpho {
  public:
   virtual int analyze(const char* form, int form_len, morpho::guesser_mode guesser, vector<tagged_lemma>& lemmas) const override;
-  virtual int generate(const char* lemma, int lemma_len, const char* tag, morpho::guesser_mode guesser, string& form) const override;
-  virtual int generate_all(const char* lemma, int lemma_len, morpho::guesser_mode guesser, vector<tagged_lemma_forms>& lemmas_forms) const override;
+  virtual int generate(const char* lemma, int lemma_len, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const;
   virtual int raw_lemma_len(const char* lemma, int lemma_len) const override;
   virtual int lemma_id_len(const char* lemma, int lemma_len) const override;
 

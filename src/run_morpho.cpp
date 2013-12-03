@@ -44,22 +44,14 @@ int main(int argc, char* argv[]) {
         printf("%sLemma: %s %s\n", guesser_name.c_str(), lemma.lemma.c_str(), lemma.tag.c_str());
 
     } else if /* generate */ (tokens.size() == 2) {
-      if (tokens[1].empty()) { //generate all
-        vector<tagged_lemma_forms> forms;
-        auto result = d->generate_all(tokens[0].c_str(), tokens[0].size(), morpho::GUESSER, forms);
+      vector<tagged_lemma_forms> forms;
+      auto result = d->generate(tokens[0].c_str(), tokens[0].size(), tokens[1].c_str(), morpho::GUESSER, forms);
 
-        string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
-        for (auto& lemma : forms) {
-          printf("%sLemma: %s\n", guesser_name.c_str(), lemma.lemma.c_str());
-          for (auto& form : lemma.forms)
-            printf("  %s %s\n", form.form.c_str(), form.tag.c_str());
-        }
-      } else { //generate given tag
-        string form;
-        auto result = d->generate(tokens[0].c_str(), tokens[0].size(), tokens[1].c_str(), morpho::GUESSER, form);
-
-        if (!form.empty())
-          printf("  %sForm: %s\n", result == morpho::GUESSER ? "Guesser " : "", form.c_str());
+      string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
+      for (auto& lemma : forms) {
+        printf("%sLemma: %s\n", guesser_name.c_str(), lemma.lemma.c_str());
+        for (auto& form : lemma.forms)
+          printf("  %s %s\n", form.form.c_str(), form.tag.c_str());
       }
     }
   }

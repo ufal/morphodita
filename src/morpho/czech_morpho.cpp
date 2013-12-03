@@ -24,6 +24,7 @@
 #include "morpho_dictionary.h"
 #include "morpho_prefix_guesser.h"
 #include "morpho_statistical_guesser.h"
+#include "tag_filter.h"
 #include "utils/compressor.h"
 #include "utils/utf8.h"
 
@@ -111,42 +112,29 @@ int czech_morpho::analyze(const char* form, int form_len, guesser_mode guesser, 
       });
       if (lemmas_end != lemmas.end()) lemmas.erase(lemmas_end, lemmas.end());
     }
+
+    if (!lemmas.empty()) return GUESSER;
   }
 
-  if (lemmas.empty())
-    lemmas.emplace_back(string(form, form_len), unknown_tag);
-
-  return guesser;
+  lemmas.emplace_back(string(form, form_len), unknown_tag);
+  return -1;
 }
 
-int czech_morpho::generate(const char* lemma, int lemma_len, const char* tag, guesser_mode guesser, string& form) const {
-  form.clear();
+int czech_morpho::generate(const char* lemma, int lemma_len, const char* tag_wildcard, ufal::morphodita::morpho::guesser_mode guesser, vector<ufal::morphodita::tagged_lemma_forms>& forms) const {
+  tag_filter filter(tag_wildcard);
 
-  if (lemma_len > 0) {
-    dictionary.generate(lemma, lemma_len, tag, form);
-    if (!form.empty()) return NO_GUESSER;
-
-    if (guesser == GUESSER && prefix_guesser)
-      prefix_guesser->generate(lemma, lemma_len, tag, form);
-  }
-
-  return guesser;
-}
-
-int czech_morpho::generate_all(const char* lemma, int lemma_len, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const {
   forms.clear();
-
   if (lemma_len > 0) {
-    dictionary.generate_all(lemma, lemma_len, forms);
-    if (!forms.empty()) return NO_GUESSER;
+    if (dictionary.generate(lemma, lemma_len, filter, forms))
+      return NO_GUESSER;
 
     if (guesser == GUESSER && prefix_guesser)
-      prefix_guesser->generate_all(lemma, lemma_len, forms);
+      if (prefix_guesser->generate(lemma, lemma_len, filter, forms))
+        return GUESSER;
   }
 
-  return guesser;
+  return -1;
 }
-
 
 int czech_morpho::raw_lemma_len(const char* lemma, int lemma_len) const {
   return czech_lemma_addinfo::raw_lemma_len(lemma, lemma_len);

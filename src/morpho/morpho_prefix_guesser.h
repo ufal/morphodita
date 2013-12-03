@@ -36,8 +36,7 @@ class morpho_prefix_guesser {
 
   void load(binary_decoder& data);
   void analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas);
-  void generate(const char* lemma, int lemma_len, const char* tag, string& form);
-  void generate_all(const char* lemma, int lemma_len, vector<tagged_lemma_forms>& lemmas_forms);
+  bool generate(const char* lemma, int lemma_len, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms);
 
  private:
   const MorphoDictionary& dictionary;
@@ -142,13 +141,9 @@ void morpho_prefix_guesser<MorphoDictionary>::analyze(const char* form, int form
 }
 
 template <class MorphoDictionary>
-void morpho_prefix_guesser<MorphoDictionary>::generate(const char* /*lemma*/, int /*lemma_len*/, const char* /*tag*/, string& /*form*/) {
+bool morpho_prefix_guesser<MorphoDictionary>::generate(const char* /*lemma*/, int /*lemma_len*/, const tag_filter& /*filter*/, vector<tagged_lemma_forms>& /*lemmas_forms*/) {
   // Not implemented yet. Is it actually needed?
-}
-
-template <class MorphoDictionary>
-void morpho_prefix_guesser<MorphoDictionary>::generate_all(const char* /*lemma*/, int /*lemma_len*/, vector<tagged_lemma_forms>& /*lemmas_forms*/) {
-  // Not implemented yet. Is it actually needed?
+  return false;
 }
 } // namespace morphodita
 } // namespace ufal

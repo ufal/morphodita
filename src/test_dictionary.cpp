@@ -43,19 +43,21 @@ int main(int argc, char* argv[]) {
   int processed = 0;
   eprintf("Processing raw dictionary: ");
   while (raw.next_lemma(lemma, raw_forms)) {
-    d->generate_all(lemma.c_str(), lemma.size(), morpho::NO_GUESSER, lemmas_forms);
+    sort(raw_forms.begin(), raw_forms.end());
+    raw_forms.erase(unique(raw_forms.begin(), raw_forms.end()), raw_forms.end());
+
+    d->generate(lemma.c_str(), lemma.size(), nullptr, morpho::NO_GUESSER, lemmas_forms);
 
     bool same_results = false;
     for (auto& lemma_forms : lemmas_forms)
       if (lemma_forms.lemma == lemma && lemma_forms.forms.size() == raw_forms.size()) {
-        sort(raw_forms.begin(), raw_forms.end());
-
         same_results = true;
         for (auto& form : lemma_forms.forms)
           if (!binary_search(raw_forms.begin(), raw_forms.end(), pair<string, string>(form.form, form.tag))) {
             same_results = false;
             break;
           }
+        if (same_results) break;
       }
 
     if (same_results)
