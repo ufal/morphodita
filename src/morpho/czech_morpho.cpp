@@ -81,16 +81,6 @@ int czech_morpho::analyze(const char* form, int form_len, guesser_mode guesser, 
     dictionary.analyze(form, form_len, lemmas);
     if (!form_uclc.empty()) dictionary.analyze(form_uclc.c_str(), form_uclc.size(), lemmas);
     if (!form_lc.empty()) dictionary.analyze(form_lc.c_str(), form_lc.size(), lemmas);
-    if (lemmas.empty()) {
-      // Heuristics. If form ends by a dot, remove all dots from the end and try again.
-      int dots = 0;
-      while (form_len - 1 - dots >= 0 && form[form_len - 1 - dots] == '.') dots++;
-      if (dots && form_len - dots > 0) {
-        dictionary.analyze(form, form_len - dots, lemmas);
-        if (!form_uclc.empty()) dictionary.analyze(form_uclc.c_str(), form_uclc.size() - dots, lemmas);
-        if (!form_lc.empty()) dictionary.analyze(form_lc.c_str(), form_lc.size() - dots, lemmas);
-      }
-    }
     if (!lemmas.empty()) return NO_GUESSER;
 
     // For the prefix guesser, use only form_lc.
