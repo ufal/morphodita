@@ -1,0 +1,3 @@
+include ../../src/Makefile.options
+
+SWIG_FLAGS=-O -c++ -outcurrentdir -o $(basename $(notdir $<)).c++
