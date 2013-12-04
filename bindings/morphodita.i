@@ -19,13 +19,16 @@
 %module morphodita
 
 %{
+#include <cstring>
 #include "morphodita.h"
-
 using namespace ufal::morphodita;
 %}
 
 %include "std_string.i"
 %include "std_vector.i"
+
+%template(Forms) std::vector<std::string>;
+typedef std::vector<std::string> Forms;
 
 %rename(TaggedForm) tagged_form;
 struct tagged_form {
@@ -52,23 +55,35 @@ struct tagged_lemma_forms {
 typedef std::vector<tagged_lemma_forms> TaggedLemmasForms;
 
 %rename(Morpho) morpho;
+%nodefaultctor morpho;
 class morpho {
  public:
   virtual ~morpho() {}
 
   static morpho* load(const char* fname);
 
-  enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
+  enum { NO_GUESSER = 0, GUESSER = 1 };
+  typedef int guesser_mode;
 
-  virtual int analyze(const char* form, int form_len, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
+  %extend {
+    int analyze(const char* form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const {
+      return self->analyze(form, strlen(form), guesser, lemmas);
+    }
 
-  virtual int generate(const char* lemma, int lemma_len, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
+    int generate(const char* lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const {
+      return self->generate(lemma, strlen(lemma), tag_wildcard, guesser, forms);
+    }
 
-  %rename(rawLemma) raw_lemma_len;
-  virtual int raw_lemma_len(const char* lemma, int lemma_len) const = 0;
+    %rename(rawLemma) raw_lemma_len;
+    std::string raw_lemma_len(const char* lemma) const {
+      return std::string(lemma, $self->raw_lemma_len(lemma, strlen(lemma)));
+    }
 
-  %rename(lemmaId) lemma_id_len;
-  virtual int lemma_id_len(const char* lemma, int lemma_len) const = 0;
+    %rename(lemmaId) lemma_id_len;
+    std::string lemma_id_len(const char* lemma) const {
+      return std::string(lemma, $self->lemma_id_len(lemma, strlen(lemma)));
+    }
+  }
 };
 
 %rename(Tagger) tagger;
@@ -81,5 +96,13 @@ class tagger {
   %rename(getMorpho) get_morpho;
   virtual const morpho* get_morpho() const = 0;
 
-  virtual void tag(const std::vector<raw_form>& forms, std::vector<tagged_lemma>& tags) const = 0;
+  %extend {
+    void tag(const std::vector<std::string>& forms, std::vector<tagged_lemma>& tags) const {
+      std::vector<raw_form> raw_forms;
+      raw_forms.reserve(forms.size());
+      for (auto& form : forms)
+        raw_forms.emplace_back(form.c_str(), form.size());
+      self->tag(raw_forms, tags);
+    }
+  }
 };
