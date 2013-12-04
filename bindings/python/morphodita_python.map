@@ -1,0 +1,4 @@
+{
+  global: initmorphodita_python; PyInit_morphodita_python;
+  local: *;
+};
