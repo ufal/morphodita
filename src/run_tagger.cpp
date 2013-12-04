@@ -52,16 +52,14 @@ bool next_sentence(FILE* f, const tokenizer<raw_form>* t, vector<raw_form>& raw_
 
     forms.clear();
     raw_forms.clear();
-    while (getline(f, line))
-      if (!line.empty()) {
-        auto tab = line.find('\t');
-        forms.emplace_back(tab == string::npos ? line : line.substr(0, tab));
-        raw_forms.emplace_back(forms.back().c_str(), forms.back().size());
-      } else if (!forms.empty()) {
-        break;
-      }
+    bool not_eof = true;
+    while ((not_eof = getline(f, line)) && !line.empty()) {
+      auto tab = line.find('\t');
+      forms.emplace_back(tab == string::npos ? line : line.substr(0, tab));
+      raw_forms.emplace_back(forms.back().c_str(), forms.back().size());
+    }
 
-    return !forms.empty();
+    return not_eof || !forms.empty();
   }
 }
 
