@@ -37,7 +37,7 @@ Returns a pointer to an instance of ``ufal::morphodita::morpho`` associated
 with the tagger. Do not delete the pointer, it is
 owned by the tagger instance and deleted in the tagger destructor.
 
-+++ tagger::tag(const std::vector<raw_form>& forms, std::vector<tagged_lemma>& tags) +++
++++ tagger::tag() +++
 
 ```
 virtual void tag(const std::vector<raw_form>& forms, std::vector<tagged_lemma>& tags) const = 0;
@@ -78,7 +78,7 @@ Public member guesser mode. Defines behavior in case of unknown words. When set
 to ``GUESSER``, morpho tries to guess unknown words. When set to ``NO_GUESSER``, morpho
 does not guess unknown words.
 
-+++ morpho::analyze(const char* form, int form_len, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) +++
++++ morpho::analyze() +++
 
 ```
 virtual int analyze(const char* form, int form_len, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
@@ -95,7 +95,7 @@ found using a guesser, they are assigned to lemmas and ``GUESSER`` is
 returned.  Otherwise ``<0`` is returned and lemmas are filled with one
 analysis containing given form as lemma and a tag for unknown word.
 
-+++ morpho::generate(const char* lemma, int lemma_len, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) +++
++++ morpho::generate() +++
 
 ```
 virtual int generate(const char* lemma, int lemma_len, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
