@@ -7,7 +7,7 @@ Version 0.9
 
 + Introduction +
 
-MorphoDiTa is an open-source tool for morphologic analysis of natural language texts. It consists of a morphologic dictionary and a tagger and is distributed as a standalone tool or a library, along with trained linguistic models. In the Czech language, MorphoDiTa achieves state-of-the-art results with a throughput around 10-200K words per second. It is free for non-commercial purposes and is distributed under [LGPL http://www.gnu.org/licenses/lgpl.html] (source code) and [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] (models).
+MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for morphologic analysis of natural language texts. It consists of a morphologic dictionary and a tagger and is distributed as a standalone tool or a library, along with trained linguistic models. In the Czech language, MorphoDiTa achieves state-of-the-art results with a throughput around 10-200K words per second. It is free for non-commercial purposes and is distributed under [LGPL http://www.gnu.org/licenses/lgpl.html] (source code) and [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] (models).
 
 
 + Release +
@@ -50,8 +50,12 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows.
 
 + MorphoDiTa API +
 
-%web% [MorphoDiTa API on separate page. morphodita/api]
-%not_web% %!include: morphodita_api.t2t
+%web% [MorphoDiTa API Tutorial on separate page. morphodita/api-tutorial]
+
+%web% [MorphoDiTa API Reference on separate page. morphodita/api-reference]
+
+%not_web% %!include: morphodita_api_tutorial.t2t
+%not_web% %!include: morphodita_api_reference.t2t
 
 
 + Contact +

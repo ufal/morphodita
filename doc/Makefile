@@ -10,10 +10,11 @@ morphodita.pdf: morphodita.tex *.sty
 	pdflatex $<
 	pdflatex $<
 
-web: morphodita.t2t morphodita_user.t2t morphodita_api.t2t
+web: morphodita.t2t morphodita_user.t2t morphodita_api_tutorial.t2t morphodita_api_reference.t2t
 	./txt2tags -t html -C web.conf -o web.html morphodita.t2t
 	./txt2tags -t html -C web.conf -C web_subpage.conf -o web_users_guide.html morphodita_user.t2t
-	./txt2tags -t html -C web.conf -C web_subpage.conf -o web_api.html morphodita_api.t2t
+	./txt2tags -t html -C web.conf -C web_subpage.conf -o web_api_tutorial.html morphodita_api_tutorial.t2t
+	./txt2tags -t html -C web.conf -C web_subpage.conf -o web_api_reference.html morphodita_api_reference.t2t
 
 manual: html pdf txt
 	$(foreach fmt,$^,cp morphodita.$(fmt) ../MANUAL.$(fmt); )
