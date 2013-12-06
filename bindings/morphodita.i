@@ -58,6 +58,7 @@ class morpho {
  public:
   virtual ~morpho() {}
 
+  %newobject load;
   static morpho* load(const char* fname);
 
   enum { NO_GUESSER = 0, GUESSER = 1 };
@@ -85,6 +86,7 @@ class tagger {
  public:
   virtual ~tagger() {}
 
+  %newobject load;
   static tagger* load(const char* fname);
 
   %rename(getMorpho) get_morpho;
