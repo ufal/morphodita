@@ -26,6 +26,9 @@ namespace morphodita {
 tag_filter::tag_filter(const char* filter) {
   if (!filter) return;
 
+  wildcard.assign(filter);
+  filter = wildcard.c_str();
+
   for (int tag_pos = 0; *filter; tag_pos++, filter++) {
     if (*filter == '?') continue;
     if (*filter == '[') {

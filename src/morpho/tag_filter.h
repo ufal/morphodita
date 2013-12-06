@@ -40,6 +40,7 @@ class tag_filter {
     int len;
   };
 
+  string wildcard;
   std::vector<char_filter> filters;
 };
 
