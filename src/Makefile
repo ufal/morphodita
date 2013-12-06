@@ -12,7 +12,7 @@ include Makefile.rules
 COMMON_O = arch/arch-specific
 LZMA_DEC_O = utils/compressor_load utils/lzma/LzmaDec
 LZMA_ENC_O = utils/compressor_save utils/lzma/LzmaEnc utils/lzma/LzFind
-MORPHO_O = $(LZMA_DEC_O) morpho/czech_morpho morpho/morpho morpho/morpho_statistical_guesser morpho/tag_filter utils/persistent_unordered_map utils/utf8
+MORPHO_O = $(LZMA_DEC_O) morpho/czech_morpho morpho/morpho morpho/morpho_statistical_guesser morpho/tag_filter utils/persistent_unordered_map utils/tokenizer/czech_tokenizer utils/utf8
 MORPHODITA_O = $(MORPHO_O) tagger/tagger
 
 # libraries

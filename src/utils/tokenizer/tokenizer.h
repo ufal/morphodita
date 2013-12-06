@@ -19,22 +19,28 @@
 #pragma once
 
 #include "common.h"
-#include "tokenizer_ids.h"
+#include "utils/string_piece.h"
 
 namespace ufal {
 namespace utils {
 
-template <class Form>
+// Range of a token, measured in Unicode characters, not UTF8 bytes.
+struct token_range {
+  size_t start;
+  size_t length;
+
+  token_range() {}
+  token_range(size_t start, size_t length) : start(start), length(length) {}
+};
+
 class tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  static tokenizer* create(tokenizer_id id, bool split_hyphenated_words);
+  virtual void set_text(const char* text) = 0;
 
-  virtual bool next_sentence(const char*& text, vector<Form>& forms) const = 0;
+  virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) = 0;
 };
 
 } // namespace utils
 } // namespace ufal
-
-#include "tokenizer_factory.h"

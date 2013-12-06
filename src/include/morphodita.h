@@ -67,6 +67,23 @@ struct tagged_lemma_forms {
   tagged_lemma_forms(const std::string& lemma) : lemma(lemma) {}
 };
 
+struct token_range {
+  size_t start;
+  size_t length;
+
+  token_range() {}
+  token_range(size_t start, size_t length) : start(start), length(length) {}
+};
+
+class MORPHODITA_IMPORT tokenizer {
+ public:
+  virtual ~tokenizer() {}
+
+  virtual void set_text(const char* text) = 0;
+
+  virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
+};
+
 class MORPHODITA_IMPORT morpho {
  public:
   virtual ~morpho() {}
@@ -111,6 +128,9 @@ class MORPHODITA_IMPORT morpho {
   // Rawlemma and lemma id identification
   virtual int raw_lemma_len(string_piece lemma) const = 0;
   virtual int lemma_id_len(string_piece lemma) const = 0;
+
+  // Construct a new tokenizer instance appropriate for this morphology.
+  virtual tokenizer* new_tokenizer() const = 0;
 };
 
 class MORPHODITA_IMPORT tagger {

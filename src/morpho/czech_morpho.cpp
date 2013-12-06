@@ -146,6 +146,10 @@ int czech_morpho::lemma_id_len(string_piece lemma) const {
   return czech_lemma_addinfo::lemma_id_len(lemma);
 }
 
+tokenizer* czech_morpho::new_tokenizer() const {
+  return new czech_tokenizer(false);
+}
+
 // What characters are considered punctuation except for the ones in unicode Punctuation category.
 static bool punctuation_additional[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1/*$*/,
   0,0,0,0,0,0,1/*+*/,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1/*<*/,1/*=*/,1/*>*/,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

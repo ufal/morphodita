@@ -25,6 +25,7 @@
 #include "morpho_dictionary.h"
 #include "morpho_prefix_guesser.h"
 #include "morpho_statistical_guesser.h"
+#include "utils/tokenizer/czech_tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
@@ -35,6 +36,7 @@ class czech_morpho : public morpho {
   virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const;
   virtual int raw_lemma_len(string_piece lemma) const override;
   virtual int lemma_id_len(string_piece lemma) const override;
+  virtual tokenizer* new_tokenizer() const override;
 
   bool load(FILE* f);
  private:

@@ -53,6 +53,28 @@ struct tagged_lemma_forms {
 %template(TaggedLemmasForms) std::vector<tagged_lemma_forms>;
 typedef std::vector<tagged_lemma_forms> TaggedLemmasForms;
 
+%rename(TokenRange) token_range;
+struct token_range {
+  size_t start;
+  size_t length;
+};
+%template(TokenRanges) std::vector<token_range>;
+typedef std::vector<token_range> TokenTanges;
+
+%rename(Tokenizer) tokenizer;
+class tokenizer {
+ public:
+  virtual ~tokenizer() {}
+
+  virtual void set_text(const char* text) = 0;
+
+  %extend {
+    bool next_sentence(std::vector<token_range>& tokens) {
+      return $self->next_sentence(NULL, &tokens);
+    }
+  }
+};
+
 %rename(Morpho) morpho;
 class morpho {
  public:
@@ -79,6 +101,10 @@ class morpho {
       return std::string(lemma, $self->lemma_id_len(lemma));
     }
   }
+
+  %rename(newTokenizer) new_tokenizer;
+  %newobject new_tokenizer;
+  virtual tokenizer* new_tokenizer() const = 0;
 };
 
 %rename(Tagger) tagger;

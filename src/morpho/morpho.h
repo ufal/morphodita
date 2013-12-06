@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "utils/string_piece.h"
+#include "utils/tokenizer/tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
@@ -94,6 +95,9 @@ class EXPORT_ATTRIBUTES morpho {
   // Rawlemma and lemma id identification
   virtual int raw_lemma_len(string_piece lemma) const = 0;
   virtual int lemma_id_len(string_piece lemma) const = 0;
+
+  // Construct a new tokenizer instance appropriate for this morphology.
+  virtual tokenizer* new_tokenizer() const = 0;
 };
 
 } // namespace morphodita

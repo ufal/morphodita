@@ -24,42 +24,20 @@
 namespace ufal {
 namespace utils {
 
-// Declarations
-template <class Form>
-class czech_tokenizer : public tokenizer<Form> {
+class czech_tokenizer : public tokenizer {
  public:
   czech_tokenizer(bool split_hyphenated_words) : split_hyphenated_words(split_hyphenated_words) {}
 
-  virtual bool next_sentence(const char*& text, vector<Form>& forms) const override;
+  virtual void set_text(const char* text) override;
+
+  virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) override;
 
  private:
   bool split_hyphenated_words;
+
+  const char* text;
+  size_t chars;
 };
-
-
-// Definitions
-template <class Form>
-bool czech_tokenizer<Form>::next_sentence(const char*& text, vector<Form>& forms) const {
-  forms.clear();
-
-  while (*text == ' ' || *text == '\t' || *text == '\n') text++;
-
-  while (*text) {
-    const char* form = text;
-    while (*text && *text != ' ' && *text != '\t' && *text != '\n') text++;
-    forms.emplace_back(form, text - form);
-
-    while (*text == ' ' || *text == '\t' || *text == '\n') {
-      text++;
-      if (text[-1] == '\n' && text[-2] == '\n')
-        return true;
-    }
-  }
-
-  return !forms.empty();
-}
 
 } // namespace utils
 } // namespace ufal
-
-
