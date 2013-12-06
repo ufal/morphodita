@@ -39,19 +39,19 @@ bool utf8::valid(const char* str) {
   return true;
 }
 
-bool utf8::valid(const char* str, int len) {
+bool utf8::valid(const char* str, size_t len) {
   for (const unsigned char*& ptr = (const unsigned char*&) str; len > 0; ptr++, len--)
     if (*ptr >= 0x80) {
       if (*ptr < 0xC0) return false;
       else if (*ptr < 0xE0) {
-        ptr++; if (--len <= 0 || *ptr < 0x80 || *ptr >= 0xC0) return false;
+        ptr++; if (!--len || *ptr < 0x80 || *ptr >= 0xC0) return false;
       } else if (*ptr < 0xF0) {
-        ptr++; if (--len <= 0 || *ptr < 0x80 || *ptr >= 0xC0) return false;
-        ptr++; if (--len <= 0 || *ptr < 0x80 || *ptr >= 0xC0) return false;
+        ptr++; if (!--len || *ptr < 0x80 || *ptr >= 0xC0) return false;
+        ptr++; if (!--len || *ptr < 0x80 || *ptr >= 0xC0) return false;
       } else if (*ptr < 0xF8) {
-        ptr++; if (--len <= 0 || *ptr < 0x80 || *ptr >= 0xC0) return false;
-        ptr++; if (--len <= 0 || *ptr < 0x80 || *ptr >= 0xC0) return false;
-        ptr++; if (--len <= 0 || *ptr < 0x80 || *ptr >= 0xC0) return false;
+        ptr++; if (!--len || *ptr < 0x80 || *ptr >= 0xC0) return false;
+        ptr++; if (!--len || *ptr < 0x80 || *ptr >= 0xC0) return false;
+        ptr++; if (!--len || *ptr < 0x80 || *ptr >= 0xC0) return false;
       } else return false;
     }
   return true;
@@ -65,9 +65,9 @@ bool utf8::is_Ll(const char* str) {
   return true;
 }
 
-bool utf8::is_Ll(const char* str, int len) {
+bool utf8::is_Ll(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Ll(chr))
       return false;
@@ -83,9 +83,9 @@ bool utf8::is_Lu(const char* str) {
   return true;
 }
 
-bool utf8::is_Lu(const char* str, int len) {
+bool utf8::is_Lu(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Lu(chr))
       return false;
@@ -101,9 +101,9 @@ bool utf8::is_Lt(const char* str) {
   return true;
 }
 
-bool utf8::is_Lt(const char* str, int len) {
+bool utf8::is_Lt(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Lt(chr))
       return false;
@@ -119,9 +119,9 @@ bool utf8::is_Lut(const char* str) {
   return true;
 }
 
-bool utf8::is_Lut(const char* str, int len) {
+bool utf8::is_Lut(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Lut(chr))
       return false;
@@ -137,9 +137,9 @@ bool utf8::is_LC(const char* str) {
   return true;
 }
 
-bool utf8::is_LC(const char* str, int len) {
+bool utf8::is_LC(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_LC(chr))
       return false;
@@ -155,9 +155,9 @@ bool utf8::is_Lm(const char* str) {
   return true;
 }
 
-bool utf8::is_Lm(const char* str, int len) {
+bool utf8::is_Lm(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Lm(chr))
       return false;
@@ -173,9 +173,9 @@ bool utf8::is_Lo(const char* str) {
   return true;
 }
 
-bool utf8::is_Lo(const char* str, int len) {
+bool utf8::is_Lo(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Lo(chr))
       return false;
@@ -191,9 +191,9 @@ bool utf8::is_L(const char* str) {
   return true;
 }
 
-bool utf8::is_L(const char* str, int len) {
+bool utf8::is_L(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_L(chr))
       return false;
@@ -209,9 +209,9 @@ bool utf8::is_Mn(const char* str) {
   return true;
 }
 
-bool utf8::is_Mn(const char* str, int len) {
+bool utf8::is_Mn(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Mn(chr))
       return false;
@@ -227,9 +227,9 @@ bool utf8::is_Mc(const char* str) {
   return true;
 }
 
-bool utf8::is_Mc(const char* str, int len) {
+bool utf8::is_Mc(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Mc(chr))
       return false;
@@ -245,9 +245,9 @@ bool utf8::is_Me(const char* str) {
   return true;
 }
 
-bool utf8::is_Me(const char* str, int len) {
+bool utf8::is_Me(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Me(chr))
       return false;
@@ -263,9 +263,9 @@ bool utf8::is_M(const char* str) {
   return true;
 }
 
-bool utf8::is_M(const char* str, int len) {
+bool utf8::is_M(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_M(chr))
       return false;
@@ -281,9 +281,9 @@ bool utf8::is_Nd(const char* str) {
   return true;
 }
 
-bool utf8::is_Nd(const char* str, int len) {
+bool utf8::is_Nd(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Nd(chr))
       return false;
@@ -299,9 +299,9 @@ bool utf8::is_Nl(const char* str) {
   return true;
 }
 
-bool utf8::is_Nl(const char* str, int len) {
+bool utf8::is_Nl(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Nl(chr))
       return false;
@@ -317,9 +317,9 @@ bool utf8::is_No(const char* str) {
   return true;
 }
 
-bool utf8::is_No(const char* str, int len) {
+bool utf8::is_No(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_No(chr))
       return false;
@@ -335,9 +335,9 @@ bool utf8::is_N(const char* str) {
   return true;
 }
 
-bool utf8::is_N(const char* str, int len) {
+bool utf8::is_N(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_N(chr))
       return false;
@@ -353,9 +353,9 @@ bool utf8::is_Pc(const char* str) {
   return true;
 }
 
-bool utf8::is_Pc(const char* str, int len) {
+bool utf8::is_Pc(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Pc(chr))
       return false;
@@ -371,9 +371,9 @@ bool utf8::is_Pd(const char* str) {
   return true;
 }
 
-bool utf8::is_Pd(const char* str, int len) {
+bool utf8::is_Pd(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Pd(chr))
       return false;
@@ -389,9 +389,9 @@ bool utf8::is_Ps(const char* str) {
   return true;
 }
 
-bool utf8::is_Ps(const char* str, int len) {
+bool utf8::is_Ps(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Ps(chr))
       return false;
@@ -407,9 +407,9 @@ bool utf8::is_Pe(const char* str) {
   return true;
 }
 
-bool utf8::is_Pe(const char* str, int len) {
+bool utf8::is_Pe(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Pe(chr))
       return false;
@@ -425,9 +425,9 @@ bool utf8::is_Pi(const char* str) {
   return true;
 }
 
-bool utf8::is_Pi(const char* str, int len) {
+bool utf8::is_Pi(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Pi(chr))
       return false;
@@ -443,9 +443,9 @@ bool utf8::is_Pf(const char* str) {
   return true;
 }
 
-bool utf8::is_Pf(const char* str, int len) {
+bool utf8::is_Pf(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Pf(chr))
       return false;
@@ -461,9 +461,9 @@ bool utf8::is_Po(const char* str) {
   return true;
 }
 
-bool utf8::is_Po(const char* str, int len) {
+bool utf8::is_Po(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Po(chr))
       return false;
@@ -479,9 +479,9 @@ bool utf8::is_P(const char* str) {
   return true;
 }
 
-bool utf8::is_P(const char* str, int len) {
+bool utf8::is_P(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_P(chr))
       return false;
@@ -497,9 +497,9 @@ bool utf8::is_Sm(const char* str) {
   return true;
 }
 
-bool utf8::is_Sm(const char* str, int len) {
+bool utf8::is_Sm(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Sm(chr))
       return false;
@@ -515,9 +515,9 @@ bool utf8::is_Sc(const char* str) {
   return true;
 }
 
-bool utf8::is_Sc(const char* str, int len) {
+bool utf8::is_Sc(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Sc(chr))
       return false;
@@ -533,9 +533,9 @@ bool utf8::is_Sk(const char* str) {
   return true;
 }
 
-bool utf8::is_Sk(const char* str, int len) {
+bool utf8::is_Sk(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Sk(chr))
       return false;
@@ -551,9 +551,9 @@ bool utf8::is_So(const char* str) {
   return true;
 }
 
-bool utf8::is_So(const char* str, int len) {
+bool utf8::is_So(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_So(chr))
       return false;
@@ -569,9 +569,9 @@ bool utf8::is_S(const char* str) {
   return true;
 }
 
-bool utf8::is_S(const char* str, int len) {
+bool utf8::is_S(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_S(chr))
       return false;
@@ -587,9 +587,9 @@ bool utf8::is_Zs(const char* str) {
   return true;
 }
 
-bool utf8::is_Zs(const char* str, int len) {
+bool utf8::is_Zs(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Zs(chr))
       return false;
@@ -605,9 +605,9 @@ bool utf8::is_Zl(const char* str) {
   return true;
 }
 
-bool utf8::is_Zl(const char* str, int len) {
+bool utf8::is_Zl(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Zl(chr))
       return false;
@@ -623,9 +623,9 @@ bool utf8::is_Zp(const char* str) {
   return true;
 }
 
-bool utf8::is_Zp(const char* str, int len) {
+bool utf8::is_Zp(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Zp(chr))
       return false;
@@ -641,9 +641,9 @@ bool utf8::is_Z(const char* str) {
   return true;
 }
 
-bool utf8::is_Z(const char* str, int len) {
+bool utf8::is_Z(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Z(chr))
       return false;
@@ -659,9 +659,9 @@ bool utf8::is_Cc(const char* str) {
   return true;
 }
 
-bool utf8::is_Cc(const char* str, int len) {
+bool utf8::is_Cc(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Cc(chr))
       return false;
@@ -677,9 +677,9 @@ bool utf8::is_Cf(const char* str) {
   return true;
 }
 
-bool utf8::is_Cf(const char* str, int len) {
+bool utf8::is_Cf(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Cf(chr))
       return false;
@@ -695,9 +695,9 @@ bool utf8::is_Cs(const char* str) {
   return true;
 }
 
-bool utf8::is_Cs(const char* str, int len) {
+bool utf8::is_Cs(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Cs(chr))
       return false;
@@ -713,9 +713,9 @@ bool utf8::is_Co(const char* str) {
   return true;
 }
 
-bool utf8::is_Co(const char* str, int len) {
+bool utf8::is_Co(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Co(chr))
       return false;
@@ -731,9 +731,9 @@ bool utf8::is_Cn(const char* str) {
   return true;
 }
 
-bool utf8::is_Cn(const char* str, int len) {
+bool utf8::is_Cn(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_Cn(chr))
       return false;
@@ -749,9 +749,9 @@ bool utf8::is_C(const char* str) {
   return true;
 }
 
-bool utf8::is_C(const char* str, int len) {
+bool utf8::is_C(const char* str, size_t len) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     if (!is_C(chr))
       return false;
@@ -765,9 +765,9 @@ void utf8::uppercase(const char* str, std::string& out) {
     append(out, uppercase(chr));
 }
 
-void utf8::uppercase(const char* str, int len, std::string& out) {
+void utf8::uppercase(const char* str, size_t len, std::string& out) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     append(out, uppercase(chr));
   }
@@ -779,9 +779,9 @@ void utf8::lowercase(const char* str, std::string& out) {
     append(out, lowercase(chr));
 }
 
-void utf8::lowercase(const char* str, int len, std::string& out) {
+void utf8::lowercase(const char* str, size_t len, std::string& out) {
   char32_t chr;
-  while (len > 0) {
+  while (len) {
     chr = decode(str, len);
     append(out, lowercase(chr));
   }
