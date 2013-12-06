@@ -48,6 +48,7 @@ static bool contains(morpho_statistical_guesser::used_rules* used, const string&
   return false;
 }
 
+// Produces unique lemma-tag pairs.
 void morpho_statistical_guesser::analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas, morpho_statistical_guesser::used_rules* used) {
   unsigned lemmas_initial_size = lemmas.size();
 

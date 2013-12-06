@@ -61,6 +61,7 @@ void morpho_prefix_guesser<MorphoDictionary>::load(binary_decoder& data) {
   prefixes_middle.load(data);
 }
 
+// Analyze can return non-unique lemma-tag pairs.
 template <class MorphoDictionary>
 void morpho_prefix_guesser<MorphoDictionary>::analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas) {
   if (form_len <= 0) return;
@@ -69,8 +70,6 @@ void morpho_prefix_guesser<MorphoDictionary>::analyze(const char* form, int form
   vector<unsigned> middle_masks;
   middle_masks.reserve(form_len);
 
-  int total_matches = 0;
-  unsigned lemmas_initial_size = lemmas.size();
   for (int initial = 0; initial < form_len; initial++) {
     // Match the initial prefix.
     unsigned initial_mask = (1<<tag_filters.size()) - 1; // full mask for empty initial prefix
@@ -121,22 +120,9 @@ void morpho_prefix_guesser<MorphoDictionary>::analyze(const char* form, int form
               }
           }
           if (lemmas_new_size < lemmas.size()) lemmas.erase(lemmas.begin() + lemmas_new_size, lemmas.end());
-          total_matches += lemmas_new_size > lemmas_ori_size;
         }
       }
     }
-  }
-
-  // Make sure results are unique lemma-tag pairs
-  if (total_matches > 1) {
-    sort(lemmas.begin() + lemmas_initial_size, lemmas.end(), [](const tagged_lemma& a, const tagged_lemma& b) {
-      int lemma_compare = a.lemma.compare(b.lemma);
-      return lemma_compare < 0 || (lemma_compare == 0 && a.tag < b.tag);
-    });
-    auto lemmas_end = unique(lemmas.begin() + lemmas_initial_size, lemmas.end(), [](const tagged_lemma& a, const tagged_lemma& b) {
-      return a.lemma == b.lemma && a.tag == b.tag;
-    });
-    if (lemmas_end != lemmas.end()) lemmas.erase(lemmas_end, lemmas.end());
   }
 }
 

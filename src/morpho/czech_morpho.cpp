@@ -101,7 +101,8 @@ int czech_morpho::analyze(const char* form, int form_len, guesser_mode guesser, 
       }
     }
 
-    // Make sure results are unique lemma-tag pairs
+    // Make sure results are unique lemma-tag pairs. Statistical guesser produces
+    // unique lemma-tag pairs, but prefix guesser does not.
     if (prefix_guesser_guesses) {
       sort(lemmas.begin(), lemmas.end(), [](const tagged_lemma& a, const tagged_lemma& b) {
         int lemma_compare = a.lemma.compare(b.lemma);
