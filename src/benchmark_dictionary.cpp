@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
   clock_t now = clock();
   vector<tagged_lemma> lemmas;
   for (auto& form : forms) {
-    d->analyze(form.c_str(), form.size(), morpho::NO_GUESSER, lemmas);
+    d->analyze(form, morpho::NO_GUESSER, lemmas);
   }
   eprintf("done in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 

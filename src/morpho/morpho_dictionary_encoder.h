@@ -58,7 +58,7 @@ class histogram {
 template <class LemmaAddinfo>
 struct lemma_info {
   lemma_info(string lemma) {
-    this->lemma = lemma.substr(0, addinfo.parse(lemma.c_str(), lemma.length(), true));
+    this->lemma = lemma.substr(0, addinfo.parse(lemma, true));
   }
 
   string lemma;

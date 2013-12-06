@@ -26,10 +26,10 @@ namespace ufal {
 namespace morphodita {
 
 struct form_with_tags {
-  raw_form form;
+  string_piece form;
   vector<tagged_lemma> tags;
 
-  form_with_tags(const raw_form& form) : form(form) {}
+  form_with_tags(string_piece form) : form(form) {}
 };
 
 } // namespace morphodita

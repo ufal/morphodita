@@ -112,7 +112,7 @@ void czech_elementary_features<Map>::compute_features(const vector<form_with_tag
     }
 
     // Per_form features
-    per_form[i].values[FORM] = maps[MAP_FORM].value(forms[i].form.form, forms[i].form.form_len);
+    per_form[i].values[FORM] = maps[MAP_FORM].value(forms[i].form.str, forms[i].form.len);
     per_form[i].values[FOLLOWING_VERB_TAG] = following_verb_tag;
     per_form[i].values[FOLLOWING_VERB_LEMMA] = following_verb_lemma;
 
@@ -121,37 +121,36 @@ void czech_elementary_features<Map>::compute_features(const vector<form_with_tag
       per_form[i].values[NUM] = per_form[i].values[CAP] = per_form[i].values[DASH] = elementary_feature_unknown;
       per_form[i].values[PREFIX1] = per_form[i].values[PREFIX2] = per_form[i].values[PREFIX3] = per_form[i].values[PREFIX4] = elementary_feature_unknown;
       per_form[i].values[SUFFIX1] = per_form[i].values[SUFFIX2] = per_form[i].values[SUFFIX3] = per_form[i].values[SUFFIX4] = elementary_feature_unknown;
-    } else if (forms[i].form.form_len <= 0) {
+    } else if (!forms[i].form.len <= 0) {
       per_form[i].values[NUM] = per_form[i].values[CAP] = per_form[i].values[DASH] = elementary_feature_empty + 1;
       per_form[i].values[PREFIX1] = per_form[i].values[PREFIX2] = per_form[i].values[PREFIX3] = per_form[i].values[PREFIX4] = elementary_feature_empty;
       per_form[i].values[SUFFIX1] = per_form[i].values[SUFFIX2] = per_form[i].values[SUFFIX3] = per_form[i].values[SUFFIX4] = elementary_feature_empty;
     } else {
-      const char* form_start = forms[i].form.form;
-      const char* form = form_start;
-      int form_len = forms[i].form.form_len;
+      string_piece form = forms[i].form;
+      const char* form_start = form.str;
 
       bool num = false, cap = false, dash = false;
-      int indices[8] = {0, form_len, form_len, form_len, form_len, 0, 0, 0}; // careful here regarding forms shorter than 4 characters
+      size_t indices[8] = {0, form.len, form.len, form.len, form.len, 0, 0, 0}; // careful here regarding forms shorter than 4 characters
       int index = 0;
-      while (form_len > 0) {
-        indices[(index++)&7] = form - form_start;
+      while (form.len) {
+        indices[(index++)&7] = form.str - form_start;
 
-        char32_t chr = utf8::decode(form, form_len);
+        char32_t chr = utf8::decode(form.str, form.len);
         num |= utf8::is_N(chr);
         cap |= utf8::is_Lut(chr);
         dash |= utf8::is_Pd(chr);
 
-        if (index == 5 || (!form_len && index < 5)) {
+        if (index == 5 || (!form.len && index < 5)) {
           per_form[i].values[PREFIX1] = maps[MAP_PREFIX1].value(form_start, indices[1]);
           per_form[i].values[PREFIX2] = maps[MAP_PREFIX2].value(form_start, indices[2]);
           per_form[i].values[PREFIX3] = maps[MAP_PREFIX3].value(form_start, indices[3]);
           per_form[i].values[PREFIX4] = maps[MAP_PREFIX4].value(form_start, indices[4]);
         }
       }
-      per_form[i].values[SUFFIX1] = maps[MAP_SUFFIX1].value(form_start + indices[(index-1)&7], form - form_start - indices[(index-1)&7]);
-      per_form[i].values[SUFFIX2] = maps[MAP_SUFFIX2].value(form_start + indices[(index-2)&7], form - form_start - indices[(index-2)&7]);
-      per_form[i].values[SUFFIX3] = maps[MAP_SUFFIX3].value(form_start + indices[(index-3)&7], form - form_start - indices[(index-3)&7]);
-      per_form[i].values[SUFFIX4] = maps[MAP_SUFFIX4].value(form_start + indices[(index-4)&7], form - form_start - indices[(index-4)&7]);
+      per_form[i].values[SUFFIX1] = maps[MAP_SUFFIX1].value(form_start + indices[(index-1)&7], form.str - form_start - indices[(index-1)&7]);
+      per_form[i].values[SUFFIX2] = maps[MAP_SUFFIX2].value(form_start + indices[(index-2)&7], form.str - form_start - indices[(index-2)&7]);
+      per_form[i].values[SUFFIX3] = maps[MAP_SUFFIX3].value(form_start + indices[(index-3)&7], form.str - form_start - indices[(index-3)&7]);
+      per_form[i].values[SUFFIX4] = maps[MAP_SUFFIX4].value(form_start + indices[(index-4)&7], form.str - form_start - indices[(index-4)&7]);
       per_form[i].values[NUM] = elementary_feature_empty + 1 + num;
       per_form[i].values[CAP] = elementary_feature_empty + 1 + cap;
       per_form[i].values[DASH] = elementary_feature_empty + 1 + dash;

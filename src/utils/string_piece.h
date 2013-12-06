@@ -18,26 +18,22 @@
 
 #pragma once
 
+#include <cstring>
+
 #include "common.h"
-#include "morpho/morpho.h"
 
 namespace ufal {
-namespace morphodita {
+namespace utils {
 
-class EXPORT_ATTRIBUTES tagger {
- public:
-  virtual ~tagger() {}
+struct string_piece {
+  const char* str;
+  size_t len;
 
-  static tagger* load(FILE* f);
-  static tagger* load(const char* fname);
-
-  // Return morpho associated with the tagger. Do not delete the pointer, it is
-  // owned by the tagger instance and deleted in the tagger destructor.
-  virtual const morpho* get_morpho() const = 0;
-
-  // Perform morphologic analysis and subsequent disambiguation.
-  virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const = 0;
+  string_piece() : str(nullptr), len(0) {}
+  string_piece(const char* str) : str(str), len(strlen(str)) {}
+  string_piece(const char* str, size_t len) : str(str), len(len) {}
+  string_piece(const std::string& str) : str(str.c_str()), len(str.size()) {}
 };
 
-} // namespace morphodita
-} // namespace ufal
+} // namespace utils
+}

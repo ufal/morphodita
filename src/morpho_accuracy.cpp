@@ -47,22 +47,22 @@ int main(int argc, char* argv[]) {
     if (tokens.size() != 3) runtime_errorf("The line %s does not contain three columns!", line.c_str());
 
     // Analyse
-    int guesser = d->analyze(tokens[0].c_str(), tokens[0].size(), morpho::GUESSER, lemmas) == morpho::GUESSER;
+    int guesser = d->analyze(tokens[0], morpho::GUESSER, lemmas) == morpho::GUESSER;
 
     // Update statistics
     forms++;
     tags[guesser] += lemmas.size();
     unique_analyses[guesser] += lemmas.size() == 1;
-    int rawlemma_len = d->raw_lemma_len(tokens[1].c_str(), tokens[1].size());
-    int lemmaid_len = d->lemma_id_len(tokens[1].c_str(), tokens[1].size());
+    int rawlemma_len = d->raw_lemma_len(tokens[1]);
+    int lemmaid_len = d->lemma_id_len(tokens[1]);
     int tag = 0, tag_rawlemma = 0, tag_lemmaid = 0, all = 0;
     wrong_lemmas.clear();
     for (auto& lemma : lemmas) {
       if (lemma.tag != tokens[2]) continue;
       tag = 1;
-      if (lemma.lemma.compare(0, d->raw_lemma_len(lemma.lemma.c_str(), lemma.lemma.size()), tokens[1], 0, rawlemma_len) != 0) continue;
+      if (lemma.lemma.compare(0, d->raw_lemma_len(lemma.lemma), tokens[1], 0, rawlemma_len) != 0) continue;
       tag_rawlemma = 1;
-      if (lemma.lemma.compare(0, d->lemma_id_len(lemma.lemma.c_str(), lemma.lemma.size()), tokens[1], 0, lemmaid_len) != 0) {
+      if (lemma.lemma.compare(0, d->lemma_id_len(lemma.lemma), tokens[1], 0, lemmaid_len) != 0) {
         wrong_lemmas.push_back(lemma.lemma.c_str());
         continue;
       }

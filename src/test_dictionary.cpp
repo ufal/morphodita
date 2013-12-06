@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     sort(raw_forms.begin(), raw_forms.end());
     raw_forms.erase(unique(raw_forms.begin(), raw_forms.end()), raw_forms.end());
 
-    d->generate(lemma.c_str(), lemma.size(), nullptr, morpho::NO_GUESSER, lemmas_forms);
+    d->generate(lemma, nullptr, morpho::NO_GUESSER, lemmas_forms);
 
     bool same_results = false;
     for (auto& lemma_forms : lemmas_forms)
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 
     if (same_results)
       for (auto& tagged_form : raw_forms) {
-        d->analyze(tagged_form.first.c_str(), tagged_form.first.size(), morpho::NO_GUESSER, lemmas);
+        d->analyze(tagged_form.first, morpho::NO_GUESSER, lemmas);
 
         same_results = false;
         for (auto& tagged_lemma : lemmas)

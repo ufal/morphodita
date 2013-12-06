@@ -31,15 +31,15 @@ namespace morphodita {
 
 class czech_morpho : public morpho {
  public:
-  virtual int analyze(const char* form, int form_len, morpho::guesser_mode guesser, vector<tagged_lemma>& lemmas) const override;
-  virtual int generate(const char* lemma, int lemma_len, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const;
-  virtual int raw_lemma_len(const char* lemma, int lemma_len) const override;
-  virtual int lemma_id_len(const char* lemma, int lemma_len) const override;
+  virtual int analyze(string_piece form, morpho::guesser_mode guesser, vector<tagged_lemma>& lemmas) const override;
+  virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const;
+  virtual int raw_lemma_len(string_piece lemma) const override;
+  virtual int lemma_id_len(string_piece lemma) const override;
 
   bool load(FILE* f);
  private:
-  inline void analyze_special(const char* form, int form_len, vector<tagged_lemma>& lemmas) const;
-  inline void generate_casing_variants(const char* form, int form_len, string& form_uclc, string& form_lc) const;
+  inline void analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const;
+  inline void generate_casing_variants(string_piece form, string& form_uclc, string& form_lc) const;
 
   morpho_dictionary<czech_lemma_addinfo> dictionary;
   unique_ptr<morpho_prefix_guesser<decltype(dictionary)>> prefix_guesser;

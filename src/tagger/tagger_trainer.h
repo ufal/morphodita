@@ -96,13 +96,13 @@ double tagger_trainer<TaggerTrainer>::load_data(FILE* f, const morpho& d, bool u
     if (tokens.size() != 3) runtime_errorf("The tagger data line '%s' does not contain three columns!", line.c_str());
 
     // Analyse
-    d.analyze(tokens[0].c_str(), tokens[0].size(), use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
+    d.analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
 
     // Add form to sentence
     forms++;
     sentence& s = sentences.back();
     s.forms.emplace_back(tokens[0]);
-    s.forms_with_tags.emplace_back(raw_form(s.forms.back().c_str(), s.forms.back().size()));
+    s.forms_with_tags.emplace_back(s.forms.back());
     s.gold.emplace_back(tokens[1], tokens[2]);
     s.gold_index.emplace_back(-1);
     for (auto& lemma : lemmas) {

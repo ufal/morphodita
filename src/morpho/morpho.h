@@ -19,11 +19,12 @@
 #pragma once
 
 #include "common.h"
+#include "utils/string_piece.h"
 
 namespace ufal {
 namespace morphodita {
 
-struct EXPORT_ATTRIBUTES tagged_form {
+struct tagged_form {
   string form;
   string tag;
 
@@ -31,7 +32,7 @@ struct EXPORT_ATTRIBUTES tagged_form {
   tagged_form(const string& form, const string& tag) : form(form), tag(tag) {}
 };
 
-struct EXPORT_ATTRIBUTES tagged_lemma {
+struct tagged_lemma {
   string lemma;
   string tag;
 
@@ -39,7 +40,7 @@ struct EXPORT_ATTRIBUTES tagged_lemma {
   tagged_lemma(const string& lemma, const string& tag) : lemma(lemma), tag(tag) {}
 };
 
-struct EXPORT_ATTRIBUTES tagged_lemma_forms {
+struct tagged_lemma_forms {
   string lemma;
   vector<tagged_form> forms;
 
@@ -66,7 +67,7 @@ class EXPORT_ATTRIBUTES morpho {
   // found using a guesser, they are assigned to lemmas and GUESSER is
   // returned.  Otherwise <0 is returned and lemmas are filled with one
   // analysis containing given form as lemma and a tag for unknown word.
-  virtual int analyze(const char* form, int form_len, guesser_mode guesser, vector<tagged_lemma>& lemmas) const = 0;
+  virtual int analyze(string_piece form, guesser_mode guesser, vector<tagged_lemma>& lemmas) const = 0;
 
   // Perform morphologic generation of a lemma. The lemma is given by a pointer
   // and length and therefore does not need to be '\0' terminated. Optionally
@@ -88,11 +89,11 @@ class EXPORT_ATTRIBUTES morpho {
   // NO_GUESSER is returned. If guesser == GUESSER and the lemma is found by
   // the guesser, GUESSER is returned. Otherwise, forms are cleared and <0 is
   // returned.
-  virtual int generate(const char* lemma, int lemma_len, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const = 0;
+  virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const = 0;
 
   // Rawlemma and lemma id identification
-  virtual int raw_lemma_len(const char* lemma, int lemma_len) const = 0;
-  virtual int lemma_id_len(const char* lemma, int lemma_len) const = 0;
+  virtual int raw_lemma_len(string_piece lemma) const = 0;
+  virtual int lemma_id_len(string_piece lemma) const = 0;
 };
 
 } // namespace morphodita

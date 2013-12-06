@@ -26,14 +26,14 @@
 
 using namespace ufal::morphodita;
 
-bool next_sentence(FILE* f, const tokenizer<raw_form>* t, vector<raw_form>& raw_forms) {
+bool next_sentence(FILE* f, const tokenizer<string_piece>* t, vector<string_piece>& forms) {
   static string line;
 
   if (t) {
     // Use tokenizer
     static string text;
     static const char* unprocessed_text = nullptr;
-    if (unprocessed_text && t->next_sentence(unprocessed_text, raw_forms)) return true;
+    if (unprocessed_text && t->next_sentence(unprocessed_text, forms)) return true;
 
     // Read data until an empty line is found
     text.clear();
@@ -45,18 +45,18 @@ bool next_sentence(FILE* f, const tokenizer<raw_form>* t, vector<raw_form>& raw_
         break;
 
     unprocessed_text = text.c_str();
-    return t->next_sentence(unprocessed_text, raw_forms);
+    return t->next_sentence(unprocessed_text, forms);
   } else {
     // Use vertical format
-    static vector<string> forms;
+    static vector<string> strings;
 
+    strings.clear();
     forms.clear();
-    raw_forms.clear();
     bool not_eof = true;
     while ((not_eof = getline(f, line)) && !line.empty()) {
       auto tab = line.find('\t');
-      forms.emplace_back(tab == string::npos ? line : line.substr(0, tab));
-      raw_forms.emplace_back(forms.back().c_str(), forms.back().size());
+      strings.emplace_back(tab == string::npos ? line : line.substr(0, tab));
+      forms.emplace_back(forms.back());
     }
 
     return not_eof || !forms.empty();
@@ -68,11 +68,11 @@ int main(int argc, char* argv[]) {
     runtime_errorf("Usage: %s [-t tokenizer_id] tagger_file", argv[0]);
 
   int argi = 1;
-  unique_ptr<tokenizer<raw_form>> tok;
+  unique_ptr<tokenizer<string_piece>> tok;
   if (strcmp(argv[argi], "-t") == 0) {
     tokenizer_id id;
     if (!tokenizer_ids::parse(argv[argi + 1], id)) runtime_errorf("Unknown tokenizer_id '%s'!", argv[argi + 1]);
-    tok.reset(tokenizer<raw_form>::create(id, /*split_hyphenated_words*/ false));
+    tok.reset(tokenizer<string_piece>::create(id, /*split_hyphenated_words*/ false));
     if (!tok) runtime_errorf("Cannot create tokenizer '%s'!", argv[argi + 1]);
     argi += 2;
   }
@@ -85,11 +85,11 @@ int main(int argc, char* argv[]) {
   eprintf("Tagging: ");
   clock_t now = clock();
 
-  vector<raw_form> raw_forms;
+  vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
-  while (next_sentence(stdin, tok.get(), raw_forms)) {
-    t->tag(raw_forms, tags);
+  while (next_sentence(stdin, tok.get(), forms)) {
+    t->tag(forms, tags);
 
     for (auto& tag : tags)
       printf("%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());

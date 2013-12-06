@@ -65,39 +65,39 @@ bool czech_morpho::load(FILE* f) {
   return data.is_end();
 }
 
-int czech_morpho::analyze(const char* form, int form_len, guesser_mode guesser, vector<tagged_lemma>& lemmas) const {
+int czech_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagged_lemma>& lemmas) const {
   lemmas.clear();
 
-  if (form_len > 0) {
+  if (form.len) {
     // Start by calling analyze_special without any casing changes.
-    analyze_special(form, form_len, lemmas);
+    analyze_special(form, lemmas);
     if (!lemmas.empty()) return NO_GUESSER;
 
     // Generate all casing variants if needed (they are different than given form).
     string form_uclc; // first uppercase, rest lowercase
     string form_lc;   // all lowercase
-    generate_casing_variants(form, form_len, form_uclc, form_lc);
+    generate_casing_variants(form, form_uclc, form_lc);
 
     // Start by analysing using the dictionary and all casing variants.
-    dictionary.analyze(form, form_len, lemmas);
-    if (!form_uclc.empty()) dictionary.analyze(form_uclc.c_str(), form_uclc.size(), lemmas);
-    if (!form_lc.empty()) dictionary.analyze(form_lc.c_str(), form_lc.size(), lemmas);
+    dictionary.analyze(form, lemmas);
+    if (!form_uclc.empty()) dictionary.analyze(form_uclc, lemmas);
+    if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
     if (!lemmas.empty()) return NO_GUESSER;
 
     // For the prefix guesser, use only form_lc.
     if (guesser == GUESSER && prefix_guesser)
-      prefix_guesser->analyze(form_lc.empty() ? form : form_lc.c_str(), form_lc.empty() ? form_len : form_lc.size(), lemmas);
+      prefix_guesser->analyze(form_lc.empty() ? form : form_lc, lemmas);
     bool prefix_guesser_guesses = !lemmas.empty();
 
     // For the statistical guesser, use all casing variants.
     if (guesser == GUESSER && statistical_guesser) {
       if (form_uclc.empty() && form_lc.empty())
-        statistical_guesser->analyze(form, form_len, lemmas, nullptr);
+        statistical_guesser->analyze(form, lemmas, nullptr);
       else {
         morpho_statistical_guesser::used_rules used_rules; used_rules.reserve(3);
-        statistical_guesser->analyze(form, form_len, lemmas, &used_rules);
-        if (!form_uclc.empty()) statistical_guesser->analyze(form_uclc.c_str(), form_uclc.size(), lemmas, &used_rules);
-        if (!form_lc.empty()) statistical_guesser->analyze(form_lc.c_str(), form_lc.size(), lemmas, &used_rules);
+        statistical_guesser->analyze(form, lemmas, &used_rules);
+        if (!form_uclc.empty()) statistical_guesser->analyze(form_uclc, lemmas, &used_rules);
+        if (!form_lc.empty()) statistical_guesser->analyze(form_lc, lemmas, &used_rules);
       }
     }
 
@@ -117,32 +117,33 @@ int czech_morpho::analyze(const char* form, int form_len, guesser_mode guesser, 
     if (!lemmas.empty()) return GUESSER;
   }
 
-  lemmas.emplace_back(string(form, form_len), unknown_tag);
+  lemmas.emplace_back(string(form.str, form.len), unknown_tag);
   return -1;
 }
 
-int czech_morpho::generate(const char* lemma, int lemma_len, const char* tag_wildcard, ufal::morphodita::morpho::guesser_mode guesser, vector<ufal::morphodita::tagged_lemma_forms>& forms) const {
+int czech_morpho::generate(string_piece lemma, const char* tag_wildcard, ufal::morphodita::morpho::guesser_mode guesser, vector<ufal::morphodita::tagged_lemma_forms>& forms) const {
+  forms.clear();
+
   tag_filter filter(tag_wildcard);
 
-  forms.clear();
-  if (lemma_len > 0) {
-    if (dictionary.generate(lemma, lemma_len, filter, forms))
+  if (lemma.len) {
+    if (dictionary.generate(lemma, filter, forms))
       return NO_GUESSER;
 
     if (guesser == GUESSER && prefix_guesser)
-      if (prefix_guesser->generate(lemma, lemma_len, filter, forms))
+      if (prefix_guesser->generate(lemma, filter, forms))
         return GUESSER;
   }
 
   return -1;
 }
 
-int czech_morpho::raw_lemma_len(const char* lemma, int lemma_len) const {
-  return czech_lemma_addinfo::raw_lemma_len(lemma, lemma_len);
+int czech_morpho::raw_lemma_len(string_piece lemma) const {
+  return czech_lemma_addinfo::raw_lemma_len(lemma);
 }
 
-int czech_morpho::lemma_id_len(const char* lemma, int lemma_len) const {
-  return czech_lemma_addinfo::lemma_id_len(lemma, lemma_len);
+int czech_morpho::lemma_id_len(string_piece lemma) const {
+  return czech_lemma_addinfo::lemma_id_len(lemma);
 }
 
 // What characters are considered punctuation except for the ones in unicode Punctuation category.
@@ -166,42 +167,42 @@ static bool punctuation_exceptions[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,1/*§*/};
 
-void czech_morpho::analyze_special(const char* form, int form_len, vector<tagged_lemma>& lemmas) const {
+void czech_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const {
   // Analyzer for numbers and punctuation.
   // Number is anything matching [+-]? is_Pn* ([.,] is_Pn*)? for at least one is_Pn* nonempty.
   // Punctuation is any form beginning with either unicode punctuation or punctuation_exceptions character.
   // Beware that numbers takes precedence, so - is punctuation, -3 is number, -. is punctuation, -.3 is number.
-  if (form_len <= 0) return;
+  if (!form.len) return;
 
-  const char* form_ori = form; int form_len_ori = form_len;
-  char32_t first = utf8::decode(form, form_len);
+  string_piece form_ori = form;
+  char32_t first = utf8::decode(form.str, form.len);
 
   // Try matching a number.
   char32_t codepoint = first;
   bool any_digit = false;
-  if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form, form_len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form, form_len);
-  if (codepoint == '.' || codepoint == ',') codepoint = utf8::decode(form, form_len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form, form_len);
+  if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
+  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
+  if (codepoint == '.' || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
+  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
 
-  if (!form_len && any_digit) {
+  if (!form.len && any_digit) {
     // We found a number. If it ends by , or ., drop it.
-    if (form_ori[form_len_ori-1] == '.' || form_ori[form_len_ori-1] == ',') form_len_ori--;
-    lemmas.emplace_back(string(form_ori, form_len_ori), number_tag);
+    if (form_ori.str[form_ori.len-1] == '.' || form_ori.str[form_ori.len-1] == ',') form_ori.len--;
+    lemmas.emplace_back(string(form_ori.str, form_ori.len), number_tag);
   } else if ((first < sizeof(punctuation_additional) && punctuation_additional[first]) ||
              (utf8::is_P(first) && (first >= sizeof(punctuation_exceptions) || !punctuation_exceptions[first])))
-    lemmas.emplace_back(string(form_ori, form_len_ori), punctuation_tag);
+    lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);
 }
 
-void czech_morpho::generate_casing_variants(const char* form, int form_len, string& form_uclc, string& form_lc) const {
+void czech_morpho::generate_casing_variants(string_piece form, string& form_uclc, string& form_lc) const {
   // Detect uppercase+titlecase characters.
   bool first_Lut = false; // first character is uppercase or titlecase
   bool rest_has_Lut = false; // any character but first is uppercase or titlecase
   {
-    const char* form_tmp = form; int form_len_tmp = form_len;
-    first_Lut = utf8::is_Lut(utf8::decode(form_tmp, form_len_tmp));
-    while (form_len_tmp > 0 && !rest_has_Lut)
-      rest_has_Lut = utf8::is_Lut(utf8::decode(form_tmp, form_len_tmp));
+    string_piece form_tmp = form;
+    first_Lut = utf8::is_Lut(utf8::decode(form_tmp.str, form_tmp.len));
+    while (form_tmp.len && !rest_has_Lut)
+      rest_has_Lut = utf8::is_Lut(utf8::decode(form_tmp.str, form_tmp.len));
   }
 
   // Generate all casing variants if needed (they are different than given form).
@@ -210,22 +211,22 @@ void czech_morpho::generate_casing_variants(const char* form, int form_len, stri
   // - form_lc: all lowercase
 
   if (first_Lut && !rest_has_Lut) { // common case allowing fast execution
-    form_lc.reserve(form_len);
-    const char* form_tmp = form; int form_len_tmp = form_len;
-    utf8::append(form_lc, utf8::lowercase(utf8::decode(form_tmp, form_len_tmp)));
-    form_lc.append(form_tmp, form_len_tmp);
+    form_lc.reserve(form.len);
+    string_piece form_tmp = form;
+    utf8::append(form_lc, utf8::lowercase(utf8::decode(form_tmp.str, form_tmp.len)));
+    form_lc.append(form_tmp.str, form_tmp.len);
   } else if (!first_Lut && rest_has_Lut) {
-    form_lc.reserve(form_len);
-    utf8::lowercase(form, form_len, form_lc);
+    form_lc.reserve(form.len);
+    utf8::lowercase(form.str, form.len, form_lc);
   } else if (first_Lut && rest_has_Lut) {
-    form_lc.reserve(form_len);
-    form_uclc.reserve(form_len);
-    const char* form_tmp = form; int form_len_tmp = form_len;
-    char32_t first = utf8::decode(form_tmp, form_len_tmp);
+    form_lc.reserve(form.len);
+    form_uclc.reserve(form.len);
+    string_piece form_tmp = form;
+    char32_t first = utf8::decode(form_tmp.str, form_tmp.len);
     utf8::append(form_lc, utf8::lowercase(first));
     utf8::append(form_uclc, first);
-    while (form_len_tmp > 0) {
-      char32_t lowercase = utf8::lowercase(utf8::decode(form_tmp, form_len_tmp));
+    while (form_tmp.len) {
+      char32_t lowercase = utf8::lowercase(utf8::decode(form_tmp.str, form_tmp.len));
       utf8::append(form_lc, lowercase);
       utf8::append(form_uclc, lowercase);
     }

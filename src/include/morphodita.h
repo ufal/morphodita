@@ -33,15 +33,17 @@
 namespace ufal {
 namespace morphodita {
 
-struct MORPHODITA_IMPORT raw_form {
-  const char* form;
-  int form_len;
+struct string_piece {
+  const char* str;
+  size_t len;
 
-  raw_form() {}
-  raw_form(const char* form, int form_len) : form(form), form_len(form_len) {}
+  string_piece() : str(NULL), len(0) {}
+  string_piece(const char* str) : str(str), len(strlen(str)) {}
+  string_piece(const char* str, size_t len) : str(str), len(len) {}
+  string_piece(const std::string& str) : str(str.c_str()), len(str.size()) {}
 };
 
-struct MORPHODITA_IMPORT tagged_form {
+struct tagged_form {
   std::string form;
   std::string tag;
 
@@ -49,7 +51,7 @@ struct MORPHODITA_IMPORT tagged_form {
   tagged_form(const std::string& form, const std::string& tag) : form(form), tag(tag) {}
 };
 
-struct MORPHODITA_IMPORT tagged_lemma {
+struct tagged_lemma {
   std::string lemma;
   std::string tag;
 
@@ -57,7 +59,7 @@ struct MORPHODITA_IMPORT tagged_lemma {
   tagged_lemma(const std::string& lemma, const std::string& tag) : lemma(lemma), tag(tag) {}
 };
 
-struct MORPHODITA_IMPORT tagged_lemma_forms {
+struct tagged_lemma_forms {
   std::string lemma;
   std::vector<tagged_form> forms;
 
@@ -74,24 +76,22 @@ class MORPHODITA_IMPORT morpho {
 
   enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
 
-  // Perform morphologic analysis of a form. The form is given by a pointer and
-  // length and therefore does not need to be '\0' terminated.  The guesser
-  // parameter specifies whether a guesser can be used if the form is not found
-  // in the dictionary. Output is assigned to the lemmas vector.
+  // Perform morphologic analysis of a form. The guesser parameter specifies
+  // whether a guesser can be used if the form is not found in the dictionary.
+  // Output is assigned to the lemmas vector.
   //
   // If the form is found in the dictionary, analyses are assigned to lemmas
   // and NO_GUESSER returned. If guesser == GUESSER and the form analyses are
   // found using a guesser, they are assigned to lemmas and GUESSER is
   // returned.  Otherwise <0 is returned and lemmas are filled with one
   // analysis containing given form as lemma and a tag for unknown word.
-  virtual int analyze(const char* form, int form_len, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
+  virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
 
-  // Perform morphologic generation of a lemma. The lemma is given by a pointer
-  // and length and therefore does not need to be '\0' terminated. Optionally
-  // a tag_wildcard can be specified (or be NULL) and if so, results are
-  // filtered using this wildcard. The guesser parameter speficies whether
-  // a guesser can be used if the lemma is not found in the dictionary. Output
-  // is assigned to the forms vector.
+  // Perform morphologic generation of a lemma. Optionally a tag_wildcard can
+  // be specified (or be NULL) and if so, results are filtered using this
+  // wildcard. The guesser parameter speficies whether a guesser can be used if
+  // the lemma is not found in the dictionary. Output is assigned to the forms
+  // vector.
   //
   // Tag_wildcard can be either NULL or a wildcard applied to the results.
   // A ? in the wildcard matches any character, [bytes] matches any of the
@@ -106,11 +106,11 @@ class MORPHODITA_IMPORT morpho {
   // NO_GUESSER is returned. If guesser == GUESSER and the lemma is found by
   // the guesser, GUESSER is returned. Otherwise, forms are cleared and <0 is
   // returned.
-  virtual int generate(const char* lemma, int lemma_len, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
+  virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
 
   // Rawlemma and lemma id identification
-  virtual int raw_lemma_len(const char* lemma, int lemma_len) const = 0;
-  virtual int lemma_id_len(const char* lemma, int lemma_len) const = 0;
+  virtual int raw_lemma_len(string_piece lemma) const = 0;
+  virtual int lemma_id_len(string_piece lemma) const = 0;
 };
 
 class MORPHODITA_IMPORT tagger {
@@ -125,14 +125,10 @@ class MORPHODITA_IMPORT tagger {
   virtual const morpho* get_morpho() const = 0;
 
   // Perform morphologic analysis and subsequent disambiguation.
-  virtual void tag(const std::vector<raw_form>& forms, std::vector<tagged_lemma>& tags) const = 0;
+  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
 };
 
 } // namespace morphodita
 } // namespace ufal
-
-extern "C" {
-
-}
 
 #endif

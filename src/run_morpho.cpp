@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
     split(line, ' ', tokens);
     if /* analyze */ (tokens.size() == 1) {
       vector<tagged_lemma> lemmas;
-      auto result = d->analyze(tokens[0].c_str(), tokens[0].size(), morpho::GUESSER, lemmas);
+      auto result = d->analyze(tokens[0], morpho::GUESSER, lemmas);
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
       for (auto& lemma : lemmas)
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 
     } else if /* generate */ (tokens.size() == 2) {
       vector<tagged_lemma_forms> forms;
-      auto result = d->generate(tokens[0].c_str(), tokens[0].size(), tokens[1].c_str(), morpho::GUESSER, forms);
+      auto result = d->generate(tokens[0], tokens[1].c_str(), morpho::GUESSER, forms);
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
       for (auto& lemma : forms) {

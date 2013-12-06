@@ -33,8 +33,8 @@ template <class LemmaAddinfo>
 class morpho_dictionary {
  public:
   void load(binary_decoder& data);
-  void analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas) const;
-  bool generate(const char* lemma, int lemma_len, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms) const;
+  void analyze(string_piece form, vector<tagged_lemma>& lemmas) const;
+  bool generate(string_piece lemma, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms) const;
  private:
   persistent_unordered_map lemmas, roots, suffixes;
 
@@ -151,28 +151,28 @@ void morpho_dictionary<LemmaAddinfo>::load(binary_decoder& data) {
 }
 
 template <class LemmaAddinfo>
-void morpho_dictionary<LemmaAddinfo>::analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas) const {
+void morpho_dictionary<LemmaAddinfo>::analyze(string_piece form, vector<tagged_lemma>& lemmas) const {
   int max_suffix_len = suffixes.max_length();
 
   uint16_t* suff[max_suffix_len]; int suff_len = 0;
-  for (int i = form_len; i >= 0 && suff_len < max_suffix_len; i--, suff_len++) {
-    suff[suff_len] = (uint16_t*) suffixes.at(form + i, suff_len, [](pointer_decoder& data) {
+  for (int i = form.len; i >= 0 && suff_len < max_suffix_len; i--, suff_len++) {
+    suff[suff_len] = (uint16_t*) suffixes.at(form.str + i, suff_len, [](pointer_decoder& data) {
       data.next<uint16_t>(2 * data.next_2B());
       data.next<uint16_t>(data.next_2B());
     });
     if (!suff[suff_len]) break;
   }
 
-  for (int root_len = form_len - --suff_len; suff_len >= 0 && root_len < int(roots.max_length()); suff_len--, root_len++)
+  for (int root_len = int(form.len) - --suff_len; suff_len >= 0 && root_len < int(roots.max_length()); suff_len--, root_len++)
     if (*suff[suff_len]) {
       unsigned suff_classes = *suff[suff_len];
       uint16_t* suff_data = suff[suff_len] + 1;
 
-      roots.iter(form, root_len, [&](const char* root, pointer_decoder& root_data) {
+      roots.iter(form.str, root_len, [&](const char* root, pointer_decoder& root_data) {
         unsigned root_class = root_data.next_2B();
         unsigned lemma_encoded = root_data.next_4B();
 
-        if (small_memeq(form, root, root_len)) {
+        if (small_memeq(form.str, root, root_len)) {
           uint16_t* suffix_class_ptr = lower_bound(suff_data, suff_data + suff_classes, root_class);
           if (suffix_class_ptr < suff_data + suff_classes && *suffix_class_ptr == root_class) {
             unsigned lemma_len = lemma_encoded & 0xFF;
@@ -191,18 +191,18 @@ void morpho_dictionary<LemmaAddinfo>::analyze(const char* form, int form_len, ve
 }
 
 template <class LemmaAddinfo>
-bool morpho_dictionary<LemmaAddinfo>::generate(const char* lemma, int lemma_len, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms) const {
+bool morpho_dictionary<LemmaAddinfo>::generate(string_piece lemma, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms) const {
   LemmaAddinfo addinfo;
-  int raw_lemma_len = addinfo.parse(lemma, lemma_len);
+  int raw_lemma_len = addinfo.parse(lemma);
   bool matched_lemma = false;
 
-  lemmas.iter(lemma, raw_lemma_len, [&](const char* lemma_str, pointer_decoder& data) {
+  lemmas.iter(lemma.str, raw_lemma_len, [&](const char* lemma_str, pointer_decoder& data) {
     unsigned lemma_info_len = data.next_1B();
     const auto* lemma_info = data.next<unsigned char>(lemma_info_len);
     unsigned lemma_roots_len = data.next_1B();
     auto* lemma_roots_ptr = data.next<unsigned char>(lemma_roots_len * (sizeof(uint32_t) + sizeof(uint16_t)));
 
-    if (small_memeq(lemma, lemma_str, raw_lemma_len) && addinfo.match_lemma_id(lemma_info, lemma_info_len)) {
+    if (small_memeq(lemma.str, lemma_str, raw_lemma_len) && addinfo.match_lemma_id(lemma_info, lemma_info_len)) {
       matched_lemma = true;
 
       vector<tagged_form>* forms = nullptr;
@@ -218,7 +218,7 @@ bool morpho_dictionary<LemmaAddinfo>::generate(const char* lemma, int lemma_len,
           for (auto& tag : suffix.second)
             if (filter.matches(tags[tag].c_str())) {
               if (!forms) {
-                lemmas_forms.emplace_back(string(lemma, raw_lemma_len) + LemmaAddinfo::format(lemma_info, lemma_info_len));
+                lemmas_forms.emplace_back(string(lemma.str, raw_lemma_len) + LemmaAddinfo::format(lemma_info, lemma_info_len));
                 forms = &lemmas_forms.back().forms;
               }
 

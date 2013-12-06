@@ -30,7 +30,7 @@ class morpho_statistical_guesser {
  public:
   void load(binary_decoder& data);
   typedef vector<string> used_rules;
-  void analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas, used_rules* used);
+  void analyze(string_piece form, vector<tagged_lemma>& lemmas, used_rules* used);
 
  private:
   vector<string> tags;

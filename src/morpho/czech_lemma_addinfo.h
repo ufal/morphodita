@@ -20,17 +20,18 @@
 
 #include "common.h"
 #include "utils/small_stringops.h"
+#include "utils/string_piece.h"
 
 namespace ufal {
 namespace morphodita {
 
 // Declarations
 struct czech_lemma_addinfo {
-  inline static int raw_lemma_len(const char* lemma, int lemma_len);
-  inline static int lemma_id_len(const char* lemma, int lemma_len);
+  inline static int raw_lemma_len(string_piece lemma);
+  inline static int lemma_id_len(string_piece lemma);
   inline static string format(const unsigned char* addinfo, int addinfo_len);
 
-  inline int parse(const char* lemma, int lemma_len, bool die_on_failure = false);
+  inline int parse(string_piece lemma, bool die_on_failure = false);
   inline bool match_lemma_id(const unsigned char* other_addinfo, int other_addinfo_len);
   inline bool match_comments_partial(const unsigned char* other_addinfo, int other_addinfo_len);
   inline bool match_comments_full(const unsigned char* other_addinfo, int other_addinfo_len);
@@ -40,33 +41,34 @@ struct czech_lemma_addinfo {
 
 
 // Definitions
-int czech_lemma_addinfo::raw_lemma_len(const char* lemma, int lemma_len) {
+int czech_lemma_addinfo::raw_lemma_len(string_piece lemma) {
   // Lemma ends by a '-[0-9]', '`' or '_'.
-  for (int len = 0; len < lemma_len; len++)
-    if (lemma[len] == '`' || lemma[len] == '_' || (lemma[len] == '-' && len+1 < lemma_len && lemma[len+1] >= '0' && lemma[len+1] <= '9'))
+  for (unsigned len = 0; len < lemma.len; len++)
+    if (lemma.str[len] == '`' || lemma.str[len] == '_' ||
+        (lemma.str[len] == '-' && len+1 < lemma.len && lemma.str[len+1] >= '0' && lemma.str[len+1] <= '9'))
       return len;
-  return lemma_len;
+  return lemma.len;
 }
 
-int czech_lemma_addinfo::lemma_id_len(const char* lemma, int lemma_len) {
+int czech_lemma_addinfo::lemma_id_len(string_piece lemma) {
   // Lemma ends by a '-[0-9]', '`' or '_'.
-  for (int len = 0; len < lemma_len; len++) {
-    if (lemma[len] == '`' || lemma[len] == '_')
+  for (unsigned len = 0; len < lemma.len; len++) {
+    if (lemma.str[len] == '`' || lemma.str[len] == '_')
       return len;
-    if (lemma[len] == '-' && len+1 < lemma_len && lemma[len+1] >= '0' && lemma[len+1] <= '9') {
+    if (lemma.str[len] == '-' && len+1 < lemma.len && lemma.str[len+1] >= '0' && lemma.str[len+1] <= '9') {
       len += 2;
-      while (len < lemma_len && lemma[len] >= '0' && lemma[len] <= '9') len++;
+      while (len < lemma.len && lemma.str[len] >= '0' && lemma.str[len] <= '9') len++;
       return len;
     }
   }
-  return lemma_len;
+  return lemma.len;
 }
 
-int czech_lemma_addinfo::parse(const char* lemma, int lemma_len, bool die_on_failure) {
+int czech_lemma_addinfo::parse(string_piece lemma, bool die_on_failure) {
   data.clear();
 
-  const char* lemma_info = lemma + raw_lemma_len(lemma, lemma_len);
-  if (lemma_info < lemma + lemma_len) {
+  const char* lemma_info = lemma.str + raw_lemma_len(lemma);
+  if (lemma_info < lemma.str + lemma.len) {
     int lemma_num = 255;
     const char* lemma_additional_info = lemma_info;
 
@@ -75,24 +77,24 @@ int czech_lemma_addinfo::parse(const char* lemma, int lemma_len, bool die_on_fai
 
       if (lemma_additional_info == lemma_info + 1 || (*lemma_additional_info != '\0' && *lemma_additional_info != '`' && *lemma_additional_info != '_') || lemma_num < 0 || lemma_num >= 255) {
         if (die_on_failure)
-          runtime_errorf("Lemma number %d in lemma %s out of range!", lemma_num, lemma);
+          runtime_errorf("Lemma number %d in lemma %s out of range!", lemma_num, lemma.str);
         else
           lemma_num = 255;
       }
     }
     data.emplace_back(lemma_num);
-    while (lemma_additional_info < lemma + lemma_len)
+    while (lemma_additional_info < lemma.str + lemma.len)
       data.push_back(*(unsigned char*)lemma_additional_info++);
 
     if (data.size() > 255) {
       if (die_on_failure)
-        runtime_errorf("Too long lemma info %s in lemma %s!", lemma_info, lemma);
+        runtime_errorf("Too long lemma info %s in lemma %s!", lemma_info, lemma.str);
       else
         data.resize(255);
     }
   }
 
-  return lemma_info - lemma;
+  return lemma_info - lemma.str;
 }
 
 bool czech_lemma_addinfo::match_lemma_id(const unsigned char* other_addinfo, int other_addinfo_len) {

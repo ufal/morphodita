@@ -35,8 +35,8 @@ class morpho_prefix_guesser {
   morpho_prefix_guesser(const MorphoDictionary& dictionary) : dictionary(dictionary) {}
 
   void load(binary_decoder& data);
-  void analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas);
-  bool generate(const char* lemma, int lemma_len, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms);
+  void analyze(string_piece form, vector<tagged_lemma>& lemmas);
+  bool generate(string_piece lemma, const tag_filter& filter, vector<tagged_lemma_forms>& lemmas_forms);
 
  private:
   const MorphoDictionary& dictionary;
@@ -63,18 +63,18 @@ void morpho_prefix_guesser<MorphoDictionary>::load(binary_decoder& data) {
 
 // Analyze can return non-unique lemma-tag pairs.
 template <class MorphoDictionary>
-void morpho_prefix_guesser<MorphoDictionary>::analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas) {
-  if (form_len <= 0) return;
+void morpho_prefix_guesser<MorphoDictionary>::analyze(string_piece form, vector<tagged_lemma>& lemmas) {
+  if (!form.len) return;
 
   vector<char> form_tmp;
   vector<unsigned> middle_masks;
-  middle_masks.reserve(form_len);
+  middle_masks.reserve(form.len);
 
-  for (int initial = 0; initial < form_len; initial++) {
+  for (unsigned initial = 0; initial < form.len; initial++) {
     // Match the initial prefix.
     unsigned initial_mask = (1<<tag_filters.size()) - 1; // full mask for empty initial prefix
     if (initial) {
-      auto found = prefixes_initial.at_typed<uint32_t>(form, initial);
+      auto found = prefixes_initial.at_typed<uint32_t>(form.str, initial);
       if (!found) break;
       initial_mask = *found;
     }
@@ -83,35 +83,35 @@ void morpho_prefix_guesser<MorphoDictionary>::analyze(const char* form, int form
     if (initial_mask) {
       middle_masks.resize(initial);
       middle_masks.emplace_back(initial_mask);
-      for (int middle = initial; middle < int(middle_masks.size()); middle++) {
+      for (unsigned middle = initial; middle < middle_masks.size(); middle++) {
         if (!middle_masks[middle]) continue;
         // Try matching middle prefixes from current index.
-        for (int i = middle + 1; i < form_len; i++) {
-          auto found = prefixes_middle.at_typed<uint32_t>(form + middle, i - middle);
+        for (unsigned i = middle + 1; i < form.len; i++) {
+          auto found = prefixes_middle.at_typed<uint32_t>(form.str + middle, i - middle);
           if (!found) break;
           if (*found) {
-            if (i + 1 > int(middle_masks.size())) middle_masks.resize(i + 1);
+            if (i + 1 > middle_masks.size()) middle_masks.resize(i + 1);
             middle_masks[i] |= middle_masks[middle] & *found;
           }
         }
 
         // Try matching word forms if at least one middle prefix was found.
-        if (middle > initial && middle < form_len ) {
+        if (middle > initial && middle < form.len ) {
           if (initial) {
-            if (form_tmp.empty()) form_tmp.assign(form, form + form_len);
-            small_memcpy(form_tmp.data() + middle - initial, form, initial);
+            if (form_tmp.empty()) form_tmp.assign(form.str, form.str + form.len);
+            small_memcpy(form_tmp.data() + middle - initial, form.str, initial);
           }
           unsigned lemmas_ori_size = lemmas.size();
-          dictionary.analyze((initial ? form_tmp.data() : form) + middle - initial, form_len - middle + initial, lemmas);
+          dictionary.analyze(string_piece((initial ? form_tmp.data() : form.str) + middle - initial, form.len - middle + initial), lemmas);
           unsigned lemmas_new_size = lemmas_ori_size;
           for (unsigned i = lemmas_ori_size; i < lemmas.size(); i++) {
             for (unsigned filter = 0; filter < tag_filters.size(); filter++)
               if ((middle_masks[middle] & (1<<filter)) && tag_filters[filter].matches(lemmas[i].tag.c_str())) {
                 if (i == lemmas_new_size) {
-                  lemmas[lemmas_new_size].lemma.insert(0, form + initial, middle - initial);
+                  lemmas[lemmas_new_size].lemma.insert(0, form.str + initial, middle - initial);
                 } else {
                   lemmas[lemmas_new_size].lemma.reserve(lemmas[i].lemma.size() + middle - initial);
-                  lemmas[lemmas_new_size].lemma.assign(form + initial, middle - initial);
+                  lemmas[lemmas_new_size].lemma.assign(form.str + initial, middle - initial);
                   lemmas[lemmas_new_size].lemma.append(lemmas[i].lemma);
                   lemmas[lemmas_new_size].tag = lemmas[i].tag;
                 }
@@ -127,7 +127,7 @@ void morpho_prefix_guesser<MorphoDictionary>::analyze(const char* form, int form
 }
 
 template <class MorphoDictionary>
-bool morpho_prefix_guesser<MorphoDictionary>::generate(const char* /*lemma*/, int /*lemma_len*/, const tag_filter& /*filter*/, vector<tagged_lemma_forms>& /*lemmas_forms*/) {
+bool morpho_prefix_guesser<MorphoDictionary>::generate(string_piece /*lemma*/, const tag_filter& /*filter*/, vector<tagged_lemma_forms>& /*lemmas_forms*/) {
   // Not implemented yet. Is it actually needed?
   return false;
 }

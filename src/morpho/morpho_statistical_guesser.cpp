@@ -49,27 +49,27 @@ static bool contains(morpho_statistical_guesser::used_rules* used, const string&
 }
 
 // Produces unique lemma-tag pairs.
-void morpho_statistical_guesser::analyze(const char* form, int form_len, vector<tagged_lemma>& lemmas, morpho_statistical_guesser::used_rules* used) {
+void morpho_statistical_guesser::analyze(string_piece form, vector<tagged_lemma>& lemmas, morpho_statistical_guesser::used_rules* used) {
   unsigned lemmas_initial_size = lemmas.size();
 
   // We have rules in format "suffix prefix" in rules.
   // Find the matching rule with longest suffix and of those with longest prefix.
   string rule_label; rule_label.reserve(12);
-  int suffix_len = 0;
-  for (; suffix_len < form_len; suffix_len++) {
-    rule_label.push_back(form[form_len - (suffix_len + 1)]);
+  unsigned suffix_len = 0;
+  for (; suffix_len < form.len; suffix_len++) {
+    rule_label.push_back(form.str[form.len - (suffix_len + 1)]);
     if (!rules.at(rule_label.c_str(), rule_label.size(), [](pointer_decoder& data){ data.next<char>(data.next_2B()); }))
       break;
   }
 
-  for (; suffix_len >= 0; suffix_len--) {
+  for (suffix_len++; suffix_len--; ) {
     rule_label.resize(suffix_len);
     rule_label.push_back(' ');
 
     const unsigned char* rule = nullptr;
-    int rule_prefix_len = 0;
-    for (int prefix_len = 0; prefix_len + suffix_len < form_len; prefix_len++) {
-      if (prefix_len) rule_label.push_back(form[prefix_len - 1]);
+    unsigned rule_prefix_len = 0;
+    for (unsigned prefix_len = 0; prefix_len + suffix_len < form.len; prefix_len++) {
+      if (prefix_len) rule_label.push_back(form.str[prefix_len - 1]);
       const unsigned char* found = rules.at(rule_label.c_str(), rule_label.size(), [](pointer_decoder& data){ data.next<char>(data.next_2B()); });
       if (!found) break;
       if (*(found += sizeof(uint16_t))) {
@@ -83,21 +83,21 @@ void morpho_statistical_guesser::analyze(const char* form, int form_len, vector<
       if (rule_label.size() > 1 && !contains(used, rule_label)) { // ignore rule ' '
         if (used) used->push_back(rule_label);
         for (int rules_len = *rule++; rules_len; rules_len--) {
-          int pref_del_len = *rule++; const char* pref_del = (const char*)rule; rule += pref_del_len;
-          int pref_add_len = *rule++; const char* pref_add = (const char*)rule; rule += pref_add_len;
-          int suff_del_len = *rule++; const char* suff_del = (const char*)rule; rule += suff_del_len;
-          int suff_add_len = *rule++; const char* suff_add = (const char*)rule; rule += suff_add_len;
-          int tags_len = *rule++; const uint16_t* tags = (const uint16_t*)rule; rule += tags_len * sizeof(uint16_t);
+          unsigned pref_del_len = *rule++; const char* pref_del = (const char*)rule; rule += pref_del_len;
+          unsigned pref_add_len = *rule++; const char* pref_add = (const char*)rule; rule += pref_add_len;
+          unsigned suff_del_len = *rule++; const char* suff_del = (const char*)rule; rule += suff_del_len;
+          unsigned suff_add_len = *rule++; const char* suff_add = (const char*)rule; rule += suff_add_len;
+          unsigned tags_len = *rule++; const uint16_t* tags = (const uint16_t*)rule; rule += tags_len * sizeof(uint16_t);
 
-          if (pref_del_len + suff_del_len > form_len ||
-              (pref_del_len && !small_memeq(pref_del, form, pref_del_len)) ||
-              (suff_del_len && !small_memeq(suff_del, form + form_len - suff_del_len, suff_del_len)))
+          if (pref_del_len + suff_del_len > form.len ||
+              (pref_del_len && !small_memeq(pref_del, form.str, pref_del_len)) ||
+              (suff_del_len && !small_memeq(suff_del, form.str + form.len - suff_del_len, suff_del_len)))
             continue;
 
           string lemma;
-          lemma.reserve(pref_add_len - pref_del_len + form_len + suff_add_len - suff_del_len);
+          lemma.reserve(pref_add_len - pref_del_len + form.len + suff_add_len - suff_del_len);
           if (pref_add_len) lemma.append(pref_add, pref_add_len);
-          if (pref_del_len + suff_del_len < form_len) lemma.append(form + pref_del_len, form_len - pref_del_len - suff_del_len);
+          if (pref_del_len + suff_del_len < form.len) lemma.append(form.str + pref_del_len, form.len - pref_del_len - suff_del_len);
           if (suff_add_len) lemma.append(suff_add, suff_add_len);
           while (tags_len--)
             lemmas.emplace_back(lemma, this->tags[*tags++]);
@@ -111,7 +111,7 @@ void morpho_statistical_guesser::analyze(const char* form, int form_len, vector<
   if (lemmas.size() == lemmas_initial_size)
     if (!contains(used, string())) {
       if (used) used->push_back(string());
-      lemmas.emplace_back(string(form, form_len), tags[default_tag]);
+      lemmas.emplace_back(string(form.str, form.len), tags[default_tag]);
     }
 }
 

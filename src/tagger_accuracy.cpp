@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
   clock_t now = clock();
 
   vector<word> sentence;
-  vector<raw_form> raw_forms;
+  vector<string_piece> forms;
   vector<tagged_lemma> tags;
   enum { TAGS, LEMMAS, BOTH, TOTAL };
   int correct[TOTAL] = {}, total = 0;
@@ -56,9 +56,9 @@ int main(int argc, char* argv[]) {
       if (!sentence.empty()) {
         // Nonempty sentence, perform tagging
         for (auto& w : sentence)
-          raw_forms.emplace_back(w.form.c_str(), w.form.size());
+          forms.emplace_back(w.form.c_str(), w.form.size());
 
-        t->tag(raw_forms, tags);
+        t->tag(forms, tags);
 
         for (unsigned i = 0; i < tags.size(); i++) {
           printf("%s\t%s\n", tags[i].lemma.c_str(), tags[i].tag.c_str());
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
         }
 
         sentence.clear();
-        raw_forms.clear();
+        forms.clear();
       }
       if (eof) break;
       putchar('\n');

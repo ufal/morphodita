@@ -33,7 +33,7 @@ class perceptron_tagger : public tagger {
 
   bool load(FILE* f);
   virtual const morpho* get_morpho() const override;
-  virtual void tag(const vector<raw_form>& forms, vector<tagged_lemma>& tags) const override;
+  virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const override;
 
  private:
   unique_ptr<morpho> dict;
@@ -73,7 +73,7 @@ const morpho* perceptron_tagger<FeatureSequences, order>::get_morpho() const {
 }
 
 template<class FeatureSequences, int order>
-void perceptron_tagger<FeatureSequences, order>::tag(const vector<raw_form>& forms, vector<tagged_lemma>& tags) const {
+void perceptron_tagger<FeatureSequences, order>::tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const {
   tags.clear();
   if (!dict) return;
 
@@ -87,7 +87,7 @@ void perceptron_tagger<FeatureSequences, order>::tag(const vector<raw_form>& for
     else
       c->tagged_forms[i].form = forms[i];
 
-    dict->analyze(c->tagged_forms[i].form.form, c->tagged_forms[i].form.form_len, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, c->tagged_forms[i].tags);
+    dict->analyze(c->tagged_forms[i].form, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, c->tagged_forms[i].tags);
   }
 
   if (c->tags.size() < forms.size()) c->tags.resize(forms.size() * 2);
