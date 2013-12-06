@@ -146,6 +146,9 @@ class MORPHODITA_IMPORT tagger {
 
   // Perform morphologic analysis and subsequent disambiguation.
   virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
+
+  // Perform tokenization and then morphologic analysis and subsequent disambiguation.
+  void tokenize_and_tag(const char* text, std::vector<tagged_lemma>& tags, std::vector<string_piece>* forms, std::vector<token_range>* tokens) const;
 };
 
 } // namespace morphodita

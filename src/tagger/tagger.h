@@ -18,8 +18,11 @@
 
 #pragma once
 
+#include <memory>
+
 #include "common.h"
 #include "morpho/morpho.h"
+#include "utils/threadsafe_stack.h"
 
 namespace ufal {
 namespace morphodita {
@@ -37,6 +40,20 @@ class EXPORT_ATTRIBUTES tagger {
 
   // Perform morphologic analysis and subsequent disambiguation.
   virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const = 0;
+
+  // Perform tokenization and then morphologic analysis and subsequent disambiguation.
+  void tokenize_and_tag(const char* text, vector<tagged_lemma>& tags, vector<string_piece>* forms, vector<token_range>* tokens) const;
+
+ private:
+  struct cache {
+    unique_ptr<tokenizer> t;
+    vector<tagged_lemma> tags;
+    vector<string_piece> forms;
+    vector<token_range> tokens;
+
+    cache(const tagger& self) : t(self.get_morpho()->new_tokenizer()) {}
+  };
+  mutable threadsafe_stack<cache> caches;
 };
 
 } // namespace morphodita

@@ -127,4 +127,11 @@ class tagger {
       self->tag(string_pieces, tags);
     }
   }
+
+  %rename(tokenizeAndTag) tokenize_and_tag;
+  %extend {
+    void tokenize_and_tag(const char* text, std::vector<tagged_lemma>& tags, std::vector<token_range>* tokens) const {
+      $self->tokenize_and_tag(text, tags, NULL, tokens);
+    }
+  }
 };

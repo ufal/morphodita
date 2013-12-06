@@ -53,5 +53,23 @@ tagger* tagger::load(const char* fname) {
   return load(f);
 }
 
+void tagger::tokenize_and_tag(const char* text, vector<tagged_lemma>& tags, vector<string_piece>* forms, vector<token_range>* tokens) const {
+  if (forms) forms->clear();
+  if (tokens) tokens->clear();
+
+  cache* c = caches.pop();
+  if (!c) c = new cache(*this);
+
+  c->t->set_text(text);
+  while (c->t->next_sentence(&c->forms, tokens ? &c->tokens : nullptr)) {
+    tag(c->forms, c->tags);
+    tags.insert(tags.end(), c->tags.begin(), c->tags.end());
+    if (forms) forms->insert(forms->end(), c->forms.begin(), c->forms.end());
+    if (tokens) tokens->insert(tokens->end(), c->tokens.begin(), c->tokens.end());
+  }
+
+  caches.push(c);
+}
+
 } // namespace morphodita
 } // namespace ufal
