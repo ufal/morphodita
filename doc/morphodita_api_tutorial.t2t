@@ -1,4 +1,4 @@
-MorphoDiTa API
+MorphoDiTa API Tutorial
 
 
 %!encoding: utf-8
@@ -66,14 +66,14 @@ model.
 The main tagging method is ``tagger::tag``:
 
 ```
-virtual void tag(const vector<raw_form>& forms, vector<tagged_lemma>& tags) const = 0;
+virtual void tag(const std::vector<raw_form>& forms, std::vector<tagged_lemma>& tags) const = 0;
 ```
 
-The input is a ``std::vector`` of ``raw_form`` which is a pair of ``const char*
-form`` and ``int form_len``.
+The input is a ``std::vector`` of ``raw_form`` which is a pair of 
+``const char* form`` and ``int form_len``.
 
 The ``tagger::tag`` method returns the tagged output in it's second argument,
-``vector<tagged_lemma>``. The calling procedure must provide a result vector
+``std::vector<tagged_lemma>``. The calling procedure must provide a result vector
 and the tagger assigns the output to this vector. Obviously, the indexes in the
 output vector correspond to indexes in input vector.  ``tagged_lemma`` has two
 public members: ``std::string lemma`` and ``std:string tag``, corresponding to
@@ -83,7 +83,7 @@ predicted lemma and tag, respectively.
 
 The main access to MorphoDiTa morphologic dictionary is through class
 ``morpho``. An example of this interface usage can be found in a program file
-`run_morpho.cpp``.
+``run_morpho.cpp``.
 
 +++ Dictionary Construction +++
 
@@ -130,7 +130,7 @@ In the first case, one performs morphologic analysis for a given word by
 calling a method ``morpho::analyze``:
 
 ```
-virtual int analyze(const char* form, int form_len, guesser_mode guesser, vector<tagged_lemma>& lemmas) const = 0;
+virtual int analyze(const char* form, int form_len, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
 ```
 
 An example (assuming that morphologic dictionary is already constructed, see
@@ -149,23 +149,65 @@ for (auto& lemma: lemmas)
 The input is a single token, C string (``const char*``), it's length, Guesser
 mode (whether to use some kind of guesser or strictly dictionary only, see
 question Guesser Mode in Questions and Answers) and output
-``std::vector<tagged_lemma>``.  The caller must provie an output
+``std::vector<tagged_lemma>``.  The caller must provide an output
 vector ``std::vector<tagged_lemma>`` and the method ``morpho::analyze``
-assign the output to this vector.
+assigns the output to this vector.
 
 +++ Generation +++
 
-For a given lemma and tag pair, MorphoDiTa can generate a corresponding form.
-Furthermore, for a given lemma, MorphoDiTa can generate all possible form-tag
-pairs. The corresponding methods are ``morpho::generate`` and ``morpho::generate_all``:
+MorphoDiTa performs morphologic generation from a given lemma:
 
 ```
-virtual int generate(const char* lemma, int lemma_len, const char* tag, guesser_mode guesser, std::string& form) const = 0;
-virtual int generate_all(const char* lemma, int lemma_len, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
+virtual int generate(const char* lemma, int lemma_len,
+                     const char* tag_wildcard, guesser_mode guesser,
+                     std::vector<tagged_lemma_forms>& forms) const = 0;
 ```
 
-Again, the last parameter is the output, which must be initialized empty by the
-caller and is filled by the method.
+The lemma is given by a pointer and a length and therefore the lemma does not need to be ``'\0'`` terminated.
+
+++++ Tag Wildcard ++++
+
+Optionally, a tag wildcard can be specified (or be ``NULL``) and if so, results
+are filtered using this wildcard. This method can be therefore used in more
+ways: One may wish to generate all possible forms and their tags from a given
+lemma. Then the ``tag_wildcard`` is set to ``NULL`` and the method generates
+all possible combinations. One may also need a generate a specific form and tag
+from a given lemma, then ``tag_wildcard`` is set to this tag value.
+
+Or even more, for example, in the Czech positional morphology tagging system
+([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]),
+one may even wish to generate something like "all forms in fourth case",
+then ``tag_wildcard`` should be set to ``????4??????????``.
+Please see Section "Czech Morphology" in User's Manual for more details about the Czech positional tagging system.
+
+The previous example applies to morphologic annotation applied to
+[PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/], however, the tag wildcards can be used in any
+morphologic tagging system.
+
+The rules for the ``tag_wildcard`` parameter are:
+
+Tag_wildcard can be either ``NULL`` or a wildcard applied to the results.
+A ``?`` in the wildcard matches any character, ``[bytes]`` matches any of the
+bytes and ``[^bytes]`` matches any byte different from the specified ones.
+A ``-`` has no special meaning inside the bytes and if ``]`` is first in bytes, it
+does not end the bytes group.
+
+++++ Unknown Lemmas ++++
+
+When the lemma is unknown, MorphoDiTa's generation behavior is defined by Guesser mode (see also
+question Guesser Mode in Questions and Answers). If at least one lemma is found
+in the dictionary, ``NO_GUESSER`` is returned. If ``guesser == GUESSER`` and the lemma
+is found by the guesser, ``GUESSER`` is returned. Otherwise, forms are cleared and
+``<0`` is returned.
+
+++++ Raw Lemmas in Czech ++++
+
+In the Czech langauge, if the given lemma is only a raw lemma, all lemma ids
+with this raw lemma are returned. Otherwise only matching lemma ids are
+returned, ignoring any lemma comments. For every found lemma, matching forms
+are filtered using the tag_wildcard. Please see Section "Czech Morphology" in
+User's Manual for details about lemmas and raw lemmas in the Czech morphology.
+
 
 ++ API Questions and Answers ++
 
@@ -179,3 +221,5 @@ caller and is filled by the method.
   input strings may be substrings of larger text or come from different than
   C++ memory regions, we want to avoid the cost ``string`` conversion.
   For C++ programmers, it is easy to use ``c_str()`` and ``size()``.
+
+

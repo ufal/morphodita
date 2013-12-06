@@ -7,7 +7,7 @@ Version 0.9
 
 + Introduction +
 
-MorphoDiTa is an open-source tool for morphologic analysis of natural language texts. It consists of a morphologic dictionary and a tagger and is distributed as a standalone tool or a library, along with trained linguistic models. In the Czech language, MorphoDiTa achieves state-of-the-art results with a throughput around 10-200K words per second. It is free for non-commercial purposes and is distributed under [LGPL http://www.gnu.org/licenses/lgpl.html] (source code) and [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] (models).
+MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for morphologic analysis of natural language texts. It consists of a morphologic dictionary and a tagger and is distributed as a standalone tool or a library, along with trained linguistic models. In the Czech language, MorphoDiTa achieves state-of-the-art results with a throughput around 10-200K words per second. It is free for non-commercial purposes and is distributed under [LGPL http://www.gnu.org/licenses/lgpl.html] (source code) and [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] (models).
 
 
 + Release +
@@ -34,7 +34,16 @@ MorphoDiTa will be available either as pre-compiled binaries and models from [LI
 
 ++ License ++
 
-MorphoDiTa is an open-source project and is freely available for non-commercial purposes. The source code is distributed under[LGPL http://www.gnu.org/licenses/lgpl.html] and the pre-compiled binaries and the associated models and data under [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/]. If you use this tool for scientific work, please give credit to us by referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and [Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
+MorphoDiTa is an open-source project and is freely available for non-commercial
+purposes. The source code is distributed under
+[LGPL http://www.gnu.org/licenses/lgpl.html]
+and the pre-compiled binaries and the
+associated models and data under
+[CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/].
+If you use this tool for
+scientific work, please give credit to us by referencing
+[MorphoDiTa website http://ufal.mff.cuni.cz/morphodita]
+and [Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
 
 
 ++ Platforms and Requirements ++
@@ -48,10 +57,16 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows.
 %not_web% %!include: morphodita_user.t2t
 
 
-+ MorphoDiTa API +
+%web% + MorphoDiTa API +
 
-%web% [MorphoDiTa API on separate page. morphodita/api]
-%not_web% %!include: morphodita_api.t2t
+%web% [MorphoDiTa API Tutorial on separate page. morphodita/api-tutorial]
+
+%web% [MorphoDiTa API Reference on separate page. morphodita/api-reference]
+
+%not_web% + MorphoDiTa API Tutorial +
+%not_web% %!include: morphodita_api_tutorial.t2t
+%not_web% + MorphoDiTa API Reference +
+%not_web% %!include: morphodita_api_reference.t2t
 
 
 + Contact +

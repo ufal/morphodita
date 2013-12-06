@@ -7,15 +7,18 @@ In a natural language text, the task of morphologic analysis is to assign for ea
 
 MorphoDiTa also performs these two steps of morphologic analysis: It first outputs all possible pairs of lemma and POS tag for each token. In Czech, this procedure is based on a well-known Jan Hajič's morphologic dictionary ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]). Consequently, the optimal combination of lemmas and POS tags is selected for the words in a sentence using an algorithm described in [Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
 
-++ Library ++
-
-MorphoDiTa is available as a C++ library with bindings for other languages. The source code is available under the [LGPL http://www.gnu.org/licenses/lgpl.html] license.
+This section describes the commandline tools and interfaces; the models and
+dictionaries; and the Czech morphology. The C++ library with bindings for other
+languages is described elsewhere, either in MorphoDiTa API Tutorial or in
+MorphoDiTa API Reference.
 
 ++ Models ++
 
 Like any supervised machine learning tool, MorphoDiTa needs a trained linguistic model. Czech models trained on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] are distributed with the tool. The models are distributed under the [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
 
-One may wish to use either a larger, more precise, but slower model; or a more light-weight, faster, but less accurate model. The parameters of the two models distributed with MorphoDiTa are as follows:
+One may wish to use either a larger, more precise, but slower model; or a more
+light-weight, faster, but less accurate model. The parameters of the models
+distributed with MorphoDiTa are as follows:
 
 : ``czech-<version>.tagger-best_accuracy``
   Best and slowest tagger (Viterbi of order 3). Reaches 95.44% tag accuracy, 97.80% lemma accuracy, 94.66% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] etest data. Speed: ~10k words/s.
@@ -39,6 +42,24 @@ MorphoDiTa is distributed with two Czech morphologic dictionaries:
 : ``czech-<version>.lemmadict``
   Jan Hajič ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]) morpho dictionary used by ``czech-<version>_lemmatizer.tagger``, using only first two tag positions.
 
+
+++ Czech Morphology ++
+
+In the Czech language, MorphoDiTa uses Czech morphologic system by
+Jan Hajič ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]).
+In this system, tags are positional with 15 positions corresponding to part of
+speech, detailed part of speech, gender, number, case, etc. (e.g. ``NNFS1-----A----``).
+Czech lemmas consist of a base part, which is a meaningful prefix and we call
+it a ``raw lemma`` in this documentation; and a certain number of technical
+suffixes. The following examples illustrate this:
+
+- ``Japonsko_;G`` (raw lemma: ``Japonsko``)
+- ``se_^(zvr._zájmeno/částice)`` (raw lemma: ``se``)
+- ``tvořit_:T`` (raw lemma: ``tvořit``)
+
+
+For a more detailed reference about the Czech morphology, please see
+[Lemma and Tag Structure in PDT 2.0 http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html].
 
 ++ Segmentation and Tokenization ++
 
