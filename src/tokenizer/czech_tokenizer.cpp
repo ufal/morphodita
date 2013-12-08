@@ -20,7 +20,7 @@
 #include "utils/utf8.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 void czech_tokenizer::set_text(const char* text) {
   this->text = text;
@@ -57,7 +57,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ra
   return true;
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal
 
 

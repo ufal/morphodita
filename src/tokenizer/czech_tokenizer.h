@@ -19,28 +19,25 @@
 #pragma once
 
 #include "common.h"
-#include "utils/string_piece.h"
+#include "tokenizer.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
-// Range of a token, measured in Unicode characters, not UTF8 bytes.
-struct token_range {
-  size_t start;
-  size_t length;
-
-  token_range() {}
-  token_range(size_t start, size_t length) : start(start), length(length) {}
-};
-
-class tokenizer {
+class czech_tokenizer : public tokenizer {
  public:
-  virtual ~tokenizer() {}
+  czech_tokenizer(bool split_hyphenated_words) : split_hyphenated_words(split_hyphenated_words) {}
 
-  virtual void set_text(const char* text) = 0;
+  virtual void set_text(const char* text) override;
 
-  virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) = 0;
+  virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) override;
+
+ private:
+  bool split_hyphenated_words;
+
+  const char* text;
+  size_t chars;
 };
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal
