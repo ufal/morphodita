@@ -121,7 +121,7 @@ int czech_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagged
   return -1;
 }
 
-int czech_morpho::generate(string_piece lemma, const char* tag_wildcard, ufal::morphodita::morpho::guesser_mode guesser, vector<ufal::morphodita::tagged_lemma_forms>& forms) const {
+int czech_morpho::generate(string_piece lemma, const char* tag_wildcard, morpho::guesser_mode guesser, vector<tagged_lemma_forms>& forms) const {
   forms.clear();
 
   tag_filter filter(tag_wildcard);

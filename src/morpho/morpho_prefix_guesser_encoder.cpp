@@ -26,7 +26,7 @@
 namespace ufal {
 namespace morphodita {
 
-void morpho_prefix_guesser_encoder::encode(FILE* f, ufal::morphodita::binary_encoder& enc) {
+void morpho_prefix_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
   vector<string> filters;
   unordered_map<string, uint32_t> filters_map;
   unordered_map<string, uint32_t> prefixes_initial;

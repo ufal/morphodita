@@ -26,7 +26,7 @@
 namespace ufal {
 namespace morphodita {
 
-void morpho_statistical_guesser_encoder::encode(FILE* f, ufal::morphodita::binary_encoder& enc) {
+void morpho_statistical_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
   unordered_map<string, vector<pair<vector<string>, vector<int>>>> statistical_guesser;
   vector<string> tags;
   unordered_map<string, int> tags_map;
