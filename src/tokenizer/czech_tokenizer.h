@@ -26,15 +26,11 @@ namespace morphodita {
 
 class czech_tokenizer : public tokenizer {
  public:
-  czech_tokenizer(bool split_hyphenated_words) : split_hyphenated_words(split_hyphenated_words) {}
-
   virtual void set_text(const char* text) override;
 
   virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) override;
 
  private:
-  bool split_hyphenated_words;
-
   const char* text = nullptr;
   size_t chars = 0;
 };

@@ -52,18 +52,18 @@ int main(int argc, char* argv[]) {
 void tag_vertical(const tagger& tagger) {
   string line;
 
-  vector<string> strings;
+  vector<string> words;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
   for (bool not_eof = true; not_eof; ) {
     // Read sentence
-    strings.clear();
+    words.clear();
     forms.clear();
     while ((not_eof = getline(stdin, line)) && !line.empty()) {
       auto tab = line.find('\t');
-      strings.emplace_back(tab == string::npos ? line : line.substr(0, tab));
-      forms.emplace_back(strings.back());
+      words.emplace_back(tab == string::npos ? line : line.substr(0, tab));
+      forms.emplace_back(words.back());
     }
 
     // Tag
