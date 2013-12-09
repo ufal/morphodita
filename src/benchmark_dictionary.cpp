@@ -28,8 +28,8 @@ int main(int argc, char* argv[]) {
   if (argc <= 2) runtime_errorf("Usage: %s dict_file forms_to_analyze <raw_dict_file", argv[0]);
 
   eprintf("Loading dictionary: ");
-  unique_ptr<morpho> d(morpho::load(argv[1]));
-  if (!d) runtime_errorf("Cannot load dictionary %s!", argv[1]);
+  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
+  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
   eprintf("done\n");
 
   eprintf("Loading forms to analyze: ");
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
   clock_t now = clock();
   vector<tagged_lemma> lemmas;
   for (auto& form : forms) {
-    d->analyze(form, morpho::NO_GUESSER, lemmas);
+    dictionary->analyze(form, morpho::NO_GUESSER, lemmas);
   }
   eprintf("done in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 

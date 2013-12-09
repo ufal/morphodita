@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
   if (argc <= 1) runtime_errorf("Usage: %s tagger_file", argv[0]);
 
   eprintf("Loading tagger: ");
-  unique_ptr<tagger> t(tagger::load(argv[1]));
-  if (!t) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
+  unique_ptr<tagger> tagger(tagger::load(argv[1]));
+  if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
   eprintf("done\n");
 
   eprintf("Tagging: ");
@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
         for (auto& w : sentence)
           forms.emplace_back(w.form.c_str(), w.form.size());
 
-        t->tag(forms, tags);
+        tagger->tag(forms, tags);
 
         for (unsigned i = 0; i < tags.size(); i++) {
           printf("%s\t%s\n", tags[i].lemma.c_str(), tags[i].tag.c_str());

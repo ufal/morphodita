@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
   if (argc <= 1) runtime_errorf("Usage: %s dict_file <raw_dict_file", argv[0]);
 
   eprintf("Loading dictionary: ");
-  unique_ptr<morpho> d(morpho::load(argv[1]));
-  if (!d) runtime_errorf("Cannot load dictionary %s!", argv[1]);
+  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
+  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
   eprintf("done\n");
 
   raw_morpho_dictionary_reader raw(stdin);
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     sort(raw_forms.begin(), raw_forms.end());
     raw_forms.erase(unique(raw_forms.begin(), raw_forms.end()), raw_forms.end());
 
-    d->generate(lemma, nullptr, morpho::NO_GUESSER, lemmas_forms);
+    dictionary->generate(lemma, nullptr, morpho::NO_GUESSER, lemmas_forms);
 
     bool same_results = false;
     for (auto& lemma_forms : lemmas_forms)
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 
     if (same_results)
       for (auto& tagged_form : raw_forms) {
-        d->analyze(tagged_form.first, morpho::NO_GUESSER, lemmas);
+        dictionary->analyze(tagged_form.first, morpho::NO_GUESSER, lemmas);
 
         same_results = false;
         for (auto& tagged_lemma : lemmas)

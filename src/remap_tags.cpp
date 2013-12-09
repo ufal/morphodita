@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
   if (argc <= 1) runtime_errorf("Usage: %s dict_file <data", argv[0]);
 
   eprintf("Loading dictionary: ");
-  unique_ptr<morpho> d(morpho::load(argv[1]));
-  if (!d) runtime_errorf("Cannot load dictionary %s!", argv[1]);
+  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
+  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
   eprintf("done\n");
 
   eprintf("Processing data: ");
@@ -54,9 +54,9 @@ int main(int argc, char* argv[]) {
     if (tokens.size() != 3) runtime_errorf("The line %s does not contain three columns!", line.c_str());
 
     // Analyse
-    d->analyze(tokens[0], morpho::NO_GUESSER, lemmas);
-    int rawlemma_len = d->raw_lemma_len(tokens[1]);
-    int lemmaid_len = d->lemma_id_len(tokens[1]);
+    dictionary->analyze(tokens[0], morpho::NO_GUESSER, lemmas);
+    int rawlemma_len = dictionary->raw_lemma_len(tokens[1]);
+    int lemmaid_len = dictionary->lemma_id_len(tokens[1]);
 
     // Perform remapping if necessary
     forms++;
@@ -68,11 +68,11 @@ int main(int argc, char* argv[]) {
       if (lemma.tag != tokens[2]) continue;
       matches[TAG] = 1;
       matching_lemmas[TAG].push_back(lemma);
-      if (lemma.lemma.compare(0, d->raw_lemma_len(lemma.lemma), tokens[1], 0, rawlemma_len) != 0) continue;
+      if (lemma.lemma.compare(0, dictionary->raw_lemma_len(lemma.lemma), tokens[1], 0, rawlemma_len) != 0) continue;
 
       matches[RAWLEMMA] = 1;
       matching_lemmas[RAWLEMMA].push_back(lemma);
-      if (lemma.lemma.compare(0, d->lemma_id_len(lemma.lemma), tokens[1], 0, lemmaid_len) != 0) continue;
+      if (lemma.lemma.compare(0, dictionary->lemma_id_len(lemma.lemma), tokens[1], 0, lemmaid_len) != 0) continue;
       matches[LEMMA_ID] = 1;
       matching_lemmas[LEMMA_ID].push_back(lemma);
       if (lemma.lemma.compare(tokens[1]) != 0) continue;
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
       printf("%s\t%s\t%s\n", tokens[0].c_str(), matching_lemmas[RAWLEMMA][0].lemma.c_str(), matching_lemmas[RAWLEMMA][0].tag.c_str());
     } else if (lemmas.size() == 1 &&
                lemmas[0].tag.compare(0, 1, tokens[2], 0, 1) == 0 &&
-               lemmas[0].lemma.compare(0, d->lemma_id_len(lemmas[0].lemma), tokens[1], 0, lemmaid_len) == 0) {
+               lemmas[0].lemma.compare(0, dictionary->lemma_id_len(lemmas[0].lemma), tokens[1], 0, lemmaid_len) == 0) {
       if (lemma_mappings[TAG].emplace(tokens[1], lemmas[0].tag).first->second != lemmas[0].tag)
         {} //eprintf("W: Two different tag mappings for %s-%s: %s and %s.\n", tokens[1], tokens[2], lemmas[0].tag.c_str(), lemma_mappings[TAG][tokens[1]].c_str());
       total_matches[TAG]++;

@@ -25,8 +25,8 @@
 
 using namespace ufal::morphodita;
 
-static void tag_vertical(const tagger& t);
-static void tag_untokenized(const tagger& t);
+static void tag_vertical(const tagger& tagger);
+static void tag_untokenized(const tagger& tagger);
 
 int main(int argc, char* argv[]) {
   bool use_tokenizer = false;
@@ -36,20 +36,20 @@ int main(int argc, char* argv[]) {
   if (argi + 1 < argc) runtime_errorf("Usage: %s [-t] tagger_file", argv[0]);
 
   eprintf("Loading tagger: ");
-  unique_ptr<tagger> t(tagger::load(argv[argi]));
-  if (!t) runtime_errorf("Cannot load tagger from file '%s'!", argv[argi]);
+  unique_ptr<tagger> tagger(tagger::load(argv[argi]));
+  if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[argi]);
   eprintf("done\n");
 
   eprintf("Tagging: ");
   clock_t now = clock();
-  if (use_tokenizer) tag_untokenized(*t);
-  else tag_vertical(*t);
+  if (use_tokenizer) tag_untokenized(*tagger);
+  else tag_vertical(*tagger);
   eprintf("done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 
   return 0;
 }
 
-void tag_vertical(const tagger& t) {
+void tag_vertical(const tagger& tagger) {
   string line;
 
   vector<string> strings;
@@ -68,7 +68,7 @@ void tag_vertical(const tagger& t) {
 
     // Tag
     if (!forms.empty()) {
-      t.tag(forms, tags);
+      tagger.tag(forms, tags);
 
       for (auto& tag : tags)
         printf("%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
@@ -79,12 +79,12 @@ void tag_vertical(const tagger& t) {
 
 static void encode_entities_and_print(const char* text, size_t length);
 
-void tag_untokenized(const tagger& t) {
+void tag_untokenized(const tagger& tagger) {
   string line, text;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
-  unique_ptr<tokenizer> tok(t.get_morpho()->new_tokenizer());
+  unique_ptr<tokenizer> tokenizer(tagger.get_morpho()->new_tokenizer());
 
   for (bool not_eof = true; not_eof; ) {
     // Read block of text
@@ -97,9 +97,9 @@ void tag_untokenized(const tagger& t) {
 
     // Tokenize and tag
     const char* unprinted = text.c_str();
-    tok->set_text(unprinted);
-    while (tok->next_sentence(&forms, nullptr)) {
-      t.tag(forms, tags);
+    tokenizer->set_text(unprinted);
+    while (tokenizer->next_sentence(&forms, nullptr)) {
+      tagger.tag(forms, tags);
 
       for (unsigned i = 0; i < forms.size(); i++) {
         if (unprinted < forms[i].str) encode_entities_and_print(unprinted, forms[i].str - unprinted);

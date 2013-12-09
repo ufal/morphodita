@@ -27,8 +27,8 @@ int main(int argc, char* argv[]) {
   if (argc <= 2) runtime_errorf("Usage: %s dict_file use_guesser", argv[0]);
 
   eprintf("Loading dictionary: ");
-  unique_ptr<morpho> d(morpho::load(argv[1]));
-  if (!d) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
+  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
   eprintf("done\n");
   bool use_guesser = atoi(argv[2]);
 
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 
       split(line, '\t', tokens);
       if (tokens.size() != 3) runtime_errorf("Input line '%s' does not contain 3 columns!", line.c_str());
-      d->analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, tags);
+      dictionary->analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, tags);
 
       printf("<f>%s<l>%s<t>%s", tokens[0].c_str(), tokens[1].c_str(), tokens[2].c_str());
       for (auto& tag : tags)
