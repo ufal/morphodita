@@ -96,12 +96,6 @@ class MORPHODITA_IMPORT morpho {
   // Perform morphologic analysis of a form. The guesser parameter specifies
   // whether a guesser can be used if the form is not found in the dictionary.
   // Output is assigned to the lemmas vector.
-  //
-  // If the form is found in the dictionary, analyses are assigned to lemmas
-  // and NO_GUESSER returned. If guesser == GUESSER and the form analyses are
-  // found using a guesser, they are assigned to lemmas and GUESSER is
-  // returned.  Otherwise <0 is returned and lemmas are filled with one
-  // analysis containing given form as lemma and a tag for unknown word.
   virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
 
   // Perform morphologic generation of a lemma. Optionally a tag_wildcard can
@@ -109,20 +103,6 @@ class MORPHODITA_IMPORT morpho {
   // wildcard. The guesser parameter speficies whether a guesser can be used if
   // the lemma is not found in the dictionary. Output is assigned to the forms
   // vector.
-  //
-  // Tag_wildcard can be either NULL or a wildcard applied to the results.
-  // A ? in the wildcard matches any character, [bytes] matches any of the
-  // bytes and [^bytes] matches any byte different from the specified ones.
-  // A - has no special meaning inside the bytes and if ] is first in bytes, it
-  // does not end the bytes group.
-  //
-  // If the given lemma is only a raw lemma, all lemma ids with this raw lemma
-  // are returned. Otherwise only matching lemma ids are returned, ignoring any
-  // lemma comments. For every found lemma, matching forms are filtered using
-  // the tag_wildcard. If at least one lemma is found in the dictionary,
-  // NO_GUESSER is returned. If guesser == GUESSER and the lemma is found by
-  // the guesser, GUESSER is returned. Otherwise, forms are cleared and <0 is
-  // returned.
   virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
 
   // Rawlemma and lemma id identification
@@ -137,8 +117,8 @@ class MORPHODITA_IMPORT tagger {
  public:
   virtual ~tagger() {}
 
-  static tagger* load(FILE* f);
   static tagger* load(const char* fname);
+  static tagger* load(FILE* f);
 
   // Return morpho associated with the tagger. Do not delete the pointer, it is
   // owned by the tagger instance and deleted in the tagger destructor.

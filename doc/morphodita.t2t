@@ -2,8 +2,6 @@ MorphoDiTa: Morphologic Dictionary and Tagger
 Version 0.9
 
 %!encoding: utf-8
-%!options: --toc --css-sugar
-%!style(tex): morphodita.sty
 
 + Introduction +
 
@@ -57,15 +55,15 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows.
 %not_web% %!include: morphodita_user.t2t
 
 
-%web% + MorphoDiTa API +
++ MorphoDiTa API Tutorial +
 
 %web% [MorphoDiTa API Tutorial on separate page. morphodita/api-tutorial]
+%not_web% %!include: morphodita_api_tutorial.t2t
+
+
++ MorphoDiTa API Reference +
 
 %web% [MorphoDiTa API Reference on separate page. morphodita/api-reference]
-
-%not_web% + MorphoDiTa API Tutorial +
-%not_web% %!include: morphodita_api_tutorial.t2t
-%not_web% + MorphoDiTa API Reference +
 %not_web% %!include: morphodita_api_reference.t2t
 
 

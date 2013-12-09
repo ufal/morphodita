@@ -3,19 +3,14 @@ MorphoDiTa API Tutorial
 
 %!encoding: utf-8
 
-The MorphoDiTa API is defined in header ``morphodita.h``. All API functions
-reside in ``ufal::morphodita`` namespace. The easiest way to use MorphoDita
-is therefore:
+The MorphoDiTa API is defined in header ``morphodita.h`` and resides in
+``ufal::morphodita`` namespace. The easiest way to use MorphoDita is therefore:
 
 ```
 #include morphodita.h
 
 using namespace ufal::morphodita;
 ```
-
-++ Encoding ++
-
-The strings used in the MorphoDiTa API are always UTF-8 encoded.
 
 ++ Tagger API ++
 
@@ -36,19 +31,19 @@ tagger* my_tagger = tagger::load("path_to_model");
 if (!t) ...
 
 // create sample input
-vector<string> forms;
-forms.push_back("malý");
-forms.push_back("pes");
+vector<string> words;
+words.push_back("malý");
+words.push_back("pes");
 
-vector<raw_form> raw_forms;
-for (auto& form : forms)
-  raw_forms.emplace_back(form.c_str(), form.size());
+vector<string_piece> forms;
+for (auto& word : words)
+  forms.emplace_back(word)
 
 // intialize output and tag
 vector<tagged_lemma> tags;
-my_tagger->tag(raw_forms, tags);
+my_tagger->tag(forms, tags);
 
-// access to output
+// access the output
 for (auto& tag : tags)
   printf("%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
 
@@ -66,11 +61,11 @@ model.
 The main tagging method is ``tagger::tag``:
 
 ```
-virtual void tag(const std::vector<raw_form>& forms, std::vector<tagged_lemma>& tags) const = 0;
+void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const;
 ```
 
-The input is a ``std::vector`` of ``raw_form`` which is a pair of 
-``const char* form`` and ``int form_len``.
+The input is a ``std::vector`` of ``string_piece`` which is a structure
+referencing a string using ``const char* str`` and ``size_t len``.
 
 The ``tagger::tag`` method returns the tagged output in it's second argument,
 ``std::vector<tagged_lemma>``. The calling procedure must provide a result vector
@@ -130,40 +125,35 @@ In the first case, one performs morphologic analysis for a given word by
 calling a method ``morpho::analyze``:
 
 ```
-virtual int analyze(const char* form, int form_len, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
+int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const;
 ```
 
 An example (assuming that morphologic dictionary is already constructed, see
 previous example):
 
 ```
-string my_string("pes");        // input
 vector<tagged_lemma> lemmas;    // output
 
-my_morpho->analyze(my_string.c_str(), my_string.size(), morpho::GUESSER, vector<tagged_lemma>& lemmas);
+my_morpho->analyze("pes", morpho::GUESSER, vector<tagged_lemma>& lemmas);
 
 for (auto& lemma: lemmas)
   printf ("%s %s\n, lemma.lemma.c_str(), lemma.tag.c_str())
 ```
 
-The input is a single token, C string (``const char*``), it's length, Guesser
-mode (whether to use some kind of guesser or strictly dictionary only, see
-question Guesser Mode in Questions and Answers) and output
-``std::vector<tagged_lemma>``.  The caller must provide an output
-vector ``std::vector<tagged_lemma>`` and the method ``morpho::analyze``
-assigns the output to this vector.
+The input is a form to analyze, then a Guesser mode (whether to use some kind
+of guesser or strictly dictionary only, see question Guesser Mode in
+[Questions and Answers #faq]) and output ``std::vector<tagged_lemma>``.  The
+caller must provide an output vector ``std::vector<tagged_lemma>`` and the
+method ``morpho::analyze`` assigns the output to this vector.
 
 +++ Generation +++
 
 MorphoDiTa performs morphologic generation from a given lemma:
 
 ```
-virtual int generate(const char* lemma, int lemma_len,
-                     const char* tag_wildcard, guesser_mode guesser,
-                     std::vector<tagged_lemma_forms>& forms) const = 0;
+int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
+             std::vector<tagged_lemma_forms>& forms) const;
 ```
-
-The lemma is given by a pointer and a length and therefore the lemma does not need to be ``'\0'`` terminated.
 
 ++++ Tag Wildcard ++++
 
@@ -177,7 +167,7 @@ from a given lemma, then ``tag_wildcard`` is set to this tag value.
 Or even more, for example, in the Czech positional morphology tagging system
 ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]),
 one may even wish to generate something like "all forms in fourth case",
-then ``tag_wildcard`` should be set to ``????4??????????``.
+then ``tag_wildcard`` should be set to ``????4``.
 Please see Section "Czech Morphology" in User's Manual for more details about the Czech positional tagging system.
 
 The previous example applies to morphologic annotation applied to
@@ -198,7 +188,7 @@ When the lemma is unknown, MorphoDiTa's generation behavior is defined by Guesse
 question Guesser Mode in Questions and Answers). If at least one lemma is found
 in the dictionary, ``NO_GUESSER`` is returned. If ``guesser == GUESSER`` and the lemma
 is found by the guesser, ``GUESSER`` is returned. Otherwise, forms are cleared and
-``<0`` is returned.
+``-1`` is returned.
 
 ++++ Raw Lemmas in Czech ++++
 
@@ -209,17 +199,17 @@ are filtered using the tag_wildcard. Please see Section "Czech Morphology" in
 User's Manual for details about lemmas and raw lemmas in the Czech morphology.
 
 
-++ API Questions and Answers ++
+++ Questions and Answers ++[faq]
 
 : **What is a Guesser Mode?**
   Morphologic analysis may try to guess the lemma and tag of an uknown word.
   This option is turned on by ``morpho::GUESSER`` and off by
   ``morpho::NO_GUESSER``.
 
-: **Why ``const char*`` and not ``std::string``? Why do I have to specify string lengths?**
+: **Why `string_piece`` and not ``const char*`` or ``std::string``?**
   We aim to make MorphoDiTa interface as effective as possible. Because the
   input strings may be substrings of larger text or come from different than
-  C++ memory regions, we want to avoid the cost ``string`` conversion.
-  For C++ programmers, it is easy to use ``c_str()`` and ``size()``.
-
-
+  C++ memory regions, we want to avoid the cost of ``\\0`` padding or
+  ``string`` conversion. Nevertheless, both ``const char*`` and
+  ``std::string`` can be used instead of a ``string_piece`` because of existing
+  implicit conversion rules.
