@@ -147,7 +147,7 @@ int czech_morpho::lemma_id_len(string_piece lemma) const {
 }
 
 tokenizer* czech_morpho::new_tokenizer() const {
-  return new czech_tokenizer(false);
+  return new czech_tokenizer();
 }
 
 // What characters are considered punctuation except for the ones in unicode Punctuation category.
