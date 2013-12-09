@@ -35,8 +35,8 @@ class czech_tokenizer : public tokenizer {
  private:
   bool split_hyphenated_words;
 
-  const char* text;
-  size_t chars;
+  const char* text = nullptr;
+  size_t chars = 0;
 };
 
 } // namespace morphodita
