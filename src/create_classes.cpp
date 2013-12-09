@@ -22,6 +22,7 @@
 
 #include "common.h"
 #include "morpho/raw_morpho_dictionary_reader.h"
+#include "utils/new_unique_ptr.h"
 
 using namespace ufal::morphodita;
 
@@ -42,7 +43,7 @@ class trie {
         depth = max(depth, 1 + child.second->depth);
         return;
       }
-    children.emplace_back(*str, unique_ptr<trie>(new trie()));
+    children.emplace_back(*str, new_unique_ptr<trie>());
     children.back().second->add(str + 1);
     depth = max(depth, 1 + children.back().second->depth);
   }
