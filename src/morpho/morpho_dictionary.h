@@ -202,7 +202,7 @@ bool morpho_dictionary<LemmaAddinfo>::generate(string_piece lemma, const tag_fil
     unsigned lemma_roots_len = data.next_1B();
     auto* lemma_roots_ptr = data.next<unsigned char>(lemma_roots_len * (sizeof(uint32_t) + sizeof(uint16_t)));
 
-    if (small_memeq(lemma.str, lemma_str, raw_lemma_len) && addinfo.match_lemma_id(lemma_info, lemma_info_len)) {
+    if (small_memeq(lemma.str, lemma_str, raw_lemma_len) && addinfo.match_lemma_id(lemma_info, lemma_info_len) && LemmaAddinfo::generatable(lemma_info, lemma_info_len)) {
       matched_lemma = true;
 
       vector<tagged_form>* forms = nullptr;

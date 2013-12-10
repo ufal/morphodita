@@ -30,6 +30,7 @@ struct czech_lemma_addinfo {
   inline static int raw_lemma_len(string_piece lemma);
   inline static int lemma_id_len(string_piece lemma);
   inline static string format(const unsigned char* addinfo, int addinfo_len);
+  inline static bool generatable(const unsigned char* addinfo, int addinfo_len);
 
   inline int parse(string_piece lemma, bool die_on_failure = false);
   inline bool match_lemma_id(const unsigned char* other_addinfo, int other_addinfo_len);
@@ -62,6 +63,31 @@ int czech_lemma_addinfo::lemma_id_len(string_piece lemma) {
     }
   }
   return lemma.len;
+}
+
+string czech_lemma_addinfo::format(const unsigned char* addinfo, int addinfo_len) {
+  string res;
+
+  if (addinfo_len) {
+    res.reserve(addinfo_len + 4);
+    if (addinfo[0] != 255) {
+      char num[5];
+      sprintf(num, "-%u", addinfo[0]);
+      res += num;
+    }
+    for (int i = 1; i < addinfo_len; i++)
+      res += addinfo[i];
+  }
+
+  return res;
+}
+
+bool czech_lemma_addinfo::generatable(const unsigned char* addinfo, int addinfo_len) {
+  for (int i = 1; i + 2 < addinfo_len; i++)
+    if (addinfo[i] == '_' && addinfo[i+1] == ',' && addinfo[i+2] == 'x')
+      return false;
+
+  return true;
 }
 
 int czech_lemma_addinfo::parse(string_piece lemma, bool die_on_failure) {
@@ -123,23 +149,6 @@ bool czech_lemma_addinfo::match_comments_partial(const unsigned char* other_addi
   }
 
   return false;
-}
-
-string czech_lemma_addinfo::format(const unsigned char* addinfo, int addinfo_len) {
-  string res;
-
-  if (addinfo_len) {
-    res.reserve(addinfo_len + 4);
-    if (addinfo[0] != 255) {
-      char num[5];
-      sprintf(num, "-%u", addinfo[0]);
-      res += num;
-    }
-    for (int i = 1; i < addinfo_len; i++)
-      res += addinfo[i];
-  }
-
-  return res;
 }
 
 } // namespace morphodita
