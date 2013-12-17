@@ -54,6 +54,7 @@ tagger* tagger::load(const char* fname) {
 }
 
 void tagger::tokenize_and_tag(const char* text, vector<tagged_lemma>& tags, vector<string_piece>* forms, vector<token_range>* tokens) const {
+  tags.clear();
   if (forms) forms->clear();
   if (tokens) tokens->clear();
 

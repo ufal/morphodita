@@ -19,10 +19,9 @@
 #include <cstring>
 
 #include "utf8_tokenizer.h"
-#include "ragel/utf8.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 void utf8_tokenizer::set_text(const char* text) {
   this->text = text;
@@ -57,7 +56,7 @@ bool utf8_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ran
   return result;
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal
 
 

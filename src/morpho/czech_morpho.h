@@ -25,7 +25,6 @@
 #include "morpho_dictionary.h"
 #include "morpho_prefix_guesser.h"
 #include "morpho_statistical_guesser.h"
-#include "utils/tokenizer/czech_tokenizer.h"
 
 namespace ufal {
 namespace morphodita {

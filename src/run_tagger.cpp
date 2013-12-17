@@ -61,8 +61,7 @@ void tag_vertical(const tagger& tagger) {
     words.clear();
     forms.clear();
     while ((not_eof = getline(stdin, line)) && !line.empty()) {
-      auto tab = line.find('\t');
-      words.emplace_back(tab == string::npos ? line : line.substr(0, tab));
+      words.emplace_back(line);
       forms.emplace_back(words.back());
     }
 

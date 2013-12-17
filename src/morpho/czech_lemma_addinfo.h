@@ -19,8 +19,8 @@
 #pragma once
 
 #include "common.h"
+#include "tokenizer/string_piece.h"
 #include "utils/small_stringops.h"
-#include "utils/string_piece.h"
 
 namespace ufal {
 namespace morphodita {

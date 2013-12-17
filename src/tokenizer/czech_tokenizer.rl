@@ -20,11 +20,10 @@
 #include <unordered_set>
 
 #include "czech_tokenizer.h"
-#include "ragel/utf8.h"
 #include "utils/utf8.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 %%{
   machine czech_tokenizer;
@@ -96,7 +95,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
           // Add all characters until first space to forms and break if eos.
           for (text = ts; text < whitespace; forms.emplace_back(ts, text - ts), ts = text) utf8_advance(text, whitespace);
           fexec whitespace;
-          if (!eos_word_exception) { printf("EOS\n"); fbreak; }
+          if (!eos_word_exception) fbreak;
         };
 
       whitespace+ -- eol eol;
@@ -113,7 +112,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
   return !forms.empty();
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal
 
 

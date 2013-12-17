@@ -25,6 +25,7 @@
 #include "morpho_prefix_guesser.h"
 #include "morpho_statistical_guesser.h"
 #include "tag_filter.h"
+#include "tokenizer/czech_tokenizer.h"
 #include "utils/compressor.h"
 #include "utils/utf8.h"
 

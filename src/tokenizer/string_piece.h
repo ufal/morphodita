@@ -23,7 +23,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 struct string_piece {
   const char* str;
@@ -35,5 +35,5 @@ struct string_piece {
   string_piece(const std::string& str) : str(str.c_str()), len(str.size()) {}
 };
 
-} // namespace utils
+} // namespace morphodita
 }

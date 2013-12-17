@@ -19,8 +19,7 @@
 #pragma once
 
 #include "common.h"
-#include "utils/string_piece.h"
-#include "utils/tokenizer/tokenizer.h"
+#include "tokenizer/tokenizer.h"
 
 namespace ufal {
 namespace morphodita {

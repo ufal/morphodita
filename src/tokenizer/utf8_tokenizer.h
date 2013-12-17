@@ -19,18 +19,34 @@
 #pragma once
 
 #include "common.h"
-#include "utf8_tokenizer.h"
+#include "tokenizer.h"
+#include "utils/threadsafe_stack.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
-class czech_tokenizer : public utf8_tokenizer {
+class utf8_tokenizer : public tokenizer {
  public:
-  virtual bool next_sentence(vector<string_piece>& forms) override;
+  virtual void set_text(const char* text) override;
+  virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) override;
 
- private:
-  string buffer;
+  virtual bool next_sentence(vector<string_piece>& forms) = 0;
+
+ protected:
+  inline void utf8_advance(const char*& text, const char* end) {
+    if (text < end) text++;
+    while (text < end && *(const unsigned char*)text >= 0x80 && *(const unsigned char*)text < 0xC0) text++;
+  }
+
+  const char* text = nullptr;
+  const char* text_end = nullptr;
+  size_t chars = 0;
+
+  struct cache {
+    vector<string_piece> forms;
+  };
+  threadsafe_stack<cache> caches;
 };
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

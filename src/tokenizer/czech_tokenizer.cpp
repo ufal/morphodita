@@ -20,11 +20,10 @@
 #include <unordered_set>
 
 #include "czech_tokenizer.h"
-#include "ragel/utf8.h"
 #include "utils/utf8.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 
 static const short _czech_tokenizer_key_offsets[] = {
@@ -2475,7 +2474,7 @@ _resume:
 			else if ( ( (unsigned char)*text) > *_mid )
 				_lower = _mid + 1;
 			else {
-				_trans += (_mid - _keys);
+				_trans += (unsigned int)(_mid - _keys);
 				goto _match;
 			}
 		}
@@ -2498,7 +2497,7 @@ _resume:
 			else if ( ( (unsigned char)*text) > _mid[1] )
 				_lower = _mid + 2;
 			else {
-				_trans += ((_mid - _keys)>>1);
+				_trans += (unsigned int)((_mid - _keys)>>1);
 				goto _match;
 			}
 		}
@@ -2540,7 +2539,7 @@ _eof_trans:
           // Add all characters until first space to forms and break if eos.
           for (text = ts; text < whitespace; forms.emplace_back(ts, text - ts), ts = text) utf8_advance(text, whitespace);
           {( text) = (( whitespace))-1;}
-          if (!eos_word_exception) { printf("EOS\n"); {( text)++; goto _out; } }
+          if (!eos_word_exception) {( text)++; goto _out; }
         }}
 	break;
 	case 11:
@@ -2590,7 +2589,7 @@ _again:
   return !forms.empty();
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal
 
 
