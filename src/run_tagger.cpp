@@ -29,11 +29,11 @@ static void tag_vertical(const tagger& tagger);
 static void tag_untokenized(const tagger& tagger);
 
 int main(int argc, char* argv[]) {
-  bool use_tokenizer = false;
+  bool use_vertical = false;
 
   int argi = 1;
-  if (argi < argc && strcmp(argv[argi], "-t") == 0) argi++, use_tokenizer = true;
-  if (argi + 1 < argc) runtime_errorf("Usage: %s [-t] tagger_file", argv[0]);
+  if (argi < argc && strcmp(argv[argi], "-v") == 0) argi++, use_vertical = true;
+  if (argi + 1 < argc) runtime_errorf("Usage: %s [-v] tagger_file", argv[0]);
 
   eprintf("Loading tagger: ");
   unique_ptr<tagger> tagger(tagger::load(argv[argi]));
@@ -42,8 +42,8 @@ int main(int argc, char* argv[]) {
 
   eprintf("Tagging: ");
   clock_t now = clock();
-  if (use_tokenizer) tag_untokenized(*tagger);
-  else tag_vertical(*tagger);
+  if (use_vertical) tag_vertical(*tagger);
+  else tag_untokenized(*tagger);
   eprintf("done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 
   return 0;
@@ -103,8 +103,12 @@ void tag_untokenized(const tagger& tagger) {
 
       for (unsigned i = 0; i < forms.size(); i++) {
         if (unprinted < forms[i].str) encode_entities_and_print(unprinted, forms[i].str - unprinted);
-        printf("<form lemma='%s' tag='%s'>", tags[i].lemma.c_str(), tags[i].tag.c_str());
-        fwrite(forms[i].str, 1, forms[i].len, stdout);
+        fputs("<form lemma=\"", stdout);
+        encode_entities_and_print(tags[i].lemma.c_str(), tags[i].lemma.size());
+        fputs("\" tag=\"", stdout);
+        encode_entities_and_print(tags[i].tag.c_str(), tags[i].tag.size());
+        fputs("\">", stdout);
+        encode_entities_and_print(forms[i].str, forms[i].len);
         fputs("</form>", stdout);
         unprinted = forms[i].str + forms[i].len;
       }
@@ -116,12 +120,12 @@ void tag_untokenized(const tagger& tagger) {
 void encode_entities_and_print(const char* text, size_t length) {
   const char* to_print = text;
   while (length) {
-    while (length && *text != '<' && *text != '>' && *text != '&')
+    while (length && *text != '<' && *text != '>' && *text != '&' && *text != '"')
       text++, length--;
 
     if (length) {
       if (to_print < text) fwrite(to_print, 1, text - to_print, stdout);
-      fputs(*text == '<' ? "&lt;" : *text == '>' ? "&gt;" : "&amp;", stdout);
+      fputs(*text == '<' ? "&lt;" : *text == '>' ? "&gt;" : *text == '&' ? "&amp;" : "&quot;", stdout);
       text++, length--;
       to_print = text;
     }

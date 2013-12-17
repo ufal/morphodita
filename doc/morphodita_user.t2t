@@ -71,10 +71,42 @@ Probably the most common usage of MorphoDita is running a tagger to tag your dat
 
 ``run_tagger tagger_model``
 
-Run the tagger with a model given as the first argument. Read from standard input, word on a line, empty line being end of sentence. Output to standard output, each line is a tab separated lemma-tag pair. MorphoDiTa assumes UTF-8 inputs.
+Run the tagger with a model given as the first argument. The input is read from standard input
+and is assumed to be in UTF-8 encoding.
 
-An example of input data ``sample_tagger_input.txt``:
++++ Untokenized Input +++
 
+The input is by default automatically tokenized and segmented. The output is in
+XML format without a root element, using ``<form lemma="..." tag="...">...</form>``
+element to encode the assigned lemma and tag.
+
+An example of input data ``tagger_input.txt``:
+``` Děti pojedou k babičce. Už se těší.
+
+An example of MorphoDiTa run_tagger command line:
+``` cat tagger_input.txt | ./run_tagger czech.best_accuracy_tagger
+
+An example of output data (line breaks added):
+```
+<form lemma='dítě' tag='NNFP1-----A----'>Děti</form>
+<form lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'>pojedou</form>
+<form lemma='k-1' tag='RR--3----------'>k</form>
+<form lemma='babička' tag='NNFS3-----A----'>babičce</form>
+<form lemma='.' tag='Z:-------------'>.</form>
+<form lemma='už-1' tag='Db-------------'>Už</form>
+<form lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'>se</form>
+<form lemma='těšit_:T' tag='VB-S---3P-AA---'>těší</form>
+<form lemma='.' tag='Z:-------------'>.</form>
+```
+
++++ Vertical Format +++
+
+If the input is already tokenized and segmented, vertical input format can be used.
+The vertical input format contains word on a line, empty line being end of sentence.
+The output has the same number of lines as input, line //l// is a tab separated
+lemma-tag pair assigned to the word on the input line //l//.
+
+An example of input data ``tagger_input_vertical.txt``:
 ```
 Děti
 pojedou
@@ -86,17 +118,12 @@ Už
 se
 těší
 .
-
 ```
 
-An example of MorphoDiTa tagger running on commandline:
+An example of MorphoDiTa run_tagger command line:
+``` cat tagger_input_vertical.txt | ./run_tagger czech.best_accuracy_tagger
 
-```
-cat sample_tagger_input.txt | ./run_tagger czech.best_accuracy_tagger
-```
-
-An example of MorphoDiTa tagger output:
-
+An example of output:
 ```
 dítě    NNFP1-----A----
 jet-1_^(pohybovat_se,_ne_však_chůzí)    VB-P---3F-AA---
