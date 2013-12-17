@@ -19,6 +19,7 @@
 #include <cstring>
 
 #include "utf8_tokenizer.h"
+#include "ragel/utf8.h"
 
 namespace ufal {
 namespace utils {
@@ -44,16 +45,13 @@ bool utf8_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ran
 
   const char* text_start = text;
   bool result = next_sentence(*forms);
-
-#define utf8_advance() do { text_start++; while (text_start < text && *(const unsigned char*)text_start >= 0x80 && *(const unsigned char*)text_start < 0xC0) text_start++; chars++; } while (0)
-  if (tokens)
-    for (auto& form : *forms) {
-      while (text_start < form.str) utf8_advance();
-      size_t chars_start = chars;
-      while (text_start < form.str + form.len) utf8_advance();
-      tokens->emplace_back(chars_start, chars - chars_start);
-    }
-  while (text_start < text) utf8_advance();
+  for (auto& form : *forms) {
+    for (; text_start < form.str; chars++) utf8_advance(text_start, form.str);
+    size_t chars_start = chars;
+    for (; text_start < form.str + form.len; chars++) utf8_advance(text_start, form.str + form.len);
+    if (tokens) tokens->emplace_back(chars_start, chars - chars_start);
+  }
+  for (; text_start < text; chars++) utf8_advance(text_start, text);
 
   if (c) caches.push(c);
   return result;

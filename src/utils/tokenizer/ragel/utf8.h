@@ -19,18 +19,26 @@
 #pragma once
 
 #include "common.h"
-#include "utf8_tokenizer.h"
 
 namespace ufal {
 namespace utils {
 
-class czech_tokenizer : public utf8_tokenizer {
- public:
-  virtual bool next_sentence(vector<string_piece>& forms) override;
+// These utf8_advance is consistent with all utf8_* ragel machines from
+// utf8.rl, including broken UTF-8 encoding.
+inline void utf8_advance(const char*& text);
+inline void utf8_advance(const char*& text, const char* end);
 
- private:
-  string buffer;
-};
+
+// Definitions
+inline void utf8_advance(const char*& text) {
+  text++;
+  while (*(const unsigned char*)text >= 0x80 && *(const unsigned char*)text < 0xC0) text++;
+}
+
+inline void utf8_advance(const char*& text, const char* end) {
+  text++;
+  while (text < end && *(const unsigned char*)text >= 0x80 && *(const unsigned char*)text < 0xC0) text++;
+}
 
 } // namespace utils
 } // namespace ufal
