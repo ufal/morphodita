@@ -20,42 +20,89 @@ import cz.cuni.mff.ufal.morphodita.*;
 import java.util.Scanner;
 
 class RunTagger {
-  public static boolean nextSentence(Scanner reader, Forms forms) {
-    forms.clear();
+  public static void tagVertical(Tagger tagger) {
+    Forms forms = new Forms();
+    TaggedLemmas lemmas = new TaggedLemmas();
+    Scanner reader = new Scanner(System.in);
 
     boolean not_eof = true;
-    String line;
-    while ((not_eof = reader.hasNextLine()) && !(line = reader.nextLine()).isEmpty())
-      forms.add(line);
+    while (not_eof) {
+      String line;
 
-    return not_eof || !forms.isEmpty();
+      forms.clear();
+      while ((not_eof = reader.hasNextLine()) && !(line = reader.nextLine()).isEmpty())
+        forms.add(line);
+
+      if (!forms.isEmpty()) {
+        tagger.tag(forms, lemmas);
+
+        for (int i = 0; i < lemmas.size(); i++) {
+          TaggedLemma lemma = lemmas.get(i);
+          System.out.printf("%s\t%s\n", lemma.getLemma(), lemma.getTag());
+        }
+        System.out.println();
+      }
+    }
+  }
+
+  public static String encodeEntities(String text) {
+    return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;");
+  }
+
+  public static void tagUntokenized(Tagger tagger) {
+    TaggedLemmas lemmas = new TaggedLemmas();
+    TokenRanges tokens = new TokenRanges();
+    Scanner reader = new Scanner(System.in);
+
+    boolean not_eof = true;
+    while (not_eof) {
+      StringBuilder textBuilder = new StringBuilder();
+      String line;
+
+      while ((not_eof = reader.hasNextLine()) && !(line = reader.nextLine()).isEmpty()) {
+        textBuilder.append(line);
+        textBuilder.append('\n');
+      }
+      if (not_eof) textBuilder.append('\n');
+
+      String text = textBuilder.toString();
+      tagger.tokenizeAndTag(text, lemmas, tokens);
+
+      int t = 0;
+      for (int i = 0; i < lemmas.size(); i++) {
+        TaggedLemma lemma = lemmas.get(i);
+        TokenRange token = tokens.get(i);
+        int token_start = (int)token.getStart(), token_end = token_start + (int)token.getLength();
+        System.out.printf("%s<form lemma=\"%s\" tag=\"%s\">%s</form>",
+                          encodeEntities(text.substring(t, token_start)),
+                          encodeEntities(lemma.getLemma()),
+                          encodeEntities(lemma.getTag()),
+                          encodeEntities(text.substring(token_start, token_end)));
+        t = token_end;
+      }
+      System.out.print(encodeEntities(text.substring(t)));
+    }
   }
 
   public static void main(String[] args) {
-    if (args.length < 1) {
+    int argi = 0;
+    if (argi < args.length && args[argi].equals("-v")) argi++;
+    boolean use_vertical = argi > 0;
+
+    if (!(argi < args.length)) {
       System.err.println("Usage: RunTagger tagger_file");
       System.exit(1);
     }
 
     System.err.print("Loading tagger: ");
-    Tagger tagger = Tagger.load(args[0]);
+    Tagger tagger = Tagger.load(args[argi]);
     if (tagger == null) {
-      System.err.println("Cannot load tagger from file '" + args[0] + "'");
+      System.err.println("Cannot load tagger from file '" + args[argi] + "'");
       System.exit(1);
     }
     System.err.println("done");
 
-    Forms forms = new Forms();
-    TaggedLemmas lemmas = new TaggedLemmas();
-    Scanner reader = new Scanner(System.in);
-    while (nextSentence(reader, forms)) {
-      tagger.tag(forms, lemmas);
-
-      for (int i = 0; i < lemmas.size(); i++) {
-        TaggedLemma lemma = lemmas.get(i);
-        System.out.printf("%s\t%s\n", lemma.getLemma(), lemma.getTag());
-      }
-      System.out.println();
-    }
+    if (use_vertical) tagVertical(tagger);
+    else tagUntokenized(tagger);
   }
 }
