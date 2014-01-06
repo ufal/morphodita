@@ -37,12 +37,14 @@ int main(int argc, char* argv[]) {
     case tagger_ids::CZECH2:
     case tagger_ids::CZECH3:
       {
-        if (argc < 6) runtime_errorf("Usage: %s %s dict use_guesser features iterations [heldout_data]", argv[0], argv[1]);
+        if (argc < 7) runtime_errorf("Usage: %s %s dict use_guesser features iterations prune_features [heldout_data [early_stopping]]", argv[0], argv[1]);
         const char* dict_file = argv[2];
         bool use_guesser = parse_int(argv[3], "use_guesser");
         const char* features_file = argv[4];
         int iterations = parse_int(argv[5], "iterations");
-        const char* heldout_file = argc == 6 ? nullptr : argv[6];
+        bool prune_features = parse_int(argv[6], "prune_features");
+        const char* heldout_file = argc >= 8 ? argv[7] : nullptr;
+        bool early_stopping = argc >= 9 ? parse_int(argv[8], "early_stopping") : false;
 
         // Open needed files
         file_ptr dict = fopen(dict_file, "rb");
@@ -61,10 +63,10 @@ int main(int argc, char* argv[]) {
         fputc(id, stdout);
         switch (id) {
           case tagger_ids::CZECH2:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, stdin, heldout, stdout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
             break;
           case tagger_ids::CZECH3:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, stdin, heldout, stdout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
             break;
         }
         eprintf("Tagger saved.\n");

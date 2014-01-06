@@ -32,9 +32,9 @@ class czech_elementary_features : public elementary_features<Map> {
   czech_elementary_features();
 
   enum features_per_form { FORM, FOLLOWING_VERB_TAG, FOLLOWING_VERB_LEMMA, NUM, CAP, DASH, PREFIX1, PREFIX2, PREFIX3, PREFIX4, SUFFIX1, SUFFIX2, SUFFIX3, SUFFIX4, PER_FORM_TOTAL };
-  enum features_per_tag { TAG, TAG2, TAG4, TAG14, LEMMA, PER_TAG_TOTAL };
-  enum features_dynamic { PREVIOUS_VERB_TAG, PREVIOUS_VERB_LEMMA, DYNAMIC_TOTAL };
-  enum features_map { MAP_NONE = -1, MAP_FORM, MAP_LEMMA, MAP_PREFIX1, MAP_PREFIX2, MAP_PREFIX3, MAP_PREFIX4, MAP_SUFFIX1, MAP_SUFFIX2, MAP_SUFFIX3, MAP_SUFFIX4, MAP_TAG, MAP_TAG2, MAP_TAG4, MAP_TAG14, MAP_TOTAL } ;
+  enum features_per_tag { TAG, TAG3, TAG5, TAG25, LEMMA, PER_TAG_TOTAL };
+  enum features_dynamic { PREVIOUS_VERB_TAG, PREVIOUS_VERB_LEMMA, PREVIOUS_OR_CURRENT_VERB_TAG, PREVIOUS_OR_CURRENT_VERB_LEMMA, DYNAMIC_TOTAL };
+  enum features_map { MAP_NONE = -1, MAP_FORM, MAP_LEMMA, MAP_PREFIX1, MAP_PREFIX2, MAP_PREFIX3, MAP_PREFIX4, MAP_SUFFIX1, MAP_SUFFIX2, MAP_SUFFIX3, MAP_SUFFIX4, MAP_TAG, MAP_TAG3, MAP_TAG5, MAP_TAG25, MAP_TOTAL } ;
 
   struct per_form_features { elementary_feature_value values[PER_FORM_TOTAL]; };
   struct per_tag_features { elementary_feature_value values[PER_TAG_TOTAL]; };
@@ -75,9 +75,9 @@ vector<elementary_feature_description> czech_elementary_features<Map>::descripti
   {"Suffix4", PER_FORM, ONLY_CURRENT, SUFFIX4, MAP_SUFFIX4},
 
   {"Tag", PER_TAG, ANY_OFFSET, TAG, MAP_TAG},
-  {"Tag2", PER_TAG, ANY_OFFSET, TAG2, MAP_TAG2},
-  {"Tag4", PER_TAG, ANY_OFFSET, TAG4, MAP_TAG4},
-  {"Tag14", PER_TAG, ANY_OFFSET, TAG14, MAP_TAG14},
+  {"Tag3", PER_TAG, ANY_OFFSET, TAG3, MAP_TAG3},
+  {"Tag5", PER_TAG, ANY_OFFSET, TAG5, MAP_TAG5},
+  {"Tag25", PER_TAG, ANY_OFFSET, TAG25, MAP_TAG25},
   {"Lemma", PER_TAG, ANY_OFFSET, LEMMA, MAP_LEMMA},
 
   {"PreviousVerbTag", DYNAMIC, ANY_OFFSET, PREVIOUS_VERB_TAG, MAP_TAG},
@@ -93,22 +93,18 @@ void czech_elementary_features<Map>::compute_features(const vector<form_with_tag
 
     // Per_tag features and verb_candidate
     for (unsigned j = 0; j < forms[i].tags.size(); j++) {
-      char tag14[2];
+      char tag25[2];
       per_tag[i][j].values[TAG] = maps[MAP_TAG].value(forms[i].tags[j].tag.c_str(), forms[i].tags[j].tag.size());
-      per_tag[i][j].values[TAG2] = forms[i].tags[j].tag.size() >= 2 ? maps[MAP_TAG2].value(forms[i].tags[j].tag.c_str() + 1, 1) : elementary_feature_empty;
-      per_tag[i][j].values[TAG4] = forms[i].tags[j].tag.size() >= 4 ? maps[MAP_TAG4].value(forms[i].tags[j].tag.c_str() + 3, 1) : elementary_feature_empty;
-      per_tag[i][j].values[TAG14] = forms[i].tags[j].tag.size() >= 4 ? maps[MAP_TAG14].value((tag14[0] = forms[i].tags[j].tag[0], tag14[1] = forms[i].tags[j].tag[3], tag14), 2) : elementary_feature_empty;
+      per_tag[i][j].values[TAG3] = forms[i].tags[j].tag.size() >= 3 ? maps[MAP_TAG3].value(forms[i].tags[j].tag.c_str() + 2, 1) : elementary_feature_empty;
+      per_tag[i][j].values[TAG5] = forms[i].tags[j].tag.size() >= 5 ? maps[MAP_TAG5].value(forms[i].tags[j].tag.c_str() + 4, 1) : elementary_feature_empty;
+      per_tag[i][j].values[TAG25] = forms[i].tags[j].tag.size() >= 5 ? maps[MAP_TAG25].value((tag25[0] = forms[i].tags[j].tag[1], tag25[1] = forms[i].tags[j].tag[4], tag25), 2) : elementary_feature_empty;
       per_tag[i][j].values[LEMMA] = j && forms[i].tags[j-1].lemma == forms[i].tags[j].lemma ? per_tag[i][j-1].values[LEMMA] :
           maps[MAP_LEMMA].value(forms[i].tags[j].lemma.c_str(), forms[i].tags[j].lemma.size());
 
-      if (!forms[i].tags[j].tag.empty() && forms[i].tags[j].tag[0] == 'V') {
+      if (forms[i].tags[j].tag[0] == 'V') {
         int tag_compare;
         verb_candidate = verb_candidate < 0 || (tag_compare = forms[i].tags[j].tag.compare(forms[i].tags[verb_candidate].tag), tag_compare < 0) || (tag_compare == 0 && forms[i].tags[j].lemma < forms[i].tags[verb_candidate].lemma) ? j : verb_candidate;
       }
-    }
-    if (verb_candidate >= 0) {
-      following_verb_tag = per_tag[i][verb_candidate].values[TAG];
-      following_verb_lemma = per_tag[i][verb_candidate].values[LEMMA];
     }
 
     // Per_form features
@@ -116,12 +112,18 @@ void czech_elementary_features<Map>::compute_features(const vector<form_with_tag
     per_form[i].values[FOLLOWING_VERB_TAG] = following_verb_tag;
     per_form[i].values[FOLLOWING_VERB_LEMMA] = following_verb_lemma;
 
+    // Update following_verb_{tag,lemma} _after_ filling FOLLOWING_VERB_{TAG,LEMMA}.
+    if (verb_candidate >= 0) {
+      following_verb_tag = per_tag[i][verb_candidate].values[TAG];
+      following_verb_lemma = per_tag[i][verb_candidate].values[LEMMA];
+    }
+
     // Ortographic per_form features if needed
     if (forms[i].tags.size() == 1) {
       per_form[i].values[NUM] = per_form[i].values[CAP] = per_form[i].values[DASH] = elementary_feature_unknown;
       per_form[i].values[PREFIX1] = per_form[i].values[PREFIX2] = per_form[i].values[PREFIX3] = per_form[i].values[PREFIX4] = elementary_feature_unknown;
       per_form[i].values[SUFFIX1] = per_form[i].values[SUFFIX2] = per_form[i].values[SUFFIX3] = per_form[i].values[SUFFIX4] = elementary_feature_unknown;
-    } else if (!forms[i].form.len <= 0) {
+    } else if (forms[i].form.len <= 0) {
       per_form[i].values[NUM] = per_form[i].values[CAP] = per_form[i].values[DASH] = elementary_feature_empty + 1;
       per_form[i].values[PREFIX1] = per_form[i].values[PREFIX2] = per_form[i].values[PREFIX3] = per_form[i].values[PREFIX4] = elementary_feature_empty;
       per_form[i].values[SUFFIX1] = per_form[i].values[SUFFIX2] = per_form[i].values[SUFFIX3] = per_form[i].values[SUFFIX4] = elementary_feature_empty;
@@ -160,15 +162,20 @@ void czech_elementary_features<Map>::compute_features(const vector<form_with_tag
 
 template <class Map>
 void czech_elementary_features<Map>::compute_dynamic_features(const tagged_lemma& tag, const per_form_features& /*per_form*/, const per_tag_features& per_tag, const dynamic_features* prev_dynamic, dynamic_features& dynamic) const {
-  if (!tag.tag.empty() && tag.tag[0] == 'V') {
-    dynamic.values[PREVIOUS_VERB_TAG] = per_tag.values[TAG];
-    dynamic.values[PREVIOUS_VERB_LEMMA] = per_tag.values[LEMMA];
-  } else if (prev_dynamic) {
-    dynamic.values[PREVIOUS_VERB_TAG] = prev_dynamic->values[PREVIOUS_VERB_TAG];
-    dynamic.values[PREVIOUS_VERB_LEMMA] = prev_dynamic->values[PREVIOUS_VERB_LEMMA];
+  if (prev_dynamic) {
+    dynamic.values[PREVIOUS_VERB_TAG] = prev_dynamic->values[PREVIOUS_OR_CURRENT_VERB_TAG];
+    dynamic.values[PREVIOUS_VERB_LEMMA] = prev_dynamic->values[PREVIOUS_OR_CURRENT_VERB_LEMMA];
   } else {
     dynamic.values[PREVIOUS_VERB_TAG] = elementary_feature_empty;
     dynamic.values[PREVIOUS_VERB_LEMMA] = elementary_feature_empty;
+  }
+
+  if (tag.tag[0] == 'V') {
+    dynamic.values[PREVIOUS_OR_CURRENT_VERB_TAG] = per_tag.values[TAG];
+    dynamic.values[PREVIOUS_OR_CURRENT_VERB_LEMMA] = per_tag.values[LEMMA];
+  } else {
+    dynamic.values[PREVIOUS_OR_CURRENT_VERB_TAG] = dynamic.values[PREVIOUS_VERB_TAG];
+    dynamic.values[PREVIOUS_OR_CURRENT_VERB_LEMMA] = dynamic.values[PREVIOUS_VERB_LEMMA];
   }
 }
 

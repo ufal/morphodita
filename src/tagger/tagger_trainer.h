@@ -40,7 +40,7 @@ class tagger_trainer {
     vector<int> gold_index;
   };
 
-  static void train(int iterations, FILE* in_morpho_dict, bool use_guesser, FILE* in_feature_templates, FILE* in_train, FILE* in_heldout, FILE* out_tagger);
+  static void train(int iterations, FILE* in_morpho_dict, bool use_guesser, FILE* in_feature_templates, bool prune_features, FILE* in_train, FILE* in_heldout, bool early_stopping, FILE* out_tagger);
 
  private:
   static double load_data(FILE* f, const morpho& d, bool use_guesser, vector<sentence>& sentences, bool add_gold);
@@ -49,7 +49,7 @@ class tagger_trainer {
 
 // Definitions
 template <class TaggerTrainer>
-void tagger_trainer<TaggerTrainer>::train(int iterations, FILE* in_morpho_dict, bool use_guesser, FILE* in_feature_templates, FILE* in_train, FILE* in_heldout, FILE* out_tagger) {
+void tagger_trainer<TaggerTrainer>::train(int iterations, FILE* in_morpho_dict, bool use_guesser, FILE* in_feature_templates, bool prune_features, FILE* in_train, FILE* in_heldout, bool early_stopping, FILE* out_tagger) {
   eprintf("Loading dictionary: ");
   unique_ptr<morpho> d(morpho::load(in_morpho_dict));
   if (!d) runtime_errorf("Cannot load dictionary!");
@@ -72,7 +72,7 @@ void tagger_trainer<TaggerTrainer>::train(int iterations, FILE* in_morpho_dict, 
   fputc(use_guesser, out_tagger);
 
   // Train and encode the tagger
-  TaggerTrainer::train(iterations, train_data, heldout_data, in_feature_templates, out_tagger);
+  TaggerTrainer::train(iterations, train_data, heldout_data, early_stopping, prune_features, in_feature_templates, out_tagger);
 }
 
 template <class TaggerTrainer>

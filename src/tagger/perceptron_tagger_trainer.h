@@ -36,23 +36,23 @@ class perceptron_tagger_trainer {
  public:
   typedef typename tagger_trainer<perceptron_tagger_trainer<FeatureSequences, order>>::sentence sentence;
 
-  static void train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, FILE* in_feature_templates, FILE* out_tagger);
+  static void train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FILE* in_feature_templates, FILE* out_tagger);
 
  private:
-  static void train_viterbi(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, FeatureSequences& features);
+  static void train_viterbi(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FeatureSequences& features);
 };
 
 
 // Definitions
 template <class FeatureSequences, int order>
-void perceptron_tagger_trainer<FeatureSequences, order>::train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, FILE *in_feature_templates, FILE *out_tagger) {
+void perceptron_tagger_trainer<FeatureSequences, order>::train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FILE *in_feature_templates, FILE *out_tagger) {
   FeatureSequences features;
 
   eprintf("Parsing feature templates...\n");
   features.parse(order, in_feature_templates);
 
   eprintf("Training tagger...\n");
-  train_viterbi(iterations, train, heldout, features);
+  train_viterbi(iterations, train, heldout, early_stopping, prune_features, features);
 
   eprintf("Encoding tagger...\n");
   typedef feature_sequences_optimizer<FeatureSequences> optimizer;
@@ -62,8 +62,8 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train(int iterations, c
 }
 
 template <class FeatureSequences, int order>
-void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, FeatureSequences& features) {
-  int best_correct = 0, best_total = 0;
+void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FeatureSequences& features) {
+  int best_correct = 0, best_iteration = -1;
   FeatureSequences best_features;
 
   viterbi<FeatureSequences, order> decoder(features);
@@ -72,6 +72,24 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
   typename FeatureSequences::cache feature_sequences_cache(features);
   typename FeatureSequences::dynamic_features decoded_dynamic_features, gold_dynamic_features;
   vector<string> decoded_feature_sequences_keys, gold_feature_sequences_keys;
+
+  // Initialize feature sequences for the gold decoding only if requested
+  if (prune_features)
+    for (unsigned s = 0; s < train.size(); s++) {
+      auto& sentence = train[s];
+      features.initialize_sentence(sentence.forms_with_tags, sentence.forms_with_tags.size(), feature_sequences_cache);
+      for (int i = 0; i < int(sentence.forms_with_tags.size()); i++) {
+        int window[order];
+        for (int j = 0; j < order && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
+
+        features.compute_dynamic_features(i, window[0], &gold_dynamic_features, gold_dynamic_features, feature_sequences_cache);
+        features.feature_keys(i, window, 0, gold_dynamic_features, gold_feature_sequences_keys, feature_sequences_cache);
+
+        for (unsigned f = 0; f < features.scores.size(); f++)
+          if (!gold_feature_sequences_keys[f].empty())
+            features.scores[f].map[gold_feature_sequences_keys[f]];
+      }
+    }
 
   // Train for given number of iterations
   for (int i = 0; i < iterations; i++) {
@@ -84,7 +102,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
       auto& sentence = train[s];
 
       // Run Viterbi
-      if (tags.size() < sentence.forms_with_tags.size()) tags.resize(sentence.forms_with_tags.size() * 2);
+      if (tags.size() < sentence.forms_with_tags.size()) tags.resize(2 * sentence.forms_with_tags.size());
       decoder.tag(sentence.forms_with_tags, sentence.forms_with_tags.size(), decoder_cache, tags);
 
       // Compute feature sequence keys or decoded result and gold result and update alpha & gamma
@@ -103,19 +121,31 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
         features.compute_dynamic_features(i, window[0], &gold_dynamic_features, gold_dynamic_features, feature_sequences_cache);
         features.feature_keys(i, window, 0, gold_dynamic_features, gold_feature_sequences_keys, feature_sequences_cache);
 
-        for (unsigned f = 0; f < features.scores.size(); f++)
+        for (unsigned f = 0; f < features.scores.size(); f++) {
           if (decoded_feature_sequences_keys[f] != gold_feature_sequences_keys[f]) {
-            auto& decoded_info = features.scores[f].map[decoded_feature_sequences_keys[f]];
-            decoded_info.gamma += decoded_info.alpha * (s - decoded_info.last_gamma_update);
-            decoded_info.last_gamma_update = s;
-            decoded_info.alpha--;
+            if (!decoded_feature_sequences_keys[f].empty()) {
+              auto it = features.scores[f].map.find(decoded_feature_sequences_keys[f]);
+              if (it == features.scores[f].map.end() && !prune_features) it = features.scores[f].map.emplace(decoded_feature_sequences_keys[f], typename decltype(features.scores[f].map)::mapped_type()).first;
+              if (it != features.scores[f].map.end()) {
+                auto& decoded_info = it->second;
+                decoded_info.gamma += decoded_info.alpha * (s - decoded_info.last_gamma_update);
+                decoded_info.last_gamma_update = s;
+                decoded_info.alpha--;
+              }
+            }
 
-            auto& gold_info = features.scores[f].map[gold_feature_sequences_keys[f]];
-            gold_info.gamma += gold_info.alpha * (s - gold_info.last_gamma_update);
-            gold_info.last_gamma_update = s;
-            gold_info.alpha++;
+            if (!gold_feature_sequences_keys[f].empty()) {
+              auto it = features.scores[f].map.find(gold_feature_sequences_keys[f]);
+              if (it == features.scores[f].map.end() && !prune_features) it = features.scores[f].map.emplace(gold_feature_sequences_keys[f], typename decltype(features.scores[f].map)::mapped_type()).first;
+              if (it != features.scores[f].map.end()) {
+                auto& gold_info = it->second;
+                gold_info.gamma += gold_info.alpha * (s - gold_info.last_gamma_update);
+                gold_info.last_gamma_update = s;
+                gold_info.alpha++;
+              }
+            }
           }
-
+        }
       }
     }
 
@@ -127,7 +157,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
       }
     eprintf("done, accuracy %.2f%%", train_correct * 100 / double(train_total));
 
-    // If we have any heldout data, compute accuracy and store best tagger configuration
+    // If we have any heldout data, compute accuracy and if requested store best tagger configuration
     if (!heldout.empty()) {
       enum { TAGS, LEMMAS, BOTH, TOTAL };
       int heldout_correct[TOTAL] = {}, heldout_total = 0;
@@ -150,9 +180,9 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
         }
       }
 
-      if (heldout_correct[BOTH] > best_correct) {
+      if (early_stopping && heldout_correct[BOTH] > best_correct) {
         best_correct = heldout_correct[BOTH];
-        best_total = heldout_total;
+        best_iteration = i;
         best_features = features;
       }
 
@@ -161,8 +191,8 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
     eprintf("\n");
   }
 
-  if (best_correct > 0) {
-    eprintf("Chosen tagger model with heldout accuracy %.2f%%\n", best_correct * 100 / double(best_total));
+  if (early_stopping && best_iteration >= 0) {
+    eprintf("Chosen tagger model from iteration %d\n", best_iteration);
     features = best_features;
   }
 }
