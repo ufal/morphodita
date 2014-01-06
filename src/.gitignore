@@ -10,6 +10,7 @@ morpho_accuracy
 remap_tags
 run_morpho
 run_tagger
+run_tokenizer
 test_dictionary
 tagger_accuracy
 train_tagger
