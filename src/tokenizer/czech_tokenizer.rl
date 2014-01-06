@@ -76,7 +76,14 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
 
     main := |*
       word | number | url | (utf8_any - whitespace)
-        { forms.emplace_back(ts, te - ts); };
+        { forms.emplace_back(ts, te - ts);
+
+          // Implement emergency splitting for large sentences
+          if (forms.size() >= 500 ||
+              (forms.size() >= 450 && utf8::is_P(utf8::first(forms.back().str))) ||
+              (forms.size() >= 400 && utf8::is_Po(utf8::first(forms.back().str))))
+            fbreak;
+        };
 
       eos closing* whitespace+ >mark_whitespace opening* (utf8_Lu | utf8_Lt)
         {

@@ -2520,7 +2520,14 @@ _eof_trans:
 	{te = ( text)+1;}
 	break;
 	case 8:
-	{te = ( text)+1;{ forms.emplace_back(ts, te - ts); }}
+	{te = ( text)+1;{ forms.emplace_back(ts, te - ts);
+
+          // Implement emergency splitting for large sentences
+          if (forms.size() >= 500 ||
+              (forms.size() >= 450 && utf8::is_P(utf8::first(forms.back().str))) ||
+              (forms.size() >= 400 && utf8::is_Po(utf8::first(forms.back().str))))
+            {( text)++; goto _out; }
+        }}
 	break;
 	case 4:
 	{te = ( text)+1;{
@@ -2546,7 +2553,14 @@ _eof_trans:
 	{te = ( text)+1;{ {( text)++; goto _out; } }}
 	break;
 	case 12:
-	{te = ( text);( text)--;{ forms.emplace_back(ts, te - ts); }}
+	{te = ( text);( text)--;{ forms.emplace_back(ts, te - ts);
+
+          // Implement emergency splitting for large sentences
+          if (forms.size() >= 500 ||
+              (forms.size() >= 450 && utf8::is_P(utf8::first(forms.back().str))) ||
+              (forms.size() >= 400 && utf8::is_Po(utf8::first(forms.back().str))))
+            {( text)++; goto _out; }
+        }}
 	break;
 	case 9:
 	{te = ( text);( text)--;}
@@ -2555,7 +2569,14 @@ _eof_trans:
 	{te = ( text);( text)--;{ {( text)++; goto _out; } }}
 	break;
 	case 3:
-	{{( text) = ((te))-1;}{ forms.emplace_back(ts, te - ts); }}
+	{{( text) = ((te))-1;}{ forms.emplace_back(ts, te - ts);
+
+          // Implement emergency splitting for large sentences
+          if (forms.size() >= 500 ||
+              (forms.size() >= 450 && utf8::is_P(utf8::first(forms.back().str))) ||
+              (forms.size() >= 400 && utf8::is_Po(utf8::first(forms.back().str))))
+            {( text)++; goto _out; }
+        }}
 	break;
 	case 1:
 	{{( text) = ((te))-1;}}
