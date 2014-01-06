@@ -19,6 +19,9 @@ web: morphodita.t2t morphodita_user.t2t morphodita_api_tutorial.t2t morphodita_a
 manual: html pdf txt
 	$(foreach fmt,$^,cp morphodita.$(fmt) ../MANUAL.$(fmt); )
 
-.PHONY: clean
+.PHONY: clean veryclean
 clean:
 	rm -f *.aux *.dvi *.html *.log *.pdf *.out *.tex *.toc *.txt
+
+veryclean: clean
+	rm -f ../MANUAL.*
