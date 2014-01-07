@@ -83,7 +83,7 @@ void tag_untokenized(const tagger& tagger) {
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
-  unique_ptr<tokenizer> tokenizer(tagger.get_morpho()->new_tokenizer());
+  unique_ptr<tokenizer> tokenizer(tagger.new_tokenizer());
 
   for (bool not_eof = true; not_eof; ) {
     // Read block of text
