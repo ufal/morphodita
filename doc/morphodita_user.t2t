@@ -80,13 +80,13 @@ The input is by default automatically tokenized and segmented. The output is in
 XML format without a root element, using ``<form lemma="..." tag="...">...</form>``
 element to encode the assigned lemma and tag.
 
-An example of input data ``tagger_input.txt``:
+Example input data ``tagger_input.txt``:
 ``` Děti pojedou k babičce. Už se těší.
 
-An example of MorphoDiTa run_tagger command line:
+Example MorphoDiTa run_tagger command line:
 ``` cat tagger_input.txt | ./run_tagger czech.best_accuracy_tagger
 
-An example of output data (line breaks added):
+Example output data (line breaks added):
 ```
 <form lemma='dítě' tag='NNFP1-----A----'>Děti</form>
 <form lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'>pojedou</form>
@@ -106,7 +106,7 @@ The vertical input format contains word on a line, empty line being end of sente
 The output has the same number of lines as input, line //l// is a tab separated
 lemma-tag pair assigned to the word on the input line //l//.
 
-An example of input data ``tagger_input_vertical.txt``:
+Example input data ``tagger_input_vertical.txt``:
 ```
 Děti
 pojedou
@@ -120,10 +120,10 @@ těší
 .
 ```
 
-An example of MorphoDiTa run_tagger command line:
-``` cat tagger_input_vertical.txt | ./run_tagger czech.best_accuracy_tagger
+Example MorphoDiTa run_tagger command line:
+``` cat tagger_input_vertical.txt | ./run_tagger -v czech.best_accuracy_tagger
 
-An example of output:
+Example output:
 ```
 dítě    NNFP1-----A----
 jet-1_^(pohybovat_se,_ne_však_chůzí)    VB-P---3F-AA---
@@ -137,14 +137,40 @@ těšit_:T        VB-S---3P-AA---
 .       Z:-------------
 ```
 
-++ Morphologic Dictionary Commandline Interface ++
+++ Morphologic Dictionary ++
 
-``run_dict morpho_dictionary``
+The command line interface allowing analysis and generation can be executed
+using:
+```run_dict morpho_dictionary
 
-Open the morpho dictionary and allow analysis and generation.
+The input is read from standard input, command on each line. If only one word
+is given, performs analysis on the given word. If the line contains two
+space-separated words, performs generation on the first word and filter the
+returned tags using a tag wildcard given as second word. If the second word
+is empty (i.e., the input is for example "dog "), generate all forms.
 
-Read from standard input, command on a line. If there is no space on a line, perform analysis on the given word. If there is one space on a line, perform generation on the word given at the beginning of the line, with the tag specified. If there is no tag specified (for example "pes "), generate all forms. MorphoDiTa assumes UTF-8 inputs.
+++ Tokenization ++
 
-An example of MorphoDiTa dictionary running on commandline:
+The tokenization performed by ``run_tagger`` can be performed separately
+by a ``run_tokenizer`` binary. A morphologic dictionary whose tokenization
+rules should be used must be specified.
 
-``run_dict czech.dict``
+Example input:
+``` Děti pojedou k babičce. Už se těší.
+
+Example tokenization command line:
+``` run_tokenizer czech.dict
+
+Example output:
+```
+Děti
+pojedou
+k
+babičce
+.
+
+Už
+se
+těší
+.
+```

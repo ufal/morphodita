@@ -76,7 +76,7 @@ class tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  virtual void [set_text #tokenizer_set_text](const char* text) = 0;
+  virtual void [set_text #tokenizer_set_text](const char* text, bool make_copy = false) = 0;
 
   virtual bool [next_sentence #tokenizer_next_sentence](std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) = 0;
 };
@@ -86,11 +86,15 @@ The [``tokenizer`` #tokenizer] class performs segmentation and tokenization of g
 The class is //not// threadsafe.
 
 +++ tokenizer::set_text +++[tokenizer_set_text]
-``` virtual void set_text(const char* text) = 0;
+``` virtual void set_text(const char* text, bool make_copy = false) = 0;
 
-Set the text which is to be tokenized. Only a reference to the given text is
-stored, therefore, the users have to make sure it exists as long as the tokenizer
-is destructed or ``set_text`` is called again.
+Set the text which is to be tokenized.
+
+If ``make_copy`` is ``false``, only a reference to the given text is
+stored and the user has to make sure it exists until the tokenizer
+is released or ``set_text`` is called again. If ``make_copy``
+is ``true``, a copy of the given text is made and retained until the
+tokenizer is released or ``set_text`` is called again.
 
 +++ tokenizer::next_sentence +++[tokenizer_next_sentence]
 ``` virtual bool next_sentence(std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) = 0;
@@ -217,8 +221,8 @@ class tagger {
   virtual const [morpho #morpho]* [get_morpho #tagger_get_morpho]() const = 0;
 
   virtual void [tag #tagger_tag](const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags) const = 0;
-  void [tokenize_and_tag #tagger_tokenize_and_tag](const char* text, std::vector<[tagged_lemma #tagged_lemma]>& tags,
-                        std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) const;
+
+  [tokenizer #tokenizer]* [new_tokenizer #tagger_new_tokenizer]() const = 0;
 };
 ```
 
@@ -253,11 +257,8 @@ tagger destructor.
 Perform morphologic analysis and subsequent disambiguation. Accepts
 a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vector of [``tagged_lemma`` #tagged_lemma].
 
-+++ tagger::tokenize_and_tag() +++[tagger_tokenize_and_tag]
-```
-void tokenize_and_tag(const char* text, std::vector<[tagged_lemma #tagged_lemma]>& tags,
-                      std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) const;
-```
++++ tagger::new_tokenizer +++[tagger_new_tokenizer]
+``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;
 
-Perform tokenization and morphologic analysis and subsequent disambiguation. The arguments
-``forms`` and ``tokens`` are the same as in [``tokenizer::next_sentence`` #tokenizer_next_sentence].
+Returns a new instance of a suitable tokenizer. The user should delete it after
+use. The call is equal to [``get_morpho()`` #tagger_get_morpho]``->``[``new_tokenizer()`` #morpho_new_tokenizer].

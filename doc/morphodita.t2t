@@ -19,6 +19,7 @@ MorphoDiTa is currently undergoing beta testing. Please let us know if you wish 
 - morphologic dictionary commandline interface, tagger commandline tool
 - C++ library
 - Java bindings
+- Python bindings
 
 
 MorphoDiTa will be available either as pre-compiled binaries and models from [LINDAT-Clarin http://ufal-point.mff.cuni.cz/lindat/] infrastructure or as open-source from [GitHub https://github.com/]. If you use this tool for scientific work, please give credit to us by referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and [Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
@@ -27,7 +28,7 @@ MorphoDiTa will be available either as pre-compiled binaries and models from [LI
 
 - Dec 2013: beta testing, training of custom models
 - Jan 2014: MorphoDiTa 1.0 release
-- Feb 2014: further language bindings (Perl, Python, ...)
+- Feb 2014: further language bindings (Perl, ...)
 
 
 ++ License ++
