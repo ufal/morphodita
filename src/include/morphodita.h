@@ -80,7 +80,7 @@ class MORPHODITA_IMPORT tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  virtual void set_text(const char* text) = 0;
+  virtual void set_text(const char* text, bool make_copy = false) = 0;
 
   virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
 };

@@ -23,7 +23,11 @@
 namespace ufal {
 namespace morphodita {
 
-void utf8_tokenizer::set_text(const char* text) {
+void utf8_tokenizer::set_text(const char* text, bool make_copy /*= false*/) {
+  if (make_copy && text) {
+    text_copy.assign(text);
+    text = text_copy.c_str();
+  }
   this->text = text;
   text_end = text ? text + strlen(text) : nullptr;
   chars = 0;
