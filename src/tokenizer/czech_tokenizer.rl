@@ -59,8 +59,8 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
     alphtype unsigned char;
     getkey (unsigned char)*text;
 
-    include utf8 "ragel/utf8.rl";
-    include url "ragel/url.rl";
+    include utf8 "../utils/ragel/utf8.rl";
+    include url "../utils/ragel/url.rl";
 
     # Tokenization
     whitespace = [\r\t\n] | utf8_Zs;
