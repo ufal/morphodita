@@ -138,7 +138,7 @@ class tagger {
       string_pieces.reserve(forms.size());
       for (auto& form : forms)
         string_pieces.emplace_back(form);
-      self->tag(string_pieces, tags);
+      $self->tag(string_pieces, tags);
     }
   }
 
