@@ -50,8 +50,10 @@ class RunTagger {
   }
 
   public static void tagUntokenized(Tagger tagger) {
+    Forms forms = new Forms();
     TaggedLemmas lemmas = new TaggedLemmas();
     TokenRanges tokens = new TokenRanges();
+    Tokenizer tokenizer = tagger.newTokenizer();
     Scanner reader = new Scanner(System.in);
 
     boolean not_eof = true;
@@ -59,26 +61,31 @@ class RunTagger {
       StringBuilder textBuilder = new StringBuilder();
       String line;
 
+      // Read block
       while ((not_eof = reader.hasNextLine()) && !(line = reader.nextLine()).isEmpty()) {
         textBuilder.append(line);
         textBuilder.append('\n');
       }
       if (not_eof) textBuilder.append('\n');
 
+      // Tokenize and tag
       String text = textBuilder.toString();
-      tagger.tokenizeAndTag(text, lemmas, tokens);
-
+      tokenizer.setText(text);
       int t = 0;
-      for (int i = 0; i < lemmas.size(); i++) {
-        TaggedLemma lemma = lemmas.get(i);
-        TokenRange token = tokens.get(i);
-        int token_start = (int)token.getStart(), token_end = token_start + (int)token.getLength();
-        System.out.printf("%s<form lemma=\"%s\" tag=\"%s\">%s</form>",
-                          encodeEntities(text.substring(t, token_start)),
-                          encodeEntities(lemma.getLemma()),
-                          encodeEntities(lemma.getTag()),
-                          encodeEntities(text.substring(token_start, token_end)));
-        t = token_end;
+      while (tokenizer.nextSentence(forms, tokens)) {
+        tagger.tag(forms, lemmas);
+
+        for (int i = 0; i < lemmas.size(); i++) {
+          TaggedLemma lemma = lemmas.get(i);
+          TokenRange token = tokens.get(i);
+          int token_start = (int)token.getStart(), token_end = token_start + (int)token.getLength();
+          System.out.printf("%s<form lemma=\"%s\" tag=\"%s\">%s</form>",
+                            encodeEntities(text.substring(t, token_start)),
+                            encodeEntities(lemma.getLemma()),
+                            encodeEntities(lemma.getTag()),
+                            encodeEntities(text.substring(token_start, token_end)));
+          t = token_end;
+        }
       }
       System.out.print(encodeEntities(text.substring(t)));
     }

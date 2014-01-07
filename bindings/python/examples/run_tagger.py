@@ -55,8 +55,10 @@ def encode_entities(text):
   return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
 
 def tag_untokenized(tagger):
+  forms = Forms()
   lemmas = TaggedLemmas()
   tokens = TokenRanges()
+  tokenizer = tagger.newTokenizer()
   not_eof = True
   while not_eof:
     text = ''
@@ -72,10 +74,11 @@ def tag_untokenized(tagger):
       if not line: break
 
     # Tag
-    if text:
-      tagger.tokenizeAndTag(text, lemmas, tokens)
+    tokenizer.setText(text)
+    t = 0
+    while tokenizer.nextSentence(forms, tokens):
+      tagger.tag(forms, lemmas)
 
-      t = 0
       for i in range(len(lemmas)):
         lemma = lemmas[i]
         token = tokens[i]
@@ -83,10 +86,10 @@ def tag_untokenized(tagger):
           encode_entities(text[t : token.start]),
           encode_entities(lemma.lemma),
           encode_entities(lemma.tag),
-          encode_entities(text[token.start : token.start + token.length])
+          encode_entities(text[token.start : token.start + token.length]),
         ))
         t = token.start + token.length
-      sys.stdout.write(encode_entities(text[t : ]))
+    sys.stdout.write(encode_entities(text[t : ]))
 
 argi = 1
 if argi < len(sys.argv) and sys.argv[argi] == "-v": argi = argi + 1

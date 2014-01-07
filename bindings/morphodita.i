@@ -62,20 +62,33 @@ struct token_range {
 typedef std::vector<token_range> TokenTanges;
 
 %rename(Tokenizer) tokenizer;
+%nodefaultctor tokenizer;
 class tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  virtual void set_text(const char* text) = 0;
-
   %extend {
-    bool next_sentence(std::vector<token_range>& tokens) {
-      return $self->next_sentence(NULL, &tokens);
+    %rename(setText) set_text;
+    void set_text(const char* text) {
+      $self->set_text(text, true);
+    }
+
+    %rename(nextSentence) next_sentence;
+    bool next_sentence(std::vector<std::string>* forms, std::vector<token_range>* tokens) {
+      if (!forms) return $self->next_sentence(NULL, tokens);
+
+      std::vector<string_piece> string_pieces;
+      bool result = $self->next_sentence(&string_pieces, tokens);
+      forms->resize(string_pieces.size());
+      for (unsigned i = 0; i < string_pieces.size(); i++)
+        forms->operator[](i).assign(string_pieces[i].str, string_pieces[i].len);
+      return result;
     }
   }
 };
 
 %rename(Morpho) morpho;
+%nodefaultctor morpho;
 class morpho {
  public:
   virtual ~morpho() {}
@@ -86,9 +99,9 @@ class morpho {
   enum { NO_GUESSER = 0, GUESSER = 1 };
   typedef int guesser_mode;
 
-  virtual int analyze(const char* form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
+  virtual int analyze(const char* form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const;
 
-  virtual int generate(const char* lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
+  virtual int generate(const char* lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const;
 
   %extend {
     %rename(rawLemma) raw_lemma_len;
@@ -104,10 +117,11 @@ class morpho {
 
   %rename(newTokenizer) new_tokenizer;
   %newobject new_tokenizer;
-  virtual tokenizer* new_tokenizer() const = 0;
+  virtual tokenizer* new_tokenizer() const;
 };
 
 %rename(Tagger) tagger;
+%nodefaultctor tagger;
 class tagger {
  public:
   virtual ~tagger() {}
@@ -116,7 +130,7 @@ class tagger {
   static tagger* load(const char* fname);
 
   %rename(getMorpho) get_morpho;
-  virtual const morpho* get_morpho() const = 0;
+  virtual const morpho* get_morpho() const;
 
   %extend {
     void tag(const std::vector<std::string>& forms, std::vector<tagged_lemma>& tags) const {
@@ -128,10 +142,7 @@ class tagger {
     }
   }
 
-  %rename(tokenizeAndTag) tokenize_and_tag;
-  %extend {
-    void tokenize_and_tag(const char* text, std::vector<tagged_lemma>& tags, std::vector<token_range>* tokens) const {
-      $self->tokenize_and_tag(text, tags, NULL, tokens);
-    }
-  }
+  %rename(newTokenizer) new_tokenizer;
+  %newobject new_tokenizer;
+  tokenizer* new_tokenizer() const;
 };
