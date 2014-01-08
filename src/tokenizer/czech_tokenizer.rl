@@ -66,7 +66,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
     whitespace = [\r\t\n] | utf8_Zs;
     eol = '\r' ('' >(eol,0) | '\n' >(eol,1)) | '\n' ('' >(eol,0) | '\r' >(eol,1));
     word = utf8_L (utf8_L | utf8_M | '-')* -- '--';
-    number = '-'? '.'? utf8_Nd (utf8_Nd | '.')*;
+    number = '-'? utf8_Nd+ ([.,] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
 
     # Segmentation
     action mark_whitespace { whitespace = text; }
