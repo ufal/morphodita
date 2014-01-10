@@ -23,18 +23,18 @@
 namespace ufal {
 namespace utils {
 
-// Try to parse an int from given string. If the int cannot be parsed or does
-// not fit into int, an error is displayed and program exits. If that happens,
-// the value_name argument is used in the error message.
-inline int parse_int(const char* str, const char* value_name) {
+// Try to parse a double from given string. If the double cannot be parsed, an
+// error is displayed and program exits. If that happens, the value_name
+// argument is used in the error message.
+inline double parse_double(const char* str, const char* value_name) {
   char* end;
 
   errno = 0;
-  long result = strtol(str, &end, 10);
-  if (*end || errno == ERANGE || result != int(result))
-    runtime_errorf("Cannot parse %s int value: '%s'!", value_name, str);
+  double result = strtod(str, &end);
+  if (*end || errno == ERANGE)
+    runtime_errorf("Cannot parse %s double value: '%s'!", value_name, str);
 
-  return int(result);
+  return result;
 }
 
 } // namespace utils
