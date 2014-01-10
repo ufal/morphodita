@@ -25,6 +25,7 @@
 #include "morpho/morpho_ids.h"
 #include "morpho/czech_morpho_encoder.h"
 #include "utils/file_ptr.h"
+#include "utils/parse_int.h"
 
 using namespace ufal::morphodita;
 
@@ -51,7 +52,7 @@ int main(int argc, char* argv[]) {
         }
 
         fputc(id, stdout);
-        czech_morpho_encoder::encode(stdin, prefix_guesser, statistical_guesser, argc > 4 ? atoi(argv[4]) : 15, stdout);
+        czech_morpho_encoder::encode(stdin, prefix_guesser, statistical_guesser, argc > 4 ? parse_int(argv[4], "tag_length") : 15, stdout);
 
         break;
       }

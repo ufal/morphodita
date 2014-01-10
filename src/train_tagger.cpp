@@ -23,6 +23,7 @@
 #include "tagger/tagger_ids.h"
 #include "tagger/tagger_trainer.h"
 #include "utils/file_ptr.h"
+#include "utils/parse_int.h"
 
 using namespace ufal::morphodita;
 
@@ -38,9 +39,9 @@ int main(int argc, char* argv[]) {
       {
         if (argc < 6) runtime_errorf("Usage: %s %s dict use_guesser features iterations [heldout_data]", argv[0], argv[1]);
         const char* dict_file = argv[2];
-        bool use_guesser = stoi(argv[3]);
+        bool use_guesser = parse_int(argv[3], "use_guesser");
         const char* features_file = argv[4];
-        int iterations = atoi(argv[5]);
+        int iterations = parse_int(argv[5], "iterations");
         const char* heldout_file = argc == 6 ? nullptr : argv[6];
 
         // Open needed files

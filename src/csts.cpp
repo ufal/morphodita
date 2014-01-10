@@ -20,6 +20,7 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/parse_int.h"
 
 using namespace ufal::morphodita;
 
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]) {
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
   if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
   eprintf("done\n");
-  bool use_guesser = atoi(argv[2]);
+  bool use_guesser = parse_int(argv[2], "use_guesser");
 
   bool in_sentence = false;
   vector<tagged_lemma> tags;

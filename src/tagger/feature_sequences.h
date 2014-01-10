@@ -27,6 +27,7 @@
 #include "utils/binary_encoder.h"
 #include "utils/compressor.h"
 #include "utils/input.h"
+#include "utils/parse_int.h"
 #include "utils/persistent_unordered_map.h"
 #include "utils/small_stringops.h"
 #include "vli.h"
@@ -113,12 +114,12 @@ void feature_sequences<ElementaryFeatures, Map>::parse(int order, FILE* f) {
       if (it == elementary_map.end()) runtime_errorf("Unknown elementary feature '%s' used in feature sequence '%s'!", parts[0].c_str(), token.c_str());
 
       auto& desc = it->second;
-      int sequence_index = stoi(parts[1]);
+      int sequence_index = parse_int(parts[1].c_str(), "sequence_index");
       if (desc.type == DYNAMIC && sequence_index != 0) runtime_errorf("Nonzero sequence index %d of dynamic elementary feature '%s'!", sequence_index, desc.name.c_str());
       if (desc.type == PER_TAG && (sequence_index > 0 || sequence_index <= -order)) runtime_errorf("Wrong sequence index %d of per-tag elementary feature '%s'!", sequence_index, desc.name.c_str());
       if (desc.range == ONLY_CURRENT && sequence_index != 0) runtime_errorf("Nonzero sequence index %d of elementary feature '%s' requiring zero offset!", sequence_index, desc.name.c_str());
 
-      sequences.back().elements.emplace_back(it->second.type, it->second.index, stoi(parts[1]));
+      sequences.back().elements.emplace_back(it->second.type, it->second.index, sequence_index);
       if (desc.type == DYNAMIC) sequences.back().dependant_range = max(sequences.back().dependant_range, order + 1);
       if (desc.type == PER_TAG) sequences.back().dependant_range = max(sequences.back().dependant_range, 1 - sequence_index);
       contains_only_current |= desc.range == ONLY_CURRENT;

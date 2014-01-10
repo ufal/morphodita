@@ -23,6 +23,7 @@
 #include "common.h"
 #include "morpho/raw_morpho_dictionary_reader.h"
 #include "utils/new_unique_ptr.h"
+#include "utils/parse_int.h"
 
 using namespace ufal::morphodita;
 
@@ -97,7 +98,7 @@ void add_class(vector<tagged_form>::const_iterator begin, vector<tagged_form>::c
 
 int main(int argc, char* argv[]) {
   if (argc <= 1) runtime_errorf("Usage: %s max_suffix_len", argv[0]);
-  max_suffix_len = stoi(argv[1]);
+  max_suffix_len = parse_int(argv[1], "max_suffix_len");
 
   raw_morpho_dictionary_reader raw(stdin);
   string lemma;

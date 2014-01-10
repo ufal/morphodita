@@ -25,6 +25,7 @@
 #include "common.h"
 #include "utils/binary_encoder.h"
 #include "utils/input.h"
+#include "utils/parse_int.h"
 #include "utils/persistent_unordered_map.h"
 
 namespace ufal {
@@ -100,7 +101,7 @@ void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, binary_encoder& en
 
     lemmas_hist.add(lemma.lemma);
     for (unsigned i = 1; i < tokens.size(); i += 2) {
-      lemma.forms.emplace_back(tokens[i], stoi(tokens[i+1]));
+      lemma.forms.emplace_back(tokens[i], parse_int(tokens[i+1].c_str(), "class_number"));
       forms_hist.add(tokens[i]);
     }
     stable_sort(lemma.forms.begin(), lemma.forms.end());

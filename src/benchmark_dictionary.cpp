@@ -21,6 +21,7 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/parse_int.h"
 
 using namespace ufal::morphodita;
 
@@ -36,7 +37,7 @@ int main(int argc, char* argv[]) {
   vector<string> forms;
   string line;
   vector<string> tokens;
-  for (int i = atoi(argv[2]); i > 0; i--) {
+  for (int i = parse_int(argv[2], "forms_to_analyze"); i > 0; i--) {
     if (!getline(stdin, line)) break;
     split(line, '\t', tokens);
     if (tokens.size() != 3) runtime_errorf("Line '%s' of the raw morpho dictionary does not have three columns!", line.c_str());
