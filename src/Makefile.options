@@ -3,8 +3,9 @@ ifdef WIN
   exe = $(foreach f,$(1),$(f).exe)
   lib = $(foreach f,$(1),$(f).a)
   dynlib = $(foreach f,$(1),$(f).dll)
+  implib = $(foreach f,$(1),$(f).dll.lib)
+  create_implib = -Wl,--out-implib,$(call implib,$(1))
   DYN_C_FLAGS += -DBUILDING_DLL
-  DYN_LD_FLAGS += -Wl,--out-implib,$(call lib,$@)
 else
   exe = $(foreach f,$(1),$(f))
   lib = $(foreach f,$(1),$(f).a)

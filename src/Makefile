@@ -25,7 +25,7 @@ $(call lib,libmorphodita.dyn): $(call dynobj,$(COMMON_O) $(MORPHODITA_O))
 	ar -rcs $@ $(call libobj,morphodita,$^)
 	@rm -f $(call libobj,morphodita,$^)
 $(call dynlib,libmorphodita): $(call lib,libmorphodita.dyn)
-	$(CXX) -o $@ $(DYN_LD_FLAGS) -Wl,--whole-archive $< -Wl,-no-whole-archive -Wl,--version-script=libmorphodita.map
+	$(CXX) -o $@ $(DYN_LD_FLAGS) -Wl,--whole-archive $< -Wl,-no-whole-archive -Wl,--version-script=libmorphodita.map $(call create_implib,libmorphodita)
 
 # executables
 $(call exe,benchmark_dictionary): $(call obj,$(COMMON_O) $(MORPHO_O) utils/input)
@@ -47,4 +47,4 @@ $(EXECUTABLES): $(call exe,%): $(call obj,%)
 .PHONY: clean
 
 clean:
-	rm -rf .objs/ $(LIBRARIES) $(EXECUTABLES) $(if $(WIN),$(call lib,$(call dynlib,libmorphodita)))
+	rm -rf .objs/ $(LIBRARIES) $(EXECUTABLES) $(call implib,libmorphodita)
