@@ -1,2 +1,5 @@
+$(call lib,../../src/libmorphodita):
+	$(MAKE) -C $(dir $@) $(notdir $@)
+
 $(call lib,../../src/libmorphodita.dyn):
-	make -C $(dir $@) $(notdir $@)
+	$(MAKE) -C $(dir $@) $(notdir $@)

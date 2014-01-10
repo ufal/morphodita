@@ -1,14 +1,25 @@
 include ../Makefile.common
 
-TARGETS = $(call dynlib,libmorphodita_java)
+ifdef WIN
+  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
+  JAVA_C_FLAGS=-DMORPHODITA_STATIC -I"$(JAVA_HOME)"/include -I"$(JAVA_HOME)"/include/win32
+  JAVA_LD_FLAGS=-Wl,--kill-at
+  JAVA_MODULE=$(call dynlib,morphodita_java)
+else
+  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
+  JAVA_C_FLAGS=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+  JAVA_MODULE=$(call dynlib,libmorphodita_java)
+endif
+
+TARGETS = $(JAVA_MODULE)
 
 all: $(TARGETS)
 
 include ../Makefile.rules
 
-$(call dynlib,libmorphodita_java): morphodita_java.cpp $(call lib,../../src/libmorphodita.dyn)
-	@$(if $(JAVA_JNI),,$(error JAVA_JNI must be set to the directory containing jni.h))
-	$(CXX) -I../../src/include -I$(JAVA_JNI) $(DYN_C_FLAGS) $(DYN_LD_FLAGS) -fno-strict-aliasing -Wl,--version-script=morphodita_java.map $^ -o $@
+$(JAVA_MODULE): morphodita_java.cpp $(JAVA_MORPHODITA_LIB)
+	@$(if $(JAVA_HOME),,$(error JAVA_HOME must be set))
+	$(CXX) -I../../src/include $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(JAVA_C_FLAGS) $(JAVA_LD_FLAGS) -fno-strict-aliasing -Wl,--version-script=morphodita_java.map $^ -o $@
 
 morphodita_java.cpp: morphodita_java.i ../morphodita.i
 	mkdir -p cz/cuni/mff/ufal/morphodita
