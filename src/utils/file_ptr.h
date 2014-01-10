@@ -38,4 +38,4 @@ class file_ptr {
 };
 
 } // namespace utils
-}
+} // namespace ufal

@@ -31,4 +31,4 @@ unique_ptr<T> new_unique_ptr(Args&&... args) {
 }
 
 } // namespace utils
-}
+} // namespace ufal
