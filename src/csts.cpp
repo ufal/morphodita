@@ -23,6 +23,20 @@
 
 using namespace ufal::morphodita;
 
+const string& encode(string& str) {
+  if (str.find_first_of("&<>") != str.npos) {
+    string encoded;
+    encoded.reserve(str.size() + 3);
+    for (auto& chr : str)
+      if (chr == '&') encoded += "&amp;";
+      else if (chr == '<') encoded += "&lt;";
+      else if (chr == '>') encoded += "&gt;";
+      else encoded += chr;
+    str.swap(encoded);
+  }
+  return str;
+}
+
 int main(int argc, char* argv[]) {
   if (argc <= 2) runtime_errorf("Usage: %s dict_file use_guesser", argv[0]);
 
@@ -49,9 +63,9 @@ int main(int argc, char* argv[]) {
       if (tokens.size() != 3) runtime_errorf("Input line '%s' does not contain 3 columns!", line.c_str());
       dictionary->analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, tags);
 
-      printf("<f>%s<l>%s<t>%s", tokens[0].c_str(), tokens[1].c_str(), tokens[2].c_str());
+      printf("<f>%s<l>%s<t>%s", encode(tokens[0]).c_str(), encode(tokens[1]).c_str(), encode(tokens[2]).c_str());
       for (auto& tag : tags)
-        printf("<MMl>%s<MMt>%s", tag.lemma.c_str(), tag.tag.c_str());
+        printf("<MMl>%s<MMt>%s", encode(tag.lemma).c_str(), encode(tag.tag).c_str());
       printf("\n");
     }
   }
