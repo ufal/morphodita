@@ -23,6 +23,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdint>
+#include <cstdlib>
 #include <string>
 #include <vector>
 
