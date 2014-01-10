@@ -25,7 +25,6 @@
 namespace ufal {
 namespace utils {
 
-// Declarations
 class file_ptr {
  public:
   file_ptr(FILE* f = nullptr) : f(f) {}
