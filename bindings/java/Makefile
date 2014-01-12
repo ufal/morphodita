@@ -22,9 +22,9 @@ $(JAVA_MODULE): morphodita_java.cpp $(JAVA_MORPHODITA_LIB)
 	$(CXX) -I../../src/include $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(JAVA_C_FLAGS) $(JAVA_LD_FLAGS) -fno-strict-aliasing -Wl,--version-script=morphodita_java.map $^ -o $@
 
 morphodita_java.cpp: morphodita_java.i ../morphodita.i
-	mkdir -p cz/cuni/mff/ufal/morphodita
+	@$(call mkdir,cz/cuni/mff/ufal/morphodita)
 	swig $(SWIG_FLAGS) -java -package cz.cuni.mff.ufal.morphodita -outdir cz/cuni/mff/ufal/morphodita -o $@ $<
 
 .PHONY: clean
 clean:
-	rm -rf $(TARGETS) cz/ *.cpp
+	@$(call rmdir,cz) $(call rm,$(TARGETS) $(wildcard *.cpp))

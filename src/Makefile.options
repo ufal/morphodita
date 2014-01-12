@@ -22,11 +22,13 @@ endif
 ifdef WINCMD
   mkdir = for %%d in ($(subst /,\\,$(1))) do if not exist %%d md %%d &
   cp = copy $(subst /,\\,$(1)) $(subst /,\\,$(2)) /B /Y &
+  touch = for %%f in ($(subst /,\\,$(1))) do if not exist %%f copy nul %%f &
   rm = for %%f in ($(subst /,\\,$(1))) do if exist %%f del /q %%f &
   rmdir = for %%d in ($(subst /,\\,$(1))) do if exist %%d rd /s /q %%d &
 else
   mkdir = mkdir -p $(1) ;
   cp = cp $(1) $(2) ;
+  touch = touch $(1) ;
   rm = rm -f $(1) ;
   rmdir = rm -rf $(1) ;
 endif
