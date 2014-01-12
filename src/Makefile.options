@@ -1,3 +1,8 @@
+# patform detection
+ifeq ($(OS),Windows_NT)
+  WIN = 1
+endif
+
 # platform settings
 ifdef WIN
   exe = $(foreach f,$(1),$(f).exe)
@@ -11,6 +16,19 @@ else
   lib = $(foreach f,$(1),$(f).a)
   dynlib = $(foreach f,$(1),$(f).so)
   DYN_C_FLAGS += -fPIC
+endif
+
+# shell settings
+ifdef WINCMD
+  mkdir = for %%d in ($(subst /,\\,$(1))) do if not exist %%d md %%d &
+  cp = copy $(subst /,\\,$(1)) $(subst /,\\,$(2)) /B /Y &
+  rm = for %%f in ($(subst /,\\,$(1))) do if exist %%f del /q %%f &
+  rmdir = for %%d in ($(subst /,\\,$(1))) do if exist %%d rd /s /q %%d &
+else
+  mkdir = mkdir -p $(1) ;
+  cp = cp $(1) $(2) ;
+  rm = rm -f $(1) ;
+  rmdir = rm -rf $(1) ;
 endif
 
 # switches
@@ -29,12 +47,10 @@ else
   LD_FLAGS += -s
 endif
 
-ifdef 32BIT
+ifeq ($(BITS),32)
   C_FLAGS += -m32 -march=i686
   LD_FLAGS += -m32
-endif
-
-ifdef 64BIT
+else ifeq ($(BITS),64)
   C_FLAGS += -m64
   LD_FLAGS += -m64
 endif

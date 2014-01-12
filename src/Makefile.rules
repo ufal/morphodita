@@ -9,10 +9,10 @@ DEPENDS := $(foreach cpp,$(wildcard *.cpp */*.cpp),.objs/$(cpp:.cpp=.d) .objs/$(
 
 # compilation - static object
 $(call obj, %) : %.cpp
-	@mkdir -p $(@D)
+	@$(call mkdir,$(@D))
 	$(CXX) $< -c -MMD -MP -o $@ $(C_FLAGS)
 
 # compilation - dynamic object
 $(call dynobj, %) : %.cpp
-	@mkdir -p $(@D)
+	@$(call mkdir,$(@D))
 	$(CXX) $< -c -MMD -MP -o $@ $(DYN_C_FLAGS)
