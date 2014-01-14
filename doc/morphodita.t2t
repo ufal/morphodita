@@ -5,7 +5,7 @@ Version 0.9
 
 + Introduction +
 
-MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for morphologic analysis of natural language texts. It consists of a morphologic dictionary and a tagger and is distributed as a standalone tool or a library, along with trained linguistic models. In the Czech language, MorphoDiTa achieves state-of-the-art results with a throughput around 10-200K words per second. It is free for non-commercial purposes and is distributed under [LGPL http://www.gnu.org/licenses/lgpl.html] (source code) and [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] (models).
+MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for morphologic analysis of natural language texts. It consists of a morphologic analysis, generation and a tagger and is distributed as a standalone tool or a library, along with trained linguistic models. In the Czech language, MorphoDiTa achieves state-of-the-art results with a throughput around 10-200K words per second. Compared to [Featurama http://sourceforge.net/projects/featurama/] (state-of-the-art Czech tagger implementation), it is 5 times faster with models 10 times smaller. MorphoDiTa is a free software under [LGPL http://www.gnu.org/licenses/lgpl.html] license and the linguistic models are free for non-commercial use and distributed under [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] license.
 
 
 + Release +
@@ -28,7 +28,8 @@ MorphoDiTa will be available either as pre-compiled binaries and models from [LI
 
 - Dec 2013: beta testing, training of custom models
 - Jan 2014: MorphoDiTa 1.0 release
-- Feb 2014: further language bindings (Perl, ...)
+- Feb 2014: further programming language bindings (Perl, ...)
+- Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
 
 
 ++ License ++

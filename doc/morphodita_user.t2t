@@ -21,13 +21,15 @@ light-weight, faster, but less accurate model. The parameters of the models
 distributed with MorphoDiTa are as follows:
 
 : ``czech-<version>.tagger-best_accuracy``
-  Best and slowest tagger (Viterbi of order 3). Reaches 95.44% tag accuracy, 97.80% lemma accuracy, 94.66% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] etest data. Speed: ~10k words/s.
+  Best and slowest tagger (Viterbi of order 3). Reaches 95.70% tag accuracy, 97.78% lemma accuracy, 94.99% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] etest data. Speed: ~10k words/s, size: 17MB.
+
+  For comparison, model trained by [Featurama http://sourceforge.net/projects/featurama/] (state-of-the-art Czech tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and overall accuracy, respectively, with speed ~2k words/s and size 210MB.
 
 : ``czech-<version>.tagger-fast``
-  Faster tagger with slightly worse results (Viterbi of order 2). Reaches 94.45% tag accuracy, 97.66% lemma accuracy, 93.96% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~50k words/s.
+  Faster tagger with slightly worse results (Viterbi of order 2). Reaches 94.71% tag accuracy, 97.66% lemma accuracy, 93.95% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~60k words/s, size: 11MB.
 
 : ``czech-<version>.lemmatizer``
-  Very fast tagger using only first two tag positions. Can be used as a lemmatizator. Reaches 99.18% tag accuracy, 97.64% lemma accuracy, 97.59% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~200k words/s.
+  Very fast tagger using only first two tag positions. Can be used as a lemmatizator. Reaches 99.18% tag accuracy, 97.63% lemma accuracy, 97.58% overall accuracy on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data. Speed: ~200k words/s, size: 4MB.
 
 
 Please make sure you are using the linguistic models in a version corresponding to your MorphoDiTa release. The best way to assure this is to use the most current MorphoDiTa release with the most current model release.
