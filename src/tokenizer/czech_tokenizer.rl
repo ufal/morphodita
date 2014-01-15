@@ -62,8 +62,8 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
     alphtype unsigned char;
     getkey (unsigned char)*text;
 
-    include utf8 "../utils/ragel/utf8.rl";
-    include url "../utils/ragel/url.rl";
+    include utf8 "ragel/utf8.rl";
+    include url "ragel/url.rl";
 
     # Words with hyphen covered by Czech Morphology, version 131023
     word_with_hyphen = 'CD-ROM' | 'KDU-ČSL' | 'Koh-i-noor'i | 'T-Mobil'
