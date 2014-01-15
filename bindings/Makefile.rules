@@ -3,3 +3,7 @@ $(call lib,../../src/libmorphodita):
 
 $(call lib,../../src/libmorphodita.dyn):
 	$(MAKE) -C $(dir $@) $(notdir $@)
+
+.PHONY: veryclean
+veryclean: clean
+	$(MAKE) -C ../../src clean
