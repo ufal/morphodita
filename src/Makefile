@@ -17,13 +17,9 @@ MORPHODITA_O = $(MORPHO_O) tagger/tagger
 
 # libraries
 $(call lib,libmorphodita): $(call obj,$(COMMON_O) $(MORPHODITA_O))
-	@$(foreach obj,$^,$(call cp,$(obj),$(call libobj,morphodita,$(obj))))
-	ar -rcs $@ $(call libobj,morphodita,$^)
-	@$(call rm,$(call libobj,morphodita,$^))
+	ar -rcs $@ $^
 $(call lib,libmorphodita.dyn): $(call dynobj,$(COMMON_O) $(MORPHODITA_O))
-	@$(foreach obj,$^,$(call cp,$(obj),$(call libobj,morphodita,$(obj))))
-	ar -rcs $@ $(call libobj,morphodita,$^)
-	@$(call rm,$(call libobj,morphodita,$^))
+	ar -rcs $@ $^
 $(call dynlib,libmorphodita): $(call lib,libmorphodita.dyn)
 	$(CXX) -o $@ $(DYN_LD_FLAGS) -Wl,--whole-archive $< -Wl,-no-whole-archive -Wl,--version-script=libmorphodita.map $(call create_implib,libmorphodita)
 

@@ -1,7 +1,6 @@
 # obj names
 obj = $(patsubst %,.objs/%.o,$(1))
 dynobj = $(patsubst %,.objs/%.dyn.o,$(1))
-libobj = $(subst /$(1)_utils_,/utils_utils_,$(subst .objs_,.objs/$(1)_,$(subst /,_,$(patsubst %.dyn.o,%.o,$(2)))))
 
 # dependencies
 DEPENDS := $(foreach cpp,$(wildcard *.cpp */*.cpp),.objs/$(cpp:.cpp=.d) .objs/$(cpp:.cpp=.dyn.d))
