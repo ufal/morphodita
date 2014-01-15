@@ -2,7 +2,8 @@ include Makefile.options
 
 EXECUTABLES = $(call exe,benchmark_dictionary create_classes csts encode_dictionary morpho_accuracy remap_tags run_morpho run_tagger run_tokenizer test_dictionary tagger_accuracy train_tagger)
 LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn) $(call dynlib,libmorphodita)
-all: $(EXECUTABLES)
+all: exe
+exe: $(EXECUTABLES)
 lib: $(LIBRARIES)
 
 # dependency and compilation rules
