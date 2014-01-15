@@ -85,6 +85,10 @@ class tokenizer {
       return result;
     }
   }
+
+  %rename(newCzechTokenizer) new_czech_tokenizer;
+  %newobject new_czech_tokenizer;
+  static tokenizer* new_czech_tokenizer();
 };
 
 %rename(Morpho) morpho;

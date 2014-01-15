@@ -103,6 +103,7 @@ sys.stderr.write('Loading tagger: ')
 tagger = Tagger.load(sys.argv[argi])
 if not tagger:
   sys.stderr.write("Cannot load tagger from file '%s'\n" % sys.argv[argi])
+  sys.exit(1)
 sys.stderr.write('done\n')
 
 if use_vertical: tag_vertical(tagger)

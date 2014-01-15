@@ -22,20 +22,25 @@ import java.util.Scanner;
 class RunTokenizer {
   public static void main(String[] args) {
     if (args.length < 1) {
-      System.err.println("Usage: RunTokenizer dict_file");
+      System.err.println("Usage: RunTokenizer [-czech | dict_file]");
       System.exit(1);
     }
 
-    System.err.print("Loading dictionary: ");
-    Morpho morpho = Morpho.load(args[0]);
-    if (morpho == null) {
-      System.err.println("Cannot load dictionary from file '" + args[0] + "'");
-      System.exit(1);
+    Tokenizer tokenizer;
+    if (args[0].equals("-czech")) {
+      tokenizer = Tokenizer.newCzechTokenizer();
+    } else {
+      System.err.print("Loading dictionary: ");
+      Morpho morpho = Morpho.load(args[0]);
+      if (morpho == null) {
+        System.err.println("Cannot load dictionary from file '" + args[0] + "'");
+        System.exit(1);
+      }
+      System.err.println("done");
+      tokenizer = morpho.newTokenizer();
     }
-    System.err.println("done");
 
     TokenRanges tokens = new TokenRanges();
-    Tokenizer tokenizer = morpho.newTokenizer();
     Scanner reader = new Scanner(System.in);
     boolean not_eof = true;
     while (not_eof) {

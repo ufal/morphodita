@@ -24,14 +24,19 @@
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
-  if (argc <= 1) runtime_errorf("Usage: %s dict_file", argv[0]);
+  if (argc <= 1) runtime_errorf("Usage: %s [-czech | dict_file]", argv[0]);
 
-  eprintf("Loading dictionary: ");
-  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
-  eprintf("done\n");
+  unique_ptr<tokenizer> tokenizer;
+  if (strcmp(argv[1], "-czech") == 0) {
+    tokenizer.reset(tokenizer::new_czech_tokenizer());
+  } else {
+    eprintf("Loading dictionary: ");
+    unique_ptr<morpho> dictionary(morpho::load(argv[1]));
+    if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+    eprintf("done\n");
 
-  unique_ptr<tokenizer> tokenizer(dictionary->new_tokenizer());
+    tokenizer.reset(dictionary->new_tokenizer());
+  }
 
   string line, text;
   vector<string_piece> forms;

@@ -36,6 +36,7 @@ sys.stderr.write('Loading dictionary: ')
 morpho = Morpho.load(sys.argv[1])
 if not morpho:
   sys.stderr.write("Cannot load dictionary from file '%s'\n" % sys.argv[1])
+  sys.exit(1)
 sys.stderr.write('done\n')
 
 lemmas = TaggedLemmas()

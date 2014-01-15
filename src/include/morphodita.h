@@ -81,8 +81,10 @@ class MORPHODITA_IMPORT tokenizer {
   virtual ~tokenizer() {}
 
   virtual void set_text(const char* text, bool make_copy = false) = 0;
-
   virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
+
+  // Static factory methods
+  static tokenizer* new_czech_tokenizer();
 };
 
 class MORPHODITA_IMPORT morpho {

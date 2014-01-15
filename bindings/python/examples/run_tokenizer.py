@@ -29,16 +29,20 @@ if sys.version_info[0] < 3:
   sys.stdout = codecs.getwriter(encoding)(sys.stdout)
 
 if len(sys.argv) < 2:
-  sys.stderr.write('Usage: %s dict_file\n' % sys.argv[0])
+  sys.stderr.write('Usage: %s [-czech | dict_file]\n' % sys.argv[0])
   sys.exit(1)
 
-sys.stderr.write('Loading dictionary: ')
-morpho = Morpho.load(sys.argv[1])
-if not morpho:
-  sys.stderr.write("Cannot load dictionary from file '%s'\n" % sys.argv[1])
-sys.stderr.write('done\n')
+if sys.argv[1] == "-czech":
+  tokenizer = Tokenizer.newCzechTokenizer()
+else:
+  sys.stderr.write('Loading dictionary: ')
+  morpho = Morpho.load(sys.argv[1])
+  if not morpho:
+    sys.stderr.write("Cannot load dictionary from file '%s'\n" % sys.argv[1])
+    sys.exit(1)
+  sys.stderr.write('done\n')
+  tokenizer = morpho.newTokenizer()
 
-tokenizer = morpho.newTokenizer()
 tokens = TokenRanges()
 not_eof = True
 while not_eof:

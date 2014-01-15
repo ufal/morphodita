@@ -16,33 +16,19 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
+#include <cstring>
 
-#include "common.h"
-#include "string_piece.h"
+#include "czech_tokenizer.h"
+#include "tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
 
-// Range of a token, measured in Unicode characters, not UTF8 bytes.
-struct token_range {
-  size_t start;
-  size_t length;
-
-  token_range() {}
-  token_range(size_t start, size_t length) : start(start), length(length) {}
-};
-
-class tokenizer {
- public:
-  virtual ~tokenizer() {}
-
-  virtual void set_text(const char* text, bool make_copy = false) = 0;
-  virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) = 0;
-
-  // Static factory methods
-  static tokenizer* new_czech_tokenizer();
-};
+tokenizer* tokenizer::new_czech_tokenizer() {
+  return new czech_tokenizer();
+}
 
 } // namespace morphodita
 } // namespace ufal
+
+
