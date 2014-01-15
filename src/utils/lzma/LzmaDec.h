@@ -6,7 +6,7 @@
 #include "Types.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 /* #define _LZMA_PROB32 */
@@ -224,5 +224,5 @@ SRes LzmaDecode(uint8_t *dest, size_t *destLen, const uint8_t *src, size_t *srcL
     ELzmaStatus *status, ISzAlloc *alloc);
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

@@ -23,7 +23,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 class file_ptr {
  public:
@@ -37,5 +37,5 @@ class file_ptr {
   FILE* f;
 };
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

@@ -28,7 +28,7 @@
 #include "pointer_decoder.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Declarations
 class persistent_unordered_map {
@@ -280,5 +280,5 @@ void persistent_unordered_map::construct(const map<string, Entry>& map, double l
   done_filling();
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

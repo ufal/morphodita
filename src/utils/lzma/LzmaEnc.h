@@ -6,7 +6,7 @@
 #include "Types.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 #define LZMA_PROPS_SIZE 5
@@ -73,5 +73,5 @@ SRes LzmaEncode(uint8_t *dest, size_t *destLen, const uint8_t *src, size_t srcLe
     ICompressProgress *progress, ISzAlloc *alloc, ISzAlloc *allocBig);
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

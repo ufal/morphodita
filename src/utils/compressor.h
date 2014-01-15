@@ -23,7 +23,7 @@
 #include "binary_encoder.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 class compressor {
  public:
@@ -31,5 +31,5 @@ class compressor {
   static bool save(FILE* f, const binary_encoder& enc);
 };
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

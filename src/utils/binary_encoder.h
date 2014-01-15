@@ -21,7 +21,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Declaration
 class binary_encoder {
@@ -85,5 +85,5 @@ void binary_encoder::add_data(const unsigned char* begin, const unsigned char* e
   data.insert(data.end(), begin, end);
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

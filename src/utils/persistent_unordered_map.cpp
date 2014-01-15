@@ -21,7 +21,7 @@
 #include "persistent_unordered_map.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 persistent_unordered_map::persistent_unordered_map() {}
 
@@ -59,5 +59,5 @@ void persistent_unordered_map::fnv_hash::save(binary_encoder& enc) {
   enc.add_data(data.data(), data.data() + data.size());
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

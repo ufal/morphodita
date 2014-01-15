@@ -4,7 +4,7 @@
 #pragma once
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 #define kHash2Size (1 << 10)
@@ -55,5 +55,5 @@ namespace lzma {
   hash4Value = (temp ^ ((uint32_t)cur[2] << 8) ^ (p->crc[cur[3]] << 5)) & (kHash4Size - 1); }
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

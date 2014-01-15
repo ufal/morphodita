@@ -7,7 +7,7 @@
 #include "LzFind.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 #define kBlockSizeMax ((1 << LZMA_NUM_BLOCK_SIZE_BITS) - 1)
@@ -2172,5 +2172,5 @@ SRes LzmaEncode(uint8_t *dest, size_t *destLen, const uint8_t *src, size_t srcLe
 }
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

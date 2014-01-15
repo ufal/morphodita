@@ -21,7 +21,7 @@
 #include "input.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 bool getline(FILE *f, string& line) {
   if (feof(f)) return (line.clear(), false);
@@ -54,5 +54,5 @@ void split(const string& text, char sep, vector<string>& tokens) {
   tokens.emplace_back(text, index);
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

@@ -23,7 +23,7 @@
 #include <string>
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 class utf8 {
  public:
@@ -795,5 +795,5 @@ void utf8::lowercase(const std::string& str, std::string& out) {
   lowercase(str.c_str(), out);
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

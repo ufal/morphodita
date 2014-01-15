@@ -21,10 +21,10 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 bool getline(FILE *f, string& line);
 void split(const string& text, char sep, vector<string>& tokens);
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

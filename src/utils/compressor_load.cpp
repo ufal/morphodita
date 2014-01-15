@@ -21,7 +21,7 @@
 #include "lzma/LzmaEnc.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 static void *LzmaAlloc(void* /*p*/, size_t size) { return new char[size]; }
 static void LzmaFree(void* /*p*/, void *address) { delete[] (char*) address; }
@@ -48,5 +48,5 @@ bool compressor::load(FILE* f, binary_decoder& data) {
   return true;
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

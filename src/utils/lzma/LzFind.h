@@ -6,7 +6,7 @@
 #include "Types.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 typedef uint32_t CLzRef;
@@ -108,5 +108,5 @@ void Bt3Zip_MatchFinder_Skip(CMatchFinder *p, uint32_t num);
 void Hc3Zip_MatchFinder_Skip(CMatchFinder *p, uint32_t num);
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

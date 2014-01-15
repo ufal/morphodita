@@ -7,7 +7,7 @@
 #include "LzHash.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 #define kEmptyHashValue 0
@@ -765,5 +765,5 @@ void MatchFinder_CreateVTable(CMatchFinder *p, IMatchFinder *vTable)
 }
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

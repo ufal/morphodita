@@ -6,7 +6,7 @@
 #include "LzmaDec.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 #define kNumTopBits 24
@@ -1003,5 +1003,5 @@ SRes LzmaDecode(uint8_t *dest, size_t *destLen, const uint8_t *src, size_t *srcL
 }
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

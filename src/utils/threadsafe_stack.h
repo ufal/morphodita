@@ -24,7 +24,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Declarations
 template <class T>
@@ -61,5 +61,5 @@ T* threadsafe_stack<T>::pop() {
   return res;
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

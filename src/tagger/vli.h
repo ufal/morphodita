@@ -21,7 +21,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Declarations
 template <class T>
@@ -56,5 +56,5 @@ inline uint32_t vli<uint32_t>::decode(const unsigned char*& from) {
   return value;
 }
 
-} // namespace utils
+} // namespace morphodita
 }

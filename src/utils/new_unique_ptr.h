@@ -23,12 +23,12 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 template<typename T, typename... Args>
 unique_ptr<T> new_unique_ptr(Args&&... args) {
   return unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

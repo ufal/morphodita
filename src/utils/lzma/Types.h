@@ -7,7 +7,7 @@
 #include <cstdint>
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 namespace lzma {
 
 #define SZ_OK 0
@@ -146,5 +146,5 @@ struct ISzAlloc
 #define IAlloc_Free(p, a) (p)->Free((p), a)
 
 } // namespace lzma
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

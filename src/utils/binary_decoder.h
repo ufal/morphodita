@@ -23,7 +23,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Declarations
 class binary_decoder_error : public runtime_error {
@@ -99,5 +99,5 @@ void binary_decoder::seek(unsigned pos) throw (binary_decoder_error) {
   data = buffer.data() + pos;
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

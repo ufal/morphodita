@@ -21,7 +21,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Declarations
 inline bool small_memeq(const void* a, const void* b, size_t len);
@@ -67,5 +67,5 @@ inline size_t small_strnchrpos(const char* str, char c, size_t len) {
   return pos;
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

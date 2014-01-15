@@ -18,7 +18,14 @@
 
 #pragma once
 
-#include "utils/common.h"
+// Headers available in all sources
+#include <cassert>
+#include <cstdarg>
+#include <cstdio>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
 
 // Assert that int is at least 4B
 static_assert(sizeof(int) >= sizeof(int32_t), "Int must be at least 4B wide!");
@@ -26,12 +33,41 @@ static_assert(sizeof(int) >= sizeof(int32_t), "Int must be at least 4B wide!");
 // Assert that we are on a little endian system
 static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, "Only little endian systems are supported!");
 
-// Define namespace name and open std and ufal::utils in it.
+// Define namespace name and open std in it.
 namespace ufal {
 namespace morphodita {
 
 using namespace std;
-using namespace ufal::utils;
+
+// Printf-like logging function.
+inline int eprintf(const char* fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  int res = vfprintf(stderr, fmt, ap);
+  va_end(ap);
+  return res;
+}
+
+// Printf-like exit function.
+inline void runtime_errorf(const char* fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  va_end(ap);
+  fputc('\n', stderr);
+  exit(1);
+}
+
+// Export attributes
+#ifdef _WIN32
+  #ifdef BUILDING_DLL
+    #define EXPORT_ATTRIBUTES __attribute__ ((dllexport))
+  #else
+    #define EXPORT_ATTRIBUTES
+  #endif
+#else
+  #define EXPORT_ATTRIBUTES __attribute__ ((visibility ("default")))
+#endif
 
 } // namespace morphodita
 } // namespace ufal

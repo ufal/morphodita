@@ -21,7 +21,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Try to parse an int from given string. If the int cannot be parsed or does
 // not fit into int, an error is displayed and program exits. If that happens,
@@ -37,5 +37,5 @@ inline int parse_int(const char* str, const char* value_name) {
   return int(result);
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal

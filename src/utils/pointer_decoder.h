@@ -23,7 +23,7 @@
 #include "common.h"
 
 namespace ufal {
-namespace utils {
+namespace morphodita {
 
 // Declarations
 class pointer_decoder {
@@ -64,5 +64,5 @@ template <class T> const T* pointer_decoder::next(unsigned elements) {
   return result;
 }
 
-} // namespace utils
+} // namespace morphodita
 } // namespace ufal
