@@ -25,9 +25,7 @@ namespace morphodita {
 
 // Declarations
 inline bool small_memeq(const void* a, const void* b, size_t len);
-inline int small_memcmp(const void* a, const void* b, size_t len);
 inline void small_memcpy(void* dest, const void* src, size_t len);
-inline size_t small_strnchrpos(const char* str, char c, size_t len);
 
 // Definitions
 inline bool small_memeq(const void* a_void, const void* b_void, size_t len) {
@@ -40,31 +38,12 @@ inline bool small_memeq(const void* a_void, const void* b_void, size_t len) {
   return true;
 }
 
-inline int small_memcmp(const void* a_void, const void* b_void, size_t len) {
-  const char* a = (const char*)a_void;
-  const char* b = (const char*)b_void;
-
-  for (; len; ++a, ++b, --len)
-    if (*a != *b)
-      return *a - *b;
-  return 0;
-}
-
 inline void small_memcpy(void* dest_void, const void* src_void, size_t len) {
   char* dest = (char*)dest_void;
   const char* src = (const char*)src_void;
 
   while (len--)
     *dest++ = *src++;
-}
-
-inline size_t small_strnchrpos(const char* str, char c, size_t len) {
-  size_t pos = 0;
-  for (; len--; str++, pos++)
-    if (*str == c)
-      return pos;
-
-  return pos;
 }
 
 } // namespace morphodita
