@@ -37,6 +37,10 @@ class utf8_tokenizer : public tokenizer {
     if (text < end) text++;
     while (text < end && *(const unsigned char*)text >= 0x80 && *(const unsigned char*)text < 0xC0) text++;
   }
+  inline void utf8_back(const char*& text, const char* start) {
+    if (text > start) text--;
+    while (text > start && *(const unsigned char*)text >= 0x80 && *(const unsigned char*)text < 0xC0) text--;
+  }
 
   const char* text = nullptr;
   const char* text_end = nullptr;

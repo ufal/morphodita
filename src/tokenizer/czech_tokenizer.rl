@@ -49,9 +49,12 @@ static unordered_set<string> eos_word_exceptions = {
 
 bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
   int cs, act;
-  const char* ts;
-  const char* te;
-  const char* whitespace = nullptr; // Suppress may be uninitialized warning
+  const char* ts, *te;
+  const char* text_start = text;
+
+  char32_t unary_chr;
+  const char* unary_text;
+  const char* whitespace = nullptr; // Suppress "may be uninitialized" warning
   %%{
     variable p text;
     variable pe text_end;
@@ -62,11 +65,20 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
     include utf8 "../utils/ragel/utf8.rl";
     include url "../utils/ragel/url.rl";
 
+    # Words with hyphen covered by Czech Morphology, version 131023
+    word_with_hyphen = 'CD-ROM' | 'KDU-ČSL' | 'Koh-i-noor'i | 'T-Mobil'
+      | 'Tchaj-wan'i | 'US-DEU' | 'coca-col'i | 'duty-free'i | 'e-business'i
+      | 'e-mail'i | 'fair-play'i | 'hands-free'i | 'hi-fi'i | 'hi-tech'i
+      | 'high-tech'i | 'know-how'i | 'kung-fu'i | 'make-up'i | 'on-line'i
+      | 'play-off'i | 'sci-fi'i | 'sex-appeal'i | 'show-business'i;
+
     # Tokenization
+    action unary_minus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unary_chr = utf8::first(unary_text, text - unary_text), !utf8::is_L(unary_chr) && !utf8::is_M(unary_chr) && !utf8::is_N(unary_chr) && !utf8::is_Pd(unary_chr)) }
+    action unary_plus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unary_chr = utf8::first(unary_text, text - unary_text), !utf8::is_L(unary_chr) && !utf8::is_M(unary_chr) && !utf8::is_N(unary_chr) && unary_chr != '+') }
     whitespace = [\r\t\n] | utf8_Zs;
     eol = '\r' ('' >(eol,0) | '\n' >(eol,1)) | '\n' ('' >(eol,0) | '\r' >(eol,1));
-    word = utf8_L (utf8_L | utf8_M | '-')* -- '--';
-    number = '-'? utf8_Nd+ ([.,] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
+    word = (utf8_L | word_with_hyphen) (utf8_L | utf8_M)*;
+    number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? utf8_Nd+ ([.,] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
 
     # Segmentation
     action mark_whitespace { whitespace = text; }
