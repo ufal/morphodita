@@ -27,4 +27,4 @@ morphodita_java.cpp: morphodita_java.i ../morphodita.i
 
 .PHONY: clean
 clean:
-	@$(call rmdir,cz) $(call rm,$(TARGETS) $(wildcard *.cpp))
+	@$(call rmdir,cz) $(call rm,$(TARGETS) $(wildcard *.cpp)) $(call rm,$(wildcard examples/*.class))
