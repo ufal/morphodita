@@ -33,8 +33,6 @@ manual: html txt
 	cp morphodita.html ../MANUAL.html
 	cp morphodita_install.txt ../INSTALL
 
-INSTALL: morphodita_install.t2t
-
-.PHONY: clean veryclean
+.PHONY: clean
 clean:
 	rm -f *.aux *.dvi *.html *.log *.pdf *.out *.tex *.toc *.txt
