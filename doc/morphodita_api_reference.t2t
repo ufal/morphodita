@@ -9,7 +9,7 @@ The MorphoDiTa API is defined in header ``morphodita.h`` and resides in
 The strings used in the MorphoDiTa API are always UTF-8 encoded (except from
 file paths, whose encoding is system dependent).
 
-++ Struct string_piece ++[string_piece]
+== Struct string_piece ==[string_piece]
 ```
 struct string_piece {
   const char* str;
@@ -26,7 +26,7 @@ The [``string_piece`` #string_piece] is used for efficient string passing. The s
 referenced in [``string_piece`` #string_piece] is not owned by it, so users have to make sure
 the referenced string exists as long as the [``string_piece`` #string_piece].
 
-++ Struct tagged_form ++[tagged_form]
+== Struct tagged_form ==[tagged_form]
 ```
 struct tagged_form {
   std::string form;
@@ -37,7 +37,7 @@ struct tagged_form {
 The [``tagged_form`` #tagged_form] is a pair of strings used when obtaining a form and tag
 pair.
 
-++ Struct tagged_lemma ++[tagged_lemma]
+== Struct tagged_lemma ==[tagged_lemma]
 ```
 struct tagged_lemma {
   std::string lemma;
@@ -48,7 +48,7 @@ struct tagged_lemma {
 The [``tagged_lemma`` #tagged_lemma] is a pair of strings used when obtaining a lemma and tag
 pair.
 
-++ Struct tagged_lemma_forms ++[tagged_lemma_forms]
+== Struct tagged_lemma_forms ==[tagged_lemma_forms]
 ```
 struct tagged_lemma_forms {
   std::string lemma;
@@ -58,7 +58,7 @@ struct tagged_lemma_forms {
 
 The [``tagged_lemma_forms`` #tagged_lemma_forms] represents a lemma and a list of tagged forms.
 
-++ Struct token_range ++[token_range]
+== Struct token_range ==[token_range]
 ```
 struct token_range {
   size_t start;
@@ -70,14 +70,15 @@ The [``token_range`` #token_range] represent a range of a token as returned by a
 The ``start`` and ``length`` fields specify the token position in Unicode
 characters, not in bytes of UTF-8 encoding.
 
-++ Class tokenizer ++[tokenizer]
+== Class tokenizer ==[tokenizer]
 ```
 class tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  virtual void [set_text #tokenizer_set_text](const char* text, bool make_copy = false) = 0;
+  static [tokenizer #tokenizer]* [new_czech_tokenizer #tokenizer_new_czech_tokenizer]();
 
+  virtual void [set_text #tokenizer_set_text](const char* text, bool make_copy = false) = 0;
   virtual bool [next_sentence #tokenizer_next_sentence](std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) = 0;
 };
 ```
@@ -85,7 +86,16 @@ class tokenizer {
 The [``tokenizer`` #tokenizer] class performs segmentation and tokenization of given text.
 The class is //not// threadsafe.
 
-+++ tokenizer::set_text +++[tokenizer_set_text]
+The [``tokenizer`` #tokenizer] instances can be obtained either directly using
+static methods or through instances of [``morpho`` #morpho] and [``tagger`` #tagger].
+
+=== tokenizer::new_czech_tokenizer ===[tokenizer_new_czech_tokenizer]
+``` static [tokenizer #tokenizer] new_czech_tokenizer();
+
+Returns a new instance of a Czech tokenizer. The user should delete it after
+use.
+
+=== tokenizer::set_text ===[tokenizer_set_text]
 ``` virtual void set_text(const char* text, bool make_copy = false) = 0;
 
 Set the text which is to be tokenized.
@@ -96,7 +106,7 @@ is released or ``set_text`` is called again. If ``make_copy``
 is ``true``, a copy of the given text is made and retained until the
 tokenizer is released or ``set_text`` is called again.
 
-+++ tokenizer::next_sentence +++[tokenizer_next_sentence]
+=== tokenizer::next_sentence ===[tokenizer_next_sentence]
 ``` virtual bool next_sentence(std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) = 0;
 
 Locate and return next sentence of the given text. Returns ``true`` when successful and ``false`` when
@@ -105,7 +115,7 @@ The ``forms`` contain token ranges in bytes of UTF-8 encoding, the ``tokens`` co
 in Unicode characters.
 
 
-++ Class morpho ++[morpho]
+== Class morpho ==[morpho]
 ```
 class morpho {
  public:
@@ -131,28 +141,28 @@ A [``morpho`` #morpho] instance represents a morphologic dictionary. Such a dict
 morphologic analysis, morphologic generation provide information about lemma structure
 and provides a suitable tokenizer. All methods are thread-safe.
 
-+++ morpho::load(const char*) +++[morpho_load_cstring]
+=== morpho::load(const char*) ===[morpho_load_cstring]
 ``` static [morpho #morpho]* load(const char* fname);
 
 Factory method constructor. Accepts C string with a file name of the model.
 Returns a pointer to an instance of [``morpho`` #morpho] which the user should delete
 after use.
 
-+++ morpho::load(FILE*) +++[morpho_load_FILE]
+=== morpho::load(FILE*) ===[morpho_load_FILE]
 ``` static [morpho #morpho]* load(FILE* f);
 
 Factory method constructor. Accepts C file pointer of an opened file with the
 model. Returns a pointer to an instance of [``morpho`` #morpho] which the user should
 delete after use.
 
-+++ morpho::guesser_mode +++[morpho_guesser_mode]
+=== morpho::guesser_mode ===[morpho_guesser_mode]
 ``` enum [guesser_mode #morpho_guesser_mode] { NO_GUESSER = 0, GUESSER = 1 };
 
 Guesser mode defines behavior in case of unknown words. When set to
 ``GUESSER``, morpho tries to guess unknown words. When set to ``NO_GUESSER``,
 morpho does not guess unknown words.
 
-+++ morpho::analyze() +++[morpho_analyze]
+=== morpho::analyze() ===[morpho_analyze]
 ``` virtual int analyze([string_piece #string_piece] form, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma #tagged_lemma]>& lemmas) const = 0;
 
 Perform morphologic analysis of a form. The guesser parameter specifies whether
@@ -165,7 +175,7 @@ found using a guesser, they are assigned to lemmas and ``GUESSER`` is
 returned.  Otherwise ``-1`` is returned and lemmas are filled with one
 analysis containing given form as lemma and a tag for unknown word.
 
-+++ morpho::generate() +++[morpho_generate]
+=== morpho::generate() ===[morpho_generate]
 ```
 virtual int generate([string_piece #string_piece] lemmma, const char* tag_wildcard, [guesser_mode #morpho_guesser_mode] guesser,
                      std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
@@ -189,26 +199,26 @@ tag_wildcard. If at least one lemma is found in the dictionary, ``NO_GUESSER``
 is returned. If ``guesser == GUESSER`` and the lemma is found by the guesser,
 ``GUESSER`` is returned. Otherwise, forms are cleared and ``-1`` is returned.
 
-+++ morpho::raw_lemma_len +++[morpho_raw_lemma_len]
+=== morpho::raw_lemma_len ===[morpho_raw_lemma_len]
 ``` virtual int raw_lemma_len([string_piece #string_piece] lemma) const = 0;
 
 When given a lemma returned by the dictionary, returns the length of
 a raw lemma (text form of the lemma).
 
-+++ morpho::lemma_id_len +++[morpho_lemma_id_len]
+=== morpho::lemma_id_len ===[morpho_lemma_id_len]
 ``` virtual int lemma_id_len([string_piece #string_piece] lemma) const = 0;
 
 When given a lemma returned by the dictionary, returns the length of
 a unique lemma identification. The rest of the lemma are comments which
 do not identificate the lemma.
 
-+++ morpho::new_tokenizer +++[morpho_new_tokenizer]
+=== morpho::new_tokenizer ===[morpho_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;
 
 Returns a new instance of a suitable tokenizer. The user should delete it after
 use.
 
-++ Class tagger ++[tagger]
+== Class tagger ==[tagger]
 
 ```
 class tagger {
@@ -229,7 +239,7 @@ class tagger {
 A [``tagger`` #tagger] instance represents a tagger, which perform disambiguation of
 morphologic analyses. All methods are thread-safe.
 
-+++ tagger::load(const char*) +++[tagger_load_cstring]
+=== tagger::load(const char*) ===[tagger_load_cstring]
 ``` static [tagger #tagger]* load(const char* fname);
 
 Factory method constructor. Accepts C string with a file name of the model.
@@ -237,27 +247,27 @@ Returns a pointer to an instance of [``tagger`` #tagger] which the user should d
 after use.
 
 
-+++ tagger::load(FILE*) +++[tagger_load_FILE]
+=== tagger::load(FILE*) ===[tagger_load_FILE]
 ``` static [tagger #tagger]* load(FILE* f);
 
 Factory method constructor. Accepts C file pointer of an opened file with the
 model. Returns a pointer to an instance of [``tagger`` #tagger] which the user should
 delete after use.
 
-+++ tagger::get_morpho() +++[tagger_get_morpho]
+=== tagger::get_morpho() ===[tagger_get_morpho]
 ``` virtual const [morpho #morpho]* get_morpho() const = 0;
 
 Returns a pointer to an instance of [``morpho`` #morpho] associated with the tagger. Do
 not delete the pointer, it is owned by the tagger instance and deleted in the
 tagger destructor.
 
-+++ tagger::tag() +++[tagger_tag]
+=== tagger::tag() ===[tagger_tag]
 ``` virtual void tag(const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags) const = 0;
 
 Perform morphologic analysis and subsequent disambiguation. Accepts
 a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vector of [``tagged_lemma`` #tagged_lemma].
 
-+++ tagger::new_tokenizer +++[tagger_new_tokenizer]
+=== tagger::new_tokenizer ===[tagger_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;
 
 Returns a new instance of a suitable tokenizer. The user should delete it after

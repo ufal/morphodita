@@ -12,7 +12,7 @@ The MorphoDiTa API is defined in header ``morphodita.h`` and resides in
 using namespace ufal::morphodita;
 ```
 
-++ Tagger API ++
+== Tagger API ==
 
 The main access to MorphoDiTa tagger is through class ``tagger``.  An example
 of this class usage can be found in program file ``run_tagger.cpp``. A typical
@@ -74,13 +74,13 @@ output vector correspond to indexes in input vector.  ``tagged_lemma`` has two
 public members: ``std::string lemma`` and ``std:string tag``, corresponding to
 predicted lemma and tag, respectively.
 
-++ Morphologic Dictionary API ++
+== Morphologic Dictionary API ==
 
 The main access to MorphoDiTa morphologic dictionary is through class
 ``morpho``. An example of this interface usage can be found in a program file
 ``run_morpho.cpp``.
 
-+++ Dictionary Construction +++
+=== Dictionary Construction ===
 
 Similarly to the tagger, MorphoDiTa morphologic dictionary is constructed by an
 overloaded factory method which accepts either a C file pointer (``FILE*``)
@@ -114,7 +114,7 @@ virtual const morpho* get_morpho() const = 0;
 Please note that you should not delete this pointer as it is owned by the
 ``tagger`` class instance.
 
-+++ Morphologic Analysis +++
+=== Morphologic Analysis ===
 
 MorphoDiTa morphologic dictionary offers two functionalities: It either
 //analyzes// the given word, that means it outputs all possible lemma-tag pairs
@@ -146,7 +146,7 @@ of guesser or strictly dictionary only, see question Guesser Mode in
 caller must provide an output vector ``std::vector<tagged_lemma>`` and the
 method ``morpho::analyze`` assigns the output to this vector.
 
-+++ Generation +++
+=== Generation ===
 
 MorphoDiTa performs morphologic generation from a given lemma:
 
@@ -155,7 +155,7 @@ int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
              std::vector<tagged_lemma_forms>& forms) const;
 ```
 
-++++ Tag Wildcard ++++
+==== Tag Wildcard ====
 
 Optionally, a tag wildcard can be specified (or be ``NULL``) and if so, results
 are filtered using this wildcard. This method can be therefore used in more
@@ -182,7 +182,7 @@ bytes and ``[^bytes]`` matches any byte different from the specified ones.
 A ``-`` has no special meaning inside the bytes and if ``]`` is first in bytes, it
 does not end the bytes group.
 
-++++ Unknown Lemmas ++++
+==== Unknown Lemmas ====
 
 When the lemma is unknown, MorphoDiTa's generation behavior is defined by Guesser mode (see also
 question Guesser Mode in Questions and Answers). If at least one lemma is found
@@ -190,7 +190,7 @@ in the dictionary, ``NO_GUESSER`` is returned. If ``guesser == GUESSER`` and the
 is found by the guesser, ``GUESSER`` is returned. Otherwise, forms are cleared and
 ``-1`` is returned.
 
-++++ Raw Lemmas in Czech ++++
+==== Raw Lemmas in Czech ====
 
 In the Czech langauge, if the given lemma is only a raw lemma, all lemma ids
 with this raw lemma are returned. Otherwise only matching lemma ids are
@@ -199,7 +199,7 @@ are filtered using the tag_wildcard. Please see Section "Czech Morphology" in
 User's Manual for details about lemmas and raw lemmas in the Czech morphology.
 
 
-++ Questions and Answers ++[faq]
+== Questions and Answers ==[faq]
 
 : **What is a Guesser Mode?**
   Morphologic analysis may try to guess the lemma and tag of an uknown word.

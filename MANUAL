@@ -1,0 +1,975 @@
+MorphoDiTa: Morphologic Dictionary and Tagger
+Version 0.91
+
+
+Introduction
+============
+
+MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for
+morphologic analysis of natural language texts. It performs tokenzation,
+morphologic analysis, morphologic generation and tagging and is distributed as a
+standalone tool or a library, along with trained linguistic models. In the Czech
+language, MorphoDiTa achieves state-of-the-art results with a throughput around
+10-200K words per second. Compared to Featurama
+(http://sourceforge.net/projects/featurama/) (state-of-the-art Czech tagger
+implementation), it is 5 times faster with models 10 times smaller. MorphoDiTa
+is a free software under LGPL (http://www.gnu.org/licenses/lgpl.html) license
+and the linguistic models are free for non-commercial use and distributed under
+CC BY-NC-SA (http://creativecommons.org/licenses/by-nc-sa/3.0/) license.
+
+
+Release
+=======
+
+
+Download
+--------
+
+MorphoDiTa is currently undergoing beta testing. Please let us know if you wish
+to participate. The beta version includes:
+
+- morphologic dictionary and tagger,
+- Czech models trained on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/),
+- morphologic dictionary commandline interface, tagger commandline tool
+- C++ library
+- Java bindings
+- Python bindings
+
+MorphoDiTa will be available either as pre-compiled binaries and models from
+LINDAT-Clarin (http://www.lindat.cz) infrastructure or as open-source from
+GitHub (https://github.com/ufal/morphodita). If you use this tool for scientific
+work, please give credit to us by referencing MorphoDiTa website
+(http://ufal.mff.cuni.cz/morphodita) and Spoustová et al. 2009
+(http://aclweb.org/anthology//E/E09/E09-1087.pdf).
+
+
+Roadmap
+-------
+
+- Dec 2013: beta testing, training of custom models
+- Jan 2014: MorphoDiTa 1.0 release
+- Feb 2014: further programming language bindings (Perl, ...)
+- Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
+
+
+License
+-------
+
+MorphoDiTa is an open-source project and is freely available for non-commercial
+purposes. The source code is distributed under LGPL
+(http://www.gnu.org/licenses/lgpl.html) and the pre-compiled binaries and the
+associated models and data under CC BY-NC-SA
+(http://creativecommons.org/licenses/by-nc-sa/3.0/).  If you use this tool for
+scientific work, please give credit to us by referencing MorphoDiTa website
+(http://ufal.mff.cuni.cz/morphodita) and Spoustová et al. 2009
+(http://aclweb.org/anthology//E/E09/E09-1087.pdf).
+
+
+Platforms and Requirements
+--------------------------
+
+MorphoDiTa is available as a standalone tool and as a library for Linux/Windows.
+It does not require any additional libraries. As any supervised machine learning
+tool, it needs trained linguistic models to perform morphologic analysis. The
+models for the Czech language are available with the tool.
+
+
+MorphoDiTa Installation
+=======================
+
+Pre-compiled binaries and models are available from LINDAT-Clarin
+(http://www.lindat.cz) infrastructure.
+
+To use the MorphoDiTa library, either in C++ or other languages, it must be
+compiled manually. The sources are available either at LINDAT-Clarin
+(http://www.lindat.cz) or in the GitHub repository
+(https://github.com/ufal/morphodita).
+
+
+Requirements
+------------
+
+- G++ 4.7 or newer
+- make
+- SWIG 1.3+ for language bindings other than C++
+
+
+Compilation
+-----------
+
+To compile MorphoDiTa on Unix-like systems, run make in the src directory.
+
+Make targets and options:
+
+- exe: compile the binaries (default)
+- lib: compile the library
+- BITS=32, BITS=64: compile for specified 32-bit or 64-bit architecture instead
+  of the default one
+- RELEASE=1: turn off assertions and use LTO
+- PROFILE=1: turn on profiling
+- DEBUG=1: compile with debug informations and C++ library debugging
+
+
+Windows
+-------
+
+Currently only G++ is supported under Windows. We use TDM-GCC
+(http://tdm-gcc.tdragon.net/) for producing Windows builds, but MinGW and Cygwin
+are also known to work. If you are interested in adding support for other
+compilers (most notably, Visual Studio), let us know.
+
+By default, Unix-like shell is required (i.e., Cygwin or MSYS). If you use
+standard Windows Cmd.exe (i.e., TDM-GCC or plain MinGW), use
+
+  make WINCMD=1
+
+Note that make in MinGW is usually distributed as mingw32-make.
+
+
+Other language bindings
+-----------------------
+
+
+Java
+----
+
+To compile Java bindings, run make in the bindings/java directory, optionally
+with the described Make options.
+
+The Java installation specified in the environment variable JAVA_HOME is used.
+If the environment variable does not exist, the JAVA_HOME can be specified using
+
+  make JAVA_HOME=path_to_Java_installation
+
+Java 6 and newer is supported.
+
+
+Python
+------
+
+To compile Python bindings, run make in the bindings/python directory,
+optionally with the described Make options.
+
+Path to the include headers of the required Python version must be specified in
+the PYTHON_INCLUDE variable using
+
+  make PYTHON_INCLUDE=path_to_Python_includes
+
+Both Python 2.6+ and Python 3+ are supported.
+
+
+MorphoDiTa User's Manual
+========================
+
+In a natural language text, the task of morphologic analysis is to assign for
+each token (word) in a sentence its lemma (cannonical form) and a part-of-speech
+tag (POS tag). This is usually achieved in two steps: a morphologic dictionary
+looks up all possible lemmas and POS tags for each word, and subsequently, a
+morphologic tagger picks for each word the best lemma-POS tag candidate. The
+second task is called a disambiguation.
+
+MorphoDiTa also performs these two steps of morphologic analysis: It first
+outputs all possible pairs of lemma and POS tag for each token. In Czech, this
+procedure is based on a well-known Jan Hajič's morphologic dictionary (Hajič
+2004 (http://books.google.cz/books?id=sB63AAAACAAJ)). Consequently, the optimal
+combination of lemmas and POS tags is selected for the words in a sentence using
+an algorithm described in Spoustová et al. 2009
+(http://aclweb.org/anthology//E/E09/E09-1087.pdf).
+
+This section describes the commandline tools and interfaces; the models and
+dictionaries; and the Czech morphology. The C++ library with bindings for other
+languages is described elsewhere, either in MorphoDiTa API Tutorial or in
+MorphoDiTa API Reference.
+
+
+Models
+------
+
+Like any supervised machine learning tool, MorphoDiTa needs a trained linguistic
+model. Czech models trained on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) are
+distributed with the tool. The models are distributed under the CC BY-NC-SA
+(http://creativecommons.org/licenses/by-nc-sa/3.0/) licence.
+
+One may wish to use either a larger, more precise, but slower model; or a more
+light-weight, faster, but less accurate model. The parameters of the models
+distributed with MorphoDiTa are as follows:
+
+czech-<version>.tagger-best_accuracy
+  Best and slowest tagger (Viterbi of order 3). Reaches 95.70% tag accuracy,
+  97.78% lemma accuracy, 94.99% overall accuracy on PDT 2.5
+  (http://ufal.mff.cuni.cz/pdt2.5/) etest data. Speed: ~10k words/s, size: 17MB.
+  
+  For comparison, model trained by Featurama
+  (http://sourceforge.net/projects/featurama/) (state-of-the-art Czech tagger
+  implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and overall
+  accuracy, respectively, with speed ~2k words/s and size 210MB.
+  
+czech-<version>.tagger-fast
+  Faster tagger with slightly worse results (Viterbi of order 2). Reaches 94.71%
+  tag accuracy, 97.66% lemma accuracy, 93.95% overall accuracy on PDT 2.5
+  (http://ufal.mff.cuni.cz/pdt2.5) etest data. Speed: ~60k words/s, size: 11MB.
+  
+czech-<version>.lemmatizer
+  Very fast tagger using only first two tag positions. Can be used as a
+  lemmatizator. Reaches 99.18% tag accuracy, 97.63% lemma accuracy, 97.58%
+  overall accuracy on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5) etest data.
+  Speed: ~200k words/s, size: 4MB.
+
+Please make sure you are using the linguistic models in a version corresponding
+to your MorphoDiTa release. The best way to assure this is to use the most
+current MorphoDiTa release with the most current model release.
+
+
+Dictionaries
+------------
+
+MorphoDiTa is distributed with two Czech morphologic dictionaries:
+
+czech-<version>.dict
+  Jan Hajič's (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ))
+  morpho dictionary used by czech-<version>_best_accuracy.tagger and
+  czech-<version>_fast.tagger.
+  
+czech-<version>.lemmadict
+  Jan Hajič (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)) morpho
+  dictionary used by czech-<version>_lemmatizer.tagger, using only first two tag
+  positions.
+
+
+Czech Morphology
+----------------
+
+In the Czech language, MorphoDiTa uses Czech morphologic system by Jan Hajič
+(Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)). In this system,
+tags are positional with 15 positions corresponding to part of speech, detailed
+part of speech, gender, number, case, etc. (e.g. NNFS1-----A----). Czech lemmas
+consist of a base part, which is a meaningful prefix and we call it a raw lemma
+in this documentation; and a certain number of technical suffixes. The following
+examples illustrate this:
+
+- Japonsko_;G (raw lemma: Japonsko)
+- se_^(zvr._zájmeno/částice) (raw lemma: se)
+- tvořit_:T (raw lemma: tvořit)
+
+For a more detailed reference about the Czech morphology, please see Lemma and
+Tag Structure in PDT 2.0
+(http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html).
+
+
+Segmentation and Tokenization
+-----------------------------
+
+In beta version, the MorphoDiTa tagger accepts segmented and tokenized data in
+raw text as an input (the input format is described in the Tagger section). As
+our further work, we plan to include (optional) segmenter and tokenizer in
+MorphoDiTa.
+
+
+Tagger
+------
+
+Probably the most common usage of MorphoDita is running a tagger to tag your
+data.
+
+run_tagger tagger_model
+
+Run the tagger with a model given as the first argument. The input is read from
+standard input and is assumed to be in UTF-8 encoding.
+
+
+Untokenized Input
+-----------------
+
+The input is by default automatically tokenized and segmented. The output is in
+XML format without a root element, using <form lemma="..." tag="...">...</form>
+element to encode the assigned lemma and tag.
+
+Example input data tagger_input.txt:
+
+  Děti pojedou k babičce. Už se těší.
+
+Example MorphoDiTa run_tagger command line:
+
+  cat tagger_input.txt | ./run_tagger czech.best_accuracy_tagger
+
+Example output data (line breaks added):
+
+  <form lemma='dítě' tag='NNFP1-----A----'>Děti</form>
+  <form lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'>pojedou</form>
+  <form lemma='k-1' tag='RR--3----------'>k</form>
+  <form lemma='babička' tag='NNFS3-----A----'>babičce</form>
+  <form lemma='.' tag='Z:-------------'>.</form>
+  <form lemma='už-1' tag='Db-------------'>Už</form>
+  <form lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'>se</form>
+  <form lemma='těšit_:T' tag='VB-S---3P-AA---'>těší</form>
+  <form lemma='.' tag='Z:-------------'>.</form>
+
+
+Vertical Format
+---------------
+
+If the input is already tokenized and segmented, vertical input format can be
+used. The vertical input format contains word on a line, empty line being end of
+sentence. The output has the same number of lines as input, line l is a tab
+separated lemma-tag pair assigned to the word on the input line l.
+
+Example input data tagger_input_vertical.txt:
+
+  Děti
+  pojedou
+  k
+  babičce
+  .
+  
+  Už
+  se
+  těší
+  .
+
+Example MorphoDiTa run_tagger command line:
+
+  cat tagger_input_vertical.txt | ./run_tagger -v czech.best_accuracy_tagger
+
+Example output:
+
+  dítě    NNFP1-----A----
+  jet-1_^(pohybovat_se,_ne_však_chůzí)    VB-P---3F-AA---
+  k-1     RR--3----------
+  babička NNFS3-----A----
+  .       Z:-------------
+  
+  už-1    Db-------------
+  se_^(zvr._zájmeno/částice)      P7-X4----------
+  těšit_:T        VB-S---3P-AA---
+  .       Z:-------------
+
+
+Morphologic Dictionary
+----------------------
+
+The command line interface allowing analysis and generation can be executed
+using: ```run_dict morpho_dictionary
+
+The input is read from standard input, command on each line. If only one word is
+given, performs analysis on the given word. If the line contains two
+space-separated words, performs generation on the first word and filter the
+returned tags using a tag wildcard given as second word. If the second word is
+empty (i.e., the input is for example "dog "), generate all forms.
+
+
+Tokenization
+------------
+
+The tokenization performed by run_tagger can be performed separately by a
+run_tokenizer binary. A morphologic dictionary whose tokenization rules should
+be used must be specified.
+
+Example input:
+
+  Děti pojedou k babičce. Už se těší.
+
+Example tokenization command line:
+
+  run_tokenizer czech.dict
+
+Example output:
+
+  Děti
+  pojedou
+  k
+  babičce
+  .
+  
+  Už
+  se
+  těší
+  .
+
+
+MorphoDiTa API Tutorial
+=======================
+
+The MorphoDiTa API is defined in header morphodita.h and resides in
+ufal::morphodita namespace. The easiest way to use MorphoDita is therefore:
+
+  #include morphodita.h
+  
+  using namespace ufal::morphodita;
+
+
+Tagger API
+----------
+
+The main access to MorphoDiTa tagger is through class tagger.  An example of
+this class usage can be found in program file run_tagger.cpp. A typical tagger
+usage may look like this:
+
+  #include tagger/tagger.h;
+  
+  using namespace ufal::morphodita;
+  
+  //...
+  
+  // load model to memory and construct tagger
+  tagger* my_tagger = tagger::load("path_to_model");
+  
+  if (!t) ...
+  
+  // create sample input
+  vector<string> words;
+  words.push_back("malý");
+  words.push_back("pes");
+  
+  vector<string_piece> forms;
+  for (auto& word : words)
+    forms.emplace_back(word)
+  
+  // intialize output and tag
+  vector<tagged_lemma> tags;
+  my_tagger->tag(forms, tags);
+  
+  // access the output
+  for (auto& tag : tags)
+    printf("%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
+  
+  delete my_tagger;
+
+The tagger is constructed by an overloaded factory method with one argument. The
+constructor either accepts a C file pointer (FILE*) pointing to a file with the
+model or a C string (const char*) with a file name of the model. The constructor
+loads the linguistic model to memory and returns the tagger pointer ready for
+tagging, returning NULL if unsuccessful. If a file pointer is used, it is not
+closed and is positioned right after the end of the model.
+
+The main tagging method is tagger::tag:
+
+  void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const;
+
+The input is a std::vector of string_piece which is a structure referencing a
+string using const char* str and size_t len.
+
+The tagger::tag method returns the tagged output in it's second argument,
+std::vector<tagged_lemma>. The calling procedure must provide a result vector
+and the tagger assigns the output to this vector. Obviously, the indexes in the
+output vector correspond to indexes in input vector.  tagged_lemma has two
+public members: std::string lemma and std:string tag, corresponding to predicted
+lemma and tag, respectively.
+
+
+Morphologic Dictionary API
+--------------------------
+
+The main access to MorphoDiTa morphologic dictionary is through class morpho. An
+example of this interface usage can be found in a program file run_morpho.cpp.
+
+
+Dictionary Construction
+-----------------------
+
+Similarly to the tagger, MorphoDiTa morphologic dictionary is constructed by an
+overloaded factory method which accepts either a C file pointer (FILE*) or a C
+string const char* with the file name of the dictionary. The factory method
+returns a pointer to morphologic dictionary or NULL if unsuccessful.
+
+  #include morpho/morpho.h
+  
+  using namespace ufal::morphodita;
+  
+  //...
+  
+  // load dictionary to memory
+  morpho* my_morpho = morpho::load("path_to_dictionary");
+  
+  //...
+  
+  delete(my_morpho);
+
+Another way of obtaining a pointer to morphology dictionary is through an
+instance of tagger class -- every tagger has a morphology dictionary, which is
+available through the method
+
+  virtual const morpho* get_morpho() const = 0;
+
+Please note that you should not delete this pointer as it is owned by the tagger
+class instance.
+
+
+Morphologic Analysis
+--------------------
+
+MorphoDiTa morphologic dictionary offers two functionalities: It either analyzes
+the given word, that means it outputs all possible lemma-tag pairs candidates
+for the given form; or for a given lemma-tag pair, it generates a form or a
+whole list of possible forms.
+
+In the first case, one performs morphologic analysis for a given word by calling
+a method morpho::analyze:
+
+  int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const;
+
+An example (assuming that morphologic dictionary is already constructed, see
+previous example):
+
+  vector<tagged_lemma> lemmas;    // output
+  
+  my_morpho->analyze("pes", morpho::GUESSER, vector<tagged_lemma>& lemmas);
+  
+  for (auto& lemma: lemmas)
+    printf ("%s %s\n, lemma.lemma.c_str(), lemma.tag.c_str())
+
+The input is a form to analyze, then a Guesser mode (whether to use some kind of
+guesser or strictly dictionary only, see question Guesser Mode in Questions and
+Answers (#faq)) and output std::vector<tagged_lemma>.  The caller must provide
+an output vector std::vector<tagged_lemma> and the method morpho::analyze
+assigns the output to this vector.
+
+
+Generation
+----------
+
+MorphoDiTa performs morphologic generation from a given lemma:
+
+  int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
+               std::vector<tagged_lemma_forms>& forms) const;
+
+
+Tag Wildcard
+------------
+
+Optionally, a tag wildcard can be specified (or be NULL) and if so, results are
+filtered using this wildcard. This method can be therefore used in more ways:
+One may wish to generate all possible forms and their tags from a given lemma.
+Then the tag_wildcard is set to NULL and the method generates all possible
+combinations. One may also need a generate a specific form and tag from a given
+lemma, then tag_wildcard is set to this tag value.
+
+Or even more, for example, in the Czech positional morphology tagging system
+(Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)), one may even wish
+to generate something like "all forms in fourth case", then tag_wildcard should
+be set to ????4. Please see Section "Czech Morphology" in User's Manual for more
+details about the Czech positional tagging system.
+
+The previous example applies to morphologic annotation applied to PDT 2.5
+(http://ufal.mff.cuni.cz/pdt2.5/), however, the tag wildcards can be used in any
+morphologic tagging system.
+
+The rules for the tag_wildcard parameter are:
+
+Tag_wildcard can be either NULL or a wildcard applied to the results. A ? in the
+wildcard matches any character, [bytes] matches any of the bytes and [^bytes]
+matches any byte different from the specified ones. A - has no special meaning
+inside the bytes and if ] is first in bytes, it does not end the bytes group.
+
+
+Unknown Lemmas
+--------------
+
+When the lemma is unknown, MorphoDiTa's generation behavior is defined by
+Guesser mode (see also question Guesser Mode in Questions and Answers). If at
+least one lemma is found in the dictionary, NO_GUESSER is returned. If guesser
+== GUESSER and the lemma is found by the guesser, GUESSER is returned.
+Otherwise, forms are cleared and -1 is returned.
+
+
+Raw Lemmas in Czech
+-------------------
+
+In the Czech langauge, if the given lemma is only a raw lemma, all lemma ids
+with this raw lemma are returned. Otherwise only matching lemma ids are
+returned, ignoring any lemma comments. For every found lemma, matching forms are
+filtered using the tag_wildcard. Please see Section "Czech Morphology" in User's
+Manual for details about lemmas and raw lemmas in the Czech morphology.
+
+
+Questions and Answers
+---------------------
+
+What is a Guesser Mode?
+  Morphologic analysis may try to guess the lemma and tag of an uknown word.
+  This option is turned on by morpho::GUESSER and off by morpho::NO_GUESSER.
+  
+Why `string_piece`` and not const char* or std::string?
+  We aim to make MorphoDiTa interface as effective as possible. Because the
+  input strings may be substrings of larger text or come from different than C++
+  memory regions, we want to avoid the cost of \\0 padding or string conversion.
+  Nevertheless, both const char* and std::string can be used instead of a
+  string_piece because of existing implicit conversion rules.
+
+
+MorphoDiTa API Reference
+========================
+
+The MorphoDiTa API is defined in header morphodita.h and resides in
+ufal::morphodita namespace.
+
+The strings used in the MorphoDiTa API are always UTF-8 encoded (except from
+file paths, whose encoding is system dependent).
+
+
+Struct string_piece
+-------------------
+
+  struct string_piece {
+    const char* str;
+    size_t len;
+  
+    string_piece();
+    string_piece(const char* str);
+    string_piece(const char* str, size_t len);
+    string_piece(const std::string& str);
+  }
+
+The string_piece (#string_piece) is used for efficient string passing. The
+string referenced in string_piece (#string_piece) is not owned by it, so users
+have to make sure the referenced string exists as long as the string_piece
+(#string_piece).
+
+
+Struct tagged_form
+------------------
+
+  struct tagged_form {
+    std::string form;
+    std::string tag;
+  };
+
+The tagged_form (#tagged_form) is a pair of strings used when obtaining a form
+and tag pair.
+
+
+Struct tagged_lemma
+-------------------
+
+  struct tagged_lemma {
+    std::string lemma;
+    std::string tag;
+  };
+
+The tagged_lemma (#tagged_lemma) is a pair of strings used when obtaining a
+lemma and tag pair.
+
+
+Struct tagged_lemma_forms
+-------------------------
+
+  struct tagged_lemma_forms {
+    std::string lemma;
+    std::vector<tagged_form> forms;
+  };
+
+The tagged_lemma_forms (#tagged_lemma_forms) represents a lemma and a list of
+tagged forms.
+
+
+Struct token_range
+------------------
+
+  struct token_range {
+    size_t start;
+    size_t length;
+  };
+
+The token_range (#token_range) represent a range of a token as returned by a
+tokenizer (#tokenizer). The start and length fields specify the token position
+in Unicode characters, not in bytes of UTF-8 encoding.
+
+
+Class tokenizer
+---------------
+
+  class tokenizer {
+   public:
+    virtual ~tokenizer() {}
+  
+    virtual void set_text(const char* text, bool make_copy = false) = 0;
+    virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
+  
+    static tokenizer* new_czech_tokenizer();
+  };
+
+The tokenizer (#tokenizer) class performs segmentation and tokenization of given
+text. The class is not threadsafe.
+
+The tokenizer (#tokenizer) instances can be obtained either directly using
+static methods or through instances of morpho (#morpho) and tagger (#tagger).
+
+
+tokenizer::set_text
+-------------------
+
+  virtual void set_text(const char* text, bool make_copy = false) = 0;
+
+Set the text which is to be tokenized.
+
+If make_copy is false, only a reference to the given text is stored and the user
+has to make sure it exists until the tokenizer is released or set_text is called
+again. If make_copy is true, a copy of the given text is made and retained until
+the tokenizer is released or set_text is called again.
+
+
+tokenizer::next_sentence
+------------------------
+
+  virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
+
+Locate and return next sentence of the given text. Returns true when successful
+and false when there are no more sentences in the given text. The arguments are
+filled with found tokens if not NULL. The forms contain token ranges in bytes of
+UTF-8 encoding, the tokens contain token ranges in Unicode characters.
+
+
+tokenizer::new_czech_tokenizer
+------------------------------
+
+  static tokenizer new_czech_tokenizer();
+
+Returns a new instance of a Czech tokenizer. The user should delete it after
+use.
+
+
+Class morpho
+------------
+
+  class morpho {
+   public:
+    virtual ~morpho() {}
+  
+    static morpho* load(const char* fname);
+    static morpho* load(FILE* f);
+  
+    enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
+  
+    virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
+    virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
+                         std::vector<tagged_lemma_forms>& forms) const = 0;
+  
+    virtual int raw_lemma_len(string_piece lemma) const = 0;
+    virtual int lemma_id_len(string_piece lemma) const = 0;
+  
+    virtual tokenizer* new_tokenizer() const = 0;
+  };
+
+A morpho (#morpho) instance represents a morphologic dictionary. Such a
+dictionary allow morphologic analysis, morphologic generation provide
+information about lemma structure and provides a suitable tokenizer. All methods
+are thread-safe.
+
+
+morpho::load(const char*)
+-------------------------
+
+  static morpho* load(const char* fname);
+
+Factory method constructor. Accepts C string with a file name of the model.
+Returns a pointer to an instance of morpho (#morpho) which the user should
+delete after use.
+
+
+morpho::load(FILE*)
+-------------------
+
+  static morpho* load(FILE* f);
+
+Factory method constructor. Accepts C file pointer of an opened file with the
+model. Returns a pointer to an instance of morpho (#morpho) which the user
+should delete after use.
+
+
+morpho::guesser_mode
+--------------------
+
+  enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
+
+Guesser mode defines behavior in case of unknown words. When set to GUESSER,
+morpho tries to guess unknown words. When set to NO_GUESSER, morpho does not
+guess unknown words.
+
+
+morpho::analyze()
+-----------------
+
+  virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
+
+Perform morphologic analysis of a form. The guesser parameter specifies whether
+a guesser can be used if the form is not found in the dictionary. Output is
+assigned to the lemmas vector.
+
+If the form is found in the dictionary, analyses are assigned to lemmas and
+NO_GUESSER returned. If guesser == GUESSER and the form analyses are found using
+a guesser, they are assigned to lemmas and GUESSER is returned.  Otherwise -1 is
+returned and lemmas are filled with one analysis containing given form as lemma
+and a tag for unknown word.
+
+
+morpho::generate()
+------------------
+
+  virtual int generate(string_piece lemmma, const char* tag_wildcard, guesser_mode guesser,
+                       std::vector<tagged_lemma_forms>& forms) const = 0;
+
+Perform morphologic generation of a lemma. Optionally a tag_wildcard can be
+specified (or be NULL) and if so, results are filtered using this wildcard. The
+guesser parameter speficies whether a guesser can be used if the lemma is not
+found in the dictionary. Output is assigned to the forms vector.
+
+Tag_wildcard can be either NULL or a wildcard applied to the results. A ? in the
+wildcard matches any character, [bytes] matches any of the bytes and [^bytes]
+matches any byte different from the specified ones. A - has no special meaning
+inside the bytes and if ] is first in bytes, it does not end the bytes group.
+
+If the given lemma is only a raw lemma, all lemma ids with this raw lemma are
+returned. Otherwise only matching lemma ids are returned, ignoring any lemma
+comments. For every found lemma, matching forms are filtered using the
+tag_wildcard. If at least one lemma is found in the dictionary, NO_GUESSER is
+returned. If guesser == GUESSER and the lemma is found by the guesser, GUESSER
+is returned. Otherwise, forms are cleared and -1 is returned.
+
+
+morpho::raw_lemma_len
+---------------------
+
+  virtual int raw_lemma_len(string_piece lemma) const = 0;
+
+When given a lemma returned by the dictionary, returns the length of a raw lemma
+(text form of the lemma).
+
+
+morpho::lemma_id_len
+--------------------
+
+  virtual int lemma_id_len(string_piece lemma) const = 0;
+
+When given a lemma returned by the dictionary, returns the length of a unique
+lemma identification. The rest of the lemma are comments which do not
+identificate the lemma.
+
+
+morpho::new_tokenizer
+---------------------
+
+  virtual tokenizer* new_tokenizer() const = 0;
+
+Returns a new instance of a suitable tokenizer. The user should delete it after
+use.
+
+
+Class tagger
+------------
+
+  class tagger {
+   public:
+    virtual ~tagger() {}
+  
+    static tagger* load(const char* fname);
+    static tagger* load(FILE* f);
+  
+    virtual const morpho* get_morpho() const = 0;
+  
+    virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
+  
+    tokenizer* new_tokenizer() const = 0;
+  };
+
+A tagger (#tagger) instance represents a tagger, which perform disambiguation of
+morphologic analyses. All methods are thread-safe.
+
+
+tagger::load(const char*)
+-------------------------
+
+  static tagger* load(const char* fname);
+
+Factory method constructor. Accepts C string with a file name of the model.
+Returns a pointer to an instance of tagger (#tagger) which the user should
+delete after use.
+
+
+tagger::load(FILE*)
+-------------------
+
+  static tagger* load(FILE* f);
+
+Factory method constructor. Accepts C file pointer of an opened file with the
+model. Returns a pointer to an instance of tagger (#tagger) which the user
+should delete after use.
+
+
+tagger::get_morpho()
+--------------------
+
+  virtual const morpho* get_morpho() const = 0;
+
+Returns a pointer to an instance of morpho (#morpho) associated with the tagger.
+Do not delete the pointer, it is owned by the tagger instance and deleted in the
+tagger destructor.
+
+
+tagger::tag()
+-------------
+
+  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
+
+Perform morphologic analysis and subsequent disambiguation. Accepts a
+std::vector of string_piece (#string_piece) and fills the output vector of
+tagged_lemma (#tagged_lemma).
+
+
+tagger::new_tokenizer
+---------------------
+
+  virtual tokenizer* new_tokenizer() const = 0;
+
+Returns a new instance of a suitable tokenizer. The user should delete it after
+use. The call is equal to get_morpho() (#tagger_get_morpho)->new_tokenizer()
+(#morpho_new_tokenizer).
+
+
+Contact
+=======
+
+Authors:
+
+- Milan Straka (http://ufal.mff.cuni.cz/milan-straka), straka@ufal.mff.cuni.cz
+- Jana Straková (http://ufal.mff.cuni.cz/jana-strakova),
+  strakova@ufal.mff.cuni.cz
+
+MorphoDiTa website (http://ufal.mff.cuni.cz/morphodita).
+
+
+Acknowledgements
+================
+
+This work has been using language resources developed and/or stored and/or
+distributed by the LINDAT-Clarin project of the Ministry of Education of the
+Czech Republic (project LM2010013).
+
+
+References
+==========
+
+- (Hajič 2004) Jan Hajič. Disambiguation of Rich Inflection: Computational
+  Morphology of Czech. (http://books.google.cz/books?id=sB63AAAACAAJ) Karolinum
+  Press (2004).
+- (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
+  Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
+  Perceptron POS Tagger. (http://aclweb.org/anthology//E/E09/E09-1087.pdf) In
+  Proceedings of the 12th Conference of the European Chapter of the ACL (EACL
+  2009), pages 763-771, Athens, Greece, March. Association for Computational
+  Linguistics.
+
+
+Bibtex for referencing
+----------------------
+
+  @inproceedings{spoustova09,
+    author = {Spoustov{\'a}, Drahom{\'\i}ra ``johanka'' and Haji\v{c}, Jan and Raab, Jan and Spousta, Miroslav},
+    title = {Semi-{S}upervised {T}raining for the {A}veraged {P}erceptron {POS} {T}agger},
+    booktitle = {Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009)},
+    month = {March},
+    year = {2009},
+    address = {Athens, Greece},
+    publisher = {Association for Computational Linguistics},
+    pages = {763--771},
+    url = {http://www.aclweb.org/anthology/E09-1087}
+  }
+
