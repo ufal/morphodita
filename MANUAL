@@ -103,8 +103,8 @@ Make targets and options:
 
 - exe: compile the binaries (default)
 - lib: compile the library
-- BITS=32, BITS=64: compile for specified 32-bit or 64-bit architecture instead
-  of the default one
+- BITS=32 or BITS=64: compile for specified 32-bit or 64-bit architecture
+  instead of the default one
 - RELEASE=1: turn off assertions and use LTO
 - PROFILE=1: turn on profiling
 - DEBUG=1: compile with debug informations and C++ library debugging
@@ -485,7 +485,7 @@ returns a pointer to morphologic dictionary or NULL if unsuccessful.
   delete(my_morpho);
 
 Another way of obtaining a pointer to morphology dictionary is through an
-instance of tagger class -- every tagger has a morphology dictionary, which is
+instance of tagger class - every tagger has a morphology dictionary, which is
 available through the method
 
   virtual const morpho* get_morpho() const = 0;
@@ -681,10 +681,10 @@ Class tokenizer
    public:
     virtual ~tokenizer() {}
   
+    static tokenizer* new_czech_tokenizer();
+  
     virtual void set_text(const char* text, bool make_copy = false) = 0;
     virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
-  
-    static tokenizer* new_czech_tokenizer();
   };
 
 The tokenizer (#tokenizer) class performs segmentation and tokenization of given
@@ -692,6 +692,15 @@ text. The class is not threadsafe.
 
 The tokenizer (#tokenizer) instances can be obtained either directly using
 static methods or through instances of morpho (#morpho) and tagger (#tagger).
+
+
+tokenizer::new_czech_tokenizer
+------------------------------
+
+  static tokenizer new_czech_tokenizer();
+
+Returns a new instance of a Czech tokenizer. The user should delete it after
+use.
 
 
 tokenizer::set_text
@@ -716,15 +725,6 @@ Locate and return next sentence of the given text. Returns true when successful
 and false when there are no more sentences in the given text. The arguments are
 filled with found tokens if not NULL. The forms contain token ranges in bytes of
 UTF-8 encoding, the tokens contain token ranges in Unicode characters.
-
-
-tokenizer::new_czech_tokenizer
-------------------------------
-
-  static tokenizer new_czech_tokenizer();
-
-Returns a new instance of a Czech tokenizer. The user should delete it after
-use.
 
 
 Class morpho

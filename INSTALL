@@ -27,8 +27,8 @@ Make targets and options:
 
 - exe: compile the binaries (default)
 - lib: compile the library
-- BITS=32, BITS=64: compile for specified 32-bit or 64-bit architecture instead
-  of the default one
+- BITS=32 or BITS=64: compile for specified 32-bit or 64-bit architecture
+  instead of the default one
 - RELEASE=1: turn off assertions and use LTO
 - PROFILE=1: turn on profiling
 - DEBUG=1: compile with debug informations and C++ library debugging
