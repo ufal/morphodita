@@ -23,14 +23,8 @@
 namespace ufal {
 namespace morphodita {
 
-// Read line and strip '\n'.
-bool getline(FILE *f, string& line);
-
-// Read a paragraph separated by an empty line. All '\n' are left intact.
-bool getpara(FILE* f, string& para);
-
-// Split given text on the separator character.
-void split(const string& text, char sep, vector<string>& tokens);
+// Print xml content while encoding <>&" using XML entities.
+void print_xml_content(FILE* out, const char* text, size_t length);
 
 } // namespace morphodita
 } // namespace ufal

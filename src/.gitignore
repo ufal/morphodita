@@ -8,7 +8,9 @@ libmorphodita.dyn.a
 libmorphodita.so
 morpho_accuracy
 remap_tags
-run_morpho
+run_morpho_analyze
+run_morpho_cli
+run_morpho_generate
 run_tagger
 run_tokenizer
 test_dictionary

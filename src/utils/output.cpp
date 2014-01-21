@@ -16,21 +16,29 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
-
-#include "common.h"
+#include "output.h"
 
 namespace ufal {
 namespace morphodita {
 
-// Read line and strip '\n'.
-bool getline(FILE *f, string& line);
+// Print xml content while encoding <>&" using XML entities.
+void print_xml_content(FILE* out, const char* text, size_t length) {
+  const char* to_print = text;
 
-// Read a paragraph separated by an empty line. All '\n' are left intact.
-bool getpara(FILE* f, string& para);
+  while (length) {
+    while (length && *text != '<' && *text != '>' && *text != '&' && *text != '"')
+      text++, length--;
 
-// Split given text on the separator character.
-void split(const string& text, char sep, vector<string>& tokens);
+    if (length) {
+      if (to_print < text) fwrite(to_print, 1, text - to_print, out);
+      fputs(*text == '<' ? "&lt;" : *text == '>' ? "&gt;" : *text == '&' ? "&amp;" : "&quot;", out);
+      text++, length--;
+      to_print = text;
+    }
+  }
+
+  if (to_print < text) fwrite(to_print, 1, text - to_print, out);
+}
 
 } // namespace morphodita
 } // namespace ufal
