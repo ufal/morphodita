@@ -19,10 +19,10 @@
 import cz.cuni.mff.ufal.morphodita.*;
 import java.util.Scanner;
 
-class RunMorpho {
+class RunMorphoCli {
   public static void main(String[] args) {
     if (args.length < 1) {
-      System.err.println("Usage: RunMorpho dict_file");
+      System.err.println("Usage: RunMorphoCli dict_file");
       System.exit(1);
     }
 
