@@ -24,6 +24,7 @@
 #include "tagger/tagger_trainer.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
+#include "utils/set_binary_stdout.h"
 
 using namespace ufal::morphodita;
 
@@ -32,6 +33,9 @@ int main(int argc, char* argv[]) {
 
   tagger_id id;
   if (!tagger_ids::parse(argv[1], id)) runtime_errorf("Cannot parse tagger_identifier '%s'!\n", argv[1]);
+
+  // Switch stdout to binary mode. Needed on Windows only.
+  set_binary_stdout();
 
   switch (id) {
     case tagger_ids::CZECH2:

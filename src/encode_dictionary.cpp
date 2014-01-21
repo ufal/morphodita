@@ -22,6 +22,7 @@
 #include "morpho/czech_morpho_encoder.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
+#include "utils/set_binary_stdout.h"
 
 using namespace ufal::morphodita;
 
@@ -30,6 +31,9 @@ int main(int argc, char* argv[]) {
 
   morpho_id id;
   if (!morpho_ids::parse(argv[1], id)) runtime_errorf("Cannot parse morpho_identifier '%s'!\n", argv[1]);
+
+  // Switch stdout to binary mode. Needed on Windows only.
+  set_binary_stdout();
 
   switch (id) {
     case morpho_ids::CZECH:
