@@ -20,11 +20,14 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/process_args.h"
 
 using namespace ufal::morphodita;
 
+static void tokenize(FILE* in, FILE* out, tokenizer& tokenizer);
+
 int main(int argc, char* argv[]) {
-  if (argc <= 1) runtime_errorf("Usage: %s [-czech | dict_file]", argv[0]);
+  if (argc < 2) runtime_errorf("Usage: %s -czech|dict_file [file[:output_file]]...", argv[0]);
 
   unique_ptr<tokenizer> tokenizer;
   if (strcmp(argv[1], "-czech") == 0) {
@@ -38,27 +41,24 @@ int main(int argc, char* argv[]) {
     tokenizer.reset(dictionary->new_tokenizer());
   }
 
-  string line, text;
-  vector<string_piece> forms;
-  for (bool not_eof = true; not_eof; ) {
-    // Read block of text
-    text.clear();
-    while ((not_eof = getline(stdin, line)) && !line.empty()) {
-      text += line;
-      text += '\n';
-    }
-    if (not_eof) text += '\n';
-
-    // Tokenize
-    tokenizer->set_text(text.c_str());
-    while (tokenizer->next_sentence(&forms, nullptr)) {
-      for (auto& form : forms) {
-        fwrite(form.str, 1, form.len, stdout);
-        putchar('\n');
-      }
-      putchar('\n');
-    }
-  }
+  process_args(2, argc, argv, tokenize, *tokenizer);
 
   return 0;
+}
+
+void tokenize(FILE* in, FILE* out, tokenizer& tokenizer) {
+  string para;
+  vector<string_piece> forms;
+  while (getpara(in, para)) {
+    eprintf("Have para: '%s'\n", para.c_str());
+    // Tokenize
+    tokenizer.set_text(para.c_str());
+    while (tokenizer.next_sentence(&forms, nullptr)) {
+      for (auto& form : forms) {
+        fwrite(form.str, 1, form.len, out);
+        fputc('\n', out);
+      }
+      fputc('\n', out);
+    }
+  }
 }

@@ -22,34 +22,37 @@
 
 #include "tagger/tagger.h"
 #include "utils/input.h"
+#include "utils/output.h"
+#include "utils/process_args.h"
 
 using namespace ufal::morphodita;
 
-static void tag_vertical(const tagger& tagger);
-static void tag_untokenized(const tagger& tagger);
+static void tag_vertical(FILE* in, FILE* out, const tagger& tagger);
+static void tag_untokenized(FILE* in, FILE* out, const tagger& tagger);
 
 int main(int argc, char* argv[]) {
   bool use_vertical = false;
 
   int argi = 1;
   if (argi < argc && strcmp(argv[argi], "-v") == 0) argi++, use_vertical = true;
-  if (argi >= argc) runtime_errorf("Usage: %s [-v] tagger_file", argv[0]);
+  if (argi >= argc) runtime_errorf("Usage: %s [-v] tagger_file [file[:output_file]]...", argv[0]);
 
   eprintf("Loading tagger: ");
   unique_ptr<tagger> tagger(tagger::load(argv[argi]));
   if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[argi]);
   eprintf("done\n");
+  argi++;
 
   eprintf("Tagging: ");
   clock_t now = clock();
-  if (use_vertical) tag_vertical(*tagger);
-  else tag_untokenized(*tagger);
+  if (use_vertical) process_args(argi, argc, argv, tag_vertical, *tagger);
+  else process_args(argi, argc, argv, tag_untokenized, *tagger);
   eprintf("done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 
   return 0;
 }
 
-void tag_vertical(const tagger& tagger) {
+void tag_vertical(FILE* in, FILE* out, const tagger& tagger) {
   string line;
 
   vector<string> words;
@@ -60,7 +63,7 @@ void tag_vertical(const tagger& tagger) {
     // Read sentence
     words.clear();
     forms.clear();
-    while ((not_eof = getline(stdin, line)) && !line.empty()) {
+    while ((not_eof = getline(in, line)) && !line.empty()) {
       words.emplace_back(line);
       forms.emplace_back(words.back());
     }
@@ -70,64 +73,38 @@ void tag_vertical(const tagger& tagger) {
       tagger.tag(forms, tags);
 
       for (auto& tag : tags)
-        printf("%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
-      putchar('\n');
+        fprintf(out, "%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
+      fputc('\n', out);
     }
   }
 }
 
-static void encode_entities_and_print(const char* text, size_t length);
-
-void tag_untokenized(const tagger& tagger) {
-  string line, text;
+void tag_untokenized(FILE* in, FILE* out, const tagger& tagger) {
+  string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
   unique_ptr<tokenizer> tokenizer(tagger.new_tokenizer());
 
-  for (bool not_eof = true; not_eof; ) {
-    // Read block of text
-    text.clear();
-    while ((not_eof = getline(stdin, line)) && !line.empty()) {
-      text += line;
-      text += '\n';
-    }
-    if (not_eof) text += '\n';
-
+  while (getpara(in, para)) {
     // Tokenize and tag
-    const char* unprinted = text.c_str();
+    const char* unprinted = para.c_str();
     tokenizer->set_text(unprinted);
     while (tokenizer->next_sentence(&forms, nullptr)) {
       tagger.tag(forms, tags);
 
       for (unsigned i = 0; i < forms.size(); i++) {
-        if (unprinted < forms[i].str) encode_entities_and_print(unprinted, forms[i].str - unprinted);
-        fputs("<form lemma=\"", stdout);
-        encode_entities_and_print(tags[i].lemma.c_str(), tags[i].lemma.size());
-        fputs("\" tag=\"", stdout);
-        encode_entities_and_print(tags[i].tag.c_str(), tags[i].tag.size());
-        fputs("\">", stdout);
-        encode_entities_and_print(forms[i].str, forms[i].len);
-        fputs("</form>", stdout);
+        if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
+        fputs("<form lemma=\"", out);
+        print_xml_content(out, tags[i].lemma.c_str(), tags[i].lemma.size());
+        fputs("\" tag=\"", out);
+        print_xml_content(out, tags[i].tag.c_str(), tags[i].tag.size());
+        fputs("\">", out);
+        print_xml_content(out, forms[i].str, forms[i].len);
+        fputs("</form>", out);
         unprinted = forms[i].str + forms[i].len;
       }
     }
-    if (unprinted < text.c_str() + text.size()) encode_entities_and_print(unprinted, text.c_str() + text.size() - unprinted);
+    if (unprinted < para.c_str() + para.size()) print_xml_content(out, unprinted, para.c_str() + para.size() - unprinted);
   }
-}
-
-void encode_entities_and_print(const char* text, size_t length) {
-  const char* to_print = text;
-  while (length) {
-    while (length && *text != '<' && *text != '>' && *text != '&' && *text != '"')
-      text++, length--;
-
-    if (length) {
-      if (to_print < text) fwrite(to_print, 1, text - to_print, stdout);
-      fputs(*text == '<' ? "&lt;" : *text == '>' ? "&gt;" : *text == '&' ? "&amp;" : "&quot;", stdout);
-      text++, length--;
-      to_print = text;
-    }
-  }
-  if (to_print < text) fwrite(to_print, 1, text - to_print, stdout);
 }
