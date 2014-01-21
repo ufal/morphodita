@@ -16,11 +16,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <algorithm>
-#include <functional>
-#include <map>
-#include <unordered_map>
-#include <unordered_set>
+#include <cstring>
 
 #include "morpho/morpho_ids.h"
 #include "morpho/czech_morpho_encoder.h"
@@ -41,12 +37,12 @@ int main(int argc, char* argv[]) {
         // options: prefix_guesser_file statistical_guesser_file max_tag_length
         file_ptr prefix_guesser, statistical_guesser;
 
-        if (argc > 2 && !string(argv[2]).empty()) {
+        if (argc > 2 && strlen(argv[2])) {
           prefix_guesser = fopen(argv[2], "r");
           if (!prefix_guesser) runtime_errorf("Cannot open prefix guesser file '%s'!", argv[2]);
         }
 
-        if (argc > 3 && !string(argv[3]).empty()) {
+        if (argc > 3 && strlen(argv[3])) {
           statistical_guesser = fopen(argv[3], "r");
           if (!statistical_guesser) runtime_errorf("Cannot open statistical guesser file '%s'!", argv[3]);
         }
