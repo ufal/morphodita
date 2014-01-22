@@ -271,4 +271,4 @@ a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vecto
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;
 
 Returns a new instance of a suitable tokenizer. The user should delete it after
-use. The call is equal to [``get_morpho()`` #tagger_get_morpho]``->``[``new_tokenizer()`` #morpho_new_tokenizer].
+use. The call is equal to ``[get_morpho() #tagger_get_morpho]->[new_tokenizer() #morpho_new_tokenizer]``.

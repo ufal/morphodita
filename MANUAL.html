@@ -41,27 +41,31 @@
     <LI><A HREF="#toc15">4.1. Models</A>
     <LI><A HREF="#toc16">4.2. Dictionaries</A>
     <LI><A HREF="#toc17">4.3. Czech Morphology</A>
-    <LI><A HREF="#toc18">4.4. Segmentation and Tokenization</A>
-    <LI><A HREF="#toc19">4.5. Tagger</A>
+    <LI><A HREF="#run_tagger">4.4. Running the Tagger</A>
       <UL>
-      <LI><A HREF="#toc20">4.5.1. Untokenized Input</A>
-      <LI><A HREF="#toc21">4.5.2. Vertical Format</A>
+      <LI><A HREF="#toc19">4.4.1. Untokenized Input</A>
+      <LI><A HREF="#toc20">4.4.2. Vertical Format</A>
       </UL>
-    <LI><A HREF="#toc22">4.6. Morphologic Dictionary</A>
-    <LI><A HREF="#toc23">4.7. Tokenization</A>
-    </UL>
-  <LI><A HREF="#toc24">MorphoDiTa API Tutorial</A>
-    <UL>
-    <LI><A HREF="#toc25">5.1. Tagger API</A>
-    <LI><A HREF="#toc26">5.2. Morphologic Dictionary API</A>
+    <LI><A HREF="#toc21">4.5. Running the Morphology</A>
       <UL>
-      <LI><A HREF="#toc27">5.2.1. Dictionary Construction</A>
-      <LI><A HREF="#toc28">5.2.2. Morphologic Analysis</A>
-      <LI><A HREF="#toc29">5.2.3. Generation</A>
+      <LI><A HREF="#run_morpho_analyze">4.5.1. Morphologic Analysis</A>
+      <LI><A HREF="#run_morpho_generate">4.5.2. Morphologic Generation</A>
+      <LI><A HREF="#run_morpho_cli">4.5.3. Interactive Morphologic Analysis and Generation</A>
+      </UL>
+    <LI><A HREF="#toc25">4.6. Running the Tokenizer</A>
+    </UL>
+  <LI><A HREF="#toc26">MorphoDiTa API Tutorial</A>
+    <UL>
+    <LI><A HREF="#toc27">5.1. Tagger API</A>
+    <LI><A HREF="#toc28">5.2. Morphologic Dictionary API</A>
+      <UL>
+      <LI><A HREF="#toc29">5.2.1. Dictionary Construction</A>
+      <LI><A HREF="#toc30">5.2.2. Morphologic Analysis</A>
+      <LI><A HREF="#toc31">5.2.3. Generation</A>
       </UL>
     <LI><A HREF="#faq">5.3. Questions and Answers</A>
     </UL>
-  <LI><A HREF="#toc31">MorphoDiTa API Reference</A>
+  <LI><A HREF="#toc33">MorphoDiTa API Reference</A>
     <UL>
     <LI><A HREF="#string_piece">6.1. Struct string_piece</A>
     <LI><A HREF="#tagged_form">6.2. Struct tagged_form</A>
@@ -94,11 +98,11 @@
       <LI><A HREF="#tagger_new_tokenizer">6.8.5. tagger::new_tokenizer</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc56">Contact</A>
-  <LI><A HREF="#toc57">Acknowledgements</A>
-  <LI><A HREF="#toc58">References</A>
+  <LI><A HREF="#toc58">Contact</A>
+  <LI><A HREF="#toc59">Acknowledgements</A>
+  <LI><A HREF="#toc60">References</A>
     <UL>
-    <LI><A HREF="#toc59">9.1. Bibtex for referencing</A>
+    <LI><A HREF="#toc61">9.1. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -352,34 +356,46 @@ For a more detailed reference about the Czech morphology, please see
 <A HREF="http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html">Lemma and Tag Structure in PDT 2.0</A>.
 </P>
 
-<A NAME="toc18"></A>
-<H2>4.4. Segmentation and Tokenization</H2>
+<A NAME="run_tagger"></A>
+<H2>4.4. Running the Tagger</H2>
 
 <P>
-In beta version, the MorphoDiTa tagger accepts segmented and tokenized data in raw text as an input (the input format is described in the Tagger section). As our further work, we plan to include (optional) segmenter and tokenizer in MorphoDiTa.
+Probably the most common usage of MorphoDita is running a tagger to tag your data using
 </P>
+
+<PRE>
+run_tagger tagger_model
+</PRE>
+
+<P>
+The input is assumed to be in UTF-8 encoding and can be either already
+tokenized and segmented, or it can be a plain text which is tokenized and
+segmented automatically.
+</P>
+<P>
+Any number of files can be specified after the <CODE>tagger_model</CODE>. If an argument
+<CODE>input_file:output_file</CODE> is used, the given <CODE>input_file</CODE> is processed and
+the result is saved to <CODE>output_file</CODE>. If only <CODE>input_file</CODE> is used, the
+result is saved to standard output. If no argument is given, input is read
+from standard input and written to standard output.
+</P>
+<P>
+The full command syntax of <CODE>run_tagger</CODE> is
+</P>
+
+<PRE>
+run_tagger [-v] tagger_model [input_file[:output_file]]...
+</PRE>
 
 <A NAME="toc19"></A>
-<H2>4.5. Tagger</H2>
+<H3>4.4.1. Untokenized Input</H3>
 
 <P>
-Probably the most common usage of MorphoDita is running a tagger to tag your data.
-</P>
-<P>
-<CODE>run_tagger tagger_model</CODE>
-</P>
-<P>
-Run the tagger with a model given as the first argument. The input is read from standard input
-and is assumed to be in UTF-8 encoding.
-</P>
-
-<A NAME="toc20"></A>
-<H3>4.5.1. Untokenized Input</H3>
-
-<P>
-The input is by default automatically tokenized and segmented. The output is in
-XML format without a root element, using <CODE>&lt;form lemma="..." tag="..."&gt;...&lt;/form&gt;</CODE>
-element to encode the assigned lemma and tag.
+By default (i.e., without specifying <CODE>-v</CODE>), the input is assumed to be
+a plain text and it is automatically tokenized and segmented by default. The
+output is in XML format without a root element, using
+<CODE>&lt;form lemma="..." tag="..."&gt;...&lt;/form&gt;</CODE> element to encode the assigned lemma
+and tag.
 </P>
 <P>
 Example input data <CODE>tagger_input.txt</CODE>:
@@ -394,7 +410,7 @@ Example MorphoDiTa run_tagger command line:
 </P>
 
 <PRE>
-cat tagger_input.txt | ./run_tagger czech.best_accuracy_tagger
+./run_tagger czech.best_accuracy_tagger tagger_input.txt
 </PRE>
 
 <P>
@@ -413,11 +429,12 @@ Example output data (line breaks added):
 &lt;form lemma='.' tag='Z:-------------'&gt;.&lt;/form&gt;
 </PRE>
 
-<A NAME="toc21"></A>
-<H3>4.5.2. Vertical Format</H3>
+<A NAME="toc20"></A>
+<H3>4.4.2. Vertical Format</H3>
 
 <P>
-If the input is already tokenized and segmented, vertical input format can be used.
+If the input is already tokenized and segmented, vertical input format can be used
+by specifying <CODE>-v</CODE> option as a first argument of <CODE>run_tagger</CODE>.
 The vertical input format contains word on a line, empty line being end of sentence.
 The output has the same number of lines as input, line <I>l</I> is a tab separated
 lemma-tag pair assigned to the word on the input line <I>l</I>.
@@ -440,11 +457,11 @@ těší
 </PRE>
 
 <P>
-Example MorphoDiTa run_tagger command line:
+Example MorphoDiTa <CODE>run_tagger</CODE> command line:
 </P>
 
 <PRE>
-cat tagger_input_vertical.txt | ./run_tagger -v czech.best_accuracy_tagger
+./run_tagger -v czech.best_accuracy_tagger tagger_input_vertical.txt
 </PRE>
 
 <P>
@@ -464,30 +481,273 @@ těšit_:T        VB-S---3P-AA---
 .       Z:-------------
 </PRE>
 
-<A NAME="toc22"></A>
-<H2>4.6. Morphologic Dictionary</H2>
+<A NAME="toc21"></A>
+<H2>4.5. Running the Morphology</H2>
 
 <P>
-The command line interface allowing analysis and generation can be executed
-using:
-```run_dict morpho_dictionary
+There are multiple commands performing morphologic tasks.
+The <A HREF="#run_morpho_analyze"><CODE>run_morpho_analyze</CODE></A> executable performs morphologic analysis and
+the <A HREF="#run_morpho_generate"><CODE>run_morpho_generate</CODE></A> executable performs morphologic generation.
+The output of these commands is suitable for automatic processing.
 </P>
 <P>
-The input is read from standard input, command on each line. If only one word
-is given, performs analysis on the given word. If the line contains two
-space-separated words, performs generation on the first word and filter the
-returned tags using a tag wildcard given as second word. If the second word
-is empty (i.e., the input is for example "dog "), generate all forms.
+The <A HREF="#run_morpho_cli"><CODE>run_morpho_cli</CODE></A> executable performs both morphologic analysis and generation,
+but is designed to be used interactively and produces more human-readable output.
 </P>
 
-<A NAME="toc23"></A>
-<H2>4.7. Tokenization</H2>
+<A NAME="run_morpho_analyze"></A>
+<H3>4.5.1. Morphologic Analysis</H3>
 
 <P>
-The tokenization performed by <CODE>run_tagger</CODE> can be performed separately
-by a <CODE>run_tokenizer</CODE> binary. A morphologic dictionary whose tokenization
-rules should be used must be specified.
+The morphologic analysis can be performed by running
 </P>
+
+<PRE>
+run_morpho_analyze morphology_model use_guesser
+</PRE>
+
+<P>
+The input is assumed to be in UTF-8 encoding and can be either already
+tokenized and segmented, or it can be a plain text which is tokenized and
+segmented automatically. The input files are specified same as with the
+<A HREF="#run_tagger"><CODE>run_tagger</CODE></A> command.
+</P>
+<P>
+Some morphologic models contain both a manually created dictionary and
+a guesser. Therefore, a numeric <CODE>use_guesser</CODE> argument is required.
+If non-zero, the guesser is used, otherwise not.
+</P>
+<P>
+The full command syntax of <CODE>run_morpho_analyze</CODE> is
+</P>
+
+<PRE>
+run_morpho_analyze [-v] morphology_model use_guesser [input_file[:output_file]]...
+</PRE>
+
+<H4>4.5.1.1. Untokenized Input</H4>
+
+<P>
+By default (i.e., without specifying <CODE>-v</CODE>), the input is assumed to be
+a plain text and it is automatically tokenized and segmented by default. The
+output is in XML format without a root element, using
+<CODE>&lt;form&gt;&lt;analysis lemma="..." tag="..."/&gt;&lt;analysis...&gt;...&lt;/form&gt;</CODE> element to
+encode the assigned lemma and tag.
+</P>
+<P>
+Example input data:
+</P>
+
+<PRE>
+Děti pojedou k babičce. Už se těší.
+</PRE>
+
+<P>
+Example <CODE>run_morpho_analyze</CODE> command line:
+</P>
+
+<PRE>
+./run_morpho_analyze czech.dict 0
+</PRE>
+
+<P>
+Example output data (line breaks added):
+</P>
+
+<PRE>
+&lt;form&gt;&lt;analysis lemma="dítě" tag="NNFP1-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP4-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP5-----A----"/&gt;Děti&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/&gt;pojedou&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="k-1" tag="RR--3----------"/&gt;&lt;analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/&gt;&lt;analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/&gt;&lt;analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/&gt;&lt;analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/&gt;k&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="babička" tag="NNFS3-----A----"/&gt;&lt;analysis lemma="babička" tag="NNFS6-----A----"/&gt;babičce&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="už-1" tag="Db-------------"/&gt;&lt;analysis lemma="už-2" tag="TT-------------"/&gt;Už&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/&gt;&lt;analysis lemma="s-1" tag="RV--2----------"/&gt;&lt;analysis lemma="s-1" tag="RV--7----------"/&gt;se&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/&gt;&lt;analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/&gt;těší&lt;/form&gt;
+&lt;form&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/form&gt;
+</PRE>
+
+<H4>4.5.1.2. Vertical Format</H4>
+
+<P>
+If the input is already tokenized and segmented, vertical input format can be used
+by specifying <CODE>-v</CODE> option as a first argument of <CODE>run_morpho_analyze</CODE>.
+The vertical input format contains word on a line, empty line being end of sentence.
+The output has the same number of lines as input, line <I>l</I> contains tab separated
+lemma-tag pairs assigned to the word on the input line <I>l</I>.
+</P>
+<P>
+Example input data:
+</P>
+
+<PRE>
+Děti
+pojedou
+k
+babičce
+.
+
+Už
+se
+těší
+.
+</PRE>
+
+<P>
+Example <CODE>run_morpho_analyze</CODE> command line:
+</P>
+
+<PRE>
+./run_morpho_analyze -v czech.dict 0
+</PRE>
+
+<P>
+Example output:
+</P>
+
+<PRE>
+dítě	NNFP1-----A----	dítě	NNFP4-----A----	dítě	NNFP5-----A----
+jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
+k-1	RR--3----------	k-3_^(označení_pomocí_písmene)	NNNXX-----A----	k-4`kůň_:B_^(jednotka_výkonu)	NNMXX-----A---8	k-8_:B_^(ost._zkratka)	XX------------8	komanditní_:B_^(jen_komanditní_společnost)	AAXXX----1A---8	koncernový_:B	AAXXX----1A---8	kuo-1_:B_,t_^(stará_jednotka_výkonu)	NNNXX-----A---8
+babička	NNFS3-----A----	babička	NNFS6-----A----
+.	Z:-------------
+
+už-1	Db-------------	už-2	TT-------------
+se_^(zvr._zájmeno/částice)	P7-X4----------	s-1	RV--2----------	s-1	RV--7----------
+těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
+.	Z:-------------
+</PRE>
+
+<A NAME="run_morpho_generate"></A>
+<H3>4.5.2. Morphologic Generation</H3>
+
+<P>
+The morphologic generation can be performed by running
+</P>
+
+<PRE>
+run_morpho_generate morphology_model use_guesser
+</PRE>
+
+<P>
+The input is assumed to be in UTF-8 encoding. The input files are specified
+same as with the <A HREF="#run_tagger"><CODE>run_tagger</CODE></A> command.
+</P>
+<P>
+Input for morphologic generation has to be in vertical format, each line
+containing a lemma, which can be optionally followed by a tab and a
+<A HREF="#tag_wildcard">tag wildcard</A>. The output has the same number of lines as input,
+line <I>l</I> contains tab separated form-lemma-tag triplets which can be generated
+from the lemma on he input line <I>l</I>. If a tag wildcard was provided, only
+triplets with matching tags are returned.
+</P>
+<P>
+Some morphologic models contain both a manually created dictionary and
+a guesser. Therefore, a numeric <CODE>use_guesser</CODE> argument is required.
+If non-zero, the guesser is used, otherwise not.
+</P>
+<P>
+The full command syntax of <CODE>run_morpho_generate</CODE> is
+</P>
+
+<PRE>
+run_morpho_generate [-v] morphology_model use_guesser [input_file[:output_file]]...
+</PRE>
+
+<P>
+Example input data:
+</P>
+
+<PRE>
+dítě
+jet	?[fN]??[-1]
+k-1
+babička	NNFS3-----A----
+</PRE>
+
+<P>
+Example <CODE>run_morpho_generate</CODE> command line:
+</P>
+
+<PRE>
+./run_morpho_generate czech.dict 0
+</PRE>
+
+<P>
+Example output:
+</P>
+
+<PRE>
+dítě	dítě	NNNS1-----A----	dítě	dítě	NNNS4-----A----	dítě	dítě	NNNS5-----A----	dítěte	dítě	NNNS2-----A----	dítěti	dítě	NNNS3-----A----	dítěti	dítě	NNNS6-----A----	dítětem	dítě	NNNS7-----A----	děti	dítě	NNFP1-----A----	děti	dítě	NNFP4-----A----	děti	dítě	NNFP5-----A----	dětma	dítě	NNFP7-----A---6	dětmi	dítě	NNFP7-----A----	dětem	dítě	NNFP3-----A----	dětí	dítě	NNFP2-----A----	dětech	dítě	NNFP6-----A----	dětima	dítě_,h	NNFP7-----A---6
+ject	jet	Vf--------A---6	jet	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------A----	jeti	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------A---2	nejet	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------N----	nejeti	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------N---2	jet	jet-2_,h_^(letadlo_s_tryskovým_pohonem)NNIS1-----A----	jety	jet-2_,h_^(letadlo_s_tryskovým_pohonem)	NNIP1-----A----
+k	k-1	RR--3----------	ke	k-1	RV--3----------	ku	k-1	RV--3---------1
+babičce babička NNFS3-----A----
+</PRE>
+
+<A NAME="tag_wildcard"></A>
+<H4>4.5.2.1. Tag Wildcards</H4>
+
+<P>
+When only forms with a specific tag should be generated for a given lemma, tag
+wildcard can be specified. The tag wildcard is a simple wildcard allowing to filter
+the results of morphologic generation.
+</P>
+<P>
+Most characters of a tag wildcard match corresponding characters of a tag, with the following exceptions:
+</P>
+
+ <UL>
+ <LI><CODE>?</CODE> matches any character of a tag.
+ <LI><CODE>[chars]</CODE> matches any of the characters listed. The dash <CODE>-</CODE> has no special meaning and if <CODE>]</CODE>
+   is the first character in <CODE>chars</CODE>, it is considered as one of the characters and does not end the group.
+ <LI><CODE>[^chars]</CODE> matches any of the characters <I>not</I> listed.
+ </UL>
+
+<A NAME="run_morpho_cli"></A>
+<H3>4.5.3. Interactive Morphologic Analysis and Generation</H3>
+
+<P>
+Morphologic analysis and generation which is interactive and more human readable
+can be run using:
+</P>
+
+<PRE>
+run_morpho_cli morphology_model
+</PRE>
+
+<P>
+The input is read from standard input, command on each line. If there is no space
+on a line, analysis is performed on the given word. Otherwise generation is performed
+on the first word, using the rest of the line as a <A HREF="#tag_wildcard">tag wildcard</A>.
+If the second word is empty (i.e., the input is for example ``on ``), all forms
+are generated.
+</P>
+
+<A NAME="toc25"></A>
+<H2>4.6. Running the Tokenizer</H2>
+
+<P>
+Using the <CODE>run_tokenizer</CODE> executable it is possible to perform only
+tokenization and segmentation.
+</P>
+<P>
+The tokenizer can be specified either using a morphologic dictionary, or
+using a tokenizer identifier. Currently only one tokenizer <CODE>-czech</CODE>
+is available.
+</P>
+<P>
+The input is a UTF-8 encoded plain text and the output is in the vertical
+format &ndash; each word is on a separate line and every sentence is ended
+by a blank line. The input files are specified same as with the
+<A HREF="#run_tagger"><CODE>run_tagger</CODE></A> command.
+</P>
+<P>
+The full command syntax of <CODE>run_tokenizer</CODE> is
+</P>
+
+<PRE>
+run_tokenizer tagger_model|-czech [input_file[:output_file]]...
+</PRE>
+
 <P>
 Example input:
 </P>
@@ -519,9 +779,10 @@ Už
 se
 těší
 .
+
 </PRE>
 
-<A NAME="toc24"></A>
+<A NAME="toc26"></A>
 <H1>5. MorphoDiTa API Tutorial</H1>
 
 <P>
@@ -535,7 +796,7 @@ The MorphoDiTa API is defined in header <CODE>morphodita.h</CODE> and resides in
 using namespace ufal::morphodita;
 </PRE>
 
-<A NAME="toc25"></A>
+<A NAME="toc27"></A>
 <H2>5.1. Tagger API</H2>
 
 <P>
@@ -606,7 +867,7 @@ public members: <CODE>std::string lemma</CODE> and <CODE>std:string tag</CODE>, 
 predicted lemma and tag, respectively.
 </P>
 
-<A NAME="toc26"></A>
+<A NAME="toc28"></A>
 <H2>5.2. Morphologic Dictionary API</H2>
 
 <P>
@@ -615,7 +876,7 @@ The main access to MorphoDiTa morphologic dictionary is through class
 <CODE>run_morpho.cpp</CODE>.
 </P>
 
-<A NAME="toc27"></A>
+<A NAME="toc29"></A>
 <H3>5.2.1. Dictionary Construction</H3>
 
 <P>
@@ -656,7 +917,7 @@ Please note that you should not delete this pointer as it is owned by the
 <CODE>tagger</CODE> class instance.
 </P>
 
-<A NAME="toc28"></A>
+<A NAME="toc30"></A>
 <H3>5.2.2. Morphologic Analysis</H3>
 
 <P>
@@ -696,7 +957,7 @@ caller must provide an output vector <CODE>std::vector&lt;tagged_lemma&gt;</CODE
 method <CODE>morpho::analyze</CODE> assigns the output to this vector.
 </P>
 
-<A NAME="toc29"></A>
+<A NAME="toc31"></A>
 <H3>5.2.3. Generation</H3>
 
 <P>
@@ -724,22 +985,20 @@ Or even more, for example, in the Czech positional morphology tagging system
 one may even wish to generate something like "all forms in fourth case",
 then <CODE>tag_wildcard</CODE> should be set to <CODE>????4</CODE>.
 Please see Section "Czech Morphology" in User's Manual for more details about the Czech positional tagging system.
-</P>
-<P>
 The previous example applies to morphologic annotation applied to
 <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>, however, the tag wildcards can be used in any
 morphologic tagging system.
 </P>
 <P>
-The rules for the <CODE>tag_wildcard</CODE> parameter are:
+Most characters of a tag wildcard match corresponding characters of a tag, with the following exceptions:
 </P>
-<P>
-Tag_wildcard can be either <CODE>NULL</CODE> or a wildcard applied to the results.
-A <CODE>?</CODE> in the wildcard matches any character, <CODE>[bytes]</CODE> matches any of the
-bytes and <CODE>[^bytes]</CODE> matches any byte different from the specified ones.
-A <CODE>-</CODE> has no special meaning inside the bytes and if <CODE>]</CODE> is first in bytes, it
-does not end the bytes group.
-</P>
+
+ <UL>
+ <LI><CODE>?</CODE> matches any character of a tag.
+ <LI><CODE>[chars]</CODE> matches any of the characters listed. The dash <CODE>-</CODE> has no special meaning and if <CODE>]</CODE>
+   is the first character in <CODE>chars</CODE>, it is considered as one of the characters and does not end the group.
+ <LI><CODE>[^chars]</CODE> matches any of the characters <I>not</I> listed.
+ </UL>
 
 <H4>5.2.3.2. Unknown Lemmas</H4>
 
@@ -779,7 +1038,7 @@ User's Manual for details about lemmas and raw lemmas in the Czech morphology.
   implicit conversion rules.
 </DL>
 
-<A NAME="toc31"></A>
+<A NAME="toc33"></A>
 <H1>6. MorphoDiTa API Reference</H1>
 
 <P>
@@ -1180,10 +1439,10 @@ virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
 
 <P>
 Returns a new instance of a suitable tokenizer. The user should delete it after
-use. The call is equal to <A HREF="#tagger_get_morpho"><CODE>get_morpho()</CODE></A><CODE>-&gt;</CODE><A HREF="#morpho_new_tokenizer"><CODE>new_tokenizer()</CODE></A>.
+use. The call is equal to <CODE><A HREF="#tagger_get_morpho">get_morpho()</A>-&gt;<A HREF="#morpho_new_tokenizer">new_tokenizer()</A></CODE>.
 </P>
 
-<A NAME="toc56"></A>
+<A NAME="toc58"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1199,14 +1458,14 @@ Authors:
 <A HREF="http://ufal.mff.cuni.cz/morphodita">MorphoDiTa website</A>.
 </P>
 
-<A NAME="toc57"></A>
+<A NAME="toc59"></A>
 <H1>8. Acknowledgements</H1>
 
 <P>
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project LM2010013).
 </P>
 
-<A NAME="toc58"></A>
+<A NAME="toc60"></A>
 <H1>9. References</H1>
 
 <UL>
@@ -1214,7 +1473,7 @@ This work has been using language resources developed and/or stored and/or distr
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc59"></A>
+<A NAME="toc61"></A>
 <H2>9.1. Bibtex for referencing</H2>
 
 <PRE>

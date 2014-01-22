@@ -256,33 +256,36 @@ Tag Structure in PDT 2.0
 (http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html).
 
 
-Segmentation and Tokenization
------------------------------
-
-In beta version, the MorphoDiTa tagger accepts segmented and tokenized data in
-raw text as an input (the input format is described in the Tagger section). As
-our further work, we plan to include (optional) segmenter and tokenizer in
-MorphoDiTa.
-
-
-Tagger
-------
+Running the Tagger
+------------------
 
 Probably the most common usage of MorphoDita is running a tagger to tag your
-data.
+data using
 
-run_tagger tagger_model
+  run_tagger tagger_model
 
-Run the tagger with a model given as the first argument. The input is read from
-standard input and is assumed to be in UTF-8 encoding.
+The input is assumed to be in UTF-8 encoding and can be either already tokenized
+and segmented, or it can be a plain text which is tokenized and segmented
+automatically.
+
+Any number of files can be specified after the tagger_model. If an argument
+input_file:output_file is used, the given input_file is processed and the result
+is saved to output_file. If only input_file is used, the result is saved to
+standard output. If no argument is given, input is read from standard input and
+written to standard output.
+
+The full command syntax of run_tagger is
+
+  run_tagger [-v] tagger_model [input_file[:output_file]]...
 
 
 Untokenized Input
 -----------------
 
-The input is by default automatically tokenized and segmented. The output is in
-XML format without a root element, using <form lemma="..." tag="...">...</form>
-element to encode the assigned lemma and tag.
+By default (i.e., without specifying -v), the input is assumed to be a plain
+text and it is automatically tokenized and segmented by default. The output is
+in XML format without a root element, using <form lemma="..."
+tag="...">...</form> element to encode the assigned lemma and tag.
 
 Example input data tagger_input.txt:
 
@@ -290,7 +293,7 @@ Example input data tagger_input.txt:
 
 Example MorphoDiTa run_tagger command line:
 
-  cat tagger_input.txt | ./run_tagger czech.best_accuracy_tagger
+  ./run_tagger czech.best_accuracy_tagger tagger_input.txt
 
 Example output data (line breaks added):
 
@@ -309,9 +312,10 @@ Vertical Format
 ---------------
 
 If the input is already tokenized and segmented, vertical input format can be
-used. The vertical input format contains word on a line, empty line being end of
-sentence. The output has the same number of lines as input, line l is a tab
-separated lemma-tag pair assigned to the word on the input line l.
+used by specifying -v option as a first argument of run_tagger. The vertical
+input format contains word on a line, empty line being end of sentence. The
+output has the same number of lines as input, line l is a tab separated
+lemma-tag pair assigned to the word on the input line l.
 
 Example input data tagger_input_vertical.txt:
 
@@ -328,7 +332,7 @@ Example input data tagger_input_vertical.txt:
 
 Example MorphoDiTa run_tagger command line:
 
-  cat tagger_input_vertical.txt | ./run_tagger -v czech.best_accuracy_tagger
+  ./run_tagger -v czech.best_accuracy_tagger tagger_input_vertical.txt
 
 Example output:
 
@@ -344,25 +348,201 @@ Example output:
   .       Z:-------------
 
 
-Morphologic Dictionary
+Running the Morphology
 ----------------------
 
-The command line interface allowing analysis and generation can be executed
-using: ```run_dict morpho_dictionary
+There are multiple commands performing morphologic tasks. The run_morpho_analyze
+executable performs morphologic analysis and the run_morpho_generate executable
+performs morphologic generation. The output of these commands is suitable for
+automatic processing.
 
-The input is read from standard input, command on each line. If only one word is
-given, performs analysis on the given word. If the line contains two
-space-separated words, performs generation on the first word and filter the
-returned tags using a tag wildcard given as second word. If the second word is
-empty (i.e., the input is for example "dog "), generate all forms.
+The run_morpho_cli executable performs both morphologic analysis and generation,
+but is designed to be used interactively and produces more human-readable
+output.
 
 
-Tokenization
-------------
+Morphologic Analysis
+--------------------
 
-The tokenization performed by run_tagger can be performed separately by a
-run_tokenizer binary. A morphologic dictionary whose tokenization rules should
-be used must be specified.
+The morphologic analysis can be performed by running
+
+  run_morpho_analyze morphology_model use_guesser
+
+The input is assumed to be in UTF-8 encoding and can be either already tokenized
+and segmented, or it can be a plain text which is tokenized and segmented
+automatically. The input files are specified same as with the run_tagger
+command.
+
+Some morphologic models contain both a manually created dictionary and a
+guesser. Therefore, a numeric use_guesser argument is required. If non-zero, the
+guesser is used, otherwise not.
+
+The full command syntax of run_morpho_analyze is
+
+  run_morpho_analyze [-v] morphology_model use_guesser [input_file[:output_file]]...
+
+
+Untokenized Input
+-----------------
+
+By default (i.e., without specifying -v), the input is assumed to be a plain
+text and it is automatically tokenized and segmented by default. The output is
+in XML format without a root element, using <form><analysis lemma="..."
+tag="..."/><analysis...>...</form> element to encode the assigned lemma and tag.
+
+Example input data:
+
+  Děti pojedou k babičce. Už se těší.
+
+Example run_morpho_analyze command line:
+
+  ./run_morpho_analyze czech.dict 0
+
+Example output data (line breaks added):
+
+  <form><analysis lemma="dítě" tag="NNFP1-----A----"/><analysis lemma="dítě" tag="NNFP4-----A----"/><analysis lemma="dítě" tag="NNFP5-----A----"/>Děti</form>
+  <form><analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/>pojedou</form>
+  <form><analysis lemma="k-1" tag="RR--3----------"/><analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/><analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/><analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/><analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/><analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/><analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/>k</form>
+  <form><analysis lemma="babička" tag="NNFS3-----A----"/><analysis lemma="babička" tag="NNFS6-----A----"/>babičce</form>
+  <form><analysis lemma="." tag="Z:-------------"/>.</form>
+  <form><analysis lemma="už-1" tag="Db-------------"/><analysis lemma="už-2" tag="TT-------------"/>Už</form>
+  <form><analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/><analysis lemma="s-1" tag="RV--2----------"/><analysis lemma="s-1" tag="RV--7----------"/>se</form>
+  <form><analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/><analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/>těší</form>
+  <form><analysis lemma="." tag="Z:-------------"/>.</form>
+
+
+Vertical Format
+---------------
+
+If the input is already tokenized and segmented, vertical input format can be
+used by specifying -v option as a first argument of run_morpho_analyze. The
+vertical input format contains word on a line, empty line being end of sentence.
+The output has the same number of lines as input, line l contains tab separated
+lemma-tag pairs assigned to the word on the input line l.
+
+Example input data:
+
+  Děti
+  pojedou
+  k
+  babičce
+  .
+  
+  Už
+  se
+  těší
+  .
+
+Example run_morpho_analyze command line:
+
+  ./run_morpho_analyze -v czech.dict 0
+
+Example output:
+
+  dítě	NNFP1-----A----	dítě	NNFP4-----A----	dítě	NNFP5-----A----
+  jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
+  k-1	RR--3----------	k-3_^(označení_pomocí_písmene)	NNNXX-----A----	k-4`kůň_:B_^(jednotka_výkonu)	NNMXX-----A---8	k-8_:B_^(ost._zkratka)	XX------------8	komanditní_:B_^(jen_komanditní_společnost)	AAXXX----1A---8	koncernový_:B	AAXXX----1A---8	kuo-1_:B_,t_^(stará_jednotka_výkonu)	NNNXX-----A---8
+  babička	NNFS3-----A----	babička	NNFS6-----A----
+  .	Z:-------------
+  
+  už-1	Db-------------	už-2	TT-------------
+  se_^(zvr._zájmeno/částice)	P7-X4----------	s-1	RV--2----------	s-1	RV--7----------
+  těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
+  .	Z:-------------
+
+
+Morphologic Generation
+----------------------
+
+The morphologic generation can be performed by running
+
+  run_morpho_generate morphology_model use_guesser
+
+The input is assumed to be in UTF-8 encoding. The input files are specified same
+as with the run_tagger command.
+
+Input for morphologic generation has to be in vertical format, each line
+containing a lemma, which can be optionally followed by a tab and a tag
+wildcard. The output has the same number of lines as input, line l contains tab
+separated form-lemma-tag triplets which can be generated from the lemma on he
+input line l. If a tag wildcard was provided, only triplets with matching tags
+are returned.
+
+Some morphologic models contain both a manually created dictionary and a
+guesser. Therefore, a numeric use_guesser argument is required. If non-zero, the
+guesser is used, otherwise not.
+
+The full command syntax of run_morpho_generate is
+
+  run_morpho_generate [-v] morphology_model use_guesser [input_file[:output_file]]...
+
+Example input data:
+
+  dítě
+  jet	?[fN]??[-1]
+  k-1
+  babička	NNFS3-----A----
+
+Example run_morpho_generate command line:
+
+  ./run_morpho_generate czech.dict 0
+
+Example output:
+
+  dítě	dítě	NNNS1-----A----	dítě	dítě	NNNS4-----A----	dítě	dítě	NNNS5-----A----	dítěte	dítě	NNNS2-----A----	dítěti	dítě	NNNS3-----A----	dítěti	dítě	NNNS6-----A----	dítětem	dítě	NNNS7-----A----	děti	dítě	NNFP1-----A----	děti	dítě	NNFP4-----A----	děti	dítě	NNFP5-----A----	dětma	dítě	NNFP7-----A---6	dětmi	dítě	NNFP7-----A----	dětem	dítě	NNFP3-----A----	dětí	dítě	NNFP2-----A----	dětech	dítě	NNFP6-----A----	dětima	dítě_,h	NNFP7-----A---6
+  ject	jet	Vf--------A---6	jet	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------A----	jeti	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------A---2	nejet	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------N----	nejeti	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------N---2	jet	jet-2_,h_^(letadlo_s_tryskovým_pohonem)NNIS1-----A----	jety	jet-2_,h_^(letadlo_s_tryskovým_pohonem)	NNIP1-----A----
+  k	k-1	RR--3----------	ke	k-1	RV--3----------	ku	k-1	RV--3---------1
+  babičce babička NNFS3-----A----
+
+
+Tag Wildcards
+-------------
+
+When only forms with a specific tag should be generated for a given lemma, tag
+wildcard can be specified. The tag wildcard is a simple wildcard allowing to
+filter the results of morphologic generation.
+
+Most characters of a tag wildcard match corresponding characters of a tag, with
+the following exceptions:
+
+ - ? matches any character of a tag.
+ - [chars] matches any of the characters listed. The dash - has no special
+   meaning and if ] is the first character in chars, it is considered as one of
+   the characters and does not end the group.
+ - [^chars] matches any of the characters not listed.
+
+
+Interactive Morphologic Analysis and Generation
+-----------------------------------------------
+
+Morphologic analysis and generation which is interactive and more human readable
+can be run using:
+
+  run_morpho_cli morphology_model
+
+The input is read from standard input, command on each line. If there is no
+space on a line, analysis is performed on the given word. Otherwise generation
+is performed on the first word, using the rest of the line as a tag wildcard. If
+the second word is empty (i.e., the input is for example ``on ``), all forms are
+generated.
+
+
+Running the Tokenizer
+---------------------
+
+Using the run_tokenizer executable it is possible to perform only tokenization
+and segmentation.
+
+The tokenizer can be specified either using a morphologic dictionary, or using a
+tokenizer identifier. Currently only one tokenizer -czech is available.
+
+The input is a UTF-8 encoded plain text and the output is in the vertical format
+- each word is on a separate line and every sentence is ended by a blank line.
+The input files are specified same as with the run_tagger command.
+
+The full command syntax of run_tokenizer is
+
+  run_tokenizer tagger_model|-czech [input_file[:output_file]]...
 
 Example input:
 
@@ -384,6 +564,7 @@ Example output:
   se
   těší
   .
+  
 
 
 MorphoDiTa API Tutorial
@@ -519,9 +700,9 @@ previous example):
 
 The input is a form to analyze, then a Guesser mode (whether to use some kind of
 guesser or strictly dictionary only, see question Guesser Mode in Questions and
-Answers (#faq)) and output std::vector<tagged_lemma>.  The caller must provide
-an output vector std::vector<tagged_lemma> and the method morpho::analyze
-assigns the output to this vector.
+Answers) and output std::vector<tagged_lemma>.  The caller must provide an
+output vector std::vector<tagged_lemma> and the method morpho::analyze assigns
+the output to this vector.
 
 
 Generation
@@ -547,18 +728,18 @@ Or even more, for example, in the Czech positional morphology tagging system
 (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)), one may even wish
 to generate something like "all forms in fourth case", then tag_wildcard should
 be set to ????4. Please see Section "Czech Morphology" in User's Manual for more
-details about the Czech positional tagging system.
+details about the Czech positional tagging system. The previous example applies
+to morphologic annotation applied to PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/),
+however, the tag wildcards can be used in any morphologic tagging system.
 
-The previous example applies to morphologic annotation applied to PDT 2.5
-(http://ufal.mff.cuni.cz/pdt2.5/), however, the tag wildcards can be used in any
-morphologic tagging system.
+Most characters of a tag wildcard match corresponding characters of a tag, with
+the following exceptions:
 
-The rules for the tag_wildcard parameter are:
-
-Tag_wildcard can be either NULL or a wildcard applied to the results. A ? in the
-wildcard matches any character, [bytes] matches any of the bytes and [^bytes]
-matches any byte different from the specified ones. A - has no special meaning
-inside the bytes and if ] is first in bytes, it does not end the bytes group.
+ - ? matches any character of a tag.
+ - [chars] matches any of the characters listed. The dash - has no special
+   meaning and if ] is the first character in chars, it is considered as one of
+   the characters and does not end the group.
+ - [^chars] matches any of the characters not listed.
 
 
 Unknown Lemmas
@@ -619,10 +800,9 @@ Struct string_piece
     string_piece(const std::string& str);
   }
 
-The string_piece (#string_piece) is used for efficient string passing. The
-string referenced in string_piece (#string_piece) is not owned by it, so users
-have to make sure the referenced string exists as long as the string_piece
-(#string_piece).
+The string_piece is used for efficient string passing. The string referenced in
+string_piece is not owned by it, so users have to make sure the referenced
+string exists as long as the string_piece.
 
 
 Struct tagged_form
@@ -633,8 +813,7 @@ Struct tagged_form
     std::string tag;
   };
 
-The tagged_form (#tagged_form) is a pair of strings used when obtaining a form
-and tag pair.
+The tagged_form is a pair of strings used when obtaining a form and tag pair.
 
 
 Struct tagged_lemma
@@ -645,8 +824,7 @@ Struct tagged_lemma
     std::string tag;
   };
 
-The tagged_lemma (#tagged_lemma) is a pair of strings used when obtaining a
-lemma and tag pair.
+The tagged_lemma is a pair of strings used when obtaining a lemma and tag pair.
 
 
 Struct tagged_lemma_forms
@@ -657,8 +835,7 @@ Struct tagged_lemma_forms
     std::vector<tagged_form> forms;
   };
 
-The tagged_lemma_forms (#tagged_lemma_forms) represents a lemma and a list of
-tagged forms.
+The tagged_lemma_forms represents a lemma and a list of tagged forms.
 
 
 Struct token_range
@@ -669,9 +846,9 @@ Struct token_range
     size_t length;
   };
 
-The token_range (#token_range) represent a range of a token as returned by a
-tokenizer (#tokenizer). The start and length fields specify the token position
-in Unicode characters, not in bytes of UTF-8 encoding.
+The token_range represent a range of a token as returned by a tokenizer. The
+start and length fields specify the token position in Unicode characters, not in
+bytes of UTF-8 encoding.
 
 
 Class tokenizer
@@ -687,11 +864,11 @@ Class tokenizer
     virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
   };
 
-The tokenizer (#tokenizer) class performs segmentation and tokenization of given
-text. The class is not threadsafe.
+The tokenizer class performs segmentation and tokenization of given text. The
+class is not threadsafe.
 
-The tokenizer (#tokenizer) instances can be obtained either directly using
-static methods or through instances of morpho (#morpho) and tagger (#tagger).
+The tokenizer instances can be obtained either directly using static methods or
+through instances of morpho and tagger.
 
 
 tokenizer::new_czech_tokenizer
@@ -749,10 +926,9 @@ Class morpho
     virtual tokenizer* new_tokenizer() const = 0;
   };
 
-A morpho (#morpho) instance represents a morphologic dictionary. Such a
-dictionary allow morphologic analysis, morphologic generation provide
-information about lemma structure and provides a suitable tokenizer. All methods
-are thread-safe.
+A morpho instance represents a morphologic dictionary. Such a dictionary allow
+morphologic analysis, morphologic generation provide information about lemma
+structure and provides a suitable tokenizer. All methods are thread-safe.
 
 
 morpho::load(const char*)
@@ -761,8 +937,8 @@ morpho::load(const char*)
   static morpho* load(const char* fname);
 
 Factory method constructor. Accepts C string with a file name of the model.
-Returns a pointer to an instance of morpho (#morpho) which the user should
-delete after use.
+Returns a pointer to an instance of morpho which the user should delete after
+use.
 
 
 morpho::load(FILE*)
@@ -771,8 +947,8 @@ morpho::load(FILE*)
   static morpho* load(FILE* f);
 
 Factory method constructor. Accepts C file pointer of an opened file with the
-model. Returns a pointer to an instance of morpho (#morpho) which the user
-should delete after use.
+model. Returns a pointer to an instance of morpho which the user should delete
+after use.
 
 
 morpho::guesser_mode
@@ -870,7 +1046,7 @@ Class tagger
     tokenizer* new_tokenizer() const = 0;
   };
 
-A tagger (#tagger) instance represents a tagger, which perform disambiguation of
+A tagger instance represents a tagger, which perform disambiguation of
 morphologic analyses. All methods are thread-safe.
 
 
@@ -880,8 +1056,8 @@ tagger::load(const char*)
   static tagger* load(const char* fname);
 
 Factory method constructor. Accepts C string with a file name of the model.
-Returns a pointer to an instance of tagger (#tagger) which the user should
-delete after use.
+Returns a pointer to an instance of tagger which the user should delete after
+use.
 
 
 tagger::load(FILE*)
@@ -890,8 +1066,8 @@ tagger::load(FILE*)
   static tagger* load(FILE* f);
 
 Factory method constructor. Accepts C file pointer of an opened file with the
-model. Returns a pointer to an instance of tagger (#tagger) which the user
-should delete after use.
+model. Returns a pointer to an instance of tagger which the user should delete
+after use.
 
 
 tagger::get_morpho()
@@ -899,9 +1075,9 @@ tagger::get_morpho()
 
   virtual const morpho* get_morpho() const = 0;
 
-Returns a pointer to an instance of morpho (#morpho) associated with the tagger.
-Do not delete the pointer, it is owned by the tagger instance and deleted in the
-tagger destructor.
+Returns a pointer to an instance of morpho associated with the tagger. Do not
+delete the pointer, it is owned by the tagger instance and deleted in the tagger
+destructor.
 
 
 tagger::tag()
@@ -910,8 +1086,7 @@ tagger::tag()
   virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
 
 Perform morphologic analysis and subsequent disambiguation. Accepts a
-std::vector of string_piece (#string_piece) and fills the output vector of
-tagged_lemma (#tagged_lemma).
+std::vector of string_piece and fills the output vector of tagged_lemma.
 
 
 tagger::new_tokenizer
@@ -920,8 +1095,7 @@ tagger::new_tokenizer
   virtual tokenizer* new_tokenizer() const = 0;
 
 Returns a new instance of a suitable tokenizer. The user should delete it after
-use. The call is equal to get_morpho() (#tagger_get_morpho)->new_tokenizer()
-(#morpho_new_tokenizer).
+use. The call is equal to get_morpho()->new_tokenizer().
 
 
 Contact

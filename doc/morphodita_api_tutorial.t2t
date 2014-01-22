@@ -169,18 +169,16 @@ Or even more, for example, in the Czech positional morphology tagging system
 one may even wish to generate something like "all forms in fourth case",
 then ``tag_wildcard`` should be set to ``????4``.
 Please see Section "Czech Morphology" in User's Manual for more details about the Czech positional tagging system.
-
 The previous example applies to morphologic annotation applied to
 [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/], however, the tag wildcards can be used in any
 morphologic tagging system.
 
-The rules for the ``tag_wildcard`` parameter are:
+Most characters of a tag wildcard match corresponding characters of a tag, with the following exceptions:
+ - ``?`` matches any character of a tag.
+ - ``[chars]`` matches any of the characters listed. The dash ``-`` has no special meaning and if ``]``
+   is the first character in ``chars``, it is considered as one of the characters and does not end the group.
+ - ``[^chars]`` matches any of the characters //not// listed.
 
-Tag_wildcard can be either ``NULL`` or a wildcard applied to the results.
-A ``?`` in the wildcard matches any character, ``[bytes]`` matches any of the
-bytes and ``[^bytes]`` matches any byte different from the specified ones.
-A ``-`` has no special meaning inside the bytes and if ``]`` is first in bytes, it
-does not end the bytes group.
 
 ==== Unknown Lemmas ====
 
