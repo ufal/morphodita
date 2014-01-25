@@ -59,8 +59,8 @@ void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser) {
       dictionary.generate(lemma, wildcard, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, forms);
 
       bool first = true;
-      for (auto& lemma : forms)
-        for (auto& form : lemma.forms) {
+      for (auto&& lemma : forms)
+        for (auto&& form : lemma.forms) {
           if (!first) fputc('\t', out);
           fprintf(out, "%s\t%s\t%s", form.form.c_str(), lemma.lemma.c_str(), form.tag.c_str());
           first = false;

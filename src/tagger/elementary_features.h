@@ -71,7 +71,7 @@ inline bool elementary_features<Map>::load(FILE* f) {
 
   try {
     maps.resize(data.next_1B());
-    for (auto& map : maps)
+    for (auto&& map : maps)
       map.load(data);
   } catch (binary_decoder_error&) {
     return false;
@@ -85,7 +85,7 @@ inline bool elementary_features<Map>::save(FILE* f) {
   binary_encoder enc;
 
   enc.add_1B(maps.size());
-  for (auto& map : maps)
+  for (auto&& map : maps)
     map.save(enc);
 
   return compressor::save(f, enc);

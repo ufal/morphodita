@@ -72,7 +72,7 @@ void tag_vertical(FILE* in, FILE* out, const tagger& tagger) {
     if (!forms.empty()) {
       tagger.tag(forms, tags);
 
-      for (auto& tag : tags)
+      for (auto&& tag : tags)
         fprintf(out, "%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
       fputc('\n', out);
     }

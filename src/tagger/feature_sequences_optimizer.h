@@ -53,8 +53,8 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
   // In order to be able to do so, precompute map_index for elements of features.sequences.
   vector<vector<int>> map_indices(features.sequences.size());
   for (unsigned i = 0; i < map_indices.size(); i++) {
-    for (auto& element : features.sequences[i].elements)
-      for (auto& description : decltype(features.elementary)::descriptions)
+    for (auto&& element : features.sequences[i].elements)
+      for (auto&& description : decltype(features.elementary)::descriptions)
         if (element.type == description.type && element.elementary_index == description.index)
           map_indices[i].emplace_back(description.map_index);
 
@@ -65,7 +65,7 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
   vector<vector<count_info>> counts(elementary.maps.size());
   vector<elementary_feature_value> elementary_ids;
   for (unsigned i = 0; i < features.sequences.size(); i++)
-    for (auto& element : features.scores[i].map)
+    for (auto&& element : features.scores[i].map)
       if (element.second.gamma) {
         elementary_ids.clear();
         for (const char* key = element.first.c_str(); key != element.first.c_str() + element.first.size(); assert(key <= element.first.c_str() + element.first.size()))
@@ -80,7 +80,7 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
       }
 
   // Sort counts by sizes decreasing
-  for (auto& count : counts) {
+  for (auto&& count : counts) {
     if (elementary_feature_empty >= count.size()) count.resize(elementary_feature_empty + 1);
     count[elementary_feature_unknown].count = 0;
     count[elementary_feature_empty].count = 1;
@@ -100,7 +100,7 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
   optimized_elementary.maps.clear();
   for (unsigned i = 0; i < elementary.maps.size(); i++) {
     unordered_map<string, elementary_feature_value> mapped_ids;
-    for (auto& element : elementary.maps[i].map)
+    for (auto&& element : elementary.maps[i].map)
       if (element.second < elementary_ids_map[i].size() && elementary_ids_map[i][element.second] != elementary_feature_unknown)
         mapped_ids.emplace(element.first, elementary_ids_map[i][element.second]);
 
@@ -115,7 +115,7 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
   vector<char> key_buffer;
   for (unsigned i = 0; i < features.sequences.size(); i++) {
     decltype(features.scores[i].map) updated_map;
-    for (auto& element : features.scores[i].map)
+    for (auto&& element : features.scores[i].map)
       if (element.second.gamma) {
         elementary_ids.clear();
         for (const char* key = element.first.c_str(); key < element.first.c_str() + element.first.size(); )
@@ -144,16 +144,16 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
 
   // Original code which only dropped feature sequences with gamma == 0
   // optimized_elementary.maps.clear();
-  // for (auto& map : elementary.maps)
+  // for (auto&& map : elementary.maps)
   //   optimized_elementary.maps.emplace_back(persistent_unordered_map(map.map, 1, [](binary_encoder& enc, elementary_feature_value value) {
   //     enc.add_4B(value);
   //   }));
   //
   // optimized_features.sequences = features.sequences;
   // optimized_features.scores.clear();
-  // for (auto& score : features.scores) {
+  // for (auto&& score : features.scores) {
   //   decltype(score.map) pruned_map;
-  //   for (auto& element : score.map)
+  //   for (auto&& element : score.map)
   //     if (element.second.gamma)
   //       pruned_map.insert(element);
   //

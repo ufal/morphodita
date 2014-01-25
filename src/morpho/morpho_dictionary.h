@@ -126,7 +126,7 @@ void morpho_dictionary<LemmaAddinfo>::load(binary_decoder& data) {
 
   // Load tags
   tags.resize(data.next_2B());
-  for (auto& tag : tags) {
+  for (auto&& tag : tags) {
     tag.resize(data.next_1B());
     for (unsigned i = 0; i < tag.size(); i++)
       tag[i] = data.next_1B();
@@ -213,9 +213,9 @@ bool morpho_dictionary<LemmaAddinfo>::generate(string_piece lemma, const tag_fil
 
         unsigned root_len = root_encoded & 0xFF;
         const unsigned char* root_data = roots.data_start(root_len) + (root_encoded >> 8);
-        for (auto& suffix : classes[clas]) {
+        for (auto&& suffix : classes[clas]) {
           string root_with_suffix;
-          for (auto& tag : suffix.second)
+          for (auto&& tag : suffix.second)
             if (filter.matches(tags[tag].c_str())) {
               if (!forms) {
                 lemmas_forms.emplace_back(string(lemma.str, raw_lemma_len) + LemmaAddinfo::format(lemma_info, lemma_info_len));

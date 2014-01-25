@@ -58,7 +58,7 @@ void analyze_vertical(FILE* in, FILE* out, morpho& dictionary, bool use_guesser)
       dictionary.analyze(line, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
 
       bool first = true;
-      for (auto& lemma : lemmas) {
+      for (auto&& lemma : lemmas) {
         if (!first) fputc('\t', out);
         fprintf(out, "%s\t%s", lemma.lemma.c_str(), lemma.tag.c_str());
         first = false;
@@ -85,7 +85,7 @@ void analyze_untokenized(FILE* in, FILE* out, morpho& dictionary, bool use_guess
 
         if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
         fputs("<form>", out);
-        for (auto& lemma : lemmas) {
+        for (auto&& lemma : lemmas) {
           fputs("<analysis lemma=\"", out);
           print_xml_content(out, lemma.lemma.c_str(), lemma.lemma.size());
           fputs("\" tag=\"", out);

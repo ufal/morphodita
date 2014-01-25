@@ -36,7 +36,7 @@ void persistent_unordered_map::load(binary_decoder& data) {
 void persistent_unordered_map::save(binary_encoder& enc) {
   enc.add_1B(hashes.size());
 
-  for (auto& hash : hashes)
+  for (auto&& hash : hashes)
     hash.save(enc);
 }
 

@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
       // End of sentence
       if (!sentence.empty()) {
         // Nonempty sentence, perform tagging
-        for (auto& w : sentence)
+        for (auto&& w : sentence)
           forms.emplace_back(w.form.c_str(), w.form.size());
 
         tagger->tag(forms, tags);

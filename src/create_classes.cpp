@@ -38,7 +38,7 @@ class trie {
   void add(const char* str) {
     if (!*str) return;
 
-    for (auto& child : children)
+    for (auto&& child : children)
       if (child.first == *str) {
         child.second->add(str + 1);
         depth = max(depth, 1 + child.second->depth);
@@ -60,7 +60,7 @@ class trie {
       best = current;
       best_length = length;
     }
-    for (auto& child : children) {
+    for (auto&& child : children) {
       current.push_back(child.first);
       child.second->find_candidate_prefix(current, best, best_length, children.size() == 1 ? length + 1 : 1);
       current.resize(current.size() - 1);
@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
     printf("%s", lemma.c_str());
     while (!forms.empty()) {
       trie t;
-      for (auto& form : forms)
+      for (auto&& form : forms)
         t.add(form.first.c_str());
 
       string prefix = t.find_candidate_prefix();

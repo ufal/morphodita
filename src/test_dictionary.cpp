@@ -49,10 +49,10 @@ int main(int argc, char* argv[]) {
     dictionary->generate(lemma, nullptr, morpho::NO_GUESSER, lemmas_forms);
 
     bool same_results = false;
-    for (auto& lemma_forms : lemmas_forms)
+    for (auto&& lemma_forms : lemmas_forms)
       if (lemma_forms.lemma == lemma && lemma_forms.forms.size() == raw_forms.size()) {
         same_results = true;
-        for (auto& form : lemma_forms.forms)
+        for (auto&& form : lemma_forms.forms)
           if (!binary_search(raw_forms.begin(), raw_forms.end(), pair<string, string>(form.form, form.tag))) {
             same_results = false;
             break;
@@ -61,11 +61,11 @@ int main(int argc, char* argv[]) {
       }
 
     if (same_results)
-      for (auto& tagged_form : raw_forms) {
+      for (auto&& tagged_form : raw_forms) {
         dictionary->analyze(tagged_form.first, morpho::NO_GUESSER, lemmas);
 
         same_results = false;
-        for (auto& tagged_lemma : lemmas)
+        for (auto&& tagged_lemma : lemmas)
           if (tagged_lemma.lemma == lemma && tagged_lemma.tag == tagged_form.second) {
             same_results = true;
             break;

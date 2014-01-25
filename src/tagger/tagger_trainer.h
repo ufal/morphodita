@@ -105,7 +105,7 @@ double tagger_trainer<TaggerTrainer>::load_data(FILE* f, const morpho& d, bool u
     s.forms_with_tags.emplace_back(s.forms.back());
     s.gold.emplace_back(tokens[1], tokens[2]);
     s.gold_index.emplace_back(-1);
-    for (auto& lemma : lemmas) {
+    for (auto&& lemma : lemmas) {
       if (s.gold_index.back() == -1 && lemma.lemma == s.gold.back().lemma && lemma.tag == s.gold.back().tag) {
         s.gold_index.back() = s.forms_with_tags.back().tags.size();
         forms_matched++;

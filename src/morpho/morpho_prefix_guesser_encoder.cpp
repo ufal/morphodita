@@ -55,7 +55,7 @@ void morpho_prefix_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
 
   // Encode prefix guesser
   enc.add_1B(filters.size());
-  for (auto& filter : filters) {
+  for (auto&& filter : filters) {
     enc.add_1B(filter.size());
     enc.add_str(filter);
   }

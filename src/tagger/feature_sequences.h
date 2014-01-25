@@ -94,7 +94,7 @@ template <class ElementaryFeatures> using persistent_feature_sequences = feature
 template <class ElementaryFeatures, class Map>
 void feature_sequences<ElementaryFeatures, Map>::parse(int order, FILE* f) {
   unordered_map<string, elementary_feature_description> elementary_map;
-  for (auto& description : ElementaryFeatures::descriptions)
+  for (auto&& description : ElementaryFeatures::descriptions)
     if (!elementary_map.emplace(description.name, description).second)
       runtime_errorf("Repeated elementary feature with name %s!", description.name.c_str());
 
@@ -106,7 +106,7 @@ void feature_sequences<ElementaryFeatures, Map>::parse(int order, FILE* f) {
 
     bool contains_only_current = false;
     sequences.emplace_back();
-    for (auto& token : tokens) {
+    for (auto&& token : tokens) {
       vector<string> parts;
       split(token, ' ', parts);
       if (parts.size() != 2) runtime_errorf("Cannot parse feature sequence element '%s'!", token.c_str());
@@ -140,10 +140,10 @@ inline bool feature_sequences<ElementaryFeatures, Map>::load(FILE* f) {
 
   try {
     sequences.resize(data.next_1B());
-    for (auto& sequence : sequences) {
+    for (auto&& sequence : sequences) {
       sequence.dependant_range = data.next_4B();
       sequence.elements.resize(data.next_1B());
-      for (auto& element : sequence.elements) {
+      for (auto&& element : sequence.elements) {
         element.type = elementary_feature_type(data.next_4B());
         element.elementary_index = data.next_4B();
         element.sequence_index = data.next_4B();
@@ -151,7 +151,7 @@ inline bool feature_sequences<ElementaryFeatures, Map>::load(FILE* f) {
     }
 
     scores.resize(data.next_1B());
-    for (auto& score : scores)
+    for (auto&& score : scores)
       score.load(data);
   } catch (binary_decoder_error&) {
     return false;
@@ -166,10 +166,10 @@ inline bool feature_sequences<ElementaryFeatures, Map>::save(FILE* f) {
 
   binary_encoder enc;
   enc.add_1B(sequences.size());
-  for (auto& sequence : sequences) {
+  for (auto&& sequence : sequences) {
     enc.add_4B(sequence.dependant_range);
     enc.add_1B(sequence.elements.size());
-    for (auto& element : sequence.elements) {
+    for (auto&& element : sequence.elements) {
       enc.add_4B(element.type);
       enc.add_4B(element.elementary_index);
       enc.add_4B(element.sequence_index);
@@ -177,7 +177,7 @@ inline bool feature_sequences<ElementaryFeatures, Map>::save(FILE* f) {
   }
 
   enc.add_1B(scores.size());
-  for (auto& score : scores)
+  for (auto&& score : scores)
     score.save(enc);
 
   return compressor::save(f, enc);
@@ -204,10 +204,10 @@ struct feature_sequences<ElementaryFeatures, Map>::cache {
   cache(const feature_sequences<ElementaryFeatures, Map>& self) : score(0) {
     caches.reserve(self.sequences.size());
     int max_sequence_elements = 0, max_window_size = 1;
-    for (auto& sequence : self.sequences) {
+    for (auto&& sequence : self.sequences) {
       caches.emplace_back(sequence.elements.size());
       if (int(sequence.elements.size()) > max_sequence_elements) max_sequence_elements = sequence.elements.size();
-      for (auto& element : sequence.elements)
+      for (auto&& element : sequence.elements)
         if (element.type == PER_TAG && 1 - element.sequence_index > max_window_size)
           max_window_size = 1 - element.sequence_index;
     }
@@ -234,7 +234,7 @@ void feature_sequences<ElementaryFeatures, Map>::initialize_sentence(const vecto
 
   // Clear score cache, because scores may have been modified
   c.score = 0;
-  for (auto& cache : c.caches)
+  for (auto&& cache : c.caches)
     cache.key_size = cache.score = 0;
 }
 

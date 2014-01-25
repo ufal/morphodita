@@ -48,7 +48,7 @@ bool utf8_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ran
 
   const char* text_start = text;
   bool result = next_sentence(*forms);
-  for (auto& form : *forms) {
+  for (auto&& form : *forms) {
     for (; text_start < form.str; chars++) utf8_advance(text_start, form.str);
     size_t chars_start = chars;
     for (; text_start < form.str + form.len; chars++) utf8_advance(text_start, form.str + form.len);

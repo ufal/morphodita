@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
       auto result = dictionary->analyze(tokens[0], morpho::GUESSER, lemmas);
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
-      for (auto& lemma : lemmas)
+      for (auto&& lemma : lemmas)
         printf("%sLemma: %s %s\n", guesser_name.c_str(), lemma.lemma.c_str(), lemma.tag.c_str());
 
     } else if /* generate */ (tokens.size() == 2) {
@@ -48,9 +48,9 @@ int main(int argc, char* argv[]) {
       auto result = dictionary->generate(tokens[0], tokens[1].c_str(), morpho::GUESSER, forms);
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
-      for (auto& lemma : forms) {
+      for (auto&& lemma : forms) {
         printf("%sLemma: %s\n", guesser_name.c_str(), lemma.lemma.c_str());
-        for (auto& form : lemma.forms)
+        for (auto&& form : lemma.forms)
           printf("  %s %s\n", form.form.c_str(), form.tag.c_str());
       }
     }

@@ -56,7 +56,7 @@ void morpho_statistical_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
       vector<string> rule_tags;
       split(tokens[i+1], ' ', rule_tags);
       vector<int> decoded_tags;
-      for (auto& rule_tag : rule_tags) {
+      for (auto&& rule_tag : rule_tags) {
         int tag = tags_map.emplace(rule_tag, tags.size()).first->second;
         if (unsigned(tag) >= tags.size()) tags.emplace_back(rule_tag);
         decoded_tags.emplace_back(tag);
@@ -68,7 +68,7 @@ void morpho_statistical_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
 
   // Encode statistical guesser
   enc.add_2B(tags.size());
-  for (auto& tag : tags) {
+  for (auto&& tag : tags) {
     enc.add_1B(tag.size());
     enc.add_str(tag);
   }
@@ -77,14 +77,14 @@ void morpho_statistical_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
   persistent_unordered_map(statistical_guesser, 5, true, false, [](binary_encoder& enc, vector<pair<vector<string>, vector<int>>> rules) {
     binary_encoder e;
     e.add_1B(rules.size());
-    for (auto& rule : rules) {
+    for (auto&& rule : rules) {
       if (rule.first.size() != 4) runtime_errorf("Replacement rule not of size 4 in statistical guesser!");
-      for (auto& affix : rule.first) {
+      for (auto&& affix : rule.first) {
         e.add_1B(affix.size());
         e.add_str(affix);
       }
       e.add_1B(rule.second.size());
-      for (auto& tag : rule.second)
+      for (auto&& tag : rule.second)
         e.add_2B(tag);
     }
     enc.add_2B(e.data.size());

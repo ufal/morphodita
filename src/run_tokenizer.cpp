@@ -54,7 +54,7 @@ void tokenize(FILE* in, FILE* out, tokenizer& tokenizer) {
     // Tokenize
     tokenizer.set_text(para.c_str());
     while (tokenizer.next_sentence(&forms, nullptr)) {
-      for (auto& form : forms) {
+      for (auto&& form : forms) {
         fwrite(form.str, 1, form.len, out);
         fputc('\n', out);
       }

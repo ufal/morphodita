@@ -49,7 +49,7 @@ class histogram {
 
   void encode(binary_encoder& enc) {
     enc.add_1B(lengths.size());
-    for (auto& set : lengths)
+    for (auto&& set : lengths)
       enc.add_4B(set.size());
   }
 
@@ -125,7 +125,7 @@ void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, binary_encoder& en
 
   string prev = "";
   enc.add_4B(lemmas.size());
-  for (auto& lemma : lemmas) {
+  for (auto&& lemma : lemmas) {
     int cpl = 0;
     while (prev[cpl] && prev[cpl] == lemma.lemma[cpl]) cpl++;
 
@@ -137,7 +137,7 @@ void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, binary_encoder& en
     enc.add_1B(lemma.forms.size());
 
     string prev_form = lemma.lemma;
-    for (auto& lemma_form : lemma.forms) {
+    for (auto&& lemma_form : lemma.forms) {
       unsigned best_prev_from = 0, best_form_from = 0, best_len = 0;
       for (unsigned prev_from = 0; prev_from < prev_form.size(); prev_from++)
         for (unsigned form_from = 0; form_from < lemma_form.form.size(); form_from++) {
@@ -169,7 +169,7 @@ void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, binary_encoder& en
 
   // Encode tags
   enc.add_2B(tags.size());
-  for (auto& tag : tags) {
+  for (auto&& tag : tags) {
     enc.add_1B(tag.size());
     enc.add_str(tag);
   }
@@ -177,16 +177,16 @@ void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, binary_encoder& en
   // Encode classes
   persistent_unordered_map(suffixes, 5, false, true, [](binary_encoder& enc, const map<int, vector<int>>& suffix) {
     enc.add_2B(suffix.size());
-    for (auto& clas : suffix)
+    for (auto&& clas : suffix)
       enc.add_2B(clas.first);
     int tags = 0;
-    for (auto& clas : suffix) {
+    for (auto&& clas : suffix) {
       enc.add_2B(tags);
       tags += clas.second.size();
     }
     enc.add_2B(tags);
-    for (auto& clas : suffix)
-      for (auto& tag : clas.second)
+    for (auto&& clas : suffix)
+      for (auto&& tag : clas.second)
         enc.add_2B(tag);
   }).save(enc);
 }

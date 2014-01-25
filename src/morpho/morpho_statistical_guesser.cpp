@@ -26,7 +26,7 @@ namespace morphodita {
 void morpho_statistical_guesser::load(binary_decoder& data) {
   // Load tags and default tag
   tags.resize(data.next_2B());
-  for (auto& tag : tags) {
+  for (auto&& tag : tags) {
     tag.resize(data.next_1B());
     for (unsigned i = 0; i < tag.size(); i++)
       tag[i] = data.next_1B();
@@ -41,7 +41,7 @@ void morpho_statistical_guesser::load(binary_decoder& data) {
 static bool contains(morpho_statistical_guesser::used_rules* used, const string& rule) {
   if (!used) return false;
 
-  for (auto& used_rule : *used)
+  for (auto&& used_rule : *used)
     if (used_rule == rule)
       return true;
 

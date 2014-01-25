@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
   eprintf("Analyzing: ");
   clock_t now = clock();
   vector<tagged_lemma> lemmas;
-  for (auto& form : forms) {
+  for (auto&& form : forms) {
     dictionary->analyze(form, morpho::NO_GUESSER, lemmas);
   }
   eprintf("done in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));

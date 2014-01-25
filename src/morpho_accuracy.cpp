@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     int lemmaid_len = dictionary->lemma_id_len(tokens[1]);
     int tag = 0, tag_rawlemma = 0, tag_lemmaid = 0, all = 0;
     wrong_lemmas.clear();
-    for (auto& lemma : lemmas) {
+    for (auto&& lemma : lemmas) {
       if (lemma.tag != tokens[2]) continue;
       tag = 1;
       if (lemma.lemma.compare(0, dictionary->raw_lemma_len(lemma.lemma), tokens[1], 0, rawlemma_len) != 0) continue;
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
     }
 //    if (tag_rawlemma && !tag_lemmaid) {
 //      eprintf("Cannot match lemma '%s' of form '%s', got only", tokens[1], tokens[0]);
-//      for (auto& wrong_lemma : wrong_lemmas)
+//      for (auto&& wrong_lemma : wrong_lemmas)
 //        eprintf(" '%s'", wrong_lemma);
 //      eprintf("\n");
 //    }

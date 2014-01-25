@@ -150,8 +150,8 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
     }
 
     // Finalize incremental gamma updates
-    for (auto& score : features.scores)
-      for (auto& element : score.map) {
+    for (auto&& score : features.scores)
+      for (auto&& element : score.map) {
         element.second.gamma += element.second.alpha * (train.size() - element.second.last_gamma_update);
         element.second.last_gamma_update = 0;
       }
@@ -168,7 +168,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
       viterbi<decltype(frozen_features), order> frozen_decoder(frozen_features);
       typename decltype(frozen_decoder)::cache frozen_decoder_cache(frozen_decoder);
 
-      for (auto& sentence : heldout) {
+      for (auto&& sentence : heldout) {
         if (tags.size() < sentence.forms_with_tags.size()) tags.resize(sentence.forms_with_tags.size() * 2);
         frozen_decoder.tag(sentence.forms_with_tags, sentence.forms_with_tags.size(), frozen_decoder_cache, tags);
 

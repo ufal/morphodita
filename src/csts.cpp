@@ -28,7 +28,7 @@ const string& encode(string& str) {
   if (str.find_first_of("&<>") != str.npos) {
     string encoded;
     encoded.reserve(str.size() + 3);
-    for (auto& chr : str)
+    for (auto&& chr : str)
       if (chr == '&') encoded += "&amp;";
       else if (chr == '<') encoded += "&lt;";
       else if (chr == '>') encoded += "&gt;";
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
       dictionary->analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, tags);
 
       printf("<f>%s<l>%s<t>%s", encode(tokens[0]).c_str(), encode(tokens[1]).c_str(), encode(tokens[2]).c_str());
-      for (auto& tag : tags)
+      for (auto&& tag : tags)
         printf("<MMl>%s<MMt>%s", encode(tag.lemma).c_str(), encode(tag.tag).c_str());
       printf("\n");
     }

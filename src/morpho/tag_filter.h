@@ -49,7 +49,7 @@ inline bool tag_filter::matches(const char* tag) const {
   if (filters.empty()) return true;
 
   int tag_pos = 0;
-  for (auto& filter : filters) {
+  for (auto&& filter : filters) {
     while (tag_pos < filter.pos)
       if (!tag[tag_pos++])
         return true;

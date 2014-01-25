@@ -61,10 +61,10 @@ int main(int argc, char* argv[]) {
     // Perform remapping if necessary
     forms++;
     int matches[MATCH_TYPES] = {};
-    for (auto& matching_lemma : matching_lemmas)
+    for (auto&& matching_lemma : matching_lemmas)
       matching_lemma.clear();
 
-    for (auto& lemma : lemmas) {
+    for (auto&& lemma : lemmas) {
       if (lemma.tag != tokens[2]) continue;
       matches[TAG] = 1;
       matching_lemmas[TAG].push_back(lemma);
@@ -109,13 +109,13 @@ int main(int argc, char* argv[]) {
   }
   eprintf("done\n");
 
-//  for (auto& mode : {LEMMA_ID, RAWLEMMA, TAG}) {
+//  for (auto&& mode : {LEMMA_ID, RAWLEMMA, TAG}) {
 //    eprintf("Remappings %d\n", mode);
 //    vector<string> mappings;
-//    for (auto& map : lemma_mappings[mode])
+//    for (auto&& map : lemma_mappings[mode])
 //      mappings.emplace_back("  " + map.first + " -> " + map.second);
 //    sort(mappings.begin(), mappings.end());
-//    for (auto& mapping : mappings)
+//    for (auto&& mapping : mappings)
 //      eprintf("%s\n", mapping.c_str());
 //  }
 

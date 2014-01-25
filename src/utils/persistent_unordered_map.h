@@ -195,7 +195,7 @@ persistent_unordered_map::persistent_unordered_map(const unordered_map<string, E
   // Copy data, possibly including prefixes and suffixes
   std::map<string, Entry> enlarged_map(map.begin(), map.end());
 
-  for (auto& entry : map) {
+  for (auto&& entry : map) {
     const string& key = entry.first;
 
     if (!key.empty() && add_prefixes)
@@ -223,9 +223,9 @@ void persistent_unordered_map::add(const char* str, int str_len, int data_len) {
 }
 
 void persistent_unordered_map::done_adding() {
-  for (auto& hash : hashes) {
+  for (auto&& hash : hashes) {
     int total = 0;
-    for (auto& len : hash.hash) total += len, len = total - len;
+    for (auto&& len : hash.hash) total += len, len = total - len;
     hash.data.resize(total);
   }
 }
@@ -242,7 +242,7 @@ unsigned char* persistent_unordered_map::fill(const char* str, int str_len, int 
 }
 
 void persistent_unordered_map::done_filling() {
-  for (auto& hash : hashes)
+  for (auto&& hash : hashes)
     for (int i = hash.hash.size() - 1; i >= 0; i--)
       hash.hash[i] = i > 0 ? hash.hash[i-1] : 0;
 }
@@ -260,7 +260,7 @@ void persistent_unordered_map::construct(const map<string, Entry>& map, double l
     if (len >= sizes.size()) sizes.resize(len + 1);
     sizes[len]++;
   }
-  for (auto& size : sizes)
+  for (auto&& size : sizes)
     resize(unsigned(load_factor * size));
 
   // 2) Add sizes of element data
