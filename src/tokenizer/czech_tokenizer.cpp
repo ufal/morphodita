@@ -4033,7 +4033,7 @@ _eof_trans:
         }}
 	break;
 	case 11:
-	{te = ( text)+1;{ {( text)++; goto _out; } }}
+	{te = ( text)+1;{ if (!forms.empty()) {( text)++; goto _out; } }}
 	break;
 	case 12:
 	{te = ( text);( text)--;{ forms.emplace_back(ts, te - ts);
@@ -4049,7 +4049,7 @@ _eof_trans:
 	{te = ( text);( text)--;}
 	break;
 	case 10:
-	{te = ( text);( text)--;{ {( text)++; goto _out; } }}
+	{te = ( text);( text)--;{ if (!forms.empty()) {( text)++; goto _out; } }}
 	break;
 	case 3:
 	{{( text) = ((te))-1;}{ forms.emplace_back(ts, te - ts);

@@ -120,7 +120,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
       whitespace+ -- eol eol;
 
       eol eol
-        { fbreak; };
+        { if (!forms.empty()) fbreak; };
     *|;
 
     write init;
