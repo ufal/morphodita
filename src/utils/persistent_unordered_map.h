@@ -255,7 +255,7 @@ template <class Entry, class EntryEncode>
 void persistent_unordered_map::construct(const map<string, Entry>& map, double load_factor, EntryEncode entry_encode) {
   // 1) Count number of elements for each size
   vector<int> sizes;
-  for (auto elem : map) {
+  for (auto&& elem : map) {
     unsigned len = elem.first.size();
     if (len >= sizes.size()) sizes.resize(len + 1);
     sizes[len]++;
@@ -264,7 +264,7 @@ void persistent_unordered_map::construct(const map<string, Entry>& map, double l
     resize(unsigned(load_factor * size));
 
   // 2) Add sizes of element data
-  for (auto elem : map) {
+  for (auto&& elem : map) {
     binary_encoder enc;
     entry_encode(enc, elem.second);
     add(elem.first.c_str(), elem.first.size(), enc.data.size());
@@ -272,7 +272,7 @@ void persistent_unordered_map::construct(const map<string, Entry>& map, double l
   done_adding();
 
   // 3) Fill in element data
-  for (auto elem : map) {
+  for (auto&& elem : map) {
     binary_encoder enc;
     entry_encode(enc, elem.second);
     small_memcpy(fill(elem.first.c_str(), elem.first.size(), enc.data.size()), enc.data.data(), enc.data.size());

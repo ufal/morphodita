@@ -134,7 +134,7 @@ int main(int argc, char* argv[]) {
   eprintf("Done, %d classes created.\n", int(classes.size()));
 
   printf("\n");
-  for (auto clas : classes)
+  for (auto&& clas : classes)
     printf("%s\n", clas.c_str());
 
   return 0;

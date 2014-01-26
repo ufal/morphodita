@@ -72,12 +72,12 @@ void binary_encoder::add_str(const char* str) {
 }
 
 void binary_encoder::add_str(const string& str) {
-  for (auto chr : str)
+  for (auto&& chr : str)
     data.push_back(chr);
 }
 
 void binary_encoder::add_data(const vector<unsigned char>& str) {
-  for (auto chr : str)
+  for (auto&& chr : str)
     data.push_back(chr);
 }
 
