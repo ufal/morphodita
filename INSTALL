@@ -15,7 +15,7 @@ Requirements
 
 - G++ 4.7 or newer
 - make
-- SWIG 1.3+ for language bindings other than C++
+- SWIG 2.0.5+ for language bindings other than C++
 
 
 Compilation
