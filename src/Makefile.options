@@ -43,8 +43,7 @@ else ifdef RELEASE
   C_FLAGS += -O3 -DNDEBUG -flto
   LD_FLAGS += -s
 else
-  C_FLAGS += -O3
-  LD_FLAGS += -s
+  C_FLAGS += -O3 -ggdb
 endif
 
 ifeq ($(BITS),32)
