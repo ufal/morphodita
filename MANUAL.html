@@ -43,8 +43,8 @@
     <LI><A HREF="#toc17">4.3. Czech Morphology</A>
     <LI><A HREF="#run_tagger">4.4. Running the Tagger</A>
       <UL>
-      <LI><A HREF="#toc19">4.4.1. Untokenized Input</A>
-      <LI><A HREF="#toc20">4.4.2. Vertical Format</A>
+      <LI><A HREF="#run_tagger_untokenized">4.4.1. Untokenized Input</A>
+      <LI><A HREF="#run_tagger_vertical">4.4.2. Vertical Format</A>
       </UL>
     <LI><A HREF="#toc21">4.5. Running the Morphology</A>
       <UL>
@@ -52,7 +52,7 @@
       <LI><A HREF="#run_morpho_generate">4.5.2. Morphologic Generation</A>
       <LI><A HREF="#run_morpho_cli">4.5.3. Interactive Morphologic Analysis and Generation</A>
       </UL>
-    <LI><A HREF="#toc25">4.6. Running the Tokenizer</A>
+    <LI><A HREF="#run_tokenizer">4.6. Running the Tokenizer</A>
     </UL>
   <LI><A HREF="#toc26">MorphoDiTa API Tutorial</A>
     <UL>
@@ -387,7 +387,7 @@ The full command syntax of <CODE>run_tagger</CODE> is
 run_tagger [-v] tagger_model [input_file[:output_file]]...
 </PRE>
 
-<A NAME="toc19"></A>
+<A NAME="run_tagger_untokenized"></A>
 <H3>4.4.1. Untokenized Input</H3>
 
 <P>
@@ -429,7 +429,7 @@ Example output data (line breaks added):
 &lt;form lemma='.' tag='Z:-------------'&gt;.&lt;/form&gt;
 </PRE>
 
-<A NAME="toc20"></A>
+<A NAME="run_tagger_vertical"></A>
 <H3>4.4.2. Vertical Format</H3>
 
 <P>
@@ -525,6 +525,7 @@ The full command syntax of <CODE>run_morpho_analyze</CODE> is
 run_morpho_analyze [-v] morphology_model use_guesser [input_file[:output_file]]...
 </PRE>
 
+<A NAME="run_morpho_analyze_untokenized"></A>
 <H4>4.5.1.1. Untokenized Input</H4>
 
 <P>
@@ -566,6 +567,7 @@ Example output data (line breaks added):
 &lt;form&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/form&gt;
 </PRE>
 
+<A NAME="run_morpho_analyze_vertical"></A>
 <H4>4.5.1.2. Vertical Format</H4>
 
 <P>
@@ -722,7 +724,7 @@ If the second word is empty (i.e., the input is for example ``on ``), all forms
 are generated.
 </P>
 
-<A NAME="toc25"></A>
+<A NAME="run_tokenizer"></A>
 <H2>4.6. Running the Tokenizer</H2>
 
 <P>

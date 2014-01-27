@@ -87,7 +87,7 @@ from standard input and written to standard output.
 The full command syntax of ``run_tagger`` is
 ``` run_tagger [-v] tagger_model [input_file[:output_file]]...
 
-=== Untokenized Input ===
+=== Untokenized Input ===[run_tagger_untokenized]
 
 By default (i.e., without specifying ``-v``), the input is assumed to be
 a plain text and it is automatically tokenized and segmented by default. The
@@ -114,7 +114,7 @@ Example output data (line breaks added):
 <form lemma='.' tag='Z:-------------'>.</form>
 ```
 
-=== Vertical Format ===
+=== Vertical Format ===[run_tagger_vertical]
 
 If the input is already tokenized and segmented, vertical input format can be used
 by specifying ``-v`` option as a first argument of ``run_tagger``.
@@ -180,7 +180,7 @@ If non-zero, the guesser is used, otherwise not.
 The full command syntax of ``run_morpho_analyze`` is
 ``` run_morpho_analyze [-v] morphology_model use_guesser [input_file[:output_file]]...
 
-==== Untokenized Input ====
+==== Untokenized Input ====[run_morpho_analyze_untokenized]
 
 By default (i.e., without specifying ``-v``), the input is assumed to be
 a plain text and it is automatically tokenized and segmented by default. The
@@ -207,7 +207,7 @@ Example output data (line breaks added):
 <form><analysis lemma="." tag="Z:-------------"/>.</form>
 ```
 
-==== Vertical Format ====
+==== Vertical Format ====[run_morpho_analyze_vertical]
 
 If the input is already tokenized and segmented, vertical input format can be used
 by specifying ``-v`` option as a first argument of ``run_morpho_analyze``.
@@ -313,7 +313,7 @@ on the first word, using the rest of the line as a [tag wildcard #tag_wildcard].
 If the second word is empty (i.e., the input is for example ``on ``), all forms
 are generated.
 
-== Running the Tokenizer ==
+== Running the Tokenizer ==[run_tokenizer]
 
 Using the ``run_tokenizer`` executable it is possible to perform only
 tokenization and segmentation.
