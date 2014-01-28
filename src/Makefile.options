@@ -35,7 +35,9 @@ endif
 C_FLAGS += -std=c++11 -W -Wall -mtune=generic -I. -fvisibility=hidden
 LD_FLAGS += -static-libgcc -static-libstdc++
 ifdef DEBUG
-  C_FLAGS += -ggdb -DDEBUG -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
+  C_FLAGS += -O3 -ggdb -DDEBUG
+else ifdef DEBUG_MORE
+  C_FLAGS += -O -ggdb -DDEBUG -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
 else ifdef PROFILE
   C_FLAGS += -O3 -ggdb -pg
   LD_FLAGS += -pg
@@ -43,7 +45,8 @@ else ifdef RELEASE
   C_FLAGS += -O3 -DNDEBUG -flto
   LD_FLAGS += -s
 else
-  C_FLAGS += -O3 -ggdb
+  C_FLAGS += -O3
+  LD_FLAGS += -s
 endif
 
 ifeq ($(BITS),32)
