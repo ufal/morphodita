@@ -1988,9 +1988,8 @@ SRes LzmaEnc_MemPrepare(CLzmaEncHandle pp, const uint8_t *src, size_t srcLen,
   return LzmaEnc_AllocAndInit(p, keepWindowSize, alloc, allocBig);
 }
 
-void LzmaEnc_Finish(CLzmaEncHandle pp)
+void LzmaEnc_Finish(CLzmaEncHandle /*pp*/)
 {
-  pp = pp;
 }
 
 struct CSeqOutStreamBuf
