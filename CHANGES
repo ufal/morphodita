@@ -3,6 +3,7 @@ Version 0.93 [29 Jan 2014]
 - Small API change
   - tokenizer::set_text takes string_piece instead of const char*
 - Required SWIG version is 2.0.5 due to SWIG bug #1187
+- Clang is supported
 
 
 Version 0.92 [22 Jan 2014]
