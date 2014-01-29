@@ -1,0 +1,27 @@
+Version 0.93 [29 Jan 2014]
+---------------------------
+- Small API change
+  - tokenizer::set_text takes string_piece instead of const char*
+- Required SWIG version is 2.0.5 due to SWIG bug #1187
+
+
+Version 0.92 [22 Jan 2014]
+---------------------------
+- First public beta
+- Overhaul tokenizator API
+  - Allow explicit tokenizer instantiation
+  - Add run_tokenizer
+- Add more executables
+  - Rename run_morpho to run_morpho_cli
+  - Add run_morpho_analyze
+  - Add run_morpho_generate
+
+
+Version 0.91 [17 Jan 2014]
+---------------------------
+- First internal beta
+
+
+Version 0.90 [02 Dec 2013]
+---------------------------
+- Initial import

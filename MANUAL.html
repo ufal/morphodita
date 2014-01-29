@@ -9,7 +9,7 @@
 
 <DIV CLASS="header" ID="header">
 <H1>MorphoDiTa: Morphologic Dictionary and Tagger</H1>
-<H2>Version 0.92</H2>
+<H2>Version 0.93</H2>
 </DIV>
 
 <DIV CLASS="toc">
@@ -143,9 +143,9 @@ MorphoDiTa will be available either as pre-compiled binaries and models from <A 
 <H2>2.2. Roadmap</H2>
 
 <UL>
-<LI>Dec 2013: beta testing, training of custom models
-<LI>Jan 2014: MorphoDiTa 1.0 release
+<LI>Dec 2013: beta testing
 <LI>Feb 2014: further programming language bindings (Perl, ...)
+<LI>Feb 2014: MorphoDiTa 1.0 release
 <LI>Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
 </UL>
 
@@ -179,7 +179,7 @@ To use the MorphoDiTa library, either in C++ or other languages, it must be comp
 <UL>
 <LI><CODE>G++ 4.7</CODE> or newer
 <LI><CODE>make</CODE>
-<LI><CODE>SWIG 2.0.5+</CODE> for language bindings other than <CODE>C++</CODE>
+<LI><CODE>SWIG 2.0.5</CODE> or newer for language bindings other than <CODE>C++</CODE>
 </UL>
 
 <A NAME="toc9"></A>
@@ -1143,7 +1143,7 @@ class tokenizer {
 
   static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_czech_tokenizer">new_czech_tokenizer</A>();
 
-  virtual void <A HREF="#tokenizer_set_text">set_text</A>(const char* text, bool make_copy = false) = 0;
+  virtual void <A HREF="#tokenizer_set_text">set_text</A>(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
   virtual bool <A HREF="#tokenizer_next_sentence">next_sentence</A>(std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;* forms, std::vector&lt;<A HREF="#token_range">token_range</A>&gt;* tokens) = 0;
 };
 </PRE>
@@ -1173,7 +1173,7 @@ use.
 <H3>6.6.2. tokenizer::set_text</H3>
 
 <PRE>
-virtual void set_text(const char* text, bool make_copy = false) = 0;
+virtual void set_text(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
 </PRE>
 
 <P>

@@ -1,5 +1,5 @@
 MorphoDiTa: Morphologic Dictionary and Tagger
-Version 0.92
+Version 0.93
 
 
 Introduction
@@ -46,9 +46,9 @@ work, please give credit to us by referencing MorphoDiTa website
 Roadmap
 -------
 
-- Dec 2013: beta testing, training of custom models
-- Jan 2014: MorphoDiTa 1.0 release
+- Dec 2013: beta testing
 - Feb 2014: further programming language bindings (Perl, ...)
+- Feb 2014: MorphoDiTa 1.0 release
 - Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
 
 
@@ -91,7 +91,7 @@ Requirements
 
 - G++ 4.7 or newer
 - make
-- SWIG 2.0.5+ for language bindings other than C++
+- SWIG 2.0.5 or newer for language bindings other than C++
 
 
 Compilation
@@ -860,7 +860,7 @@ Class tokenizer
   
     static tokenizer* new_czech_tokenizer();
   
-    virtual void set_text(const char* text, bool make_copy = false) = 0;
+    virtual void set_text(string_piece text, bool make_copy = false) = 0;
     virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
   };
 
@@ -883,7 +883,7 @@ use.
 tokenizer::set_text
 -------------------
 
-  virtual void set_text(const char* text, bool make_copy = false) = 0;
+  virtual void set_text(string_piece text, bool make_copy = false) = 0;
 
 Set the text which is to be tokenized.
 

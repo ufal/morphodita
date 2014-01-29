@@ -1,5 +1,5 @@
 MorphoDiTa: Morphologic Dictionary and Tagger
-Version 0.92
+Version 0.93
 
 %!encoding: utf-8
 
@@ -26,9 +26,9 @@ MorphoDiTa will be available either as pre-compiled binaries and models from [LI
 
 == Roadmap ==
 
-- Dec 2013: beta testing, training of custom models
-- Jan 2014: MorphoDiTa 1.0 release
+- Dec 2013: beta testing
 - Feb 2014: further programming language bindings (Perl, ...)
+- Feb 2014: MorphoDiTa 1.0 release
 - Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
 
 
