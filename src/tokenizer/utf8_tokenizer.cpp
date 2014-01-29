@@ -23,13 +23,13 @@
 namespace ufal {
 namespace morphodita {
 
-void utf8_tokenizer::set_text(const char* text, bool make_copy /*= false*/) {
-  if (make_copy && text) {
-    text_copy.assign(text);
-    text = text_copy.c_str();
+void utf8_tokenizer::set_text(string_piece text, bool make_copy /*= false*/) {
+  if (make_copy && text.str) {
+    text_copy.assign(text.str, text.len);
+    text.str = text_copy.c_str();
   }
-  this->text = text;
-  text_end = text ? text + strlen(text) : nullptr;
+  this->text = text.str;
+  this->text_end = text.str + text.len;
   chars = 0;
 }
 
@@ -62,5 +62,3 @@ bool utf8_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ran
 
 } // namespace morphodita
 } // namespace ufal
-
-

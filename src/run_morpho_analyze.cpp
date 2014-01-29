@@ -77,8 +77,8 @@ void analyze_untokenized(FILE* in, FILE* out, morpho& dictionary, bool use_guess
 
   while (getpara(in, para)) {
     // Tokenize and analyze
+    tokenizer->set_text(para);
     const char* unprinted = para.c_str();
-    tokenizer->set_text(unprinted);
     while (tokenizer->next_sentence(&forms, nullptr))
       for (unsigned i = 0; i < forms.size(); i++) {
         dictionary.analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);

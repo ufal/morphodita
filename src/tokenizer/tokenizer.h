@@ -37,7 +37,7 @@ class tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  virtual void set_text(const char* text, bool make_copy = false) = 0;
+  virtual void set_text(string_piece text, bool make_copy = false) = 0;
   virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) = 0;
 
   // Static factory methods

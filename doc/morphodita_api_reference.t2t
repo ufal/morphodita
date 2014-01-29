@@ -78,7 +78,7 @@ class tokenizer {
 
   static [tokenizer #tokenizer]* [new_czech_tokenizer #tokenizer_new_czech_tokenizer]();
 
-  virtual void [set_text #tokenizer_set_text](const char* text, bool make_copy = false) = 0;
+  virtual void [set_text #tokenizer_set_text]([string_piece #string_piece] text, bool make_copy = false) = 0;
   virtual bool [next_sentence #tokenizer_next_sentence](std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) = 0;
 };
 ```
@@ -96,7 +96,7 @@ Returns a new instance of a Czech tokenizer. The user should delete it after
 use.
 
 === tokenizer::set_text ===[tokenizer_set_text]
-``` virtual void set_text(const char* text, bool make_copy = false) = 0;
+``` virtual void set_text([string_piece #string_piece] text, bool make_copy = false) = 0;
 
 Set the text which is to be tokenized.
 

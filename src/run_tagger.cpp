@@ -88,8 +88,8 @@ void tag_untokenized(FILE* in, FILE* out, const tagger& tagger) {
 
   while (getpara(in, para)) {
     // Tokenize and tag
+    tokenizer->set_text(para);
     const char* unprinted = para.c_str();
-    tokenizer->set_text(unprinted);
     while (tokenizer->next_sentence(&forms, nullptr)) {
       tagger.tag(forms, tags);
 

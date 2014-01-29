@@ -52,7 +52,7 @@ void tokenize(FILE* in, FILE* out, tokenizer& tokenizer) {
   while (getpara(in, para)) {
     eprintf("Have para: '%s'\n", para.c_str());
     // Tokenize
-    tokenizer.set_text(para.c_str());
+    tokenizer.set_text(para);
     while (tokenizer.next_sentence(&forms, nullptr)) {
       for (auto&& form : forms) {
         fwrite(form.str, 1, form.len, out);

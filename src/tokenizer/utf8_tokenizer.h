@@ -27,7 +27,7 @@ namespace morphodita {
 
 class utf8_tokenizer : public tokenizer {
  public:
-  virtual void set_text(const char* text, bool make_copy = false) override;
+  virtual void set_text(string_piece text, bool make_copy = false) override;
   virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) override;
 
   virtual bool next_sentence(vector<string_piece>& forms) = 0;
