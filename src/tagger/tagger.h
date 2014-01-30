@@ -30,8 +30,8 @@ class EXPORT_ATTRIBUTES tagger {
  public:
   virtual ~tagger() {}
 
-  static tagger* load(FILE* f);
   static tagger* load(const char* fname);
+  static tagger* load(FILE* f);
 
   // Return morpho associated with the tagger. Do not delete the pointer, it is
   // owned by the tagger instance and deleted in the tagger destructor.
