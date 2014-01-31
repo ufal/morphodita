@@ -96,6 +96,7 @@ class EXPORT_ATTRIBUTES morpho {
   virtual int lemma_id_len(string_piece lemma) const = 0;
 
   // Construct a new tokenizer instance appropriate for this morphology.
+  // Can return NULL if no such tokenizer exists.
   virtual tokenizer* new_tokenizer() const = 0;
 };
 

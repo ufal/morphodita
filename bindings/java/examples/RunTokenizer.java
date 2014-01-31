@@ -38,6 +38,11 @@ class RunTokenizer {
       }
       System.err.println("done");
       tokenizer = morpho.newTokenizer();
+
+      if (tokenizer == null) {
+        System.err.println("No tokenizer is defined for the supplied model!");
+        System.exit(1);
+      }
     }
 
     TokenRanges tokens = new TokenRanges();

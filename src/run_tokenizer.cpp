@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
     eprintf("done\n");
 
     tokenizer.reset(dictionary->new_tokenizer());
+    if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
   }
 
   process_args(2, argc, argv, tokenize, *tokenizer);

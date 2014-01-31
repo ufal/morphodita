@@ -74,6 +74,7 @@ void analyze_untokenized(FILE* in, FILE* out, morpho& dictionary, bool use_guess
   vector<tagged_lemma> lemmas;
 
   unique_ptr<tokenizer> tokenizer(dictionary.new_tokenizer());
+  if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
 
   while (getpara(in, para)) {
     // Tokenize and analyze

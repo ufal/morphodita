@@ -53,8 +53,12 @@ class RunTagger {
     Forms forms = new Forms();
     TaggedLemmas lemmas = new TaggedLemmas();
     TokenRanges tokens = new TokenRanges();
-    Tokenizer tokenizer = tagger.newTokenizer();
     Scanner reader = new Scanner(System.in);
+    Tokenizer tokenizer = tagger.newTokenizer();
+    if (tokenizer == null) {
+      System.err.println("No tokenizer is defined for the supplied model!");
+      System.exit(1);
+    }
 
     boolean not_eof = true;
     while (not_eof) {

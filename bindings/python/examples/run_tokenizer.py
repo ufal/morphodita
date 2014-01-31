@@ -42,6 +42,9 @@ else:
     sys.exit(1)
   sys.stderr.write('done\n')
   tokenizer = morpho.newTokenizer()
+  if tokenizer is None:
+    sys.stderr.write("No tokenizer is defined for the supplied model!")
+    sys.exit(1)
 
 tokens = TokenRanges()
 not_eof = True

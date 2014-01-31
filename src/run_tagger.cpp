@@ -85,6 +85,7 @@ void tag_untokenized(FILE* in, FILE* out, const tagger& tagger) {
   vector<tagged_lemma> tags;
 
   unique_ptr<tokenizer> tokenizer(tagger.new_tokenizer());
+  if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
 
   while (getpara(in, para)) {
     // Tokenize and tag
