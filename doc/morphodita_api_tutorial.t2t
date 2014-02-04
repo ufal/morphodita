@@ -188,14 +188,6 @@ in the dictionary, ``NO_GUESSER`` is returned. If ``guesser == GUESSER`` and the
 is found by the guesser, ``GUESSER`` is returned. Otherwise, forms are cleared and
 ``-1`` is returned.
 
-==== Raw Lemmas in Czech ====
-
-In the Czech langauge, if the given lemma is only a raw lemma, all lemma ids
-with this raw lemma are returned. Otherwise only matching lemma ids are
-returned, ignoring any lemma comments. For every found lemma, matching forms
-are filtered using the tag_wildcard. Please see Section "Czech Morphology" in
-User's Manual for details about lemmas and raw lemmas in the Czech morphology.
-
 
 == Questions and Answers ==[faq]
 

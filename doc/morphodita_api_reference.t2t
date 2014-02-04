@@ -9,6 +9,27 @@ The MorphoDiTa API is defined in header ``morphodita.h`` and resides in
 The strings used in the MorphoDiTa API are always UTF-8 encoded (except from
 file paths, whose encoding is system dependent).
 
+
+== Lemma Structure ==[lemma_structure]
+
+The lemmas used by MorphoDiTa consist of three parts:
+
++ //raw lemma//: text form of the lemma. May not uniquely distinguish
+  lemma meanings, lemma use cases etc.
++ //lemma id//: together with raw lemma provide a unique identifier of the lemma,
+  possibly including lemma meanings or use cases.
++ //lemma comments//: additional comments for the given lemma.
+
+
+These parts are stored in one string and the boundaries between them can be
+determined by
+[``morpho::raw_lemma_len`` #morpho_raw_lemma_len] and
+[``morpho::lemma_id_len`` #morpho_lemma_id_len] methods.
+Analyzer and tagger always return lemma in this structured form. When
+performing morphologic generation, either //raw lemma// or both //raw lemma// and
+//lemma id// can be specified, any //lemma comments// are ignored.
+
+
 == Struct string_piece ==[string_piece]
 ```
 struct string_piece {
@@ -203,14 +224,16 @@ is returned. If ``guesser == GUESSER`` and the lemma is found by the guesser,
 ``` virtual int raw_lemma_len([string_piece #string_piece] lemma) const = 0;
 
 When given a lemma returned by the dictionary, returns the length of
-a raw lemma (text form of the lemma).
+a //raw lemma// (see [Lemma Structure #lemma_structure]).
 
 === morpho::lemma_id_len ===[morpho_lemma_id_len]
 ``` virtual int lemma_id_len([string_piece #string_piece] lemma) const = 0;
 
 When given a lemma returned by the dictionary, returns the length of
-a unique lemma identification. The rest of the lemma are comments which
-do not identificate the lemma.
+a //raw lemma// plus a //lemma id// (see [Lemma Structure #lemma_structure]).
+Therefore, the substring of the original lemma of this length is a unique
+lemma identifier. The rest of the original lemma are lemma comments which
+do not identify the lemma.
 
 === morpho::new_tokenizer ===[morpho_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;
