@@ -21,15 +21,16 @@ Compared to Featurama http://sourceforge.net/projects/featurama/
 (state-of-the-art Czech tagger implementation), the models are 5 times faster
 and 10 times smaller.
 
-=== Czech Morphologic System ===
+=== Czech Morphologic System ===[czech_morphologic_system]
 
 In the Czech language, MorphoDiTa uses Czech morphologic system by
 Jan Hajič ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]).
 In this system, tags are positional with 15 positions corresponding to part of
 speech, detailed part of speech, gender, number, case, etc. (e.g. ``NNFS1-----A----``).
-Czech lemmas consist of a base part, which is a meaningful prefix and we call
-it a ``raw lemma`` in this documentation; and a certain number of technical
-suffixes. The following examples illustrate this:
+Different meanings of same lemmas are distinguished and additional comments
+can be provided for every lemma meaning. The lemma itself without the comments
+and meaning specification is called a //raw lemma//. The following examples
+illustrate this:
 
 - ``Japonsko_;G`` (raw lemma: ``Japonsko``)
 - ``se_^(zvr._zájmeno/částice)`` (raw lemma: ``se``)
@@ -52,7 +53,7 @@ The main Czech model contains the following files:
   Best and slowest tagger (Viterbi of order 3). Contains the ``czech-<version>.dict`` morphologic dictionary.
 
   The latest version ``czech-131112.tagger-best_accuracy`` reaches 95.67% tag
-  accuracy, 97.78% lemma accuracy, 94.97% overall accuracy on
+  accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on
   [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] etest data (whose morphologic tags
   were remapped using the ``czech-131112.dict`` dictionary). Model speed: ~10k words/s,
   model size: 17MB. For comparison, model trained by
@@ -65,7 +66,7 @@ The main Czech model contains the following files:
   the ``czech-<version>.dict`` morphologic dictionary.
 
   The latest version ``czech-131112.tagger-fast`` reaches 94.70% tag accuracy,
-  97.64% lemma accuracy, 93.94% overall accuracy on
+  97.64% lemma accuracy and 93.94% overall accuracy on
   [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data (whose morphologic tags
   were remapped using the ``czech-131112.dict`` dictionary). Model speed: ~60k words/s,
   model size: 11MB.
@@ -89,10 +90,23 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
   Very fast tagger containing the ``czech-<version>-pos_only.dict`` morphologic dictionary.
 
   The latest version ``czech-131112-pos_only.tagger`` reaches 99.18% tag
-  accuracy, 97.64% lemma accuracy, 97.59% overall accuracy on
+  accuracy, 97.64% lemma accuracy and 97.59% overall accuracy on
   [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data (which morphologic tags
   were remapped using the ``czech-131112-pos_only.dict`` dictionary).
   Model speed: ~200k words/s, model size: 4MB.
 
 
-=== Raw Lemmas Variants ===
+=== Raw Lemmas Variant ===
+
+The Czech morphologic system distinguish different meanings of same lemmas by
+numbering the lemmas with multiple meanings and supplying additional comments
+for every lemma meaning, as described and demonstrated in
+[Czech Morphologic System #czech_morphologic_system]. Sometimes this may be
+undesirable, for example when comparing to systems which do not use the
+[MorfFlex CZ https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9]
+morphologic dictionary.
+
+Therefore, all already mentioned Czech models have a variant which does not
+disambiguate lemma meanings and provides no additional comments. (In terms of
+MorphoDiTa API, the lemmas are //raw lemmas// with empty //lemma ids// and
+//lemma comments//.) These model variants are denoted by ``raw_lemmas``.
