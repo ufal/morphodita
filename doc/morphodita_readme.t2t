@@ -5,8 +5,9 @@ MorphoDiTa
 
 %!include: morphodita_about.t2t
 
-MorphoDiTa website http://ufal.mff.cuni.cz/morphodita contains released
-packages, trained models, documentation and online demo.
+MorphoDiTa website http://ufal.mff.cuni.cz/morphodita contains download links
+of both the released packages and trained models, hosts documentation and
+offers online demo.
 
 MorphoDiTa development repository http://github.com/ufal/morphodita is hosted
 on GitHub.
