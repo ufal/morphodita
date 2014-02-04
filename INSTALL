@@ -1,13 +1,12 @@
 MorphoDiTa Installation
 =======================
 
-Pre-compiled binaries and models are available from LINDAT-Clarin
-(http://www.lindat.cz) infrastructure.
+Trained models and pre-compiled binaries and C++ library are available from
+LINDAT-Clarin (http://www.lindat.cz) infrastructure.
 
-To use the MorphoDiTa library, either in C++ or other languages, it must be
-compiled manually. The sources are available either at LINDAT-Clarin
-(http://www.lindat.cz) or in the GitHub repository
-(https://github.com/ufal/morphodita).
+To use MorphoDiTa in other languages than C++, it must be compiled manually. The
+sources are available either at LINDAT-Clarin (http://www.lindat.cz) or in the
+GitHub repository (https://github.com/ufal/morphodita).
 
 
 Requirements

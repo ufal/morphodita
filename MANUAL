@@ -79,13 +79,12 @@ models for the Czech language are available with the tool.
 MorphoDiTa Installation
 =======================
 
-Pre-compiled binaries and models are available from LINDAT-Clarin
-(http://www.lindat.cz) infrastructure.
+Trained models and pre-compiled binaries and C++ library are available from
+LINDAT-Clarin (http://www.lindat.cz) infrastructure.
 
-To use the MorphoDiTa library, either in C++ or other languages, it must be
-compiled manually. The sources are available either at LINDAT-Clarin
-(http://www.lindat.cz) or in the GitHub repository
-(https://github.com/ufal/morphodita).
+To use MorphoDiTa in other languages than C++, it must be compiled manually. The
+sources are available either at LINDAT-Clarin (http://www.lindat.cz) or in the
+GitHub repository (https://github.com/ufal/morphodita).
 
 
 Requirements
@@ -171,12 +170,15 @@ morphologic tagger picks for each word the best lemma-POS tag candidate. The
 second task is called a disambiguation.
 
 MorphoDiTa also performs these two steps of morphologic analysis: It first
-outputs all possible pairs of lemma and POS tag for each token. In Czech, this
-procedure is based on a well-known Jan Hajič's morphologic dictionary (Hajič
-2004 (http://books.google.cz/books?id=sB63AAAACAAJ)). Consequently, the optimal
-combination of lemmas and POS tags is selected for the words in a sentence using
-an algorithm described in Spoustová et al. 2009
+outputs all possible pairs of lemma and POS tag for each token. Consequently,
+the optimal combination of lemmas and POS tags is selected for the words in a
+sentence using an algorithm described in Spoustová et al. 2009
 (http://aclweb.org/anthology//E/E09/E09-1087.pdf).
+
+Like any supervised machine learning tool, MorphoDiTa needs a trained linguistic
+model. This section describes the available language models and also the
+commandline tools and interfaces. The C++ library is described elsewhere, either
+in MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 
 This section describes the commandline tools and interfaces; the models and
 dictionaries; and the Czech morphology. The C++ library with bindings for other
@@ -184,70 +186,36 @@ languages is described elsewhere, either in MorphoDiTa API Tutorial or in
 MorphoDiTa API Reference.
 
 
-Models
-------
+Czech MorphoDiTa Models
+-----------------------
 
-Like any supervised machine learning tool, MorphoDiTa needs a trained linguistic
-model. Czech models trained on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) are
-distributed with the tool. The models are distributed under the CC BY-NC-SA
-(http://creativecommons.org/licenses/by-nc-sa/3.0/) licence.
+Czech models are distributed under the CC BY-NC-SA
+(http://creativecommons.org/licenses/by-nc-sa/3.0/) licence. The Czech
+morphology uses the MorfFlex CZ
+(https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
+Czech morphological dictionary and the Czech tagger is trained on PDT 2.5
+(http://ufal.mff.cuni.cz/pdt2.5/).
 
-One may wish to use either a larger, more precise, but slower model; or a more
-light-weight, faster, but less accurate model. The parameters of the models
-distributed with MorphoDiTa are as follows:
+Czech models are versioned according to the version of the MorfFlex CZ
+morphological dictionary used, the version format is YYMMDD, where YY, MM and DD
+are two-digit representation of year, month and day, respectively.
 
-czech-<version>.tagger-best_accuracy
-  Best and slowest tagger (Viterbi of order 3). Reaches 95.70% tag accuracy,
-  97.78% lemma accuracy, 94.99% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5/) etest data. Speed: ~10k words/s, size: 17MB.
-  
-  For comparison, model trained by Featurama
-  (http://sourceforge.net/projects/featurama/) (state-of-the-art Czech tagger
-  implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and overall
-  accuracy, respectively, with speed ~2k words/s and size 210MB.
-  
-czech-<version>.tagger-fast
-  Faster tagger with slightly worse results (Viterbi of order 2). Reaches 94.71%
-  tag accuracy, 97.66% lemma accuracy, 93.95% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5) etest data. Speed: ~60k words/s, size: 11MB.
-  
-czech-<version>.lemmatizer
-  Very fast tagger using only first two tag positions. Can be used as a
-  lemmatizator. Reaches 99.18% tag accuracy, 97.63% lemma accuracy, 97.58%
-  overall accuracy on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5) etest data.
-  Speed: ~200k words/s, size: 4MB.
-
-Please make sure you are using the linguistic models in a version corresponding
-to your MorphoDiTa release. The best way to assure this is to use the most
-current MorphoDiTa release with the most current model release.
+Compared to Featurama http://sourceforge.net/projects/featurama/
+(state-of-the-art Czech tagger implementation), the models are 5 times faster
+and 10 times smaller.
 
 
-Dictionaries
-------------
-
-MorphoDiTa is distributed with two Czech morphologic dictionaries:
-
-czech-<version>.dict
-  Jan Hajič's (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ))
-  morpho dictionary used by czech-<version>_best_accuracy.tagger and
-  czech-<version>_fast.tagger.
-  
-czech-<version>.lemmadict
-  Jan Hajič (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)) morpho
-  dictionary used by czech-<version>_lemmatizer.tagger, using only first two tag
-  positions.
-
-
-Czech Morphology
-----------------
+Czech Morphologic System
+------------------------
 
 In the Czech language, MorphoDiTa uses Czech morphologic system by Jan Hajič
 (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)). In this system,
 tags are positional with 15 positions corresponding to part of speech, detailed
-part of speech, gender, number, case, etc. (e.g. NNFS1-----A----). Czech lemmas
-consist of a base part, which is a meaningful prefix and we call it a raw lemma
-in this documentation; and a certain number of technical suffixes. The following
-examples illustrate this:
+part of speech, gender, number, case, etc. (e.g. NNFS1-----A----). Different
+meanings of same lemmas are distinguished and additional comments can be
+provided for every lemma meaning. The lemma itself without the comments and
+meaning specification is called a raw lemma. The following examples illustrate
+this:
 
 - Japonsko_;G (raw lemma: Japonsko)
 - se_^(zvr._zájmeno/částice) (raw lemma: se)
@@ -256,6 +224,86 @@ examples illustrate this:
 For a more detailed reference about the Czech morphology, please see Lemma and
 Tag Structure in PDT 2.0
 (http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html).
+
+
+Main Czech Model
+----------------
+
+The main Czech model contains the following files:
+
+czech-<version>.dict
+  Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
+  (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
+  CZ
+  (https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
+  morphologic dictionary.
+  
+czech-<version>.tagger-best_accuracy
+  Best and slowest tagger (Viterbi of order 3). Contains the
+  czech-<version>.dict morphologic dictionary.
+  
+  The latest version czech-131112.tagger-best_accuracy reaches 95.67% tag
+  accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on PDT 2.5
+  (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphologic tags were
+  remapped using the czech-131112.dict dictionary). Model speed: ~10k words/s,
+  model size: 17MB. For comparison, model trained by Featurama
+  (http://sourceforge.net/projects/featurama/) (state-of-the-art Czech tagger
+  implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and overall
+  accuracy, respectively, with speed ~2k words/s and size 210MB.
+  
+czech-<version>.tagger-fast
+  Faster tagger with slightly worse results (Viterbi of order 2). Contains also
+  the czech-<version>.dict morphologic dictionary.
+  
+  The latest version czech-131112.tagger-fast reaches 94.70% tag accuracy,
+  97.64% lemma accuracy and 93.94% overall accuracy on PDT 2.5
+  (http://ufal.mff.cuni.cz/pdt2.5) etest data (whose morphologic tags were
+  remapped using the czech-131112.dict dictionary). Model speed: ~60k words/s,
+  model size: 11MB.
+
+
+Part of Speech Only Variant
+---------------------------
+
+The tags used by the main Czech model are very fine-grained. In many situations,
+only the part of speech tags would be sufficient. Therefore, we provide a
+variant of the model, denoted as pos_only, where only the first two characters
+of the fifteen-letter tags are used, representing the part of speech and
+detailed part of speech, respectively. There are 67 such two-letter tags.
+
+czech-<version>-pos_only.dict
+  Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
+  (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
+  CZ
+  (https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
+  morphologic dictionary. Only first two tag characters are used.
+  
+czech-<version>-pos_only.tagger
+  Very fast tagger containing the czech-<version>-pos_only.dict morphologic
+  dictionary.
+  
+  The latest version czech-131112-pos_only.tagger reaches 99.18% tag accuracy,
+  97.64% lemma accuracy and 97.59% overall accuracy on PDT 2.5
+  (http://ufal.mff.cuni.cz/pdt2.5) etest data (which morphologic tags were
+  remapped using the czech-131112-pos_only.dict dictionary). Model speed: ~200k
+  words/s, model size: 4MB.
+
+
+Raw Lemmas Variant
+------------------
+
+The Czech morphologic system distinguish different meanings of same lemmas by
+numbering the lemmas with multiple meanings and supplying additional comments
+for every lemma meaning, as described and demonstrated in Czech Morphologic
+System. Sometimes this may be undesirable, for example when comparing to systems
+which do not use the MorfFlex CZ
+(https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
+morphologic dictionary.
+
+Therefore, all already mentioned Czech models have a variant which does not
+disambiguate lemma meanings and provides no additional comments. (In terms of
+MorphoDiTa API, the lemmas are raw lemmas with empty lemma ids and lemma
+comments.) These model variants are denoted by raw_lemmas.
 
 
 Running the Tagger
@@ -754,16 +802,6 @@ least one lemma is found in the dictionary, NO_GUESSER is returned. If guesser
 Otherwise, forms are cleared and -1 is returned.
 
 
-Raw Lemmas in Czech
--------------------
-
-In the Czech langauge, if the given lemma is only a raw lemma, all lemma ids
-with this raw lemma are returned. Otherwise only matching lemma ids are
-returned, ignoring any lemma comments. For every found lemma, matching forms are
-filtered using the tag_wildcard. Please see Section "Czech Morphology" in User's
-Manual for details about lemmas and raw lemmas in the Czech morphology.
-
-
 Questions and Answers
 ---------------------
 
@@ -787,6 +825,24 @@ ufal::morphodita namespace.
 
 The strings used in the MorphoDiTa API are always UTF-8 encoded (except from
 file paths, whose encoding is system dependent).
+
+
+Lemma Structure
+---------------
+
+The lemmas used by MorphoDiTa consist of three parts:
+
+1. raw lemma: text form of the lemma. May not uniquely distinguish lemma
+   meanings, lemma use cases etc.
+2. lemma id: together with raw lemma provide a unique identifier of the lemma,
+   possibly including lemma meanings or use cases.
+3. lemma comments: additional comments for the given lemma.
+
+These parts are stored in one string and the boundaries between them can be
+determined by morpho::raw_lemma_len and morpho::lemma_id_len methods. Analyzer
+and tagger always return lemma in this structured form. When performing
+morphologic generation, either raw lemma or both raw lemma and lemma id can be
+specified, any lemma comments are ignored.
 
 
 Struct string_piece
@@ -1009,7 +1065,7 @@ morpho::raw_lemma_len
   virtual int raw_lemma_len(string_piece lemma) const = 0;
 
 When given a lemma returned by the dictionary, returns the length of a raw lemma
-(text form of the lemma).
+(see Lemma Structure).
 
 
 morpho::lemma_id_len
@@ -1017,9 +1073,10 @@ morpho::lemma_id_len
 
   virtual int lemma_id_len(string_piece lemma) const = 0;
 
-When given a lemma returned by the dictionary, returns the length of a unique
-lemma identification. The rest of the lemma are comments which do not
-identificate the lemma.
+When given a lemma returned by the dictionary, returns the length of a raw lemma
+plus a lemma id (see Lemma Structure). Therefore, the substring of the original
+lemma of this length is a unique lemma identifier. The rest of the original
+lemma are lemma comments which do not identify the lemma.
 
 
 morpho::new_tokenizer
