@@ -2,21 +2,22 @@ MorphoDiTa
 ==========
 
 MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for
-morphologic analysis of natural language texts. It performs tokenzation,
-morphologic analysis, morphologic generation and tagging and is distributed as
+morphologic analysis of natural language texts. It performs morphologic
+analysis, morphologic generation, tagging and tokenization and is distributed as
 a standalone tool or a library, along with trained linguistic models. In the
 Czech language, MorphoDiTa achieves state-of-the-art results with a throughput
-around 10-200K words per second. Compared to Featurama
-http://sourceforge.net/projects/featurama/ (state-of-the-art Czech tagger
-implementation), it is 5 times faster with models 10 times smaller. MorphoDiTa
-is a free software under LGPL http://www.gnu.org/licenses/lgpl.html license and
-the linguistic models are free for non-commercial use and distributed under CC
-BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/ license.
+around 10-200K words per second. MorphoDiTa is a free software under LGPL
+(http://www.gnu.org/licenses/lgpl.html) license and the linguistic models are
+free for non-commercial use and distributed under [CC BY-NC-SA
+http://creativecommons.org/licenses/by-nc-sa/3.0/] license, although for some
+models the original data used to create the model may impose additional
+licensing conditions.
 
 Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
 Mathematics and Physics, Charles University in Prague, Czech Republic.
 
-MorphoDiTa website: http://ufal.mff.cuni.cz/morphodita
-Contains released packages, trained models, documentation and online demo.
+MorphoDiTa website http://ufal.mff.cuni.cz/morphodita contains released
+packages, trained models, documentation and online demo.
 
-MorphoDiTa development repository: http://github.com/ufal/morphodita
+MorphoDiTa development repository http://github.com/ufal/morphodita is hosted on
+GitHub.

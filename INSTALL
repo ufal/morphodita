@@ -1,5 +1,5 @@
 MorphoDiTa Installation
-
+=======================
 
 Pre-compiled binaries and models are available from LINDAT-Clarin
 (http://www.lindat.cz) infrastructure.
@@ -80,4 +80,3 @@ the PYTHON_INCLUDE variable using
   make PYTHON_INCLUDE=path_to_Python_includes
 
 Both Python 2.6+ and Python 3+ are supported.
-

@@ -1,0 +1,12 @@
+MorphoDiTa
+==========
+
+%!encoding: utf-8
+
+%!include: morphodita_about.t2t
+
+MorphoDiTa website http://ufal.mff.cuni.cz/morphodita contains released
+packages, trained models, documentation and online demo.
+
+MorphoDiTa development repository http://github.com/ufal/morphodita is hosted
+on GitHub.
