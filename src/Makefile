@@ -10,16 +10,15 @@ lib: $(LIBRARIES)
 include Makefile.rules
 
 # object files groups
-COMMON_O = arch/arch-specific
 LZMA_DEC_O = utils/compressor_load utils/lzma/LzmaDec
 LZMA_ENC_O = utils/compressor_save utils/lzma/LzmaEnc utils/lzma/LzFind
 MORPHO_O = $(LZMA_DEC_O) morpho/czech_morpho morpho/morpho morpho/morpho_statistical_guesser morpho/tag_filter tokenizer/czech_tokenizer tokenizer/tokenizer tokenizer/utf8_tokenizer utils/persistent_unordered_map utils/utf8
 MORPHODITA_O = $(MORPHO_O) tagger/tagger
 
 # libraries
-$(call lib,libmorphodita): $(call obj,$(COMMON_O) $(MORPHODITA_O))
+$(call lib,libmorphodita): $(call obj,$(MORPHODITA_O))
 	ar -rcs $@ $^
-$(call lib,libmorphodita.dyn): $(call dynobj,$(COMMON_O) $(MORPHODITA_O))
+$(call lib,libmorphodita.dyn): $(call dynobj,$(MORPHODITA_O))
 	ar -rcs $@ $^
 $(call dynlib,libmorphodita): $(call lib,libmorphodita.dyn)
 	$(CXX) -o $@ $(DYN_LD_FLAGS) -Wl,--whole-archive $< -Wl,-no-whole-archive -Wl,--version-script=libmorphodita.map $(call create_implib,libmorphodita)
@@ -39,7 +38,7 @@ $(call exe,run_tokenizer): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,test_dictionary): $(call obj,$(MORPHO_O) morpho/raw_morpho_dictionary_reader utils/input)
 $(call exe,tagger_accuracy): $(call obj,$(MORPHODITA_O) utils/input)
 $(call exe,train_tagger): $(call obj,$(LZMA_ENC_O) $(MORPHODITA_O) utils/input)
-$(EXECUTABLES): $(call exe,%): $(call obj,% $(COMMON_O))
+$(EXECUTABLES): $(call exe,%): $(call obj,%)
 	$(CXX) $^ -o $@ $(LD_FLAGS)
 
 # cleaning
