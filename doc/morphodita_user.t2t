@@ -21,10 +21,6 @@ This section describes the available language models and also the commandline
 tools and interfaces. The C++ library is described elsewhere, either in
 MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 
-This section describes the commandline tools and interfaces; the models and
-dictionaries; and the Czech morphology. The C++ library with bindings for other
-languages is described elsewhere, either in MorphoDiTa API Tutorial or in
-MorphoDiTa API Reference.
 
 %!include: morphodita_model_czech.t2t
 
