@@ -18,7 +18,7 @@ morphodita_%.html: morphodita_%.t2t *.t2t
 	./txt2tags -t html -C not_web.conf -C strip_level.conf -o- $< | sed '/^<H2>=*<\/H2>$$/d' >$@
 
 web.html: morphodita.t2t *.t2t
-	./txt2tags -t html -C web.conf -o $@ <$
+	./txt2tags -t html -C web.conf -o $@ $<
 
 web_%.html: morphodita_%.t2t *.t2t
 	./txt2tags -t html -C web.conf -C strip_level.conf -o- $< | sed '/^<H2>=*<\/H2>$$/d' >$@
