@@ -10,12 +10,13 @@ Czech models are distributed under the
 The Czech morphology uses the
 [MorfFlex CZ https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9]
 Czech morphological dictionary and the Czech tagger is trained on
-[PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/].
+[PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/]. Czech models work in MorphoDiTa
+version 1.0 or later.
 
 Czech models are versioned according to the version of the MorfFlex CZ
 morphological dictionary used, the version format is ``YYMMDD``, where ``YY``,
 ``MM`` and ``DD`` are two-digit representation of year, month and day,
-respectively.
+respectively. The latest version is 131112.
 
 Compared to Featurama http://sourceforge.net/projects/featurama/
 (state-of-the-art Czech tagger implementation), the models are 5 times faster
