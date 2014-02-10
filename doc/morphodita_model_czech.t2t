@@ -8,10 +8,13 @@ Czech MorphoDiTa Models
 Czech models are distributed under the
 [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
 The Czech morphology uses the
-[MorfFlex CZ https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9]
+[MorfFlex CZ http://hdl.handle.net/11858/00-097C-0000-0015-A780-9]
 Czech morphological dictionary and the Czech tagger is trained on
 [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/]. Czech models work in MorphoDiTa
 version 1.0 or later.
+
+Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser
+are implemented and can be optionally used when performing morphologic analysis.
 
 Czech models are versioned according to the version of the MorfFlex CZ
 morphological dictionary used, the version format is ``YYMMDD``, where ``YY``,
@@ -48,7 +51,7 @@ The main Czech model contains the following files:
 : ``czech-<version>.dict``
   Morphologic dictionary only based on the Jan Hajič's ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ])
   system created from
-  [MorfFlex CZ https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9] morphologic dictionary.
+  [MorfFlex CZ http://hdl.handle.net/11858/00-097C-0000-0015-A780-9] morphologic dictionary.
 
 : ``czech-<version>.tagger-best_accuracy``
   Best and slowest tagger (Viterbi of order 3). Contains the ``czech-<version>.dict`` morphologic dictionary.
@@ -84,7 +87,7 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
 : ``czech-<version>-pos_only.dict``
   Morphologic dictionary only based on the Jan Hajič's ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ])
   system created from
-  [MorfFlex CZ https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9] morphologic dictionary.
+  [MorfFlex CZ http://hdl.handle.net/11858/00-097C-0000-0015-A780-9] morphologic dictionary.
   Only first two tag characters are used.
 
 : ``czech-<version>-pos_only.tagger``
@@ -104,8 +107,7 @@ numbering the lemmas with multiple meanings and supplying additional comments
 for every lemma meaning, as described and demonstrated in
 [Czech Morphologic System #czech_morphologic_system]. Sometimes this may be
 undesirable, for example when comparing to systems which do not use the
-[MorfFlex CZ https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9]
-morphologic dictionary.
+[MorfFlex CZ http://hdl.handle.net/11858/00-097C-0000-0015-A780-9] morphologic dictionary.
 
 Therefore, all already mentioned Czech models have a variant which does not
 disambiguate lemma meanings and provides no additional comments. (In terms of
