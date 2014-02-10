@@ -51,7 +51,9 @@ The main Czech model contains the following files:
   [MorfFlex CZ https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9] morphologic dictionary.
 
 : ``czech-<version>.tagger-best_accuracy``
-  Best and slowest tagger (Viterbi of order 3). Contains the ``czech-<version>.dict`` morphologic dictionary.
+  Best and slowest tagger (Viterbi of order 3) trained on the training portion
+  of [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/]. Contains the
+  ``czech-<version>.dict`` morphologic dictionary.
 
   The latest version ``czech-131112.tagger-best_accuracy`` reaches 95.67% tag
   accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on
@@ -63,7 +65,8 @@ The main Czech model contains the following files:
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
 
 : ``czech-<version>.tagger-fast``
-  Faster tagger with slightly worse results (Viterbi of order 2). Contains also
+  Faster tagger with slightly worse results (Viterbi of order 2) trained on the
+  training portion of [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/]. Contains also
   the ``czech-<version>.dict`` morphologic dictionary.
 
   The latest version ``czech-131112.tagger-fast`` reaches 94.70% tag accuracy,
@@ -88,7 +91,9 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
   Only first two tag characters are used.
 
 : ``czech-<version>-pos_only.tagger``
-  Very fast tagger containing the ``czech-<version>-pos_only.dict`` morphologic dictionary.
+  Very fast tagger trained on the training portion of
+  [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] containing the
+  ``czech-<version>-pos_only.dict`` morphologic dictionary.
 
   The latest version ``czech-131112-pos_only.tagger`` reaches 99.18% tag
   accuracy, 97.64% lemma accuracy and 97.59% overall accuracy on
