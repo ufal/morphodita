@@ -9,7 +9,7 @@
 
 <DIV CLASS="header" ID="header">
 <H1>MorphoDiTa: Morphologic Dictionary and Tagger</H1>
-<H2>Version 0.93</H2>
+<H2>Version 0.94</H2>
 </DIV>
 
 <DIV CLASS="toc">
@@ -310,12 +310,6 @@ This section describes the available language models and also the commandline
 tools and interfaces. The C++ library is described elsewhere, either in
 MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 </P>
-<P>
-This section describes the commandline tools and interfaces; the models and
-dictionaries; and the Czech morphology. The C++ library with bindings for other
-languages is described elsewhere, either in MorphoDiTa API Tutorial or in
-MorphoDiTa API Reference.
-</P>
 
 <A NAME="toc15"></A>
 <H2>4.1. Czech MorphoDiTa Models</H2>
@@ -324,15 +318,20 @@ MorphoDiTa API Reference.
 Czech models are distributed under the
 <A HREF="http://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA</A> licence.
 The Czech morphology uses the
-<A HREF="https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A>
+<A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A>
 Czech morphological dictionary and the Czech tagger is trained on
-<A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>.
+<A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>. Czech models work in MorphoDiTa
+version 1.0 or later.
+</P>
+<P>
+Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser
+are implemented and can be optionally used when performing morphologic analysis.
 </P>
 <P>
 Czech models are versioned according to the version of the MorfFlex CZ
 morphological dictionary used, the version format is <CODE>YYMMDD</CODE>, where <CODE>YY</CODE>,
 <CODE>MM</CODE> and <CODE>DD</CODE> are two-digit representation of year, month and day,
-respectively.
+respectively. The latest version is 131112.
 </P>
 <P>
 Compared to Featurama <A HREF="http://sourceforge.net/projects/featurama/">http://sourceforge.net/projects/featurama/</A>
@@ -376,10 +375,12 @@ The main Czech model contains the following files:
 <DT><CODE>czech-&lt;version&gt;.dict</CODE></DT><DD>
   Morphologic dictionary only based on the Jan Hajič's (<A HREF="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</A>)
   system created from
-  <A HREF="https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphologic dictionary.
+  <A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphologic dictionary.
 <P></P>
 <DT><CODE>czech-&lt;version&gt;.tagger-best_accuracy</CODE></DT><DD>
-  Best and slowest tagger (Viterbi of order 3). Contains the <CODE>czech-&lt;version&gt;.dict</CODE> morphologic dictionary.
+  Best and slowest tagger (Viterbi of order 3) trained on the training portion
+  of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>. Contains the
+  <CODE>czech-&lt;version&gt;.dict</CODE> morphologic dictionary.
 <P></P>
   The latest version <CODE>czech-131112.tagger-best_accuracy</CODE> reaches 95.67% tag
   accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on
@@ -391,7 +392,8 @@ The main Czech model contains the following files:
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
 <P></P>
 <DT><CODE>czech-&lt;version&gt;.tagger-fast</CODE></DT><DD>
-  Faster tagger with slightly worse results (Viterbi of order 2). Contains also
+  Faster tagger with slightly worse results (Viterbi of order 2) trained on the
+  training portion of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>. Contains also
   the <CODE>czech-&lt;version&gt;.dict</CODE> morphologic dictionary.
 <P></P>
   The latest version <CODE>czech-131112.tagger-fast</CODE> reaches 94.70% tag accuracy,
@@ -416,11 +418,13 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
 <DT><CODE>czech-&lt;version&gt;-pos_only.dict</CODE></DT><DD>
   Morphologic dictionary only based on the Jan Hajič's (<A HREF="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</A>)
   system created from
-  <A HREF="https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphologic dictionary.
+  <A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphologic dictionary.
   Only first two tag characters are used.
 <P></P>
 <DT><CODE>czech-&lt;version&gt;-pos_only.tagger</CODE></DT><DD>
-  Very fast tagger containing the <CODE>czech-&lt;version&gt;-pos_only.dict</CODE> morphologic dictionary.
+  Very fast tagger trained on the training portion of
+  <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> containing the
+  <CODE>czech-&lt;version&gt;-pos_only.dict</CODE> morphologic dictionary.
 <P></P>
   The latest version <CODE>czech-131112-pos_only.tagger</CODE> reaches 99.18% tag
   accuracy, 97.64% lemma accuracy and 97.59% overall accuracy on
@@ -438,8 +442,7 @@ numbering the lemmas with multiple meanings and supplying additional comments
 for every lemma meaning, as described and demonstrated in
 <A HREF="#czech_morphologic_system">Czech Morphologic System</A>. Sometimes this may be
 undesirable, for example when comparing to systems which do not use the
-<A HREF="https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A>
-morphologic dictionary.
+<A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphologic dictionary.
 </P>
 <P>
 Therefore, all already mentioned Czech models have a variant which does not

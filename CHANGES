@@ -1,3 +1,10 @@
+Version 0.94 [10 Feb 2014]
+--------------------------
+- Allow new_tokenizer and get_morpho to return NULL
+- Add C++ library to the binary package
+- Remove arch-specific sources
+- Improve czech_tokenizer and czech_morpho consistency
+
 Version 0.93 [29 Jan 2014]
 --------------------------
 - Small API change

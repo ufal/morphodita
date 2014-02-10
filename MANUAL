@@ -1,5 +1,5 @@
 MorphoDiTa: Morphologic Dictionary and Tagger
-Version 0.93
+Version 0.94
 
 Introduction
 ============
@@ -180,11 +180,6 @@ model. This section describes the available language models and also the
 commandline tools and interfaces. The C++ library is described elsewhere, either
 in MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 
-This section describes the commandline tools and interfaces; the models and
-dictionaries; and the Czech morphology. The C++ library with bindings for other
-languages is described elsewhere, either in MorphoDiTa API Tutorial or in
-MorphoDiTa API Reference.
-
 
 Czech MorphoDiTa Models
 -----------------------
@@ -192,13 +187,18 @@ Czech MorphoDiTa Models
 Czech models are distributed under the CC BY-NC-SA
 (http://creativecommons.org/licenses/by-nc-sa/3.0/) licence. The Czech
 morphology uses the MorfFlex CZ
-(https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
-Czech morphological dictionary and the Czech tagger is trained on PDT 2.5
-(http://ufal.mff.cuni.cz/pdt2.5/).
+(http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) Czech morphological
+dictionary and the Czech tagger is trained on PDT 2.5
+(http://ufal.mff.cuni.cz/pdt2.5/). Czech models work in MorphoDiTa version 1.0
+or later.
+
+Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser are
+implemented and can be optionally used when performing morphologic analysis.
 
 Czech models are versioned according to the version of the MorfFlex CZ
 morphological dictionary used, the version format is YYMMDD, where YY, MM and DD
-are two-digit representation of year, month and day, respectively.
+are two-digit representation of year, month and day, respectively. The latest
+version is 131112.
 
 Compared to Featurama http://sourceforge.net/projects/featurama/
 (state-of-the-art Czech tagger implementation), the models are 5 times faster
@@ -234,12 +234,12 @@ The main Czech model contains the following files:
 czech-<version>.dict
   Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
-  CZ
-  (https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
-  morphologic dictionary.
+  CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic
+  dictionary.
   
 czech-<version>.tagger-best_accuracy
-  Best and slowest tagger (Viterbi of order 3). Contains the
+  Best and slowest tagger (Viterbi of order 3) trained on the training portion
+  of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/). Contains the
   czech-<version>.dict morphologic dictionary.
   
   The latest version czech-131112.tagger-best_accuracy reaches 95.67% tag
@@ -252,7 +252,8 @@ czech-<version>.tagger-best_accuracy
   accuracy, respectively, with speed ~2k words/s and size 210MB.
   
 czech-<version>.tagger-fast
-  Faster tagger with slightly worse results (Viterbi of order 2). Contains also
+  Faster tagger with slightly worse results (Viterbi of order 2) trained on the
+  training portion of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/). Contains also
   the czech-<version>.dict morphologic dictionary.
   
   The latest version czech-131112.tagger-fast reaches 94.70% tag accuracy,
@@ -274,13 +275,13 @@ detailed part of speech, respectively. There are 67 such two-letter tags.
 czech-<version>-pos_only.dict
   Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
-  CZ
-  (https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
-  morphologic dictionary. Only first two tag characters are used.
+  CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic
+  dictionary. Only first two tag characters are used.
   
 czech-<version>-pos_only.tagger
-  Very fast tagger containing the czech-<version>-pos_only.dict morphologic
-  dictionary.
+  Very fast tagger trained on the training portion of PDT 2.5
+  (http://ufal.mff.cuni.cz/pdt2.5/) containing the czech-<version>-pos_only.dict
+  morphologic dictionary.
   
   The latest version czech-131112-pos_only.tagger reaches 99.18% tag accuracy,
   97.64% lemma accuracy and 97.59% overall accuracy on PDT 2.5
@@ -297,8 +298,7 @@ numbering the lemmas with multiple meanings and supplying additional comments
 for every lemma meaning, as described and demonstrated in Czech Morphologic
 System. Sometimes this may be undesirable, for example when comparing to systems
 which do not use the MorfFlex CZ
-(https://lindat.mff.cuni.cz/repository/xmlui/handle/11858/00-097C-0000-0015-A780-9)
-morphologic dictionary.
+(http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic dictionary.
 
 Therefore, all already mentioned Czech models have a variant which does not
 disambiguate lemma meanings and provides no additional comments. (In terms of
