@@ -90,11 +90,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
       word | number | url | (utf8_any - whitespace)
         { forms.emplace_back(ts, te - ts);
 
-          // Implement emergency splitting for large sentences
-          if (forms.size() >= 500 ||
-              (forms.size() >= 450 && utf8::is_P(utf8::first(forms.back().str))) ||
-              (forms.size() >= 400 && utf8::is_Po(utf8::first(forms.back().str))))
-            fbreak;
+          if (emergency_sentence_split(forms)) fbreak;
         };
 
       eos closing* whitespace+ >mark_whitespace opening* (utf8_Lu | utf8_Lt)
