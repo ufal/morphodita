@@ -5,4 +5,4 @@ MorphoDiTa
 
 %!include: morphodita_model_about.t2t
 
-%!include: morphodita_model_czech.t2t
+%!include: morphodita_model_czech-morfflex.t2t

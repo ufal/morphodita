@@ -12,29 +12,41 @@ Version 0.94
 
 == Download ==
 
-MorphoDiTa is currently undergoing beta testing. Please let us know if you wish to participate. The beta version includes:
+MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
+a pre-compiled binary package, or source code only. The binary package contains Linux
+and Windows binaries and ``C++`` library, all language bindings (Java, Python)
+and source code (needed to compile the language bindings).
 
-- morphologic dictionary and tagger,
-- Czech models trained on [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/],
-- morphologic dictionary commandline interface, tagger commandline tool
-- C++ library
-- Java bindings
-- Python bindings
+- [Latest release http://github.com/ufal/morphodita/releases/latest]
+- [All releases http://github.com/ufal/morphodita/releases]
 
+=== Language Models ===[language_models]
 
-MorphoDiTa will be available either as pre-compiled binaries and models from [LINDAT-Clarin http://www.lindat.cz] infrastructure or as open-source from [GitHub https://github.com/ufal/morphodita]. If you use this tool for scientific work, please give credit to us by referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and [Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
+To use MorphoDiTa, a language model is needed. The language models are available
+from [LINDAT-Clarin http://www.lindat.cz] infrastructure and described further
+in the User's Manual. Currently the following language models are available:
+
+- Czech: [latest version 131112 ...]
+
 
 == Roadmap ==
 
-- Dec 2013: beta testing
-- Feb 2014: further programming language bindings (Perl, ...)
-- Feb 2014: MorphoDiTa 1.0 release
-- Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
+- further programming language bindings (Perl is planned)
+- more language models (English is planned)
 
 
 == License ==
 
-MorphoDiTa is an open-source project and is freely available for non-commercial purposes. The source code is distributed under [LGPL http://www.gnu.org/licenses/lgpl.html] and the pre-compiled binaries and the associated models and data under [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/].  If you use this tool for scientific work, please give credit to us by referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and [Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
+MorphoDiTa is an open-source project and is freely available for non-commercial
+purposes. The library is distributed under
+[LGPL http://www.gnu.org/licenses/lgpl.html] and the associated models and data
+under [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/], although
+for some models the original data used to create the model may impose
+additional licensing conditions.
+
+If you use this tool for scientific work, please give credit to us by
+referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and
+[Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
 
 
 == Platforms and Requirements ==
@@ -76,14 +88,13 @@ Authors:
 [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita].
 
 
-= Acknowledgements =
+= Acknowledgements =[morphodita_acknowledgements]
 
-This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project LM2010013).
+This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project //LM2010013//).
 
 
-= References =
+== Publications ==
 
-- (Hajič 2004) Jan Hajič. //[Disambiguation of Rich Inflection: Computational Morphology of Czech. http://books.google.cz/books?id=sB63AAAACAAJ]// Karolinum Press (2004).
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. //[Semi-Supervised Training for the Averaged Perceptron POS Tagger. http://aclweb.org/anthology//E/E09/E09-1087.pdf]// In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 
 

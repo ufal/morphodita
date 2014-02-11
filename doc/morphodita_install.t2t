@@ -3,9 +3,18 @@ MorphoDiTa Installation
 
 %!encoding: utf-8
 
-Trained models and pre-compiled binaries and ``C++`` library are available from [LINDAT-Clarin http://www.lindat.cz] infrastructure.
+MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
+a pre-compiled binary package, or source code only. The binary package contains Linux
+and Windows binaries and ``C++`` library, all language bindings (Java, Python)
+and source code (needed to compile the language bindings).
 
-To use MorphoDiTa in other languages than ``C++``, it must be compiled manually. The sources are available either at [LINDAT-Clarin http://www.lindat.cz] or in the [GitHub repository https://github.com/ufal/morphodita].
+To use MorphoDiTa, a language model is needed.
+[Here is a list of available language models http://ufal.mff.cuni.cz/morphodita#language_models].
+
+To use MorphoDiTa in other languages than ``C++``, it must be compiled manually. The sources are available
+on [GitHub http://github.com/ufal/morphodita], both in the
+[pre-compiled binary package releases http://github.com/ufal/morphodita/releases] and also separately.
+
 
 == Requirements ==
 

@@ -27,44 +27,44 @@ Release
 Download
 --------
 
-MorphoDiTa is currently undergoing beta testing. Please let us know if you wish
-to participate. The beta version includes:
+MorphoDiTa releases are available on GitHub (http://github.com/ufal/morphodita),
+either as a pre-compiled binary package, or source code only. The binary package
+contains Linux and Windows binaries and C++ library, all language bindings
+(Java, Python) and source code (needed to compile the language bindings).
 
-- morphologic dictionary and tagger,
-- Czech models trained on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/),
-- morphologic dictionary commandline interface, tagger commandline tool
-- C++ library
-- Java bindings
-- Python bindings
-
-MorphoDiTa will be available either as pre-compiled binaries and models from
-LINDAT-Clarin (http://www.lindat.cz) infrastructure or as open-source from
-GitHub (https://github.com/ufal/morphodita). If you use this tool for scientific
-work, please give credit to us by referencing MorphoDiTa website
-(http://ufal.mff.cuni.cz/morphodita) and Spoustová et al. 2009
-(http://aclweb.org/anthology//E/E09/E09-1087.pdf).
+- Latest release (http://github.com/ufal/morphodita/releases/latest)
+- All releases (http://github.com/ufal/morphodita/releases)
+  
+  === Language Models ===[language_models]
+  
+  To use MorphoDiTa, a language model is needed. The language models are
+  available from LINDAT-Clarin (http://www.lindat.cz) infrastructure and
+  described further in the User's Manual. Currently the following language
+  models are available:
+  
+- Czech: latest version 131112 (...)
 
 
 Roadmap
 -------
 
-- Dec 2013: beta testing
-- Feb 2014: further programming language bindings (Perl, ...)
-- Feb 2014: MorphoDiTa 1.0 release
-- Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
+- further programming language bindings (Perl is planned)
+- more language models (English is planned)
 
 
 License
 -------
 
 MorphoDiTa is an open-source project and is freely available for non-commercial
-purposes. The source code is distributed under LGPL
-(http://www.gnu.org/licenses/lgpl.html) and the pre-compiled binaries and the
-associated models and data under CC BY-NC-SA
-(http://creativecommons.org/licenses/by-nc-sa/3.0/).  If you use this tool for
-scientific work, please give credit to us by referencing MorphoDiTa website
-(http://ufal.mff.cuni.cz/morphodita) and Spoustová et al. 2009
-(http://aclweb.org/anthology//E/E09/E09-1087.pdf).
+purposes. The library is distributed under LGPL
+(http://www.gnu.org/licenses/lgpl.html) and the associated models and data under
+CC BY-NC-SA (http://creativecommons.org/licenses/by-nc-sa/3.0/), although for
+some models the original data used to create the model may impose additional
+licensing conditions.
+
+If you use this tool for scientific work, please give credit to us by
+referencing MorphoDiTa website (http://ufal.mff.cuni.cz/morphodita) and
+Spoustová et al. 2009 (http://aclweb.org/anthology//E/E09/E09-1087.pdf).
 
 
 Platforms and Requirements
@@ -79,12 +79,18 @@ models for the Czech language are available with the tool.
 MorphoDiTa Installation
 =======================
 
-Trained models and pre-compiled binaries and C++ library are available from
-LINDAT-Clarin (http://www.lindat.cz) infrastructure.
+MorphoDiTa releases are available on GitHub (http://github.com/ufal/morphodita),
+either as a pre-compiled binary package, or source code only. The binary package
+contains Linux and Windows binaries and C++ library, all language bindings
+(Java, Python) and source code (needed to compile the language bindings).
+
+To use MorphoDiTa, a language model is needed. Here is a list of available
+language models (http://ufal.mff.cuni.cz/morphodita#language_models).
 
 To use MorphoDiTa in other languages than C++, it must be compiled manually. The
-sources are available either at LINDAT-Clarin (http://www.lindat.cz) or in the
-GitHub repository (https://github.com/ufal/morphodita).
+sources are available on GitHub (http://github.com/ufal/morphodita), both in the
+pre-compiled binary package releases
+(http://github.com/ufal/morphodita/releases) and also separately.
 
 
 Requirements
@@ -189,7 +195,7 @@ Czech models are distributed under the CC BY-NC-SA
 morphology uses the MorfFlex CZ
 (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) Czech morphological
 dictionary and the Czech tagger is trained on PDT 2.5
-(http://ufal.mff.cuni.cz/pdt2.5/). Czech models work in MorphoDiTa version 1.0
+(http://ufal.mff.cuni.cz/pdt2.5/). Czech models work in MorphoDiTa version 1.0.0
 or later.
 
 Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser are
@@ -205,17 +211,58 @@ Compared to Featurama http://sourceforge.net/projects/featurama/
 and 10 times smaller.
 
 
+Acknowledgements
+----------------
+
+This work has been using language resources developed and/or stored and/or
+distributed by the LINDAT-Clarin project of the Ministry of Education of the
+Czech Republic (project LM2010013).
+
+The Czech morphologic system was devised by Jan Hajič.
+
+The guesser research was supported by the projects 1ET101120503 and 1ET101120413
+of Academy of Sciences of the Czech Republic and 100008/2008 of Charles
+University Grant Agency. The research was performed by Jan Hajič, Jaroslava
+Hlaváčová and David Kolovratník.
+
+The tagger algorithm and feature set research was supported by the projects
+MSM0021620838 and LC536 of Ministry of Education, Youth and Sports of the Czech
+Republic, GA405/09/0278 of the Grant Agency of the Czech Republic and
+1ET101120503 of Academy of Sciences of the Czech Republic. The research was
+performed by Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav
+Spousta.
+
+
+Publications
+------------
+
+- (Hajič 2004) Jan Hajič. Disambiguation of Rich Inflection: Computational
+  Morphology of Czech. (http://books.google.cz/books?id=sB63AAAACAAJ) Karolinum
+  Press (2004).
+  
+- Hlaváčová Jaroslava, Kolovratník David. Morfologie češtiny znovu a
+  lépe. In Informačné Technológie - Aplikácie a Teória. Zborník
+  príspevkov, ITAT 2008.  Seňa, Slovakia: PONT s.r.o., 2008, pp. 43-47.
+  
+- (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
+  Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
+  Perceptron POS Tagger. (http://aclweb.org/anthology//E/E09/E09-1087.pdf) In
+  Proceedings of the 12th Conference of the European Chapter of the ACL (EACL
+  2009), pages 763-771, Athens, Greece, March. Association for Computational
+  Linguistics.
+
+
 Czech Morphologic System
 ------------------------
 
 In the Czech language, MorphoDiTa uses Czech morphologic system by Jan Hajič
 (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)). In this system,
-tags are positional with 15 positions corresponding to part of speech, detailed
-part of speech, gender, number, case, etc. (e.g. NNFS1-----A----). Different
-meanings of same lemmas are distinguished and additional comments can be
-provided for every lemma meaning. The lemma itself without the comments and
-meaning specification is called a raw lemma. The following examples illustrate
-this:
+which we call PDT tag set, the tags are positional with 15 positions
+corresponding to part of speech, detailed part of speech, gender, number, case,
+etc. (e.g. NNFS1-----A----).  Different meanings of same lemmas are
+distinguished and additional comments can be provided for every lemma meaning.
+The lemma itself without the comments and meaning specification is called a raw
+lemma. The following examples illustrate this:
 
 - Japonsko_;G (raw lemma: Japonsko)
 - se_^(zvr._zájmeno/částice) (raw lemma: se)
@@ -231,63 +278,65 @@ Main Czech Model
 
 The main Czech model contains the following files:
 
-czech-<version>.dict
+czech-morfflex-pdt-<version>.dict
   Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
-  (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
-  CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic
-  dictionary.
+  (http://books.google.cz/books?id=sB63AAAACAAJ)) system with PDT tag set
+  created from MorfFlex CZ
+  (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic dictionary.
   
-czech-<version>.tagger-best_accuracy
+czech-morfflex-pdt-neopren-<version>.tagger-best_accuracy
   Best and slowest tagger (Viterbi of order 3) trained on the training portion
-  of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/). Contains the
-  czech-<version>.dict morphologic dictionary.
+  of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set.
+  Contains the czech-morfflex-pdt-<version>.dict morphologic dictionary.
   
-  The latest version czech-131112.tagger-best_accuracy reaches 95.67% tag
-  accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphologic tags were
-  remapped using the czech-131112.dict dictionary). Model speed: ~10k words/s,
-  model size: 17MB. For comparison, model trained by Featurama
-  (http://sourceforge.net/projects/featurama/) (state-of-the-art Czech tagger
-  implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and overall
-  accuracy, respectively, with speed ~2k words/s and size 210MB.
+  The latest version czech-morfflex-pdt-neopren-131112.tagger-best_accuracy
+  reaches 95.67% tag accuracy, 97.78% lemma accuracy and 94.97% overall accuracy
+  on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphologic
+  tags and lemmas were remapped using the czech-morfflex-pdt-131112.dict
+  dictionary). Model speed: ~10k words/s, model size: 17MB. For comparison,
+  model trained by Featurama (http://sourceforge.net/projects/featurama/)
+  (state-of-the-art Czech tagger implementation) reaches 95.66%, 97.70%, 94.90%
+  of tag, lemma and overall accuracy, respectively, with speed ~2k words/s and
+  size 210MB.
   
-czech-<version>.tagger-fast
+czech-morfflex-pdt-neopren-<version>.tagger-fast
   Faster tagger with slightly worse results (Viterbi of order 2) trained on the
-  training portion of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/). Contains also
-  the czech-<version>.dict morphologic dictionary.
+  training portion of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the
+  neopren feature set. Contains the czech-morfflex-pdt-<version>.dict
+  morphologic dictionary.
   
-  The latest version czech-131112.tagger-fast reaches 94.70% tag accuracy,
-  97.64% lemma accuracy and 93.94% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5) etest data (whose morphologic tags were
-  remapped using the czech-131112.dict dictionary). Model speed: ~60k words/s,
-  model size: 11MB.
+  The latest version czech-morfflex-pdt-neopren-131112.tagger-fast reaches
+  94.70% tag accuracy, 97.64% lemma accuracy and 93.94% overall accuracy on PDT
+  2.5 (http://ufal.mff.cuni.cz/pdt2.5) etest data (whose morphologic tags and
+  lemmas were remapped using the czech-morfflex-pdt-131112.dict dictionary).
+  Model speed: ~60k words/s, model size: 11MB.
 
 
 Part of Speech Only Variant
 ---------------------------
 
-The tags used by the main Czech model are very fine-grained. In many situations,
-only the part of speech tags would be sufficient. Therefore, we provide a
-variant of the model, denoted as pos_only, where only the first two characters
-of the fifteen-letter tags are used, representing the part of speech and
-detailed part of speech, respectively. There are 67 such two-letter tags.
+The PDT tag set used by the main Czech model is very fine-grained. In many
+situations, only the part of speech tags would be sufficient. Therefore, we
+provide a variant of the model, denoted as pos_only, where only the first two
+characters of the fifteen-letter tags are used, representing the part of speech
+and detailed part of speech, respectively. There are 67 such two-letter tags.
 
-czech-<version>-pos_only.dict
+czech-morfflex-pdt-<version>-pos_only.dict
   Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
   CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic
-  dictionary. Only first two tag characters are used.
+  dictionary. Only first two tag characters of PDT tag set are used.
   
-czech-<version>-pos_only.tagger
+czech-morfflex-pdt-neopren-<version>-pos_only.tagger
   Very fast tagger trained on the training portion of PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5/) containing the czech-<version>-pos_only.dict
-  morphologic dictionary.
+  (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set. Containins
+  the czech-morfflex-pdt-<version>-pos_only.dict morphologic dictionary.
   
-  The latest version czech-131112-pos_only.tagger reaches 99.18% tag accuracy,
-  97.64% lemma accuracy and 97.59% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5) etest data (which morphologic tags were
-  remapped using the czech-131112-pos_only.dict dictionary). Model speed: ~200k
-  words/s, model size: 4MB.
+  The latest version czech-morfflex-pdt-neopren-131112-pos_only.tagger reaches
+  99.18% tag accuracy, 97.64% lemma accuracy and 97.59% overall accuracy on PDT
+  2.5 (http://ufal.mff.cuni.cz/pdt2.5) etest data (which morphologic tags and
+  lemmas were remapped using the czech-morfflex-pdt-131112-pos_only.dict
+  dictionary). Model speed: ~200k words/s, model size: 4MB.
 
 
 Raw Lemmas Variant
@@ -1178,12 +1227,9 @@ distributed by the LINDAT-Clarin project of the Ministry of Education of the
 Czech Republic (project LM2010013).
 
 
-References
-==========
+Publications
+------------
 
-- (Hajič 2004) Jan Hajič. Disambiguation of Rich Inflection: Computational
-  Morphology of Czech. (http://books.google.cz/books?id=sB63AAAACAAJ) Karolinum
-  Press (2004).
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
   Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
   Perceptron POS Tagger. (http://aclweb.org/anthology//E/E09/E09-1087.pdf) In

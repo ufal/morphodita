@@ -40,17 +40,18 @@
     <UL>
     <LI><A HREF="#toc15">4.1. Czech MorphoDiTa Models</A>
       <UL>
-      <LI><A HREF="#czech_morphologic_system">4.1.1. Czech Morphologic System</A>
-      <LI><A HREF="#toc17">4.1.2. Main Czech Model</A>
-      <LI><A HREF="#toc18">4.1.3. Part of Speech Only Variant</A>
-      <LI><A HREF="#toc19">4.1.4. Raw Lemmas Variant</A>
+      <LI><A HREF="#czech_morfflex_acknowledgements">4.1.1. Acknowledgements</A>
+      <LI><A HREF="#czech_morphologic_system">4.1.2. Czech Morphologic System</A>
+      <LI><A HREF="#toc18">4.1.3. Main Czech Model</A>
+      <LI><A HREF="#toc19">4.1.4. Part of Speech Only Variant</A>
+      <LI><A HREF="#toc20">4.1.5. Raw Lemmas Variant</A>
       </UL>
     <LI><A HREF="#run_tagger">4.2. Running the Tagger</A>
       <UL>
       <LI><A HREF="#run_tagger_untokenized">4.2.1. Untokenized Input</A>
       <LI><A HREF="#run_tagger_vertical">4.2.2. Vertical Format</A>
       </UL>
-    <LI><A HREF="#toc23">4.3. Running the Morphology</A>
+    <LI><A HREF="#toc24">4.3. Running the Morphology</A>
       <UL>
       <LI><A HREF="#run_morpho_analyze">4.3.1. Morphologic Analysis</A>
       <LI><A HREF="#run_morpho_generate">4.3.2. Morphologic Generation</A>
@@ -58,18 +59,18 @@
       </UL>
     <LI><A HREF="#run_tokenizer">4.4. Running the Tokenizer</A>
     </UL>
-  <LI><A HREF="#toc28">MorphoDiTa API Tutorial</A>
+  <LI><A HREF="#toc29">MorphoDiTa API Tutorial</A>
     <UL>
-    <LI><A HREF="#toc29">5.1. Tagger API</A>
-    <LI><A HREF="#toc30">5.2. Morphologic Dictionary API</A>
+    <LI><A HREF="#toc30">5.1. Tagger API</A>
+    <LI><A HREF="#toc31">5.2. Morphologic Dictionary API</A>
       <UL>
-      <LI><A HREF="#toc31">5.2.1. Dictionary Construction</A>
-      <LI><A HREF="#toc32">5.2.2. Morphologic Analysis</A>
-      <LI><A HREF="#toc33">5.2.3. Generation</A>
+      <LI><A HREF="#toc32">5.2.1. Dictionary Construction</A>
+      <LI><A HREF="#toc33">5.2.2. Morphologic Analysis</A>
+      <LI><A HREF="#toc34">5.2.3. Generation</A>
       </UL>
     <LI><A HREF="#faq">5.3. Questions and Answers</A>
     </UL>
-  <LI><A HREF="#toc35">MorphoDiTa API Reference</A>
+  <LI><A HREF="#toc36">MorphoDiTa API Reference</A>
     <UL>
     <LI><A HREF="#lemma_structure">6.1. Lemma Structure</A>
     <LI><A HREF="#string_piece">6.2. Struct string_piece</A>
@@ -103,11 +104,11 @@
       <LI><A HREF="#tagger_new_tokenizer">6.9.5. tagger::new_tokenizer</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc61">Contact</A>
-  <LI><A HREF="#toc62">Acknowledgements</A>
-  <LI><A HREF="#toc63">References</A>
+  <LI><A HREF="#toc62">Contact</A>
+  <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc64">9.1. Bibtex for referencing</A>
+    <LI><A HREF="#toc64">8.1. Publications</A>
+    <LI><A HREF="#toc65">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -142,37 +143,48 @@ Mathematics and Physics, Charles University in Prague, Czech Republic.
 <H2>2.1. Download</H2>
 
 <P>
-MorphoDiTa is currently undergoing beta testing. Please let us know if you wish to participate. The beta version includes:
+MorphoDiTa releases are available on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, either as
+a pre-compiled binary package, or source code only. The binary package contains Linux
+and Windows binaries and <CODE>C++</CODE> library, all language bindings (Java, Python)
+and source code (needed to compile the language bindings).
 </P>
 
 <UL>
-<LI>morphologic dictionary and tagger,
-<LI>Czech models trained on <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>,
-<LI>morphologic dictionary commandline interface, tagger commandline tool
-<LI>C++ library
-<LI>Java bindings
-<LI>Python bindings
+<LI><A HREF="http://github.com/ufal/morphodita/releases/latest">Latest release</A>
+<LI><A HREF="http://github.com/ufal/morphodita/releases">All releases</A>
+<P></P>
+=== Language Models ===[language_models]
+<P></P>
+To use MorphoDiTa, a language model is needed. The language models are available
+from <A HREF="http://www.lindat.cz">LINDAT-Clarin</A> infrastructure and described further
+in the User's Manual. Currently the following language models are available:
+<P></P>
+<LI>Czech: <A HREF="...">latest version 131112</A>
 </UL>
-
-<P>
-MorphoDiTa will be available either as pre-compiled binaries and models from <A HREF="http://www.lindat.cz">LINDAT-Clarin</A> infrastructure or as open-source from <A HREF="https://github.com/ufal/morphodita">GitHub</A>. If you use this tool for scientific work, please give credit to us by referencing <A HREF="http://ufal.mff.cuni.cz/morphodita">MorphoDiTa website</A> and <A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Spoustová et al. 2009</A>.
-</P>
 
 <A NAME="toc4"></A>
 <H2>2.2. Roadmap</H2>
 
 <UL>
-<LI>Dec 2013: beta testing
-<LI>Feb 2014: further programming language bindings (Perl, ...)
-<LI>Feb 2014: MorphoDiTa 1.0 release
-<LI>Q1/Q2 2014: more language models (English, Slovak, Polish, ...)
+<LI>further programming language bindings (Perl is planned)
+<LI>more language models (English is planned)
 </UL>
 
 <A NAME="toc5"></A>
 <H2>2.3. License</H2>
 
 <P>
-MorphoDiTa is an open-source project and is freely available for non-commercial purposes. The source code is distributed under <A HREF="http://www.gnu.org/licenses/lgpl.html">LGPL</A> and the pre-compiled binaries and the associated models and data under <A HREF="http://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA</A>.  If you use this tool for scientific work, please give credit to us by referencing <A HREF="http://ufal.mff.cuni.cz/morphodita">MorphoDiTa website</A> and <A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Spoustová et al. 2009</A>.
+MorphoDiTa is an open-source project and is freely available for non-commercial
+purposes. The library is distributed under
+<A HREF="http://www.gnu.org/licenses/lgpl.html">LGPL</A> and the associated models and data
+under <A HREF="http://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA</A>, although
+for some models the original data used to create the model may impose
+additional licensing conditions.
+</P>
+<P>
+If you use this tool for scientific work, please give credit to us by
+referencing <A HREF="http://ufal.mff.cuni.cz/morphodita">MorphoDiTa website</A> and
+<A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Spoustová et al. 2009</A>.
 </P>
 
 <A NAME="toc6"></A>
@@ -186,10 +198,19 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows.
 <H1>3. MorphoDiTa Installation</H1>
 
 <P>
-Trained models and pre-compiled binaries and <CODE>C++</CODE> library are available from <A HREF="http://www.lindat.cz">LINDAT-Clarin</A> infrastructure.
+MorphoDiTa releases are available on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, either as
+a pre-compiled binary package, or source code only. The binary package contains Linux
+and Windows binaries and <CODE>C++</CODE> library, all language bindings (Java, Python)
+and source code (needed to compile the language bindings).
 </P>
 <P>
-To use MorphoDiTa in other languages than <CODE>C++</CODE>, it must be compiled manually. The sources are available either at <A HREF="http://www.lindat.cz">LINDAT-Clarin</A> or in the <A HREF="https://github.com/ufal/morphodita">GitHub repository</A>.
+To use MorphoDiTa, a language model is needed.
+<A HREF="http://ufal.mff.cuni.cz/morphodita#language_models">Here is a list of available language models</A>.
+</P>
+<P>
+To use MorphoDiTa in other languages than <CODE>C++</CODE>, it must be compiled manually. The sources are available
+on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, both in the
+<A HREF="http://github.com/ufal/morphodita/releases">pre-compiled binary package releases</A> and also separately.
 </P>
 
 <A NAME="toc8"></A>
@@ -321,7 +342,7 @@ The Czech morphology uses the
 <A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A>
 Czech morphological dictionary and the Czech tagger is trained on
 <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>. Czech models work in MorphoDiTa
-version 1.0 or later.
+version 1.0.0 or later.
 </P>
 <P>
 Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser
@@ -339,18 +360,53 @@ Compared to Featurama <A HREF="http://sourceforge.net/projects/featurama/">http:
 and 10 times smaller.
 </P>
 
+<A NAME="czech_morfflex_acknowledgements"></A>
+<H3>4.1.1. Acknowledgements</H3>
+
+<P>
+This work has been using language resources developed and/or stored and/or
+distributed by the LINDAT-Clarin project of the Ministry of Education of the
+Czech Republic (project <I>LM2010013</I>).
+</P>
+<P>
+The Czech morphologic system was devised by Jan Hajič.
+</P>
+<P>
+The guesser research was supported by the projects
+<I>1ET101120503</I> and <I>1ET101120413</I> of Academy of Sciences of the Czech
+Republic and <I>100008/2008</I> of Charles University Grant Agency. The research
+was performed by Jan Hajič, Jaroslava Hlaváčová and David Kolovratník.
+</P>
+<P>
+The tagger algorithm and feature set research was supported by the projects
+<I>MSM0021620838</I> and <I>LC536</I> of Ministry of Education, Youth and Sports of the Czech Republic,
+<I>GA405/09/0278</I> of the Grant Agency of the Czech Republic and <I>1ET101120503</I> of
+Academy of Sciences of the Czech Republic. The research was performed by
+Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
+</P>
+
+<H4>4.1.1.1. Publications</H4>
+
+<UL>
+<LI>(Hajič 2004) Jan Hajič. <I><A HREF="http://books.google.cz/books?id=sB63AAAACAAJ">Disambiguation of Rich Inflection: Computational Morphology of Czech.</A></I> Karolinum Press (2004).
+<P></P>
+<LI>Hlaváčová Jaroslava, Kolovratník David. <I>Morfologie češtiny znovu a lépe.</I> In Informačné Technológie - Aplikácie a Teória. Zborník príspevkov, ITAT 2008.  Seňa, Slovakia: PONT s.r.o., 2008, pp. 43-47.
+<P></P>
+<LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
+</UL>
+
 <A NAME="czech_morphologic_system"></A>
-<H3>4.1.1. Czech Morphologic System</H3>
+<H3>4.1.2. Czech Morphologic System</H3>
 
 <P>
 In the Czech language, MorphoDiTa uses Czech morphologic system by
 Jan Hajič (<A HREF="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</A>).
-In this system, tags are positional with 15 positions corresponding to part of
-speech, detailed part of speech, gender, number, case, etc. (e.g. <CODE>NNFS1-----A----</CODE>).
-Different meanings of same lemmas are distinguished and additional comments
-can be provided for every lemma meaning. The lemma itself without the comments
-and meaning specification is called a <I>raw lemma</I>. The following examples
-illustrate this:
+In this system, which we call <I>PDT tag set</I>, the tags are positional with 15
+positions corresponding to part of speech, detailed part of speech, gender,
+number, case, etc. (e.g. <CODE>NNFS1-----A----</CODE>).  Different meanings of same
+lemmas are distinguished and additional comments can be provided for every
+lemma meaning. The lemma itself without the comments and meaning specification
+is called a <I>raw lemma</I>. The following examples illustrate this:
 </P>
 
 <UL>
@@ -364,50 +420,50 @@ For a more detailed reference about the Czech morphology, please see
 <A HREF="http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html">Lemma and Tag Structure in PDT 2.0</A>.
 </P>
 
-<A NAME="toc17"></A>
-<H3>4.1.2. Main Czech Model</H3>
+<A NAME="toc18"></A>
+<H3>4.1.3. Main Czech Model</H3>
 
 <P>
 The main Czech model contains the following files:
 </P>
 
 <DL>
-<DT><CODE>czech-&lt;version&gt;.dict</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-&lt;version&gt;.dict</CODE></DT><DD>
   Morphologic dictionary only based on the Jan Hajič's (<A HREF="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</A>)
-  system created from
+  system with PDT tag set created from
   <A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphologic dictionary.
 <P></P>
-<DT><CODE>czech-&lt;version&gt;.tagger-best_accuracy</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-neopren-&lt;version&gt;.tagger-best_accuracy</CODE></DT><DD>
   Best and slowest tagger (Viterbi of order 3) trained on the training portion
-  of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>. Contains the
-  <CODE>czech-&lt;version&gt;.dict</CODE> morphologic dictionary.
+  of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> using the <CODE>neopren</CODE> feature
+  set. Contains the <CODE>czech-morfflex-pdt-&lt;version&gt;.dict</CODE> morphologic dictionary.
 <P></P>
-  The latest version <CODE>czech-131112.tagger-best_accuracy</CODE> reaches 95.67% tag
+  The latest version <CODE>czech-morfflex-pdt-neopren-131112.tagger-best_accuracy</CODE> reaches 95.67% tag
   accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on
-  <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> etest data (whose morphologic tags
-  were remapped using the <CODE>czech-131112.dict</CODE> dictionary). Model speed: ~10k words/s,
+  <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> etest data (whose morphologic tags and lemmas
+  were remapped using the <CODE>czech-morfflex-pdt-131112.dict</CODE> dictionary). Model speed: ~10k words/s,
   model size: 17MB. For comparison, model trained by
   <A HREF="http://sourceforge.net/projects/featurama/">Featurama</A> (state-of-the-art
   Czech tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
 <P></P>
-<DT><CODE>czech-&lt;version&gt;.tagger-fast</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-neopren-&lt;version&gt;.tagger-fast</CODE></DT><DD>
   Faster tagger with slightly worse results (Viterbi of order 2) trained on the
-  training portion of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A>. Contains also
-  the <CODE>czech-&lt;version&gt;.dict</CODE> morphologic dictionary.
+  training portion of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> using the <CODE>neopren</CODE>
+  feature set. Contains the <CODE>czech-morfflex-pdt-&lt;version&gt;.dict</CODE> morphologic dictionary.
 <P></P>
-  The latest version <CODE>czech-131112.tagger-fast</CODE> reaches 94.70% tag accuracy,
+  The latest version <CODE>czech-morfflex-pdt-neopren-131112.tagger-fast</CODE> reaches 94.70% tag accuracy,
   97.64% lemma accuracy and 93.94% overall accuracy on
-  <A HREF="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</A> etest data (whose morphologic tags
-  were remapped using the <CODE>czech-131112.dict</CODE> dictionary). Model speed: ~60k words/s,
+  <A HREF="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</A> etest data (whose morphologic tags and lemmas
+  were remapped using the <CODE>czech-morfflex-pdt-131112.dict</CODE> dictionary). Model speed: ~60k words/s,
   model size: 11MB.
 </DL>
 
-<A NAME="toc18"></A>
-<H3>4.1.3. Part of Speech Only Variant</H3>
+<A NAME="toc19"></A>
+<H3>4.1.4. Part of Speech Only Variant</H3>
 
 <P>
-The tags used by the main Czech model are very fine-grained. In many
+The PDT tag set used by the main Czech model is very fine-grained. In many
 situations, only the part of speech tags would be sufficient. Therefore, we
 provide a variant of the model, denoted as <CODE>pos_only</CODE>, where only the first
 two characters of the fifteen-letter tags are used, representing the part of
@@ -415,26 +471,26 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
 </P>
 
 <DL>
-<DT><CODE>czech-&lt;version&gt;-pos_only.dict</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-&lt;version&gt;-pos_only.dict</CODE></DT><DD>
   Morphologic dictionary only based on the Jan Hajič's (<A HREF="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</A>)
   system created from
   <A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphologic dictionary.
-  Only first two tag characters are used.
+  Only first two tag characters of PDT tag set are used.
 <P></P>
-<DT><CODE>czech-&lt;version&gt;-pos_only.tagger</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-neopren-&lt;version&gt;-pos_only.tagger</CODE></DT><DD>
   Very fast tagger trained on the training portion of
-  <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> containing the
-  <CODE>czech-&lt;version&gt;-pos_only.dict</CODE> morphologic dictionary.
+  <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> using the <CODE>neopren</CODE> feature
+  set. Containins the <CODE>czech-morfflex-pdt-&lt;version&gt;-pos_only.dict</CODE> morphologic dictionary.
 <P></P>
-  The latest version <CODE>czech-131112-pos_only.tagger</CODE> reaches 99.18% tag
+  The latest version <CODE>czech-morfflex-pdt-neopren-131112-pos_only.tagger</CODE> reaches 99.18% tag
   accuracy, 97.64% lemma accuracy and 97.59% overall accuracy on
-  <A HREF="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</A> etest data (which morphologic tags
-  were remapped using the <CODE>czech-131112-pos_only.dict</CODE> dictionary).
+  <A HREF="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</A> etest data (which morphologic tags and lemmas
+  were remapped using the <CODE>czech-morfflex-pdt-131112-pos_only.dict</CODE> dictionary).
   Model speed: ~200k words/s, model size: 4MB.
 </DL>
 
-<A NAME="toc19"></A>
-<H3>4.1.4. Raw Lemmas Variant</H3>
+<A NAME="toc20"></A>
+<H3>4.1.5. Raw Lemmas Variant</H3>
 
 <P>
 The Czech morphologic system distinguish different meanings of same lemmas by
@@ -576,7 +632,7 @@ těšit_:T        VB-S---3P-AA---
 .       Z:-------------
 </PRE>
 
-<A NAME="toc23"></A>
+<A NAME="toc24"></A>
 <H2>4.3. Running the Morphology</H2>
 
 <P>
@@ -879,7 +935,7 @@ těší
 
 </PRE>
 
-<A NAME="toc28"></A>
+<A NAME="toc29"></A>
 <H1>5. MorphoDiTa API Tutorial</H1>
 
 <P>
@@ -893,7 +949,7 @@ The MorphoDiTa API is defined in header <CODE>morphodita.h</CODE> and resides in
 using namespace ufal::morphodita;
 </PRE>
 
-<A NAME="toc29"></A>
+<A NAME="toc30"></A>
 <H2>5.1. Tagger API</H2>
 
 <P>
@@ -964,7 +1020,7 @@ public members: <CODE>std::string lemma</CODE> and <CODE>std:string tag</CODE>, 
 predicted lemma and tag, respectively.
 </P>
 
-<A NAME="toc30"></A>
+<A NAME="toc31"></A>
 <H2>5.2. Morphologic Dictionary API</H2>
 
 <P>
@@ -973,7 +1029,7 @@ The main access to MorphoDiTa morphologic dictionary is through class
 <CODE>run_morpho.cpp</CODE>.
 </P>
 
-<A NAME="toc31"></A>
+<A NAME="toc32"></A>
 <H3>5.2.1. Dictionary Construction</H3>
 
 <P>
@@ -1014,7 +1070,7 @@ Please note that you should not delete this pointer as it is owned by the
 <CODE>tagger</CODE> class instance.
 </P>
 
-<A NAME="toc32"></A>
+<A NAME="toc33"></A>
 <H3>5.2.2. Morphologic Analysis</H3>
 
 <P>
@@ -1054,7 +1110,7 @@ caller must provide an output vector <CODE>std::vector&lt;tagged_lemma&gt;</CODE
 method <CODE>morpho::analyze</CODE> assigns the output to this vector.
 </P>
 
-<A NAME="toc33"></A>
+<A NAME="toc34"></A>
 <H3>5.2.3. Generation</H3>
 
 <P>
@@ -1125,7 +1181,7 @@ is found by the guesser, <CODE>GUESSER</CODE> is returned. Otherwise, forms are 
   implicit conversion rules.
 </DL>
 
-<A NAME="toc35"></A>
+<A NAME="toc36"></A>
 <H1>6. MorphoDiTa API Reference</H1>
 
 <P>
@@ -1557,7 +1613,7 @@ exists. The user should delete it after use.
 The call is equal to <CODE><A HREF="#tagger_get_morpho">get_morpho()</A>-&gt;<A HREF="#morpho_new_tokenizer">new_tokenizer()</A></CODE>.
 </P>
 
-<A NAME="toc61"></A>
+<A NAME="toc62"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1573,23 +1629,22 @@ Authors:
 <A HREF="http://ufal.mff.cuni.cz/morphodita">MorphoDiTa website</A>.
 </P>
 
-<A NAME="toc62"></A>
+<A NAME="morphodita_acknowledgements"></A>
 <H1>8. Acknowledgements</H1>
 
 <P>
-This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project LM2010013).
+This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project <I>LM2010013</I>).
 </P>
 
-<A NAME="toc63"></A>
-<H1>9. References</H1>
+<A NAME="toc64"></A>
+<H2>8.1. Publications</H2>
 
 <UL>
-<LI>(Hajič 2004) Jan Hajič. <I><A HREF="http://books.google.cz/books?id=sB63AAAACAAJ">Disambiguation of Rich Inflection: Computational Morphology of Czech.</A></I> Karolinum Press (2004).
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc64"></A>
-<H2>9.1. Bibtex for referencing</H2>
+<A NAME="toc65"></A>
+<H2>8.2. Bibtex for referencing</H2>
 
 <PRE>
 @inproceedings{spoustova09,
