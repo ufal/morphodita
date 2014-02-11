@@ -20,6 +20,7 @@ and source code (needed to compile the language bindings).
 - [Latest release http://github.com/ufal/morphodita/releases/latest]
 - [All releases http://github.com/ufal/morphodita/releases]
 
+
 === Language Models ===[language_models]
 
 To use MorphoDiTa, a language model is needed. The language models are available
