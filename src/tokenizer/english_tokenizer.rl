@@ -33,18 +33,18 @@ namespace morphodita {
 // The list of lower cased words that when preceding eos do not end sentence.
 static unordered_set<string> eos_word_exceptions = {
   // Titles
-  "Adj", "Adm", "Adv", "Assoc", "Asst", "Bart", "Bldg", "Brig", "Bros", "Capt",
-  "Cmdr", "Col", "Comdr", "Con", "Corp", "Cpl", "D", "DR", "Dr", "Drs", "Ens",
-  "Gen", "Gov", "Hon", "Hosp", "Hr", "Insp", "Lt", "MM", "MR", "MRS", "MS",
-  "Maj", "Messrs", "Mlle", "Mme", "Mr", "Mrs", "Ms", "Msgr", "Op", "Ord",
-  "Pfc", "Ph", "PhD", "Prof", "Pvt", "Rep", "Reps", "Res", "Rev", "Rt", "Sen",
-  "Sens", "Sfc", "Sgt", "Sr", "St", "Supt", "Surg", "Univ",
+  "adj", "adm", "adv", "assoc", "asst", "bart", "bldg", "brig", "bros", "capt",
+  "cmdr", "col", "comdr", "con", "corp", "cpl", "d", "dr", "dr", "drs", "ens",
+  "gen", "gov", "hon", "hosp", "hr", "insp", "lt", "mm", "mr", "mrs", "ms",
+  "maj", "messrs", "mlle", "mme", "mr", "mrs", "ms", "msgr", "op", "ord",
+  "pfc", "ph", "phd", "prof", "pvt", "rep", "reps", "res", "rev", "rt", "sen",
+  "sens", "sfc", "sgt", "sr", "st", "supt", "surg", "univ",
   // Common abbrevs
-  "Apr", "Aug", "Calif", "Co", "Dec", "Def", "E", "Feb", "Fla", "Gen", "Gov",
-  "Inc", "Jan", "Jr", "Ltd", "Mar", "Mt", "N", "Nov", "Oct", "Ont", "Pa",
-  "Pres", "Rep", "Rev", "S", "Sec", "Sen", "Sep", "Sept", "Sgt", "UN", "Univ",
-  "Va", "W", "addr", "approx", "corp", "def", "e.g", "eg", "ft", "hrs", "i.e",
-  "ie", "jr", "max", "min", "mph", "rev", "sr", "tel", "v", "vs", "yrs",
+  "addr", "approx", "apr", "aug", "calif", "co", "corp", "dec", "def", "e",
+  "e.g", "eg", "feb", "fla", "ft", "gen", "gov", "hrs", "i.", "i.e", "ie",
+  "inc", "jan", "jr", "ltd", "mar", "max", "min", "mph", "mt", "n", "nov",
+  "oct", "ont", "pa", "pres", "rep", "rev", "s", "sec", "sen", "sep", "sept",
+  "sgt", "sr", "tel", "un", "univ", "v", "va", "vs", "w", "yrs",
 };
 
 bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
@@ -55,7 +55,6 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
   char32_t unary_chr;
   const char* unary_text;
   const char* whitespace = nullptr; // Suppress "may be uninitialized" warning
-  const char* split = nullptr; // Suppress "may be uninitialized" warning
   %%{
     variable p text;
     variable pe text_end;
@@ -79,20 +78,21 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
 
     multiletter_punctuation = "--" | apo apo | backapo backapo;
 
-    action mark_split { split = text; }
-    word_with_split =
-      (word >mark_split apo ('s'i | 'm'i | 'd'i | 'll'i | 're'i | 've'i)) |
-      (word >mark_split 'n'i apo 't'i) |
-      ('can'i >mark_split 'not'i) |
-      ('d'i apo >mark_split 'ye'i) |
-      ('gim'i >mark_split 'me'i) |
-      ('gon'i >mark_split 'na'i) |
-      ('got'i >mark_split 'ta'i) |
-      ('lem'i >mark_split 'me'i) |
-      ('more'i >mark_split apo 'n'i) |
-      (apo 't'i >mark_split 'is'i) |
-      (apo 't'i >mark_split 'was'i) |
-      ('wan'i >mark_split 'na'i);
+    word_with_split2 =
+      (word apo ('s'i | 'm'i | 'd'i)) |
+      ('d'i apo 'ye'i) |
+      ('gimme'i) |
+      ('gonna'i) |
+      ('gotta'i) |
+      ('lemme'i) |
+      ('more'i apo 'n'i) |
+      (apo 'tis'i) |
+      ('wanna'i);
+    word_with_split3 =
+      (word apo ('ll'i | 're'i | 've'i)) |
+      (word 'n'i apo 't'i) |
+      ('cannot'i) |
+      (apo 'twas'i);
 
     # Segmentation
     action mark_whitespace { whitespace = text; }
@@ -101,15 +101,22 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     opening = '"' | utf8_Ps | utf8_Pi;
 
     main := |*
-      word | number | url | multiletter_punctuation | (utf8_any - whitespace)
-        { forms.emplace_back(ts, te - ts);
+      word_with_split2
+        { forms.emplace_back(ts, te - 2 - ts);
+          forms.emplace_back(te - 2, 2);
 
           if (emergency_sentence_split(forms)) fbreak;
         };
 
-      word_with_split
-        { forms.emplace_back(ts, split - ts);
-          forms.emplace_back(split, te - split);
+      word_with_split3
+        { forms.emplace_back(ts, te - 3 - ts);
+          forms.emplace_back(te - 3, 3);
+
+          if (emergency_sentence_split(forms)) fbreak;
+        };
+
+      word | number | url | multiletter_punctuation | (utf8_any - whitespace)
+        { forms.emplace_back(ts, te - ts);
 
           if (emergency_sentence_split(forms)) fbreak;
         };

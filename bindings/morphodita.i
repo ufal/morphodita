@@ -93,6 +93,10 @@ class tokenizer {
   %rename(newCzechTokenizer) new_czech_tokenizer;
   %newobject new_czech_tokenizer;
   static tokenizer* new_czech_tokenizer();
+
+  %rename(newEnglishTokenizer) new_english_tokenizer;
+  %newobject new_english_tokenizer;
+  static tokenizer* new_english_tokenizer();
 };
 
 %rename(Morpho) morpho;
