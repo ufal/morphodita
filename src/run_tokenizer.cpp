@@ -51,7 +51,6 @@ void tokenize(FILE* in, FILE* out, tokenizer& tokenizer) {
   string para;
   vector<string_piece> forms;
   while (getpara(in, para)) {
-    eprintf("Have para: '%s'\n", para.c_str());
     // Tokenize
     tokenizer.set_text(para);
     while (tokenizer.next_sentence(&forms, nullptr)) {
