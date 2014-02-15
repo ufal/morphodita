@@ -23,6 +23,7 @@
 #include "tagger/tagger.h"
 #include "utils/input.h"
 #include "utils/output.h"
+#include "utils/parse_options.h"
 #include "utils/process_args.h"
 
 using namespace ufal::morphodita;
@@ -31,22 +32,25 @@ static void tag_vertical(FILE* in, FILE* out, const tagger& tagger);
 static void tag_untokenized(FILE* in, FILE* out, const tagger& tagger);
 
 int main(int argc, char* argv[]) {
-  bool use_vertical = false;
-
-  int argi = 1;
-  if (argi < argc && strcmp(argv[argi], "-v") == 0) argi++, use_vertical = true;
-  if (argi >= argc) runtime_errorf("Usage: %s [-v] tagger_file [file[:output_file]]...", argv[0]);
+  options_map options;
+  if (!parse_options({{"input",{"untokenized", "vertical"}},
+                      {"convert_tagset",{""}},
+                      {"output",{"vertical","xml"}}}, argc, argv, options) ||
+      argc < 2)
+    runtime_errorf("Usage: %s [options] tagger_file [file[:output_file]]...\n"
+                   "Options: --input=untokenized|vertical\n"
+                   "         --convert_tagset=pdt_to_conll2009\n"
+                   "         --output=vertical|xml", argv[0]);
 
   eprintf("Loading tagger: ");
-  unique_ptr<tagger> tagger(tagger::load(argv[argi]));
-  if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[argi]);
+  unique_ptr<tagger> tagger(tagger::load(argv[1]));
+  if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
   eprintf("done\n");
-  argi++;
 
   eprintf("Tagging: ");
   clock_t now = clock();
-  if (use_vertical) process_args(argi, argc, argv, tag_vertical, *tagger);
-  else process_args(argi, argc, argv, tag_untokenized, *tagger);
+  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger);
+  else process_args(2, argc, argv, tag_untokenized, *tagger);
   eprintf("done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 
   return 0;
