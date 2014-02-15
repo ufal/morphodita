@@ -22,12 +22,12 @@ import java.util.Scanner;
 class RunTokenizer {
   public static void main(String[] args) {
     if (args.length < 1) {
-      System.err.println("Usage: RunTokenizer [-czech | dict_file]");
+      System.err.println("Usage: RunTokenizer [--czech | dict_file]");
       System.exit(1);
     }
 
     Tokenizer tokenizer;
-    if (args[0].equals("-czech")) {
+    if (args[0].equals("--czech")) {
       tokenizer = Tokenizer.newCzechTokenizer();
     } else {
       System.err.print("Loading dictionary: ");

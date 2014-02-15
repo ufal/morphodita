@@ -29,10 +29,10 @@ if sys.version_info[0] < 3:
   sys.stdout = codecs.getwriter(encoding)(sys.stdout)
 
 if len(sys.argv) < 2:
-  sys.stderr.write('Usage: %s [-czech | dict_file]\n' % sys.argv[0])
+  sys.stderr.write('Usage: %s [--czech | dict_file]\n' % sys.argv[0])
   sys.exit(1)
 
-if sys.argv[1] == "-czech":
+if sys.argv[1] == "--czech":
   tokenizer = Tokenizer.newCzechTokenizer()
 else:
   sys.stderr.write('Loading dictionary: ')

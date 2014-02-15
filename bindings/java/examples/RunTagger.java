@@ -20,45 +20,25 @@ import cz.cuni.mff.ufal.morphodita.*;
 import java.util.Scanner;
 
 class RunTagger {
-  public static void tagVertical(Tagger tagger) {
-    Forms forms = new Forms();
-    TaggedLemmas lemmas = new TaggedLemmas();
-    Scanner reader = new Scanner(System.in);
-
-    boolean not_eof = true;
-    while (not_eof) {
-      String line;
-
-      forms.clear();
-      while ((not_eof = reader.hasNextLine()) && !(line = reader.nextLine()).isEmpty())
-        forms.add(line);
-
-      if (!forms.isEmpty()) {
-        tagger.tag(forms, lemmas);
-
-        for (int i = 0; i < lemmas.size(); i++) {
-          TaggedLemma lemma = lemmas.get(i);
-          System.out.printf("%s\t%s\n", lemma.getLemma(), lemma.getTag());
-        }
-        System.out.println();
-      }
+  public static void main(String[] args) {
+    if (args.length == 0) {
+      System.err.println("Usage: RunTagger tagger_file");
+      System.exit(1);
     }
-  }
 
-  public static String encodeEntities(String text) {
-    return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;");
-  }
+    System.err.print("Loading tagger: ");
+    Tagger tagger = Tagger.load(args[0]);
+    if (tagger == null) {
+      System.err.println("Cannot load tagger from file '" + args[0] + "'");
+      System.exit(1);
+    }
+    System.err.println("done");
 
-  public static void tagUntokenized(Tagger tagger) {
     Forms forms = new Forms();
     TaggedLemmas lemmas = new TaggedLemmas();
     TokenRanges tokens = new TokenRanges();
     Scanner reader = new Scanner(System.in);
     Tokenizer tokenizer = tagger.newTokenizer();
-    if (tokenizer == null) {
-      System.err.println("No tokenizer is defined for the supplied model!");
-      System.exit(1);
-    }
 
     boolean not_eof = true;
     while (not_eof) {
@@ -75,45 +55,16 @@ class RunTagger {
       // Tokenize and tag
       String text = textBuilder.toString();
       tokenizer.setText(text);
-      int t = 0;
       while (tokenizer.nextSentence(forms, tokens)) {
         tagger.tag(forms, lemmas);
 
         for (int i = 0; i < lemmas.size(); i++) {
           TaggedLemma lemma = lemmas.get(i);
           TokenRange token = tokens.get(i);
-          int token_start = (int)token.getStart(), token_end = token_start + (int)token.getLength();
-          System.out.printf("%s<form lemma=\"%s\" tag=\"%s\">%s</form>",
-                            encodeEntities(text.substring(t, token_start)),
-                            encodeEntities(lemma.getLemma()),
-                            encodeEntities(lemma.getTag()),
-                            encodeEntities(text.substring(token_start, token_end)));
-          t = token_end;
+          System.out.printf("%s\t%s\t%s\n", /*form.get(i) or */ text.substring((int)token.getStart(), (int)token.getStart() + (int)token.getLength()), lemma.getLemma(), lemma.getTag());
         }
+        System.out.println();
       }
-      System.out.print(encodeEntities(text.substring(t)));
     }
-  }
-
-  public static void main(String[] args) {
-    int argi = 0;
-    if (argi < args.length && args[argi].equals("-v")) argi++;
-    boolean use_vertical = argi > 0;
-
-    if (!(argi < args.length)) {
-      System.err.println("Usage: RunTagger tagger_file");
-      System.exit(1);
-    }
-
-    System.err.print("Loading tagger: ");
-    Tagger tagger = Tagger.load(args[argi]);
-    if (tagger == null) {
-      System.err.println("Cannot load tagger from file '" + args[argi] + "'");
-      System.exit(1);
-    }
-    System.err.println("done");
-
-    if (use_vertical) tagVertical(tagger);
-    else tagUntokenized(tagger);
   }
 }
