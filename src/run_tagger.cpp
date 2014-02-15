@@ -69,8 +69,8 @@ void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenize
     while (tokenizer.next_sentence(&forms, nullptr)) {
       tagger.tag(forms, tags);
 
-      for (auto&& tag : tags)
-        fprintf(out, "%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
+      for (unsigned i = 0; i < tags.size(); i++)
+        fprintf(out, "%.*s\t%s\t%s\n", int(forms[i].len), forms[i].str, tags[i].lemma.c_str(), tags[i].tag.c_str());
       fputc('\n', out);
     }
   }
@@ -90,13 +90,13 @@ void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer) {
 
       for (unsigned i = 0; i < forms.size(); i++) {
         if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
-        fputs("<form lemma=\"", out);
+        fputs("<token lemma=\"", out);
         print_xml_content(out, tags[i].lemma.c_str(), tags[i].lemma.size());
         fputs("\" tag=\"", out);
         print_xml_content(out, tags[i].tag.c_str(), tags[i].tag.size());
         fputs("\">", out);
         print_xml_content(out, forms[i].str, forms[i].len);
-        fputs("</form>", out);
+        fputs("</token>", out);
         unprinted = forms[i].str + forms[i].len;
       }
     }

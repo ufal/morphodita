@@ -51,10 +51,11 @@
       </UL>
     <LI><A HREF="#run_tagger">4.2. Running the Tagger</A>
       <UL>
-      <LI><A HREF="#run_tagger_untokenized">4.2.1. Untokenized Input</A>
-      <LI><A HREF="#run_tagger_vertical">4.2.2. Vertical Format</A>
+      <LI><A HREF="#toc23">4.2.1. Input Formats</A>
+      <LI><A HREF="#toc24">4.2.2. Tag Set Conversion</A>
+      <LI><A HREF="#toc25">4.2.3. Output Formats</A>
       </UL>
-    <LI><A HREF="#toc25">4.3. Running the Morphology</A>
+    <LI><A HREF="#toc26">4.3. Running the Morphology</A>
       <UL>
       <LI><A HREF="#run_morpho_analyze">4.3.1. Morphologic Analysis</A>
       <LI><A HREF="#run_morpho_generate">4.3.2. Morphologic Generation</A>
@@ -62,18 +63,18 @@
       </UL>
     <LI><A HREF="#run_tokenizer">4.4. Running the Tokenizer</A>
     </UL>
-  <LI><A HREF="#toc30">MorphoDiTa API Tutorial</A>
+  <LI><A HREF="#toc31">MorphoDiTa API Tutorial</A>
     <UL>
-    <LI><A HREF="#toc31">5.1. Tagger API</A>
-    <LI><A HREF="#toc32">5.2. Morphologic Dictionary API</A>
+    <LI><A HREF="#toc32">5.1. Tagger API</A>
+    <LI><A HREF="#toc33">5.2. Morphologic Dictionary API</A>
       <UL>
-      <LI><A HREF="#toc33">5.2.1. Dictionary Construction</A>
-      <LI><A HREF="#toc34">5.2.2. Morphologic Analysis</A>
-      <LI><A HREF="#toc35">5.2.3. Generation</A>
+      <LI><A HREF="#toc34">5.2.1. Dictionary Construction</A>
+      <LI><A HREF="#toc35">5.2.2. Morphologic Analysis</A>
+      <LI><A HREF="#toc36">5.2.3. Generation</A>
       </UL>
     <LI><A HREF="#faq">5.3. Questions and Answers</A>
     </UL>
-  <LI><A HREF="#toc37">MorphoDiTa API Reference</A>
+  <LI><A HREF="#toc38">MorphoDiTa API Reference</A>
     <UL>
     <LI><A HREF="#lemma_structure">6.1. Lemma Structure</A>
     <LI><A HREF="#string_piece">6.2. Struct string_piece</A>
@@ -83,9 +84,10 @@
     <LI><A HREF="#token_range">6.6. Struct token_range</A>
     <LI><A HREF="#tokenizer">6.7. Class tokenizer</A>
       <UL>
-      <LI><A HREF="#tokenizer_new_czech_tokenizer">6.7.1. tokenizer::new_czech_tokenizer</A>
-      <LI><A HREF="#tokenizer_set_text">6.7.2. tokenizer::set_text</A>
-      <LI><A HREF="#tokenizer_next_sentence">6.7.3. tokenizer::next_sentence</A>
+      <LI><A HREF="#tokenizer_new_vertical_tokenizer">6.7.1. tokenizer::new_vertical_tokenizer</A>
+      <LI><A HREF="#tokenizer_new_czech_tokenizer">6.7.2. tokenizer::new_czech_tokenizer</A>
+      <LI><A HREF="#tokenizer_set_text">6.7.3. tokenizer::set_text</A>
+      <LI><A HREF="#tokenizer_next_sentence">6.7.4. tokenizer::next_sentence</A>
       </UL>
     <LI><A HREF="#morpho">6.8. Class morpho</A>
       <UL>
@@ -107,11 +109,11 @@
       <LI><A HREF="#tagger_new_tokenizer">6.9.5. tagger::new_tokenizer</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc63">Contact</A>
+  <LI><A HREF="#toc65">Contact</A>
   <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc65">8.1. Publications</A>
-    <LI><A HREF="#toc66">8.2. Bibtex for referencing</A>
+    <LI><A HREF="#toc67">8.1. Publications</A>
+    <LI><A HREF="#toc68">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -167,7 +169,7 @@ in the User's Manual. Currently the following language models are available:
 </P>
 
 <UL>
-<LI>Czech: <A HREF="...">latest version 131112</A>
+<LI>Czech: latest version 131112 (to be released soon)
 </UL>
 
 <A NAME="toc5"></A>
@@ -543,104 +545,88 @@ The full command syntax of <CODE>run_tagger</CODE> is
 </P>
 
 <PRE>
-run_tagger [-v] tagger_model [input_file[:output_file]]...
+run_tagger [options] tagger_file [file[:output_file]]...
+Options: --input=untokenized|vertical
+         --convert_tagset=pdt_to_conll2009
+         --output=vertical|xml
 </PRE>
 
-<A NAME="run_tagger_untokenized"></A>
-<H3>4.2.1. Untokenized Input</H3>
+<A NAME="toc23"></A>
+<H3>4.2.1. Input Formats</H3>
 
 <P>
-By default (i.e., without specifying <CODE>-v</CODE>), the input is assumed to be
-a plain text and it is automatically tokenized and segmented by default. The
-output is in XML format without a root element, using
-<CODE>&lt;form lemma="..." tag="..."&gt;...&lt;/form&gt;</CODE> element to encode the assigned lemma
-and tag.
-</P>
-<P>
-Example input data <CODE>tagger_input.txt</CODE>:
+The input format is specified using the <CODE>--input</CODE> option. Currently supported
+input formats are:
 </P>
 
-<PRE>
-Děti pojedou k babičce. Už se těší.
-</PRE>
+<UL>
+<LI><CODE>untokenized</CODE> (default): the input is tokenized and segmented using
+  a tokenizer defined by the model,
+<LI><CODE>vertical</CODE>: the input is in vertical format, every line is considered
+  a word, with empty line denoting end of sentence.
+</UL>
 
-<P>
-Example MorphoDiTa run_tagger command line:
-</P>
-
-<PRE>
-./run_tagger czech.best_accuracy_tagger tagger_input.txt
-</PRE>
+<A NAME="toc24"></A>
+<H3>4.2.2. Tag Set Conversion</H3>
 
 <P>
-Example output data (line breaks added):
+Some tag sets can be converted to different ones. Currently supported tag set
+conversions are:
 </P>
 
-<PRE>
-&lt;form lemma='dítě' tag='NNFP1-----A----'&gt;Děti&lt;/form&gt;
-&lt;form lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'&gt;pojedou&lt;/form&gt;
-&lt;form lemma='k-1' tag='RR--3----------'&gt;k&lt;/form&gt;
-&lt;form lemma='babička' tag='NNFS3-----A----'&gt;babičce&lt;/form&gt;
-&lt;form lemma='.' tag='Z:-------------'&gt;.&lt;/form&gt;
-&lt;form lemma='už-1' tag='Db-------------'&gt;Už&lt;/form&gt;
-&lt;form lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'&gt;se&lt;/form&gt;
-&lt;form lemma='těšit_:T' tag='VB-S---3P-AA---'&gt;těší&lt;/form&gt;
-&lt;form lemma='.' tag='Z:-------------'&gt;.&lt;/form&gt;
-</PRE>
-
-<A NAME="run_tagger_vertical"></A>
-<H3>4.2.2. Vertical Format</H3>
-
-<P>
-If the input is already tokenized and segmented, vertical input format can be used
-by specifying <CODE>-v</CODE> option as a first argument of <CODE>run_tagger</CODE>.
-The vertical input format contains word on a line, empty line being end of sentence.
-The output has the same number of lines as input, line <I>l</I> is a tab separated
-lemma-tag pair assigned to the word on the input line <I>l</I>.
-</P>
-<P>
-Example input data <CODE>tagger_input_vertical.txt</CODE>:
-</P>
-
-<PRE>
-Děti
-pojedou
-k
-babičce
-.
-
-Už
-se
-těší
-.
-</PRE>
-
-<P>
-Example MorphoDiTa <CODE>run_tagger</CODE> command line:
-</P>
-
-<PRE>
-./run_tagger -v czech.best_accuracy_tagger tagger_input_vertical.txt
-</PRE>
-
-<P>
-Example output:
-</P>
-
-<PRE>
-dítě    NNFP1-----A----
-jet-1_^(pohybovat_se,_ne_však_chůzí)    VB-P---3F-AA---
-k-1     RR--3----------
-babička NNFS3-----A----
-.       Z:-------------
-
-už-1    Db-------------
-se_^(zvr._zájmeno/částice)      P7-X4----------
-těšit_:T        VB-S---3P-AA---
-.       Z:-------------
-</PRE>
+<UL>
+<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
+</UL>
 
 <A NAME="toc25"></A>
+<H3>4.2.3. Output Formats</H3>
+
+<P>
+The output format is specified using the <CODE>--output</CODE> option. Currently
+supported output formats are:
+</P>
+
+<UL>
+<LI><CODE>xml</CODE> (default): Simple XML format without a root element, using
+  <CODE>&lt;token lemma="..." tag="..."&gt;...&lt;/token&gt;</CODE> element to encode assigned lemma
+  and tag.
+<P></P>
+  Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE> (line breaks added):
+
+<PRE>
+&lt;token lemma='dítě' tag='NNFP1-----A----'&gt;Děti&lt;/token&gt;
+&lt;token lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'&gt;pojedou&lt;/token&gt;
+&lt;token lemma='k-1' tag='RR--3----------'&gt;k&lt;/token&gt;
+&lt;token lemma='babička' tag='NNFS3-----A----'&gt;babičce&lt;/token&gt;
+&lt;token lemma='.' tag='Z:-------------'&gt;.&lt;/token&gt;
+&lt;token lemma='už-1' tag='Db-------------'&gt;Už&lt;/token&gt;
+&lt;token lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'&gt;se&lt;/token&gt;
+&lt;token lemma='těšit_:T' tag='VB-S---3P-AA---'&gt;těší&lt;/token&gt;
+&lt;token lemma='.' tag='Z:-------------'&gt;.&lt;/token&gt;
+</PRE>
+
+<P></P>
+<LI><CODE>vertical</CODE>: Every output line is a tag separated triple form-lemma-tag, with empty
+  line denoting end of sentence.
+<P></P>
+  Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE>:
+
+<PRE>
+Děti	dítě	NNFP1-----A----
+pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
+k	k-1	RR--3----------
+babičce	babička	NNFS3-----A----
+.	.	Z:-------------
+
+Už	už-1	Db-------------
+se	se_^(zvr._zájmeno/částice)	P7-X4----------
+těší	těšit_:T	VB-S---3P-AA---
+.	.	Z:-------------
+</PRE>
+
+</UL>
+
+<A NAME="toc26"></A>
 <H2>4.3. Running the Morphology</H2>
 
 <P>
@@ -681,102 +667,89 @@ The full command syntax of <CODE>run_morpho_analyze</CODE> is
 </P>
 
 <PRE>
-run_morpho_analyze [-v] morphology_model use_guesser [input_file[:output_file]]...
+run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
+Options: --input=untokenized|vertical
+         --convert_tagset=pdt_to_conll2009
+         --output=vertical|xml
 </PRE>
 
-<A NAME="run_morpho_analyze_untokenized"></A>
-<H4>4.3.1.1. Untokenized Input</H4>
+<H4>4.3.1.1. Input Formats</H4>
 
 <P>
-By default (i.e., without specifying <CODE>-v</CODE>), the input is assumed to be
-a plain text and it is automatically tokenized and segmented by default. The
-output is in XML format without a root element, using
-<CODE>&lt;form&gt;&lt;analysis lemma="..." tag="..."/&gt;&lt;analysis...&gt;...&lt;/form&gt;</CODE> element to
-encode the assigned lemma and tag.
+The input format is specified using the <CODE>--input</CODE> option. Currently supported
+input formats are:
 </P>
+
+<UL>
+<LI><CODE>untokenized</CODE> (default): the input is tokenized and segmented using
+  a tokenizer defined by the model,
+<LI><CODE>vertical</CODE>: the input is in vertical format, every line is considered
+  a word, with empty line denoting end of sentence.
+</UL>
+
 <P>
-Example input data:
+Note that the input data is also segmented, even if it is not strictly
+necessary. Therefore, the input is processed by whole paragraphs (ending
+by an empty line).
 </P>
+
+<H4>4.3.1.2. Tag Set Conversion</H4>
+
+<P>
+Some tag sets can be converted to different ones. Currently supported tag set
+conversions are:
+</P>
+
+<UL>
+<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
+</UL>
+
+<H4>4.3.1.3. Output Formats</H4>
+
+<P>
+The output format is specified using the <CODE>--output</CODE> option. Currently
+supported output formats are:
+</P>
+
+<UL>
+<LI><CODE>xml</CODE> (default): Simple XML format without a root element, using
+  using <CODE>&lt;token&gt;&lt;analysis lemma="..." tag="..."/&gt;&lt;analysis...&gt;...&lt;/token&gt;</CODE>
+  element to encode morphologic analysis.
+<P></P>
+  Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE> (line breaks added):
 
 <PRE>
-Děti pojedou k babičce. Už se těší.
+&lt;token&gt;&lt;analysis lemma="dítě" tag="NNFP1-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP4-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP5-----A----"/&gt;Děti&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/&gt;pojedou&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="k-1" tag="RR--3----------"/&gt;&lt;analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/&gt;&lt;analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/&gt;&lt;analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/&gt;&lt;analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/&gt;k&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="babička" tag="NNFS3-----A----"/&gt;&lt;analysis lemma="babička" tag="NNFS6-----A----"/&gt;babičce&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="už-1" tag="Db-------------"/&gt;&lt;analysis lemma="už-2" tag="TT-------------"/&gt;Už&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/&gt;&lt;analysis lemma="s-1" tag="RV--2----------"/&gt;&lt;analysis lemma="s-1" tag="RV--7----------"/&gt;se&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/&gt;&lt;analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/&gt;těší&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/token&gt;
 </PRE>
 
-<P>
-Example <CODE>run_morpho_analyze</CODE> command line:
-</P>
+<P></P>
+<LI><CODE>vertical</CODE>: Every output line contains a word and a tab separated lemma-tag
+  pairs assigned to the input word, with empty line denoting end of sentence.
+<P></P>
+  Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE>:
 
 <PRE>
-./run_morpho_analyze czech.dict 0
+Děti	dítě	NNFP1-----A----	dítě	NNFP4-----A----	dítě	NNFP5-----A----
+pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
+k	k-1	RR--3----------	k-3_^(označení_pomocí_písmene)	NNNXX-----A----	k-4`kůň_:B_^(jednotka_výkonu)	NNMXX-----A---8	k-8_:B_^(ost._zkratka)	XX------------8	komanditní_:B_^(jen_komanditní_společnost)	AAXXX----1A---8	koncernový_:B	AAXXX----1A---8	kuo-1_:B_,t_^(stará_jednotka_výkonu)	NNNXX-----A---8
+babičce	babička	NNFS3-----A----	babička	NNFS6-----A----
+.	.	Z:-------------
+
+Už	už-1	Db-------------	už-2	TT-------------
+se	se_^(zvr._zájmeno/částice)	P7-X4----------	s-1	RV--2----------	s-1	RV--7----------
+těší	těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
+.	.	Z:-------------
 </PRE>
 
-<P>
-Example output data (line breaks added):
-</P>
-
-<PRE>
-&lt;form&gt;&lt;analysis lemma="dítě" tag="NNFP1-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP4-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP5-----A----"/&gt;Děti&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/&gt;pojedou&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="k-1" tag="RR--3----------"/&gt;&lt;analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/&gt;&lt;analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/&gt;&lt;analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/&gt;&lt;analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/&gt;k&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="babička" tag="NNFS3-----A----"/&gt;&lt;analysis lemma="babička" tag="NNFS6-----A----"/&gt;babičce&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="už-1" tag="Db-------------"/&gt;&lt;analysis lemma="už-2" tag="TT-------------"/&gt;Už&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/&gt;&lt;analysis lemma="s-1" tag="RV--2----------"/&gt;&lt;analysis lemma="s-1" tag="RV--7----------"/&gt;se&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/&gt;&lt;analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/&gt;těší&lt;/form&gt;
-&lt;form&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/form&gt;
-</PRE>
-
-<A NAME="run_morpho_analyze_vertical"></A>
-<H4>4.3.1.2. Vertical Format</H4>
-
-<P>
-If the input is already tokenized and segmented, vertical input format can be used
-by specifying <CODE>-v</CODE> option as a first argument of <CODE>run_morpho_analyze</CODE>.
-The vertical input format contains word on a line, empty line being end of sentence.
-The output has the same number of lines as input, line <I>l</I> contains tab separated
-lemma-tag pairs assigned to the word on the input line <I>l</I>.
-</P>
-<P>
-Example input data:
-</P>
-
-<PRE>
-Děti
-pojedou
-k
-babičce
-.
-
-Už
-se
-těší
-.
-</PRE>
-
-<P>
-Example <CODE>run_morpho_analyze</CODE> command line:
-</P>
-
-<PRE>
-./run_morpho_analyze -v czech.dict 0
-</PRE>
-
-<P>
-Example output:
-</P>
-
-<PRE>
-dítě	NNFP1-----A----	dítě	NNFP4-----A----	dítě	NNFP5-----A----
-jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
-k-1	RR--3----------	k-3_^(označení_pomocí_písmene)	NNNXX-----A----	k-4`kůň_:B_^(jednotka_výkonu)	NNMXX-----A---8	k-8_:B_^(ost._zkratka)	XX------------8	komanditní_:B_^(jen_komanditní_společnost)	AAXXX----1A---8	koncernový_:B	AAXXX----1A---8	kuo-1_:B_,t_^(stará_jednotka_výkonu)	NNNXX-----A---8
-babička	NNFS3-----A----	babička	NNFS6-----A----
-.	Z:-------------
-
-už-1	Db-------------	už-2	TT-------------
-se_^(zvr._zájmeno/částice)	P7-X4----------	s-1	RV--2----------	s-1	RV--7----------
-těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
-.	Z:-------------
-</PRE>
+</UL>
 
 <A NAME="run_morpho_generate"></A>
 <H3>4.3.2. Morphologic Generation</H3>
@@ -811,7 +784,8 @@ The full command syntax of <CODE>run_morpho_generate</CODE> is
 </P>
 
 <PRE>
-run_morpho_generate [-v] morphology_model use_guesser [input_file[:output_file]]...
+run_morpho_generate [options] morphology_model use_guesser [input_file[:output_file]]...
+Options: --convert_tagset=pdt_to_conll2009
 </PRE>
 
 <P>
@@ -826,14 +800,6 @@ babička	NNFS3-----A----
 </PRE>
 
 <P>
-Example <CODE>run_morpho_generate</CODE> command line:
-</P>
-
-<PRE>
-./run_morpho_generate czech.dict 0
-</PRE>
-
-<P>
 Example output:
 </P>
 
@@ -844,8 +810,24 @@ k	k-1	RR--3----------	ke	k-1	RV--3----------	ku	k-1	RV--3---------1
 babičce babička NNFS3-----A----
 </PRE>
 
+<H4>4.3.2.1. Tag Set Conversion</H4>
+
+<P>
+Some tag sets can be converted to different ones. Currently supported tag set
+conversions are:
+</P>
+
+<UL>
+<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
+</UL>
+
+<P>
+Note that the tag set conversion is applied only to the output, not to the
+input lemmas and wildcards.
+</P>
+
 <A NAME="tag_wildcard"></A>
-<H4>4.3.2.1. Tag Wildcards</H4>
+<H4>4.3.2.2. Tag Wildcards</H4>
 
 <P>
 When only forms with a specific tag should be generated for a given lemma, tag
@@ -892,9 +874,13 @@ tokenization and segmentation.
 </P>
 <P>
 The tokenizer can be specified either using a morphologic dictionary, or
-using a tokenizer identifier. Currently only one tokenizer <CODE>-czech</CODE>
-is available.
+using a tokenizer identifier. Currently supported tokenizer identifiers are:
 </P>
+
+<UL>
+<LI><CODE>--czech</CODE>
+</UL>
+
 <P>
 The input is a UTF-8 encoded plain text and the output is in the vertical
 format &ndash; each word is on a separate line and every sentence is ended
@@ -906,7 +892,7 @@ The full command syntax of <CODE>run_tokenizer</CODE> is
 </P>
 
 <PRE>
-run_tokenizer tagger_model|-czech [input_file[:output_file]]...
+run_tokenizer --czech|morphology_model [input_file[:output_file]]...
 </PRE>
 
 <P>
@@ -922,7 +908,7 @@ Example tokenization command line:
 </P>
 
 <PRE>
-run_tokenizer czech.dict
+run_tokenizer --czech
 </PRE>
 
 <P>
@@ -943,7 +929,7 @@ těší
 
 </PRE>
 
-<A NAME="toc30"></A>
+<A NAME="toc31"></A>
 <H1>5. MorphoDiTa API Tutorial</H1>
 
 <P>
@@ -957,7 +943,7 @@ The MorphoDiTa API is defined in header <CODE>morphodita.h</CODE> and resides in
 using namespace ufal::morphodita;
 </PRE>
 
-<A NAME="toc31"></A>
+<A NAME="toc32"></A>
 <H2>5.1. Tagger API</H2>
 
 <P>
@@ -1028,7 +1014,7 @@ public members: <CODE>std::string lemma</CODE> and <CODE>std:string tag</CODE>, 
 predicted lemma and tag, respectively.
 </P>
 
-<A NAME="toc32"></A>
+<A NAME="toc33"></A>
 <H2>5.2. Morphologic Dictionary API</H2>
 
 <P>
@@ -1037,7 +1023,7 @@ The main access to MorphoDiTa morphologic dictionary is through class
 <CODE>run_morpho.cpp</CODE>.
 </P>
 
-<A NAME="toc33"></A>
+<A NAME="toc34"></A>
 <H3>5.2.1. Dictionary Construction</H3>
 
 <P>
@@ -1078,7 +1064,7 @@ Please note that you should not delete this pointer as it is owned by the
 <CODE>tagger</CODE> class instance.
 </P>
 
-<A NAME="toc34"></A>
+<A NAME="toc35"></A>
 <H3>5.2.2. Morphologic Analysis</H3>
 
 <P>
@@ -1118,7 +1104,7 @@ caller must provide an output vector <CODE>std::vector&lt;tagged_lemma&gt;</CODE
 method <CODE>morpho::analyze</CODE> assigns the output to this vector.
 </P>
 
-<A NAME="toc35"></A>
+<A NAME="toc36"></A>
 <H3>5.2.3. Generation</H3>
 
 <P>
@@ -1189,7 +1175,7 @@ is found by the guesser, <CODE>GUESSER</CODE> is returned. Otherwise, forms are 
   implicit conversion rules.
 </DL>
 
-<A NAME="toc37"></A>
+<A NAME="toc38"></A>
 <H1>6. MorphoDiTa API Reference</H1>
 
 <P>
@@ -1315,6 +1301,8 @@ class tokenizer {
  public:
   virtual ~tokenizer() {}
 
+  static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_vertical_tokenizer">new_vertical_tokenizer</A>();
+
   static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_czech_tokenizer">new_czech_tokenizer</A>();
 
   virtual void <A HREF="#tokenizer_set_text">set_text</A>(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
@@ -1331,8 +1319,21 @@ The <A HREF="#tokenizer"><CODE>tokenizer</CODE></A> instances can be obtained ei
 static methods or through instances of <A HREF="#morpho"><CODE>morpho</CODE></A> and <A HREF="#tagger"><CODE>tagger</CODE></A>.
 </P>
 
+<A NAME="tokenizer_new_vertical_tokenizer"></A>
+<H3>6.7.1. tokenizer::new_vertical_tokenizer</H3>
+
+<PRE>
+static <A HREF="#tokenizer">tokenizer</A> new_vertical_tokenizer();
+</PRE>
+
+<P>
+Returns a new instance of a vertical tokenizer, which considers every line to
+be one token, with empty line denoting end of sentence. The user should delete
+the instance after use.
+</P>
+
 <A NAME="tokenizer_new_czech_tokenizer"></A>
-<H3>6.7.1. tokenizer::new_czech_tokenizer</H3>
+<H3>6.7.2. tokenizer::new_czech_tokenizer</H3>
 
 <PRE>
 static <A HREF="#tokenizer">tokenizer</A> new_czech_tokenizer();
@@ -1344,7 +1345,7 @@ use.
 </P>
 
 <A NAME="tokenizer_set_text"></A>
-<H3>6.7.2. tokenizer::set_text</H3>
+<H3>6.7.3. tokenizer::set_text</H3>
 
 <PRE>
 virtual void set_text(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
@@ -1362,7 +1363,7 @@ tokenizer is released or <CODE>set_text</CODE> is called again.
 </P>
 
 <A NAME="tokenizer_next_sentence"></A>
-<H3>6.7.3. tokenizer::next_sentence</H3>
+<H3>6.7.4. tokenizer::next_sentence</H3>
 
 <PRE>
 virtual bool next_sentence(std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;* forms, std::vector&lt;<A HREF="#token_range">token_range</A>&gt;* tokens) = 0;
@@ -1529,8 +1530,7 @@ virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
 </PRE>
 
 <P>
-Returns a new instance of a suitable tokenizer or <CODE>NULL</CODE> if no such tokenizer
-exists. The user should delete it after use.
+Returns a new instance of a suitable tokenizer. The user should delete it after use.
 </P>
 
 <A NAME="tagger"></A>
@@ -1616,12 +1616,11 @@ virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
 </PRE>
 
 <P>
-Returns a new instance of a suitable tokenizer or <CODE>NULL</CODE> if no such tokenizer
-exists. The user should delete it after use.
+Returns a new instance of a suitable tokenizer. The user should delete it after use.
 The call is equal to <CODE><A HREF="#tagger_get_morpho">get_morpho()</A>-&gt;<A HREF="#morpho_new_tokenizer">new_tokenizer()</A></CODE>.
 </P>
 
-<A NAME="toc63"></A>
+<A NAME="toc65"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1644,14 +1643,14 @@ Authors:
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project <I>LM2010013</I>).
 </P>
 
-<A NAME="toc65"></A>
+<A NAME="toc67"></A>
 <H2>8.1. Publications</H2>
 
 <UL>
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc66"></A>
+<A NAME="toc68"></A>
 <H2>8.2. Bibtex for referencing</H2>
 
 <PRE>

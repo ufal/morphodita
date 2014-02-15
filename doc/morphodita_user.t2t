@@ -41,73 +41,68 @@ result is saved to standard output. If no argument is given, input is read
 from standard input and written to standard output.
 
 The full command syntax of ``run_tagger`` is
-``` run_tagger [-v] tagger_model [input_file[:output_file]]...
-
-=== Untokenized Input ===[run_tagger_untokenized]
-
-By default (i.e., without specifying ``-v``), the input is assumed to be
-a plain text and it is automatically tokenized and segmented by default. The
-output is in XML format without a root element, using
-``<form lemma="..." tag="...">...</form>`` element to encode the assigned lemma
-and tag.
-
-Example input data ``tagger_input.txt``:
-``` Děti pojedou k babičce. Už se těší.
-
-Example MorphoDiTa run_tagger command line:
-``` ./run_tagger czech.best_accuracy_tagger tagger_input.txt
-
-Example output data (line breaks added):
 ```
-<form lemma='dítě' tag='NNFP1-----A----'>Děti</form>
-<form lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'>pojedou</form>
-<form lemma='k-1' tag='RR--3----------'>k</form>
-<form lemma='babička' tag='NNFS3-----A----'>babičce</form>
-<form lemma='.' tag='Z:-------------'>.</form>
-<form lemma='už-1' tag='Db-------------'>Už</form>
-<form lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'>se</form>
-<form lemma='těšit_:T' tag='VB-S---3P-AA---'>těší</form>
-<form lemma='.' tag='Z:-------------'>.</form>
+run_tagger [options] tagger_file [file[:output_file]]...
+Options: --input=untokenized|vertical
+         --convert_tagset=pdt_to_conll2009
+         --output=vertical|xml
 ```
 
-=== Vertical Format ===[run_tagger_vertical]
+=== Input Formats ===
 
-If the input is already tokenized and segmented, vertical input format can be used
-by specifying ``-v`` option as a first argument of ``run_tagger``.
-The vertical input format contains word on a line, empty line being end of sentence.
-The output has the same number of lines as input, line //l// is a tab separated
-lemma-tag pair assigned to the word on the input line //l//.
+The input format is specified using the ``--input`` option. Currently supported
+input formats are:
+- ``untokenized`` (default): the input is tokenized and segmented using
+  a tokenizer defined by the model,
+- ``vertical``: the input is in vertical format, every line is considered
+  a word, with empty line denoting end of sentence.
 
-Example input data ``tagger_input_vertical.txt``:
+
+=== Tag Set Conversion ===
+
+Some tag sets can be converted to different ones. Currently supported tag set
+conversions are:
+- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set.
+
+
+=== Output Formats ===
+
+The output format is specified using the ``--output`` option. Currently
+supported output formats are:
+- ``xml`` (default): Simple XML format without a root element, using
+  ``<token lemma="..." tag="...">...</token>`` element to encode assigned lemma
+  and tag.
+
+  Example output for input ``Děti pojedou k babičce. Už se těší.`` (line breaks added):
 ```
-Děti
-pojedou
-k
-babičce
-.
-
-Už
-se
-těší
-.
+<token lemma='dítě' tag='NNFP1-----A----'>Děti</token>
+<token lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'>pojedou</token>
+<token lemma='k-1' tag='RR--3----------'>k</token>
+<token lemma='babička' tag='NNFS3-----A----'>babičce</token>
+<token lemma='.' tag='Z:-------------'>.</token>
+<token lemma='už-1' tag='Db-------------'>Už</token>
+<token lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'>se</token>
+<token lemma='těšit_:T' tag='VB-S---3P-AA---'>těší</token>
+<token lemma='.' tag='Z:-------------'>.</token>
 ```
 
-Example MorphoDiTa ``run_tagger`` command line:
-``` ./run_tagger -v czech.best_accuracy_tagger tagger_input_vertical.txt
+- ``vertical``: Every output line is a tag separated triple form-lemma-tag, with empty
+  line denoting end of sentence.
 
-Example output:
+  Example output for input ``Děti pojedou k babičce. Už se těší.``:
 ```
-dítě    NNFP1-----A----
-jet-1_^(pohybovat_se,_ne_však_chůzí)    VB-P---3F-AA---
-k-1     RR--3----------
-babička NNFS3-----A----
-.       Z:-------------
+Děti	dítě	NNFP1-----A----
+pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
+k	k-1	RR--3----------
+babičce	babička	NNFS3-----A----
+.	.	Z:-------------
 
-už-1    Db-------------
-se_^(zvr._zájmeno/částice)      P7-X4----------
-těšit_:T        VB-S---3P-AA---
-.       Z:-------------
+Už	už-1	Db-------------
+se	se_^(zvr._zájmeno/částice)	P7-X4----------
+těší	těšit_:T	VB-S---3P-AA---
+.	.	Z:-------------
 ```
+
 
 == Running the Morphology ==
 
@@ -134,73 +129,72 @@ a guesser. Therefore, a numeric ``use_guesser`` argument is required.
 If non-zero, the guesser is used, otherwise not.
 
 The full command syntax of ``run_morpho_analyze`` is
-``` run_morpho_analyze [-v] morphology_model use_guesser [input_file[:output_file]]...
-
-==== Untokenized Input ====[run_morpho_analyze_untokenized]
-
-By default (i.e., without specifying ``-v``), the input is assumed to be
-a plain text and it is automatically tokenized and segmented by default. The
-output is in XML format without a root element, using
-``<form><analysis lemma="..." tag="..."/><analysis...>...</form>`` element to
-encode the assigned lemma and tag.
-
-Example input data:
-``` Děti pojedou k babičce. Už se těší.
-
-Example ``run_morpho_analyze`` command line:
-``` ./run_morpho_analyze czech.dict 0
-
-Example output data (line breaks added):
 ```
-<form><analysis lemma="dítě" tag="NNFP1-----A----"/><analysis lemma="dítě" tag="NNFP4-----A----"/><analysis lemma="dítě" tag="NNFP5-----A----"/>Děti</form>
-<form><analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/>pojedou</form>
-<form><analysis lemma="k-1" tag="RR--3----------"/><analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/><analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/><analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/><analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/><analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/><analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/>k</form>
-<form><analysis lemma="babička" tag="NNFS3-----A----"/><analysis lemma="babička" tag="NNFS6-----A----"/>babičce</form>
-<form><analysis lemma="." tag="Z:-------------"/>.</form>
-<form><analysis lemma="už-1" tag="Db-------------"/><analysis lemma="už-2" tag="TT-------------"/>Už</form>
-<form><analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/><analysis lemma="s-1" tag="RV--2----------"/><analysis lemma="s-1" tag="RV--7----------"/>se</form>
-<form><analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/><analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/>těší</form>
-<form><analysis lemma="." tag="Z:-------------"/>.</form>
+run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
+Options: --input=untokenized|vertical
+         --convert_tagset=pdt_to_conll2009
+         --output=vertical|xml
 ```
 
-==== Vertical Format ====[run_morpho_analyze_vertical]
+==== Input Formats ====
 
-If the input is already tokenized and segmented, vertical input format can be used
-by specifying ``-v`` option as a first argument of ``run_morpho_analyze``.
-The vertical input format contains word on a line, empty line being end of sentence.
-The output has the same number of lines as input, line //l// contains tab separated
-lemma-tag pairs assigned to the word on the input line //l//.
+The input format is specified using the ``--input`` option. Currently supported
+input formats are:
+- ``untokenized`` (default): the input is tokenized and segmented using
+  a tokenizer defined by the model,
+- ``vertical``: the input is in vertical format, every line is considered
+  a word, with empty line denoting end of sentence.
 
-Example input data:
+
+Note that the input data is also segmented, even if it is not strictly
+necessary. Therefore, the input is processed by whole paragraphs (ending
+by an empty line).
+
+==== Tag Set Conversion ====
+
+Some tag sets can be converted to different ones. Currently supported tag set
+conversions are:
+- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set.
+
+
+==== Output Formats ====
+
+The output format is specified using the ``--output`` option. Currently
+supported output formats are:
+- ``xml`` (default): Simple XML format without a root element, using
+  using ``<token><analysis lemma="..." tag="..."/><analysis...>...</token>``
+  element to encode morphologic analysis.
+
+  Example output for input ``Děti pojedou k babičce. Už se těší.`` (line breaks added):
 ```
-Děti
-pojedou
-k
-babičce
-.
-
-Už
-se
-těší
-.
+<token><analysis lemma="dítě" tag="NNFP1-----A----"/><analysis lemma="dítě" tag="NNFP4-----A----"/><analysis lemma="dítě" tag="NNFP5-----A----"/>Děti</token>
+<token><analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/>pojedou</token>
+<token><analysis lemma="k-1" tag="RR--3----------"/><analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/><analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/><analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/><analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/><analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/><analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/>k</token>
+<token><analysis lemma="babička" tag="NNFS3-----A----"/><analysis lemma="babička" tag="NNFS6-----A----"/>babičce</token>
+<token><analysis lemma="." tag="Z:-------------"/>.</token>
+<token><analysis lemma="už-1" tag="Db-------------"/><analysis lemma="už-2" tag="TT-------------"/>Už</token>
+<token><analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/><analysis lemma="s-1" tag="RV--2----------"/><analysis lemma="s-1" tag="RV--7----------"/>se</token>
+<token><analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/><analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/>těší</token>
+<token><analysis lemma="." tag="Z:-------------"/>.</token>
 ```
 
-Example ``run_morpho_analyze`` command line:
-``` ./run_morpho_analyze -v czech.dict 0
+- ``vertical``: Every output line contains a word and a tab separated lemma-tag
+  pairs assigned to the input word, with empty line denoting end of sentence.
 
-Example output:
+  Example output for input ``Děti pojedou k babičce. Už se těší.``:
 ```
-dítě	NNFP1-----A----	dítě	NNFP4-----A----	dítě	NNFP5-----A----
-jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
-k-1	RR--3----------	k-3_^(označení_pomocí_písmene)	NNNXX-----A----	k-4`kůň_:B_^(jednotka_výkonu)	NNMXX-----A---8	k-8_:B_^(ost._zkratka)	XX------------8	komanditní_:B_^(jen_komanditní_společnost)	AAXXX----1A---8	koncernový_:B	AAXXX----1A---8	kuo-1_:B_,t_^(stará_jednotka_výkonu)	NNNXX-----A---8
-babička	NNFS3-----A----	babička	NNFS6-----A----
-.	Z:-------------
+Děti	dítě	NNFP1-----A----	dítě	NNFP4-----A----	dítě	NNFP5-----A----
+pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
+k	k-1	RR--3----------	k-3_^(označení_pomocí_písmene)	NNNXX-----A----	k-4`kůň_:B_^(jednotka_výkonu)	NNMXX-----A---8	k-8_:B_^(ost._zkratka)	XX------------8	komanditní_:B_^(jen_komanditní_společnost)	AAXXX----1A---8	koncernový_:B	AAXXX----1A---8	kuo-1_:B_,t_^(stará_jednotka_výkonu)	NNNXX-----A---8
+babičce	babička	NNFS3-----A----	babička	NNFS6-----A----
+.	.	Z:-------------
 
-už-1	Db-------------	už-2	TT-------------
-se_^(zvr._zájmeno/částice)	P7-X4----------	s-1	RV--2----------	s-1	RV--7----------
-těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
-.	Z:-------------
+Už	už-1	Db-------------	už-2	TT-------------
+se	se_^(zvr._zájmeno/částice)	P7-X4----------	s-1	RV--2----------	s-1	RV--7----------
+těší	těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
+.	.	Z:-------------
 ```
+
 
 === Morphologic Generation ===[run_morpho_generate]
 
@@ -222,7 +216,10 @@ a guesser. Therefore, a numeric ``use_guesser`` argument is required.
 If non-zero, the guesser is used, otherwise not.
 
 The full command syntax of ``run_morpho_generate`` is
-``` run_morpho_generate [-v] morphology_model use_guesser [input_file[:output_file]]...
+```
+run_morpho_generate [options] morphology_model use_guesser [input_file[:output_file]]...
+Options: --convert_tagset=pdt_to_conll2009
+```
 
 Example input data:
 ```
@@ -232,9 +229,6 @@ k-1
 babička	NNFS3-----A----
 ```
 
-Example ``run_morpho_generate`` command line:
-``` ./run_morpho_generate czech.dict 0
-
 Example output:
 ```
 dítě	dítě	NNNS1-----A----	dítě	dítě	NNNS4-----A----	dítě	dítě	NNNS5-----A----	dítěte	dítě	NNNS2-----A----	dítěti	dítě	NNNS3-----A----	dítěti	dítě	NNNS6-----A----	dítětem	dítě	NNNS7-----A----	děti	dítě	NNFP1-----A----	děti	dítě	NNFP4-----A----	děti	dítě	NNFP5-----A----	dětma	dítě	NNFP7-----A---6	dětmi	dítě	NNFP7-----A----	dětem	dítě	NNFP3-----A----	dětí	dítě	NNFP2-----A----	dětech	dítě	NNFP6-----A----	dětima	dítě_,h	NNFP7-----A---6
@@ -242,6 +236,17 @@ ject	jet	Vf--------A---6	jet	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------A
 k	k-1	RR--3----------	ke	k-1	RV--3----------	ku	k-1	RV--3---------1
 babičce babička NNFS3-----A----
 ```
+
+==== Tag Set Conversion ====
+
+Some tag sets can be converted to different ones. Currently supported tag set
+conversions are:
+- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set.
+
+
+Note that the tag set conversion is applied only to the output, not to the
+input lemmas and wildcards.
+
 
 ==== Tag Wildcards ====[tag_wildcard]
 
@@ -275,8 +280,9 @@ Using the ``run_tokenizer`` executable it is possible to perform only
 tokenization and segmentation.
 
 The tokenizer can be specified either using a morphologic dictionary, or
-using a tokenizer identifier. Currently only one tokenizer ``-czech``
-is available.
+using a tokenizer identifier. Currently supported tokenizer identifiers are:
+- ``--czech``
+
 
 The input is a UTF-8 encoded plain text and the output is in the vertical
 format -- each word is on a separate line and every sentence is ended
@@ -284,13 +290,13 @@ by a blank line. The input files are specified same as with the
 [``run_tagger`` #run_tagger] command.
 
 The full command syntax of ``run_tokenizer`` is
-``` run_tokenizer tagger_model|-czech [input_file[:output_file]]...
+``` run_tokenizer --czech|morphology_model [input_file[:output_file]]...
 
 Example input:
 ``` Děti pojedou k babičce. Už se těší.
 
 Example tokenization command line:
-``` run_tokenizer czech.dict
+``` run_tokenizer --czech
 
 Example output:
 ```

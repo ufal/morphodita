@@ -21,6 +21,7 @@
 #include "morpho/morpho.h"
 #include "utils/input.h"
 #include "utils/parse_int.h"
+#include "utils/parse_options.h"
 #include "utils/process_args.h"
 
 using namespace ufal::morphodita;
@@ -28,7 +29,11 @@ using namespace ufal::morphodita;
 static void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser);
 
 int main(int argc, char* argv[]) {
-  if (argc < 3) runtime_errorf("Usage: %s dict_file use_guesser", argv[0]);
+  options_map options;
+  if (!parse_options({{"convert_tagset",{""}}}, argc, argv, options) ||
+      argc < 3)
+    runtime_errorf("Usage: %s [options] dict_file use_guesser [file[:output_file]]...\n"
+                   "Options: --convert_tagset=pdt_to_conll2009", argv[0]);
 
   eprintf("Loading dictionary: ");
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));

@@ -68,12 +68,9 @@ void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_gu
       for (auto&& form : forms) {
         dictionary.analyze(form, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
 
-        bool first = true;
-        for (auto&& lemma : lemmas) {
-          if (!first) fputc('\t', out);
-          fprintf(out, "%s\t%s", lemma.lemma.c_str(), lemma.tag.c_str());
-          first = false;
-        }
+        fprintf(out, "%.*s", int(form.len), form.str);
+        for (auto&& lemma : lemmas)
+          fprintf(out, "\t%s\t%s", lemma.lemma.c_str(), lemma.tag.c_str());
         fputc('\n', out);
       }
       fputc('\n', out);
@@ -95,7 +92,7 @@ void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser
         dictionary.analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
 
         if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
-        fputs("<form>", out);
+        fputs("<token>", out);
         for (auto&& lemma : lemmas) {
           fputs("<analysis lemma=\"", out);
           print_xml_content(out, lemma.lemma.c_str(), lemma.lemma.size());
@@ -104,7 +101,7 @@ void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser
           fputs("\"/>", out);
         }
         print_xml_content(out, forms[i].str, forms[i].len);
-        fputs("</form>", out);
+        fputs("</token>", out);
         unprinted = forms[i].str + forms[i].len;
       }
 

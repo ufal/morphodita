@@ -1,9 +1,19 @@
+Version 0.95
+------------
+- Do not allow new_tokenizer and get_morpho to return NULL.
+- Provide better options (--input, --output), which also allows
+  to specify input and output format separately.
+- Add convert_tagset parameter and tagset_converter class.
+- Change both vertical and xml output format slightly.
+
+
 Version 0.94 [10 Feb 2014]
 --------------------------
 - Allow new_tokenizer and get_morpho to return NULL
 - Add C++ library to the binary package
 - Remove arch-specific sources
 - Improve czech_tokenizer and czech_morpho consistency
+
 
 Version 0.93 [29 Jan 2014]
 --------------------------

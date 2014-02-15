@@ -27,10 +27,10 @@ using namespace ufal::morphodita;
 static void tokenize(FILE* in, FILE* out, tokenizer& tokenizer);
 
 int main(int argc, char* argv[]) {
-  if (argc < 2) runtime_errorf("Usage: %s -czech|dict_file [file[:output_file]]...", argv[0]);
+  if (argc < 2) runtime_errorf("Usage: %s --czech|dict_file [file[:output_file]]...", argv[0]);
 
   unique_ptr<tokenizer> tokenizer;
-  if (strcmp(argv[1], "-czech") == 0) {
+  if (strcmp(argv[1], "--czech") == 0 || strcmp(argv[1], "-czech") == 0) {
     tokenizer.reset(tokenizer::new_czech_tokenizer());
   } else {
     eprintf("Loading dictionary: ");
