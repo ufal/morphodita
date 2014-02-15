@@ -16,23 +16,18 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <cstring>
+#pragma once
 
-#include "czech_tokenizer.h"
-#include "vertical_tokenizer.h"
+#include "common.h"
+#include "utf8_tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
 
-tokenizer* tokenizer::new_vertical_tokenizer() {
-  return new vertical_tokenizer();
-}
-
-tokenizer* tokenizer::new_czech_tokenizer() {
-  return new czech_tokenizer();
-}
+class vertical_tokenizer : public utf8_tokenizer {
+ public:
+  virtual bool next_sentence(vector<string_piece>& forms) override;
+};
 
 } // namespace morphodita
 } // namespace ufal
-
-

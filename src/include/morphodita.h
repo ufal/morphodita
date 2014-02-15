@@ -84,6 +84,8 @@ class MORPHODITA_IMPORT tokenizer {
   virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
 
   // Static factory methods
+  static tokenizer* new_vertical_tokenizer();
+
   static tokenizer* new_czech_tokenizer();
 };
 
@@ -135,7 +137,6 @@ class MORPHODITA_IMPORT morpho {
   virtual int lemma_id_len(string_piece lemma) const = 0;
 
   // Construct a new tokenizer instance appropriate for this morphology.
-  // Can return NULL if no such tokenizer exists.
   virtual tokenizer* new_tokenizer() const = 0;
 };
 
@@ -154,7 +155,6 @@ class MORPHODITA_IMPORT tagger {
   virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
 
   // Construct a new tokenizer instance appropriate for this tokenizer.
-  // Can return NULL if no such tokenizer exists.
   // Is equal to get_morpho()->new_tokenizer.
   tokenizer* new_tokenizer() const;
 };

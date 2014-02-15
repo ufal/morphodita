@@ -28,8 +28,8 @@
 
 using namespace ufal::morphodita;
 
-static void tag_vertical(FILE* in, FILE* out, const tagger& tagger);
-static void tag_untokenized(FILE* in, FILE* out, const tagger& tagger);
+static void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer);
+static void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer);
 
 int main(int argc, char* argv[]) {
   options_map options;
@@ -47,33 +47,26 @@ int main(int argc, char* argv[]) {
   if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
   eprintf("done\n");
 
-  eprintf("Tagging: ");
+  unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : tagger->new_tokenizer());
+  if (!tokenizer) runtime_errorf("Cannot create tokenizer!");
+
   clock_t now = clock();
-  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger);
-  else process_args(2, argc, argv, tag_untokenized, *tagger);
-  eprintf("done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
+  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer);
+  else process_args(2, argc, argv, tag_xml, *tagger, *tokenizer);
+  eprintf("Tagging done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 
   return 0;
 }
 
-void tag_vertical(FILE* in, FILE* out, const tagger& tagger) {
-  string line;
-
-  vector<string> words;
+void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer) {
+  string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
-  for (bool not_eof = true; not_eof; ) {
-    // Read sentence
-    words.clear();
-    forms.clear();
-    while ((not_eof = getline(in, line)) && !line.empty()) {
-      words.emplace_back(line);
-      forms.emplace_back(words.back());
-    }
-
-    // Tag
-    if (!forms.empty()) {
+  while (getpara(in, para)) {
+    // Tokenize and tag
+    tokenizer.set_text(para);
+    while (tokenizer.next_sentence(&forms, nullptr)) {
       tagger.tag(forms, tags);
 
       for (auto&& tag : tags)
@@ -83,19 +76,16 @@ void tag_vertical(FILE* in, FILE* out, const tagger& tagger) {
   }
 }
 
-void tag_untokenized(FILE* in, FILE* out, const tagger& tagger) {
+void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
-  unique_ptr<tokenizer> tokenizer(tagger.new_tokenizer());
-  if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
-
   while (getpara(in, para)) {
     // Tokenize and tag
-    tokenizer->set_text(para);
+    tokenizer.set_text(para);
     const char* unprinted = para.c_str();
-    while (tokenizer->next_sentence(&forms, nullptr)) {
+    while (tokenizer.next_sentence(&forms, nullptr)) {
       tagger.tag(forms, tags);
 
       for (unsigned i = 0; i < forms.size(); i++) {

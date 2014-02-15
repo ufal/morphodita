@@ -41,6 +41,8 @@ class EXPORT_ATTRIBUTES tokenizer {
   virtual bool next_sentence(vector<string_piece>* forms, vector<token_range>* tokens) = 0;
 
   // Static factory methods
+  static tokenizer* new_vertical_tokenizer();
+
   static tokenizer* new_czech_tokenizer();
 };
 

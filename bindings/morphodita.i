@@ -86,6 +86,10 @@ class tokenizer {
     }
   }
 
+  %rename(newVerticalTokenizer) new_vertical_tokenizer;
+  %newobject new_vertical_tokenizer;
+  static tokenizer* new_vertical_tokenizer();
+
   %rename(newCzechTokenizer) new_czech_tokenizer;
   %newobject new_czech_tokenizer;
   static tokenizer* new_czech_tokenizer();

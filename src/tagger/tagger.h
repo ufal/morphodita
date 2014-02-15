@@ -41,7 +41,6 @@ class EXPORT_ATTRIBUTES tagger {
   virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const = 0;
 
   // Construct a new tokenizer instance appropriate for this tokenizer.
-  // Can return NULL if no such tokenizer exists.
   // Is equal to get_morpho()->new_tokenizer.
   tokenizer* new_tokenizer() const;
 };

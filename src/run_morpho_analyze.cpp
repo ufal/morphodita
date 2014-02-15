@@ -20,67 +20,77 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
-#include "utils/parse_int.h"
-#include "utils/process_args.h"
 #include "utils/output.h"
+#include "utils/parse_int.h"
+#include "utils/parse_options.h"
+#include "utils/process_args.h"
 
 using namespace ufal::morphodita;
 
-static void analyze_vertical(FILE* in, FILE* out, morpho& dictionary, bool use_guesser);
-static void analyze_untokenized(FILE* in, FILE* out, morpho& dictionary, bool use_guesser);
+static void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer);
+static void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer);
 
 int main(int argc, char* argv[]) {
-  bool use_vertical = false;
-
-  int argi = 1;
-  if (argi < argc && strcmp(argv[argi], "-v") == 0) argi++, use_vertical = true;
-  if (argi + 2 > argc) runtime_errorf("Usage: %s [-v] dict_file use_guesser [file[:output_file]]...", argv[0]);
+  options_map options;
+  if (!parse_options({{"input",{"untokenized", "vertical"}},
+                      {"convert_tagset",{""}},
+                      {"output",{"vertical","xml"}}}, argc, argv, options) ||
+      argc < 3)
+    runtime_errorf("Usage: %s [options] dict_file use_guesser [file[:output_file]]...\n"
+                   "Options: --input=untokenized|vertical\n"
+                   "         --convert_tagset=pdt_to_conll2009\n"
+                   "         --output=vertical|xml", argv[0]);
 
   eprintf("Loading dictionary: ");
-  unique_ptr<morpho> dictionary(morpho::load(argv[argi]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[argi]);
+  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
+  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
   eprintf("done\n");
-  argi++;
 
-  bool use_guesser = parse_int(argv[argi++], "use_guesser");
-  if (use_vertical) process_args(argi, argc, argv, analyze_vertical, *dictionary, use_guesser);
-  else process_args(argi, argc, argv, analyze_untokenized, *dictionary, use_guesser);
+  bool use_guesser = parse_int(argv[2], "use_guesser");
+
+  unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : dictionary->new_tokenizer());
+  if (!tokenizer) runtime_errorf("Cannot create tokenizer!");
+
+  if (options.count("output") && options["output"] == "vertical") process_args(3, argc, argv, analyze_vertical, *dictionary, use_guesser, *tokenizer);
+  else process_args(3, argc, argv, analyze_xml, *dictionary, use_guesser, *tokenizer);
 
   return 0;
 }
 
-void analyze_vertical(FILE* in, FILE* out, morpho& dictionary, bool use_guesser) {
-  string line;
-  vector<tagged_lemma> lemmas;
-
-  while (getline(in, line)) {
-    if (!line.empty()) {
-      dictionary.analyze(line, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
-
-      bool first = true;
-      for (auto&& lemma : lemmas) {
-        if (!first) fputc('\t', out);
-        fprintf(out, "%s\t%s", lemma.lemma.c_str(), lemma.tag.c_str());
-        first = false;
-      }
-    }
-    fputc('\n', out);
-  }
-}
-
-void analyze_untokenized(FILE* in, FILE* out, morpho& dictionary, bool use_guesser) {
+void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> lemmas;
 
-  unique_ptr<tokenizer> tokenizer(dictionary.new_tokenizer());
-  if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
+  while (getpara(in, para)) {
+    tokenizer.set_text(para);
+    while (tokenizer.next_sentence(&forms, nullptr)) {
+      for (auto&& form : forms) {
+        dictionary.analyze(form, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
+
+        bool first = true;
+        for (auto&& lemma : lemmas) {
+          if (!first) fputc('\t', out);
+          fprintf(out, "%s\t%s", lemma.lemma.c_str(), lemma.tag.c_str());
+          first = false;
+        }
+        fputc('\n', out);
+      }
+      fputc('\n', out);
+    }
+  }
+}
+
+void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer) {
+  string para;
+  vector<string_piece> forms;
+  vector<tagged_lemma> lemmas;
 
   while (getpara(in, para)) {
     // Tokenize and analyze
-    tokenizer->set_text(para);
+    tokenizer.set_text(para);
     const char* unprinted = para.c_str();
-    while (tokenizer->next_sentence(&forms, nullptr))
+    while (tokenizer.next_sentence(&forms, nullptr))
       for (unsigned i = 0; i < forms.size(); i++) {
         dictionary.analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
 

@@ -12,7 +12,7 @@ include Makefile.rules
 # object files groups
 LZMA_DEC_O = utils/compressor_load utils/lzma/LzmaDec
 LZMA_ENC_O = utils/compressor_save utils/lzma/LzmaEnc utils/lzma/LzFind
-MORPHO_O = $(LZMA_DEC_O) morpho/czech_morpho morpho/morpho morpho/morpho_statistical_guesser morpho/tag_filter tokenizer/czech_tokenizer tokenizer/tokenizer tokenizer/utf8_tokenizer utils/persistent_unordered_map utils/utf8
+MORPHO_O = $(LZMA_DEC_O) morpho/czech_morpho morpho/morpho morpho/morpho_statistical_guesser morpho/tag_filter tokenizer/czech_tokenizer tokenizer/tokenizer tokenizer/utf8_tokenizer tokenizer/vertical_tokenizer utils/persistent_unordered_map utils/utf8
 MORPHODITA_O = $(MORPHO_O) tagger/tagger
 
 # libraries
@@ -30,10 +30,10 @@ $(call exe,csts): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,encode_dictionary): $(call obj,$(LZMA_ENC_O) morpho/czech_morpho_encoder morpho/morpho_prefix_guesser_encoder morpho/morpho_statistical_guesser_encoder utils/input utils/persistent_unordered_map)
 $(call exe,morpho_accuracy): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,remap_tags): $(call obj,$(MORPHO_O) utils/input)
-$(call exe,run_morpho_analyze): $(call obj,$(MORPHO_O) utils/input utils/output)
+$(call exe,run_morpho_analyze): $(call obj,$(MORPHO_O) utils/input utils/output utils/parse_options)
 $(call exe,run_morpho_cli): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,run_morpho_generate): $(call obj,$(MORPHO_O) utils/input)
-$(call exe,run_tagger): $(call obj,$(MORPHODITA_O) utils/input utils/parse_options utils/output)
+$(call exe,run_tagger): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
 $(call exe,run_tokenizer): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,test_dictionary): $(call obj,$(MORPHO_O) morpho/raw_morpho_dictionary_reader utils/input)
 $(call exe,tagger_accuracy): $(call obj,$(MORPHODITA_O) utils/input)

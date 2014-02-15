@@ -97,6 +97,8 @@ class tokenizer {
  public:
   virtual ~tokenizer() {}
 
+  static [tokenizer #tokenizer]* [new_vertical_tokenizer #tokenizer_new_vertical_tokenizer]();
+
   static [tokenizer #tokenizer]* [new_czech_tokenizer #tokenizer_new_czech_tokenizer]();
 
   virtual void [set_text #tokenizer_set_text]([string_piece #string_piece] text, bool make_copy = false) = 0;
@@ -109,6 +111,13 @@ The class is //not// threadsafe.
 
 The [``tokenizer`` #tokenizer] instances can be obtained either directly using
 static methods or through instances of [``morpho`` #morpho] and [``tagger`` #tagger].
+
+=== tokenizer::new_vertical_tokenizer ===[tokenizer_new_vertical_tokenizer]
+``` static [tokenizer #tokenizer] new_vertical_tokenizer();
+
+Returns a new instance of a vertical tokenizer, which considers every line to
+be one token, with empty line denoting end of sentence. The user should delete
+the instance after use.
 
 === tokenizer::new_czech_tokenizer ===[tokenizer_new_czech_tokenizer]
 ``` static [tokenizer #tokenizer] new_czech_tokenizer();
@@ -238,8 +247,7 @@ do not identify the lemma.
 === morpho::new_tokenizer ===[morpho_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;
 
-Returns a new instance of a suitable tokenizer or ``NULL`` if no such tokenizer
-exists. The user should delete it after use.
+Returns a new instance of a suitable tokenizer. The user should delete it after use.
 
 == Class tagger ==[tagger]
 
@@ -293,6 +301,5 @@ a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vecto
 === tagger::new_tokenizer ===[tagger_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;
 
-Returns a new instance of a suitable tokenizer or ``NULL`` if no such tokenizer
-exists. The user should delete it after use.
+Returns a new instance of a suitable tokenizer. The user should delete it after use.
 The call is equal to ``[get_morpho() #tagger_get_morpho]->[new_tokenizer() #morpho_new_tokenizer]``.
