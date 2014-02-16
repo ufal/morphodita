@@ -303,3 +303,52 @@ a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vecto
 
 Returns a new instance of a suitable tokenizer. The user should delete it after use.
 The call is equal to ``[get_morpho() #tagger_get_morpho]->[new_tokenizer() #morpho_new_tokenizer]``.
+
+== Class tagset_converter ==[tagset_converter]
+
+```
+class tagset_converter {
+ public:
+  virtual ~tagset_converter() {}
+
+  virtual void [convert #tagset_converter_convert]([tagged_lemma #tagged_lemma]& tagged_lemma) const = 0;
+  virtual void [convert_analyzed #tagset_converter_convert_analyzed](std::vector<[tagged_lemma #tagged_lemma]>& tagged_lemmas) const = 0;
+  virtual void [convert_generated #tagset_converter_convert_generated](std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
+
+  static [tagset_converter* #tagset_converter] [new_identity_converter #tagset_converter_new_identity_converter]();
+  static [tagset_converter* #tagset_converter] [new_pdt_to_conll2009_converter #tagset_converter_new_pdt_to_conll2009_converter]();
+};
+```
+
+=== tagset_converter::convert() ===[tagset_converter_convert]
+``` virtual void convert([tagged_lemma #tagged_lemma]& tagged_lemma) const = 0;
+
+Convert the given tagged lemma.
+
+=== tagset_converter::convert_analyzed() ===[tagset_converter_convert_analyzed]
+``` virtual void convert_analyzed(std::vector<[tagged_lemma #tagged_lemma]>& tagged_lemmas) const = 0;
+
+Convert the given results of [morpho::analyze #morpho_analyze]. Apart from calling
+[convert #tagset_converter_convert], any repeated entries are removed.
+
+=== tagset_converter::convert_generated() ===[tagset_converter_convert_generated]
+``` virtual void convert_generated(std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
+
+Convert the given results of [morpho::generate #morpho_generate]. Apart from calling
+[convert #tagset_converter_convert], any repeated entries are removed.
+
+=== tagset_converter::new_identity_converter() ===[tagset_converter_new_identity_converter]
+``` static [tagset_converter* #tagset_converter] new_identity_converter();
+
+Returns a new instance of an identity converter. All convert methods of an
+identity converter do nothing. The user should delete the instance after use.
+
+=== tagset_converter::new_pdt_to_conll2009_converter() ===[tagset_converter_new_pdt_to_conll2009_converter]
+``` static [tagset_converter* #tagset_converter] new_pdt_to_conll2009_converter();
+
+Returns a new instance of a Czech PDT tag set to CoNLL2009 tag set converter.
+The user should delete the instance after use.
+
+CoNLL2009 tag set uses two columns for tags -- one is a POS and the other one
+are additional FEATs. Because we have only one tag field, we merge these fields
+together by using ``Pos=?|FEAT``, i.e., the POS is stored as a first FEAT.

@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "morpho/morpho.h"
+#include "tagset_converter/tagset_converter.h"
 #include "utils/input.h"
 #include "utils/output.h"
 #include "utils/parse_int.h"
@@ -27,8 +28,8 @@
 
 using namespace ufal::morphodita;
 
-static void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer);
-static void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer);
+static void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter);
+static void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
   options_map options;
@@ -51,13 +52,24 @@ int main(int argc, char* argv[]) {
   unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : dictionary->new_tokenizer());
   if (!tokenizer) runtime_errorf("Cannot create tokenizer!");
 
-  if (options.count("output") && options["output"] == "vertical") process_args(3, argc, argv, analyze_vertical, *dictionary, use_guesser, *tokenizer);
-  else process_args(3, argc, argv, analyze_xml, *dictionary, use_guesser, *tokenizer);
+  unique_ptr<tagset_converter> tagset_converter;
+  if (options.count("convert_tagset")) {
+    tagset_converter.reset(new_tagset_converter(options["convert_tagset"]));
+    if (!tagset_converter) runtime_errorf("Unknown tag set converter '%s'!", options["convert_tagset"].c_str());
+  } else {
+    tagset_converter.reset(tagset_converter::new_identity_converter());
+    if (!tagset_converter) runtime_errorf("Cannot create identity tag set converter!");
+  }
+
+  if (options.count("output") && options["output"] == "vertical")
+    process_args(3, argc, argv, analyze_vertical, *dictionary, use_guesser, *tokenizer, *tagset_converter);
+  else
+    process_args(3, argc, argv, analyze_xml, *dictionary, use_guesser, *tokenizer, *tagset_converter);
 
   return 0;
 }
 
-void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer) {
+void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> lemmas;
@@ -67,6 +79,7 @@ void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_gu
     while (tokenizer.next_sentence(&forms, nullptr)) {
       for (auto&& form : forms) {
         dictionary.analyze(form, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
+        tagset_converter.convert_analyzed(lemmas);
 
         fprintf(out, "%.*s", int(form.len), form.str);
         for (auto&& lemma : lemmas)
@@ -78,7 +91,7 @@ void analyze_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_gu
   }
 }
 
-void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer) {
+void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> lemmas;
@@ -90,6 +103,7 @@ void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser
     while (tokenizer.next_sentence(&forms, nullptr))
       for (unsigned i = 0; i < forms.size(); i++) {
         dictionary.analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
+        tagset_converter.convert_analyzed(lemmas);
 
         if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
         fputs("<token>", out);

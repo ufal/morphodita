@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "morpho/morpho.h"
+#include "tagset_converter/tagset_converter.h"
 #include "utils/input.h"
 #include "utils/parse_int.h"
 #include "utils/parse_options.h"
@@ -26,7 +27,7 @@
 
 using namespace ufal::morphodita;
 
-static void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser);
+static void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
   options_map options;
@@ -39,14 +40,24 @@ int main(int argc, char* argv[]) {
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
   if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
   eprintf("done\n");
+
   bool use_guesser = parse_int(argv[2], "use_guesser");
 
-  process_args(3, argc, argv, generate, *dictionary, use_guesser);
+  unique_ptr<tagset_converter> tagset_converter;
+  if (options.count("convert_tagset")) {
+    tagset_converter.reset(new_tagset_converter(options["convert_tagset"]));
+    if (!tagset_converter) runtime_errorf("Unknown tag set converter '%s'!", options["convert_tagset"].c_str());
+  } else {
+    tagset_converter.reset(tagset_converter::new_identity_converter());
+    if (!tagset_converter) runtime_errorf("Cannot create identity tag set converter!");
+  }
+
+  process_args(3, argc, argv, generate, *dictionary, use_guesser, *tagset_converter);
 
   return 0;
 }
 
-void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser) {
+void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter) {
   string line;
   vector<tagged_lemma_forms> forms;
 
@@ -62,6 +73,7 @@ void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser) {
       }
 
       dictionary.generate(lemma, wildcard, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, forms);
+      tagset_converter.convert_generated(forms);
 
       bool first = true;
       for (auto&& lemma : forms)

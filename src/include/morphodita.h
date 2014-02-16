@@ -159,6 +159,25 @@ class MORPHODITA_IMPORT tagger {
   tokenizer* new_tokenizer() const;
 };
 
+class MORPHODITA_IMPORT tagset_converter {
+ public:
+  virtual ~tagset_converter() {}
+
+  // Convert a tag-lemma pair to a different tag set.
+  virtual void convert(tagged_lemma& tagged_lemma) const = 0;
+  // Convert a result of analysis to a different tag set. Apart from calling
+  // convert, any repeated entry is removed.
+  virtual void convert_analyzed(std::vector<tagged_lemma>& tagged_lemmas) const = 0;
+  // Convert a result of generation to a different tag set. Apart from calling
+  // convert, any repeated entry is removed.
+  virtual void convert_generated(std::vector<tagged_lemma_forms>& forms) const = 0;
+
+  // Static factory methods
+  static tagset_converter* new_identity_converter();
+
+  static tagset_converter* new_pdt_to_conll2009_converter();
+};
+
 } // namespace morphodita
 } // namespace ufal
 

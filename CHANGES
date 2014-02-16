@@ -5,6 +5,7 @@ Version 0.95
   to specify input and output format separately.
 - Add convert_tagset parameter and tagset_converter class.
 - Change both vertical and xml output format slightly.
+- Add tagset_converter class and instances
 
 
 Version 0.94 [10 Feb 2014]

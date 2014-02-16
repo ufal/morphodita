@@ -108,12 +108,20 @@
       <LI><A HREF="#tagger_tag">6.9.4. tagger::tag()</A>
       <LI><A HREF="#tagger_new_tokenizer">6.9.5. tagger::new_tokenizer</A>
       </UL>
+    <LI><A HREF="#tagset_converter">6.10. Class tagset_converter</A>
+      <UL>
+      <LI><A HREF="#tagset_converter_convert">6.10.1. tagset_converter::convert()</A>
+      <LI><A HREF="#tagset_converter_convert_analyzed">6.10.2. tagset_converter::convert_analyzed()</A>
+      <LI><A HREF="#tagset_converter_convert_generated">6.10.3. tagset_converter::convert_generated()</A>
+      <LI><A HREF="#tagset_converter_new_identity_converter">6.10.4. tagset_converter::new_identity_converter()</A>
+      <LI><A HREF="#tagset_converter_new_pdt_to_conll2009_converter">6.10.5. tagset_converter::new_pdt_to_conll2009_converter()</A>
+      </UL>
     </UL>
-  <LI><A HREF="#toc65">Contact</A>
+  <LI><A HREF="#toc71">Contact</A>
   <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc67">8.1. Publications</A>
-    <LI><A HREF="#toc68">8.2. Bibtex for referencing</A>
+    <LI><A HREF="#toc73">8.1. Publications</A>
+    <LI><A HREF="#toc74">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -1620,7 +1628,88 @@ Returns a new instance of a suitable tokenizer. The user should delete it after 
 The call is equal to <CODE><A HREF="#tagger_get_morpho">get_morpho()</A>-&gt;<A HREF="#morpho_new_tokenizer">new_tokenizer()</A></CODE>.
 </P>
 
-<A NAME="toc65"></A>
+<A NAME="tagset_converter"></A>
+<H2>6.10. Class tagset_converter</H2>
+
+<PRE>
+class tagset_converter {
+ public:
+  virtual ~tagset_converter() {}
+
+  virtual void <A HREF="#tagset_converter_convert">convert</A>(<A HREF="#tagged_lemma">tagged_lemma</A>&amp; tagged_lemma) const = 0;
+  virtual void <A HREF="#tagset_converter_convert_analyzed">convert_analyzed</A>(std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tagged_lemmas) const = 0;
+  virtual void <A HREF="#tagset_converter_convert_generated">convert_generated</A>(std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
+
+  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_identity_converter">new_identity_converter</A>();
+  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_pdt_to_conll2009_converter">new_pdt_to_conll2009_converter</A>();
+};
+</PRE>
+
+<A NAME="tagset_converter_convert"></A>
+<H3>6.10.1. tagset_converter::convert()</H3>
+
+<PRE>
+virtual void convert(<A HREF="#tagged_lemma">tagged_lemma</A>&amp; tagged_lemma) const = 0;
+</PRE>
+
+<P>
+Convert the given tagged lemma.
+</P>
+
+<A NAME="tagset_converter_convert_analyzed"></A>
+<H3>6.10.2. tagset_converter::convert_analyzed()</H3>
+
+<PRE>
+virtual void convert_analyzed(std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tagged_lemmas) const = 0;
+</PRE>
+
+<P>
+Convert the given results of <A HREF="#morpho_analyze">morpho::analyze</A>. Apart from calling
+<A HREF="#tagset_converter_convert">convert</A>, any repeated entries are removed.
+</P>
+
+<A NAME="tagset_converter_convert_generated"></A>
+<H3>6.10.3. tagset_converter::convert_generated()</H3>
+
+<PRE>
+virtual void convert_generated(std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
+</PRE>
+
+<P>
+Convert the given results of <A HREF="#morpho_generate">morpho::generate</A>. Apart from calling
+<A HREF="#tagset_converter_convert">convert</A>, any repeated entries are removed.
+</P>
+
+<A NAME="tagset_converter_new_identity_converter"></A>
+<H3>6.10.4. tagset_converter::new_identity_converter()</H3>
+
+<PRE>
+static <A HREF="#tagset_converter">tagset_converter*</A> new_identity_converter();
+</PRE>
+
+<P>
+Returns a new instance of an identity converter. All convert methods of an
+identity converter do nothing. The user should delete the instance after use.
+</P>
+
+<A NAME="tagset_converter_new_pdt_to_conll2009_converter"></A>
+<H3>6.10.5. tagset_converter::new_pdt_to_conll2009_converter()</H3>
+
+<PRE>
+static <A HREF="#tagset_converter">tagset_converter*</A> new_pdt_to_conll2009_converter();
+</PRE>
+
+<P>
+Returns a new instance of a Czech PDT tag set to CoNLL2009 tag set converter.
+The user should delete the instance after use.
+</P>
+<P>
+CoNLL2009 tag set uses two columns for tags &ndash; one is a POS and the other one
+are additional FEATs. Because we have only one tag field, we merge these fields
+together by using <CODE>Pos=?|FEAT</CODE>, i.e., the POS is stored as a first FEAT.
+</P>
+
+<A NAME="toc71"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1643,14 +1732,14 @@ Authors:
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project <I>LM2010013</I>).
 </P>
 
-<A NAME="toc67"></A>
+<A NAME="toc73"></A>
 <H2>8.1. Publications</H2>
 
 <UL>
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc68"></A>
+<A NAME="toc74"></A>
 <H2>8.2. Bibtex for referencing</H2>
 
 <PRE>

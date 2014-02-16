@@ -21,6 +21,7 @@
 #include <memory>
 
 #include "tagger/tagger.h"
+#include "tagset_converter/tagset_converter.h"
 #include "utils/input.h"
 #include "utils/output.h"
 #include "utils/parse_options.h"
@@ -28,8 +29,8 @@
 
 using namespace ufal::morphodita;
 
-static void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer);
-static void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer);
+static void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
+static void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
   options_map options;
@@ -50,15 +51,24 @@ int main(int argc, char* argv[]) {
   unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : tagger->new_tokenizer());
   if (!tokenizer) runtime_errorf("Cannot create tokenizer!");
 
+  unique_ptr<tagset_converter> tagset_converter;
+  if (options.count("convert_tagset")) {
+    tagset_converter.reset(new_tagset_converter(options["convert_tagset"]));
+    if (!tagset_converter) runtime_errorf("Unknown tag set converter '%s'!", options["convert_tagset"].c_str());
+  } else {
+    tagset_converter.reset(tagset_converter::new_identity_converter());
+    if (!tagset_converter) runtime_errorf("Cannot create identity tag set converter!");
+  }
+
   clock_t now = clock();
-  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer);
-  else process_args(2, argc, argv, tag_xml, *tagger, *tokenizer);
+  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer, *tagset_converter);
+  else process_args(2, argc, argv, tag_xml, *tagger, *tokenizer, *tagset_converter);
   eprintf("Tagging done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
 
   return 0;
 }
 
-void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer) {
+void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
@@ -69,14 +79,16 @@ void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenize
     while (tokenizer.next_sentence(&forms, nullptr)) {
       tagger.tag(forms, tags);
 
-      for (unsigned i = 0; i < tags.size(); i++)
+      for (unsigned i = 0; i < tags.size(); i++) {
+        tagset_converter.convert(tags[i]);
         fprintf(out, "%.*s\t%s\t%s\n", int(forms[i].len), forms[i].str, tags[i].lemma.c_str(), tags[i].tag.c_str());
+      }
       fputc('\n', out);
     }
   }
 }
 
-void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer) {
+void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
@@ -89,6 +101,8 @@ void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer) {
       tagger.tag(forms, tags);
 
       for (unsigned i = 0; i < forms.size(); i++) {
+        tagset_converter.convert(tags[i]);
+
         if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
         fputs("<token lemma=\"", out);
         print_xml_content(out, tags[i].lemma.c_str(), tags[i].lemma.size());

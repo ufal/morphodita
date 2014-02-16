@@ -154,3 +154,24 @@ class tagger {
   %newobject new_tokenizer;
   tokenizer* new_tokenizer() const;
 };
+
+%rename(TagsetConverter) tagset_converter;
+%nodefaultctor tagset_converter;
+class tagset_converter {
+ public:
+  virtual ~tagset_converter() {}
+
+  virtual void convert(tagged_lemma& tagged_lemma) const;
+  %rename(convertAnalyzed) convert_analyzed;
+  virtual void convert_analyzed(std::vector<tagged_lemma>& tagged_lemmas) const;
+  %rename(convertGenerated) convert_generated;
+  virtual void convert_generated(std::vector<tagged_lemma_forms>& forms) const;
+
+  %rename(newIdentityConverter) new_identity_converter;
+  %newobject new_identity_converter;
+  static tagset_converter* new_identity_converter();
+
+  %rename(newPdtToConll2009Converter) new_pdt_to_conll2009_converter;
+  %newobject new_pdt_to_conll2009_converter;
+  static tagset_converter* new_pdt_to_conll2009_converter();
+};
