@@ -1,6 +1,5 @@
 Version 0.95
 ------------
-- Do not allow new_tokenizer and get_morpho to return NULL.
 - Provide better options (--input, --output), which also allows
   to specify input and output format separately.
 - Add convert_tagset parameter and tagset_converter class.

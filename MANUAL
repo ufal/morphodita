@@ -1149,8 +1149,8 @@ morpho::new_tokenizer
 
   virtual tokenizer* new_tokenizer() const = 0;
 
-Returns a new instance of a suitable tokenizer. The user should delete it after
-use.
+Returns a new instance of a suitable tokenizer or NULL if no such tokenizer
+exists. The user should delete it after use.
 
 
 Class tagger
@@ -1218,8 +1218,9 @@ tagger::new_tokenizer
 
   virtual tokenizer* new_tokenizer() const = 0;
 
-Returns a new instance of a suitable tokenizer. The user should delete it after
-use. The call is equal to get_morpho()->new_tokenizer().
+Returns a new instance of a suitable tokenizer or NULL if no such tokenizer
+exists. The user should delete it after use.  The call is equal to
+get_morpho()->new_tokenizer().
 
 
 Class tagset_converter

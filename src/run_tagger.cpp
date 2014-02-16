@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
   eprintf("done\n");
 
   unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : tagger->new_tokenizer());
-  if (!tokenizer) runtime_errorf("Cannot create tokenizer!");
+  if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
 
   unique_ptr<tagset_converter> tagset_converter;
   if (options.count("convert_tagset")) {

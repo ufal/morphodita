@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
   bool use_guesser = parse_int(argv[2], "use_guesser");
 
   unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : dictionary->new_tokenizer());
-  if (!tokenizer) runtime_errorf("Cannot create tokenizer!");
+  if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
 
   unique_ptr<tagset_converter> tagset_converter;
   if (options.count("convert_tagset")) {

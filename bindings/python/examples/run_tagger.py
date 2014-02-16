@@ -43,6 +43,10 @@ forms = Forms()
 lemmas = TaggedLemmas()
 tokens = TokenRanges()
 tokenizer = tagger.newTokenizer()
+if tokenizer is None:
+  sys.stderr.write("No tokenizer is defined for the supplied model!")
+  sys.exit(1)
+
 not_eof = True
 while not_eof:
   text = ''

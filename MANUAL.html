@@ -1538,7 +1538,8 @@ virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
 </PRE>
 
 <P>
-Returns a new instance of a suitable tokenizer. The user should delete it after use.
+Returns a new instance of a suitable tokenizer or <CODE>NULL</CODE> if no such tokenizer
+exists. The user should delete it after use.
 </P>
 
 <A NAME="tagger"></A>
@@ -1624,8 +1625,9 @@ virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
 </PRE>
 
 <P>
-Returns a new instance of a suitable tokenizer. The user should delete it after use.
-The call is equal to <CODE><A HREF="#tagger_get_morpho">get_morpho()</A>-&gt;<A HREF="#morpho_new_tokenizer">new_tokenizer()</A></CODE>.
+Returns a new instance of a suitable tokenizer or <CODE>NULL</CODE> if no such tokenizer
+exists. The user should delete it after use.  The call is equal to
+<CODE><A HREF="#tagger_get_morpho">get_morpho()</A>-&gt;<A HREF="#morpho_new_tokenizer">new_tokenizer()</A></CODE>.
 </P>
 
 <A NAME="tagset_converter"></A>
