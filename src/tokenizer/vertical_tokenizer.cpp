@@ -22,17 +22,23 @@ namespace ufal {
 namespace morphodita {
 
 bool vertical_tokenizer::next_sentence(vector<string_piece>& forms) {
+  if (text == text_end) return false;
+
   while (true) {
     const char* line_start = text;
-    while (*text != '\r' && *text != '\n') text++;
+    while (text < text_end && *text != '\r' && *text != '\n') text++;
 
-    const char* line_end = text++;
-    if ((text[-1] == '\r' && *text == '\n') || (text[-1] == '\n' && *text == '\r')) text++;
+    const char* line_end = text;
+    if (text < text_end) {
+      text++;
+      if (text < text_end && ((text[-1] == '\r' && *text == '\n') || (text[-1] == '\n' && *text == '\r'))) text++;
+    }
+
     if (line_start < line_end) forms.emplace_back(line_start, line_end - line_start);
     else break;
   }
 
-  return !forms.empty();
+  return true;
 }
 
 } // namespace morphodita
