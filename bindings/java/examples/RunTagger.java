@@ -20,6 +20,10 @@ import cz.cuni.mff.ufal.morphodita.*;
 import java.util.Scanner;
 
 class RunTagger {
+  public static String encodeEntities(String text) {
+    return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;");
+  }
+
   public static void main(String[] args) {
     if (args.length == 0) {
       System.err.println("Usage: RunTagger tagger_file");
@@ -59,16 +63,25 @@ class RunTagger {
       // Tokenize and tag
       String text = textBuilder.toString();
       tokenizer.setText(text);
+      int t = 0;
       while (tokenizer.nextSentence(forms, tokens)) {
         tagger.tag(forms, lemmas);
 
         for (int i = 0; i < lemmas.size(); i++) {
           TaggedLemma lemma = lemmas.get(i);
           TokenRange token = tokens.get(i);
-          System.out.printf("%s\t%s\t%s\n", /*form.get(i) or */ text.substring((int)token.getStart(), (int)token.getStart() + (int)token.getLength()), lemma.getLemma(), lemma.getTag());
+          int token_start = (int)token.getStart(), token_end = token_start + (int)token.getLength();
+          System.out.printf("%s%s<token lemma=\"%s\" tag=\"%s\">%s</token>%s",
+                            encodeEntities(text.substring(t, token_start)),
+                            i == 0 ? "<sentence>" : "",
+                            encodeEntities(lemma.getLemma()),
+                            encodeEntities(lemma.getTag()),
+                            encodeEntities(text.substring(token_start, token_end)),
+                            i + 1 == lemmas.size() ? "</sentence>" : "");
+          t = token_end;
         }
-        System.out.println();
       }
+      System.out.print(encodeEntities(text.substring(t)));
     }
   }
 }

@@ -20,6 +20,9 @@ import sys
 
 from ufal.morphodita import *
 
+def encode_entities(text):
+  return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
+
 # In Python2, wrap sys.stdin and sys.stdout to work with unicode.
 if sys.version_info[0] < 3:
   import codecs
@@ -35,7 +38,7 @@ if len(sys.argv) == 1:
 sys.stderr.write('Loading tagger: ')
 tagger = Tagger.load(sys.argv[1])
 if not tagger:
-  sys.stderr.write("Cannot load tagger from file '%s'\n" % sys.argv[argi])
+  sys.stderr.write("Cannot load tagger from file '%s'\n" % sys.argv[1])
   sys.exit(1)
 sys.stderr.write('done\n')
 
@@ -61,12 +64,24 @@ while not_eof:
     text += '\n';
     if not line: break
 
+
+
   # Tag
   tokenizer.setText(text)
+  t = 0
   while tokenizer.nextSentence(forms, tokens):
     tagger.tag(forms, lemmas)
 
     for i in range(len(lemmas)):
-      sys.stdout.write('%s\t%s\t%s\n' % (text[tokens[i].start : tokens[i].start + tokens[i].length], # or forms[i]
-        lemmas[i].lemma, lemmas[i].tag))
-    sys.stdout.write('\n')
+      lemma = lemmas[i]
+      token = tokens[i]
+      sys.stdout.write('%s%s<token lemma="%s" tag="%s">%s</token>%s' % (
+        encode_entities(text[t : token.start]),
+        "<sentence>" if i == 0 else "",
+        encode_entities(lemma.lemma),
+        encode_entities(lemma.tag),
+        encode_entities(text[token.start : token.start + token.length]),
+        "</sentence>" if i + 1 == len(lemmas) else "",
+      ))
+      t = token.start + token.length
+  sys.stdout.write(encode_entities(text[t : ]))
