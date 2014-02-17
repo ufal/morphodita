@@ -76,7 +76,7 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     word = (utf8_L (utf8_L | utf8_M | '-' | apo)*) -- ('--' | apo apo);
     number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? utf8_Nd+ (',' (utf8_Nd{3}))* ([.] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
 
-    multiletter_punctuation = "--" | apo apo | backapo backapo;
+    multiletter_punctuation = "--" | apo apo | backapo backapo | "...";
 
     word_with_split2 =
       (word apo ('s'i | 'm'i | 'd'i)) |
