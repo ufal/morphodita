@@ -1,4 +1,4 @@
-TARGETS = RunMorphoCli.class RunTagger.class RunTokenizer.class
+TARGETS = RunMorphoCli.class RunTagger.class
 
 all: $(TARGETS)
 
