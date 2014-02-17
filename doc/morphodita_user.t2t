@@ -70,20 +70,21 @@ conversions are:
 The output format is specified using the ``--output`` option. Currently
 supported output formats are:
 - ``xml`` (default): Simple XML format without a root element, using
-  ``<token lemma="..." tag="...">...</token>`` element to encode assigned lemma
-  and tag.
+  ``<sentence>`` element to mark sentences and
+  ``<token lemma="..." tag="...">...</token>`` element to encode token
+  and its assigned lemma and tag.
 
   Example output for input ``Děti pojedou k babičce. Už se těší.`` (line breaks added):
 ```
-<token lemma='dítě' tag='NNFP1-----A----'>Děti</token>
+<sentence><token lemma='dítě' tag='NNFP1-----A----'>Děti</token>
 <token lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'>pojedou</token>
 <token lemma='k-1' tag='RR--3----------'>k</token>
 <token lemma='babička' tag='NNFS3-----A----'>babičce</token>
-<token lemma='.' tag='Z:-------------'>.</token>
-<token lemma='už-1' tag='Db-------------'>Už</token>
+<token lemma='.' tag='Z:-------------'>.</token></sentence>
+<sentence><token lemma='už-1' tag='Db-------------'>Už</token>
 <token lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'>se</token>
 <token lemma='těšit_:T' tag='VB-S---3P-AA---'>těší</token>
-<token lemma='.' tag='Z:-------------'>.</token>
+<token lemma='.' tag='Z:-------------'>.</token></sentence>
 ```
 
 - ``vertical``: Every output line is a tag separated triple form-lemma-tag, with empty
@@ -167,15 +168,15 @@ supported output formats are:
 
   Example output for input ``Děti pojedou k babičce. Už se těší.`` (line breaks added):
 ```
-<token><analysis lemma="dítě" tag="NNFP1-----A----"/><analysis lemma="dítě" tag="NNFP4-----A----"/><analysis lemma="dítě" tag="NNFP5-----A----"/>Děti</token>
+<sentence><token><analysis lemma="dítě" tag="NNFP1-----A----"/><analysis lemma="dítě" tag="NNFP4-----A----"/><analysis lemma="dítě" tag="NNFP5-----A----"/>Děti</token>
 <token><analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/>pojedou</token>
 <token><analysis lemma="k-1" tag="RR--3----------"/><analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/><analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/><analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/><analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/><analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/><analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/>k</token>
 <token><analysis lemma="babička" tag="NNFS3-----A----"/><analysis lemma="babička" tag="NNFS6-----A----"/>babičce</token>
-<token><analysis lemma="." tag="Z:-------------"/>.</token>
-<token><analysis lemma="už-1" tag="Db-------------"/><analysis lemma="už-2" tag="TT-------------"/>Už</token>
+<token><analysis lemma="." tag="Z:-------------"/>.</token></sentence>
+<sentence><token><analysis lemma="už-1" tag="Db-------------"/><analysis lemma="už-2" tag="TT-------------"/>Už</token>
 <token><analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/><analysis lemma="s-1" tag="RV--2----------"/><analysis lemma="s-1" tag="RV--7----------"/>se</token>
 <token><analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/><analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/>těší</token>
-<token><analysis lemma="." tag="Z:-------------"/>.</token>
+<token><analysis lemma="." tag="Z:-------------"/>.</token></sentence>
 ```
 
 - ``vertical``: Every output line contains a word and a tab separated lemma-tag

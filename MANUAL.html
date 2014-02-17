@@ -599,21 +599,22 @@ supported output formats are:
 
 <UL>
 <LI><CODE>xml</CODE> (default): Simple XML format without a root element, using
-  <CODE>&lt;token lemma="..." tag="..."&gt;...&lt;/token&gt;</CODE> element to encode assigned lemma
-  and tag.
+  <CODE>&lt;sentence&gt;</CODE> element to mark sentences and
+  <CODE>&lt;token lemma="..." tag="..."&gt;...&lt;/token&gt;</CODE> element to encode token
+  and its assigned lemma and tag.
 <P></P>
   Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE> (line breaks added):
 
 <PRE>
-&lt;token lemma='dítě' tag='NNFP1-----A----'&gt;Děti&lt;/token&gt;
+&lt;sentence&gt;&lt;token lemma='dítě' tag='NNFP1-----A----'&gt;Děti&lt;/token&gt;
 &lt;token lemma='jet-1_^(pohybovat_se,_ne_však_chůzí)' tag='VB-P---3F-AA---'&gt;pojedou&lt;/token&gt;
 &lt;token lemma='k-1' tag='RR--3----------'&gt;k&lt;/token&gt;
 &lt;token lemma='babička' tag='NNFS3-----A----'&gt;babičce&lt;/token&gt;
-&lt;token lemma='.' tag='Z:-------------'&gt;.&lt;/token&gt;
-&lt;token lemma='už-1' tag='Db-------------'&gt;Už&lt;/token&gt;
+&lt;token lemma='.' tag='Z:-------------'&gt;.&lt;/token&gt;&lt;/sentence&gt;
+&lt;sentence&gt;&lt;token lemma='už-1' tag='Db-------------'&gt;Už&lt;/token&gt;
 &lt;token lemma='se_^(zvr._zájmeno/částice)' tag='P7-X4----------'&gt;se&lt;/token&gt;
 &lt;token lemma='těšit_:T' tag='VB-S---3P-AA---'&gt;těší&lt;/token&gt;
-&lt;token lemma='.' tag='Z:-------------'&gt;.&lt;/token&gt;
+&lt;token lemma='.' tag='Z:-------------'&gt;.&lt;/token&gt;&lt;/sentence&gt;
 </PRE>
 
 <P></P>
@@ -730,15 +731,15 @@ supported output formats are:
   Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE> (line breaks added):
 
 <PRE>
-&lt;token&gt;&lt;analysis lemma="dítě" tag="NNFP1-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP4-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP5-----A----"/&gt;Děti&lt;/token&gt;
+&lt;sentence&gt;&lt;token&gt;&lt;analysis lemma="dítě" tag="NNFP1-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP4-----A----"/&gt;&lt;analysis lemma="dítě" tag="NNFP5-----A----"/&gt;Děti&lt;/token&gt;
 &lt;token&gt;&lt;analysis lemma="jet-1_^(pohybovat_se,_ne_však_chůzí)" tag="VB-P---3F-AA---"/&gt;pojedou&lt;/token&gt;
 &lt;token&gt;&lt;analysis lemma="k-1" tag="RR--3----------"/&gt;&lt;analysis lemma="k-3_^(označení_pomocí_písmene)" tag="NNNXX-----A----"/&gt;&lt;analysis lemma="k-4`kůň_:B_^(jednotka_výkonu)" tag="NNMXX-----A---8"/&gt;&lt;analysis lemma="k-8_:B_^(ost._zkratka)" tag="XX------------8"/&gt;&lt;analysis lemma="komanditní_:B_^(jen_komanditní_společnost)" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="koncernový_:B" tag="AAXXX----1A---8"/&gt;&lt;analysis lemma="kuo-1_:B_,t_^(stará_jednotka_výkonu)" tag="NNNXX-----A---8"/&gt;k&lt;/token&gt;
 &lt;token&gt;&lt;analysis lemma="babička" tag="NNFS3-----A----"/&gt;&lt;analysis lemma="babička" tag="NNFS6-----A----"/&gt;babičce&lt;/token&gt;
-&lt;token&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/token&gt;
-&lt;token&gt;&lt;analysis lemma="už-1" tag="Db-------------"/&gt;&lt;analysis lemma="už-2" tag="TT-------------"/&gt;Už&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/token&gt;&lt;/sentence&gt;
+&lt;sentence&gt;&lt;token&gt;&lt;analysis lemma="už-1" tag="Db-------------"/&gt;&lt;analysis lemma="už-2" tag="TT-------------"/&gt;Už&lt;/token&gt;
 &lt;token&gt;&lt;analysis lemma="se_^(zvr._zájmeno/částice)" tag="P7-X4----------"/&gt;&lt;analysis lemma="s-1" tag="RV--2----------"/&gt;&lt;analysis lemma="s-1" tag="RV--7----------"/&gt;se&lt;/token&gt;
 &lt;token&gt;&lt;analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/&gt;&lt;analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/&gt;těší&lt;/token&gt;
-&lt;token&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/token&gt;
+&lt;token&gt;&lt;analysis lemma="." tag="Z:-------------"/&gt;.&lt;/token&gt;&lt;/sentence&gt;
 </PRE>
 
 <P></P>

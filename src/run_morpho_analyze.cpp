@@ -106,6 +106,7 @@ void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser
         tagset_converter.convert_analyzed(lemmas);
 
         if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
+        if (!i) fputs("<sentence>", out);
         fputs("<token>", out);
         for (auto&& lemma : lemmas) {
           fputs("<analysis lemma=\"", out);
@@ -116,6 +117,7 @@ void analyze_xml(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser
         }
         print_xml_content(out, forms[i].str, forms[i].len);
         fputs("</token>", out);
+        if (i + 1 == forms.size()) fputs("</sentence>", out);
         unprinted = forms[i].str + forms[i].len;
       }
 

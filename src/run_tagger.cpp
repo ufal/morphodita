@@ -104,6 +104,7 @@ void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, co
         tagset_converter.convert(tags[i]);
 
         if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
+        if (!i) fputs("<sentence>", out);
         fputs("<token lemma=\"", out);
         print_xml_content(out, tags[i].lemma.c_str(), tags[i].lemma.size());
         fputs("\" tag=\"", out);
@@ -111,6 +112,7 @@ void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, co
         fputs("\">", out);
         print_xml_content(out, forms[i].str, forms[i].len);
         fputs("</token>", out);
+        if (i + 1 == forms.size()) fputs("</sentence>", out);
         unprinted = forms[i].str + forms[i].len;
       }
     }
