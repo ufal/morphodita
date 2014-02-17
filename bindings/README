@@ -1,9 +1,9 @@
 This directory contains language bindings of the MorphoDiTa library.
 
-For instructions how to compile the language bindings, see the MorphoDiTa Installation
-either in INSTALL, or in MANUAL.
+For instructions how to compile the language bindings, see
+the MorphoDiTa Installation either in INSTALL, or in MANUAL.
 
 For every language, two examples are provided:
-  run_tagger: same as C++ run_ragger, with untokenized input format, no
-    tag set conversion and xml output format
+  run_tagger: same as C++ run_ragger, with untokenized input format,
+    no tag set conversion and xml output format
   run_morpho_cli: same as C++ run_morpho_cli
