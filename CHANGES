@@ -1,10 +1,11 @@
-Version 0.95
-------------
+Version 0.95 [17 Feb 2014]
+--------------------------
 - Provide better options (--input, --output), which also allows
   to specify input and output format separately.
 - Add convert_tagset parameter and tagset_converter class.
 - Change both vertical and xml output format slightly.
-- Add tagset_converter class and instances
+- Add tagset_converter class and instances.
+- Add static tokenizer::new_vertical_tokenizer method.
 
 
 Version 0.94 [10 Feb 2014]
