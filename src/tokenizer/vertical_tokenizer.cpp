@@ -22,7 +22,6 @@ namespace ufal {
 namespace morphodita {
 
 bool vertical_tokenizer::next_sentence(vector<string_piece>& forms) {
-  while (text < text_end && (*text == '\r' || *text == '\n')) text++;
   if (text == text_end) return false;
 
   while (true) {
