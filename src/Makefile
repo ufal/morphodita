@@ -34,7 +34,7 @@ $(call exe,run_morpho_analyze): $(call obj,$(MORPHO_O) utils/input utils/output 
 $(call exe,run_morpho_cli): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,run_morpho_generate): $(call obj,$(MORPHO_O) utils/input utils/parse_options)
 $(call exe,run_tagger): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
-$(call exe,run_tokenizer): $(call obj,$(MORPHO_O) utils/input)
+$(call exe,run_tokenizer): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
 $(call exe,test_dictionary): $(call obj,$(MORPHO_O) morpho/raw_morpho_dictionary_reader utils/input)
 $(call exe,tagger_accuracy): $(call obj,$(MORPHODITA_O) utils/input)
 $(call exe,train_tagger): $(call obj,$(LZMA_ENC_O) $(MORPHODITA_O) utils/input)

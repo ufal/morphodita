@@ -634,29 +634,44 @@ Running the Tokenizer
 Using the run_tokenizer executable it is possible to perform only tokenization
 and segmentation.
 
-The tokenizer can be specified either using a morphologic dictionary, or using a
-tokenizer identifier. Currently supported tokenizer identifiers are:
+The input is a UTF-8 encoded plain text and the input files are specified same
+as with the run_tagger command.
 
-- --czech
+The tokenizer can be specified either by using a morphology model (--morphology
+option), tagger model (--tagger option) or by using a tokenizer identifier
+(--tokenizer option). Currently supported tokenizer identifiers are:
 
-The input is a UTF-8 encoded plain text and the output is in the vertical format
-- each word is on a separate line and every sentence is ended by a blank line.
-The input files are specified same as with the run_tagger command.
+- czech
 
 The full command syntax of run_tokenizer is
 
-  run_tokenizer --czech|morphology_model [input_file[:output_file]]...
+  run_tokenizer [options] [file[:output_file]]...
+  Options: --tokenizer=czech
+           --morphology=morphology_model_file
+           --tagger=tagger_model_file
+           --output=vertical|xml
 
-Example input:
 
-  Děti pojedou k babičce. Už se těší.
+Output Formats
+--------------
 
-Example tokenization command line:
+The output format is specified using the --output option. Currently supported
+output formats are:
 
-  run_tokenizer --czech
+- xml (default): Simple XML format without a root element, using <sentence>
+  element to mark sentences and <token> element to mark tokens.
+  
+  Example output for input Děti pojedou k babičce. Už se těší. (line
+  breaks added):
+  <sentence><token>Děti</token> <token>pojedou</token> <token>k</token>
+  <token>babičce</token><token>.</token></sentence> <sentence><token>Už</token>
+  <token>se</token> <token>těší</token><token>.</token></sentence>
 
-Example output:
-
+  
+- vertical: Each token is on a separate line, every sentence is ended by a
+  blank line.
+  
+  Example output for input Děti pojedou k babičce. Už se těší.:
   Děti
   pojedou
   k
@@ -668,6 +683,7 @@ Example output:
   těší
   .
   
+
 
 
 MorphoDiTa API Tutorial

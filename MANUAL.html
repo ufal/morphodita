@@ -62,19 +62,22 @@
       <LI><A HREF="#run_morpho_cli">4.3.3. Interactive Morphologic Analysis and Generation</A>
       </UL>
     <LI><A HREF="#run_tokenizer">4.4. Running the Tokenizer</A>
-    </UL>
-  <LI><A HREF="#toc31">MorphoDiTa API Tutorial</A>
-    <UL>
-    <LI><A HREF="#toc32">5.1. Tagger API</A>
-    <LI><A HREF="#toc33">5.2. Morphologic Dictionary API</A>
       <UL>
-      <LI><A HREF="#toc34">5.2.1. Dictionary Construction</A>
-      <LI><A HREF="#toc35">5.2.2. Morphologic Analysis</A>
-      <LI><A HREF="#toc36">5.2.3. Generation</A>
+      <LI><A HREF="#toc31">4.4.1. Output Formats</A>
+      </UL>
+    </UL>
+  <LI><A HREF="#toc32">MorphoDiTa API Tutorial</A>
+    <UL>
+    <LI><A HREF="#toc33">5.1. Tagger API</A>
+    <LI><A HREF="#toc34">5.2. Morphologic Dictionary API</A>
+      <UL>
+      <LI><A HREF="#toc35">5.2.1. Dictionary Construction</A>
+      <LI><A HREF="#toc36">5.2.2. Morphologic Analysis</A>
+      <LI><A HREF="#toc37">5.2.3. Generation</A>
       </UL>
     <LI><A HREF="#faq">5.3. Questions and Answers</A>
     </UL>
-  <LI><A HREF="#toc38">MorphoDiTa API Reference</A>
+  <LI><A HREF="#toc39">MorphoDiTa API Reference</A>
     <UL>
     <LI><A HREF="#lemma_structure">6.1. Lemma Structure</A>
     <LI><A HREF="#string_piece">6.2. Struct string_piece</A>
@@ -117,11 +120,11 @@
       <LI><A HREF="#tagset_converter_new_pdt_to_conll2009_converter">6.10.5. tagset_converter::new_pdt_to_conll2009_converter()</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc71">Contact</A>
+  <LI><A HREF="#toc72">Contact</A>
   <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc73">8.1. Publications</A>
-    <LI><A HREF="#toc74">8.2. Bibtex for referencing</A>
+    <LI><A HREF="#toc74">8.1. Publications</A>
+    <LI><A HREF="#toc75">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -881,47 +884,58 @@ Using the <CODE>run_tokenizer</CODE> executable it is possible to perform only
 tokenization and segmentation.
 </P>
 <P>
-The tokenizer can be specified either using a morphologic dictionary, or
-using a tokenizer identifier. Currently supported tokenizer identifiers are:
+The input is a UTF-8 encoded plain text and the input files are specified same
+as with the <A HREF="#run_tagger"><CODE>run_tagger</CODE></A> command.
+</P>
+<P>
+The tokenizer can be specified either by using a morphology model
+(<CODE>--morphology</CODE> option), tagger model (<CODE>--tagger</CODE> option) or by using
+a tokenizer identifier (<CODE>--tokenizer</CODE> option). Currently supported
+tokenizer identifiers are:
 </P>
 
 <UL>
-<LI><CODE>--czech</CODE>
+<LI><CODE>czech</CODE>
 </UL>
 
-<P>
-The input is a UTF-8 encoded plain text and the output is in the vertical
-format &ndash; each word is on a separate line and every sentence is ended
-by a blank line. The input files are specified same as with the
-<A HREF="#run_tagger"><CODE>run_tagger</CODE></A> command.
-</P>
 <P>
 The full command syntax of <CODE>run_tokenizer</CODE> is
 </P>
 
 <PRE>
-run_tokenizer --czech|morphology_model [input_file[:output_file]]...
+run_tokenizer [options] [file[:output_file]]...
+Options: --tokenizer=czech
+         --morphology=morphology_model_file
+         --tagger=tagger_model_file
+         --output=vertical|xml
 </PRE>
 
+<A NAME="toc31"></A>
+<H3>4.4.1. Output Formats</H3>
+
 <P>
-Example input:
+The output format is specified using the <CODE>--output</CODE> option. Currently
+supported output formats are:
 </P>
+
+<UL>
+<LI><CODE>xml</CODE> (default): Simple XML format without a root element, using
+  <CODE>&lt;sentence&gt;</CODE> element to mark sentences and <CODE>&lt;token&gt;</CODE> element to mark
+  tokens.
+<P></P>
+  Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE> (line breaks added):
 
 <PRE>
-Děti pojedou k babičce. Už se těší.
+&lt;sentence&gt;&lt;token&gt;Děti&lt;/token&gt; &lt;token&gt;pojedou&lt;/token&gt; &lt;token&gt;k&lt;/token&gt;
+&lt;token&gt;babičce&lt;/token&gt;&lt;token&gt;.&lt;/token&gt;&lt;/sentence&gt; &lt;sentence&gt;&lt;token&gt;Už&lt;/token&gt;
+&lt;token&gt;se&lt;/token&gt; &lt;token&gt;těší&lt;/token&gt;&lt;token&gt;.&lt;/token&gt;&lt;/sentence&gt;
 </PRE>
 
-<P>
-Example tokenization command line:
-</P>
-
-<PRE>
-run_tokenizer --czech
-</PRE>
-
-<P>
-Example output:
-</P>
+<P></P>
+<LI><CODE>vertical</CODE>: Each token is on a separate line, every sentence is ended by
+  a blank line.
+<P></P>
+  Example output for input <CODE>Děti pojedou k babičce. Už se těší.</CODE>:
 
 <PRE>
 Děti
@@ -937,7 +951,9 @@ těší
 
 </PRE>
 
-<A NAME="toc31"></A>
+</UL>
+
+<A NAME="toc32"></A>
 <H1>5. MorphoDiTa API Tutorial</H1>
 
 <P>
@@ -951,7 +967,7 @@ The MorphoDiTa API is defined in header <CODE>morphodita.h</CODE> and resides in
 using namespace ufal::morphodita;
 </PRE>
 
-<A NAME="toc32"></A>
+<A NAME="toc33"></A>
 <H2>5.1. Tagger API</H2>
 
 <P>
@@ -1022,7 +1038,7 @@ public members: <CODE>std::string lemma</CODE> and <CODE>std:string tag</CODE>, 
 predicted lemma and tag, respectively.
 </P>
 
-<A NAME="toc33"></A>
+<A NAME="toc34"></A>
 <H2>5.2. Morphologic Dictionary API</H2>
 
 <P>
@@ -1031,7 +1047,7 @@ The main access to MorphoDiTa morphologic dictionary is through class
 <CODE>run_morpho.cpp</CODE>.
 </P>
 
-<A NAME="toc34"></A>
+<A NAME="toc35"></A>
 <H3>5.2.1. Dictionary Construction</H3>
 
 <P>
@@ -1072,7 +1088,7 @@ Please note that you should not delete this pointer as it is owned by the
 <CODE>tagger</CODE> class instance.
 </P>
 
-<A NAME="toc35"></A>
+<A NAME="toc36"></A>
 <H3>5.2.2. Morphologic Analysis</H3>
 
 <P>
@@ -1112,7 +1128,7 @@ caller must provide an output vector <CODE>std::vector&lt;tagged_lemma&gt;</CODE
 method <CODE>morpho::analyze</CODE> assigns the output to this vector.
 </P>
 
-<A NAME="toc36"></A>
+<A NAME="toc37"></A>
 <H3>5.2.3. Generation</H3>
 
 <P>
@@ -1183,7 +1199,7 @@ is found by the guesser, <CODE>GUESSER</CODE> is returned. Otherwise, forms are 
   implicit conversion rules.
 </DL>
 
-<A NAME="toc38"></A>
+<A NAME="toc39"></A>
 <H1>6. MorphoDiTa API Reference</H1>
 
 <P>
@@ -1711,7 +1727,7 @@ are additional FEATs. Because we have only one tag field, we merge these fields
 together by using <CODE>Pos=?|FEAT</CODE>, i.e., the POS is stored as a first FEAT.
 </P>
 
-<A NAME="toc71"></A>
+<A NAME="toc72"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1734,14 +1750,14 @@ Authors:
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project <I>LM2010013</I>).
 </P>
 
-<A NAME="toc73"></A>
+<A NAME="toc74"></A>
 <H2>8.1. Publications</H2>
 
 <UL>
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc74"></A>
+<A NAME="toc75"></A>
 <H2>8.2. Bibtex for referencing</H2>
 
 <PRE>
