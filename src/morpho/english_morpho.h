@@ -22,6 +22,7 @@
 
 #include "common.h"
 #include "english_lemma_addinfo.h"
+#include "english_morpho_guesser.h"
 #include "morpho_dictionary.h"
 
 namespace ufal {
@@ -40,6 +41,7 @@ class english_morpho : public morpho {
   inline void analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const;
 
   morpho_dictionary<english_lemma_addinfo> dictionary;
+  english_morpho_guesser morpho_guesser;
 
   string unknown_tag = "UNK";
   string number_tag = "CD";

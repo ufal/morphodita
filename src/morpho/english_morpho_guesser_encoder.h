@@ -19,13 +19,14 @@
 #pragma once
 
 #include "common.h"
+#include "utils/binary_encoder.h"
 
 namespace ufal {
 namespace morphodita {
 
-class english_morpho_encoder {
+class english_morpho_guesser_encoder {
  public:
-  static void encode(FILE* dictionary, FILE* negations, FILE* out);
+  static void encode(FILE* negations_file, binary_encoder& enc);
 };
 
 } // namespace morphodita

@@ -18,6 +18,7 @@
 
 #include "english_lemma_addinfo.h"
 #include "english_morpho_encoder.h"
+#include "english_morpho_guesser_encoder.h"
 #include "morpho_dictionary_encoder.h"
 #include "utils/binary_encoder.h"
 #include "utils/compressor.h"
@@ -25,11 +26,14 @@
 namespace ufal {
 namespace morphodita {
 
-void english_morpho_encoder::encode(FILE* dictionary, FILE* out) {
+void english_morpho_encoder::encode(FILE* dictionary, FILE* negations, FILE* out) {
   binary_encoder enc;
 
   eprintf("Encoding dictionary.\n");
   morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, enc);
+
+  eprintf("Encoding negations.\n");
+  english_morpho_guesser_encoder::encode(negations, enc);
 
   eprintf("Compressing dictionary.\n");
   if (!compressor::save(out, enc)) runtime_errorf("Cannot compress and write dictionary to file!");

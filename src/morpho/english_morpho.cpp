@@ -21,8 +21,6 @@
 
 #include "casing_variants.h"
 #include "english_morpho.h"
-#include "english_lemma_addinfo.h"
-#include "morpho_dictionary.h"
 #include "tag_filter.h"
 #include "tokenizer/english_tokenizer.h"
 #include "utils/compressor.h"
@@ -37,6 +35,7 @@ bool english_morpho::load(FILE* f) {
 
   try {
     dictionary.load(data);
+    morpho_guesser.load(data);
   } catch (binary_decoder_error&) {
     return false;
   }
@@ -64,8 +63,8 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
     if (!lemmas.empty()) return NO_GUESSER;
 
     // Use English guesser on form_lc if allowed.
-    if (guesser == GUESSER) {}
-//      prefix_guesser->analyze(form_lc.empty() ? form : form_lc, lemmas);
+    if (guesser == GUESSER)
+      morpho_guesser.analyze(form, form_lc.empty() ? form : form_lc, lemmas);
     if (!lemmas.empty()) return GUESSER;
   }
 
