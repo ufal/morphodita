@@ -190,17 +190,17 @@ void czech_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemm
   while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   if (codepoint == '.' || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
   while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
-  if (codepoint == 'e' || codepoint == 'E') {
+  if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
     codepoint = utf8::decode(form.str, form.len);
     if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
     any_digit = false;
     while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   }
 
-  if (!form.len && any_digit) {
-    // We found a number. If it ends by , or ., drop it.
-    if (form_ori.str[form_ori.len-1] == '.' || form_ori.str[form_ori.len-1] == ',') form_ori.len--;
+  if (any_digit && !form.len && !codepoint) {
     lemmas.emplace_back(string(form_ori.str, form_ori.len), number_tag);
+  } else if (any_digit && !form.len && (codepoint == '.' || codepoint == ',')) { // allow numbers to end by . or ,
+    lemmas.emplace_back(string(form_ori.str, form_ori.len - 1), number_tag);
   } else if ((first < sizeof(punctuation_additional) && punctuation_additional[first]) ||
              (utf8::is_P(first) && (first >= sizeof(punctuation_exceptions) || !punctuation_exceptions[first])))
     lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);
