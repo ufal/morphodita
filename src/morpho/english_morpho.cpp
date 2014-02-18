@@ -48,10 +48,6 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
   lemmas.clear();
 
   if (form.len) {
-    // Start by calling analyze_special without any casing changes.
-    analyze_special(form, lemmas);
-    if (!lemmas.empty()) return NO_GUESSER;
-
     // Generate all casing variants if needed (they are different than given form).
     string form_uclc; // first uppercase, rest lowercase
     string form_lc;   // all lowercase
@@ -63,7 +59,11 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
     if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
     if (!lemmas.empty()) return NO_GUESSER;
 
-//    // For the prefix guesser, use only form_lc.
+    // If not found, try analyze_special handling numbers and punctiation.
+    analyze_special(form, lemmas);
+    if (!lemmas.empty()) return NO_GUESSER;
+
+    // Use English guesser on form_lc if allowed.
     if (guesser == GUESSER) {}
 //      prefix_guesser->analyze(form_lc.empty() ? form : form_lc, lemmas);
     if (!lemmas.empty()) return GUESSER;
@@ -100,34 +100,59 @@ tokenizer* english_morpho::new_tokenizer() const {
 
 void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const {
   // Analyzer for numbers and punctuation.
-  // Number is anything matching [+-]? is_Pn* ([.,] is_Pn*)? ([Ee] [+-]? is_Pn+)? for at least one is_Pn* nonempty.
-  // Punctuation is any form beginning with either unicode punctuation or punctuation_exceptions character.
-  // Beware that numbers takes precedence, so - is punctuation, -3 is number, -. is punctuation, -.3 is number.
   if (!form.len) return;
 
-  string_piece form_ori = form;
-  char32_t first = utf8::decode(form.str, form.len);
-
-  // Try matching a number.
-  char32_t codepoint = first;
+  // Try matching a number: [+-]? is_Pn* (, is_Pn{3})? (. is_Pn*)? ([Ee] [+-]? is_Pn+)? with at least one digi
+  string_piece number = form;
+  char32_t codepoint = utf8::decode(number.str, number.len);
   bool any_digit = false;
-  if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
-  if (codepoint == '.' || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
-  if (codepoint == 'e' || codepoint == 'E') {
-    codepoint = utf8::decode(form.str, form.len);
-    if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
-    any_digit = false;
-    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
+  if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
+  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  while (codepoint == ',') {
+    string_piece group = number;
+    if (!utf8::is_N(utf8::decode(group.str, group.len))) break;
+    if (!utf8::is_N(utf8::decode(group.str, group.len))) break;
+    if (!utf8::is_N(utf8::decode(group.str, group.len))) break;
+    any_digit = true;
+    number = group;
+    codepoint = utf8::decode(number.str, number.len);
   }
+  if (codepoint == '.') {
+    codepoint = utf8::decode(number.str, number.len);
+    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  }
+  if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
+    codepoint = utf8::decode(number.str, number.len);
+    if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
+    any_digit = false;
+    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  }
+  if (any_digit && !number.len && !codepoint) { lemmas.emplace_back(string(form.str, form.len), number_tag); return; }
+  if (any_digit && !number.len && (codepoint == '.' || codepoint == ',')) { lemmas.emplace_back(string(form.str, form.len - 1), number_tag); return; }
 
-  if (!form.len && any_digit) {
-    // We found a number. If it ends by , or ., drop it.
-    if (form_ori.str[form_ori.len-1] == '.' || form_ori.str[form_ori.len-1] == ',') form_ori.len--;
-    lemmas.emplace_back(string(form_ori.str, form_ori.len), number_tag);
-  } else if (utf8::is_P(first))
-    lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);
+  // Fullstop, question mark, exclamation mark -> dot_tag
+  if (form.len == 1 && (*form.str == '.' || *form.str == '!' || *form.str == '?')) { lemmas.emplace_back(string(form.str, form.len), dot_tag); return; }
+  // Comma -> comma_tag
+  if (form.len == 1 && *form.str == ',') { lemmas.emplace_back(string(form.str, form.len), comma_tag); return; }
+
+  // Open quotation, end quotation, open parentheses, end parentheses, symbol, or other
+  string_piece punctuation = form;
+  bool open_quotation = true, close_quotation = true, open_parenthesis = true, close_parenthesis = true, any_punctuation = true, symbol = true;
+  while ((symbol || any_punctuation) && punctuation.len) {
+    codepoint = utf8::decode(punctuation.str, punctuation.len);
+    if (open_quotation) open_quotation = codepoint == '`' || utf8::is_Pi(codepoint);
+    if (close_quotation) close_quotation = codepoint == '\'' || codepoint == '"' || utf8::is_Pf(codepoint);
+    if (open_parenthesis) open_parenthesis = utf8::is_Ps(codepoint);
+    if (close_parenthesis) close_parenthesis = utf8::is_Pe(codepoint);
+    if (any_punctuation) any_punctuation = utf8::is_P(codepoint);
+    if (symbol) symbol = utf8::is_S(codepoint);
+  }
+  if (!punctuation.len && open_quotation) { lemmas.emplace_back(string(form.str, form.len), open_quotation_tag); return; }
+  if (!punctuation.len && close_quotation) { lemmas.emplace_back(string(form.str, form.len), close_quotation_tag); return; }
+  if (!punctuation.len && open_parenthesis) { lemmas.emplace_back(string(form.str, form.len), open_parenthesis_tag); return; }
+  if (!punctuation.len && close_parenthesis) { lemmas.emplace_back(string(form.str, form.len), close_parenthesis_tag); return; }
+  if (!punctuation.len && any_punctuation) { lemmas.emplace_back(string(form.str, form.len), punctuation_tag); return; }
+  if (!punctuation.len && symbol) { lemmas.emplace_back(string(form.str, form.len), symbol_tag); return; }
 }
 
 } // namespace morphodita

@@ -45,7 +45,7 @@ class english_morpho : public morpho {
   string number_tag = "CD";
   string open_quotation_tag = "``", close_quotation_tag = "''";
   string open_parenthesis_tag = "(", close_parenthesis_tag = ")";
-  string comma_tag = ",", dot_tag = ".", punctuation_tag = ":";
+  string comma_tag = ",", dot_tag = ".", punctuation_tag = ":", symbol_tag = "SYM";
 };
 
 } // namespace morphodita
