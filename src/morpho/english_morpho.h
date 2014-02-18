@@ -38,7 +38,6 @@ class english_morpho : public morpho {
   bool load(FILE* f);
  private:
   inline void analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const;
-  inline void generate_lc_if_needed(string_piece form, string& form_lc) const;
 
   morpho_dictionary<english_lemma_addinfo> dictionary;
 

@@ -40,7 +40,6 @@ class czech_morpho : public morpho {
   bool load(FILE* f);
  private:
   inline void analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const;
-  inline void generate_casing_variants(string_piece form, string& form_uclc, string& form_lc) const;
 
   morpho_dictionary<czech_lemma_addinfo> dictionary;
   unique_ptr<morpho_prefix_guesser<decltype(dictionary)>> prefix_guesser;

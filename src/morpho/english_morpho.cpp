@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "casing_variants.h"
 #include "english_morpho.h"
 #include "english_lemma_addinfo.h"
 #include "morpho_dictionary.h"
@@ -53,11 +54,13 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
     if (!lemmas.empty()) return NO_GUESSER;
 
     // Generate all casing variants if needed (they are different than given form).
+    string form_uclc; // first uppercase, rest lowercase
     string form_lc;   // all lowercase
-    generate_lc_if_needed(form, form_lc);
+    generate_casing_variants(form, form_uclc, form_lc);
 
     // Start by analysing using the dictionary and all casing variants.
     dictionary.analyze(form, lemmas);
+    if (!form_uclc.empty()) dictionary.analyze(form_uclc, lemmas);
     if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
     if (!lemmas.empty()) return NO_GUESSER;
 
@@ -126,21 +129,6 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
     lemmas.emplace_back(string(form_ori.str, form_ori.len), number_tag);
   } else if (utf8::is_P(first))
     lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);
-}
-
-void english_morpho::generate_lc_if_needed(string_piece form, string& form_lc) const {
-  bool upper_title = false;
-  {
-    string_piece form_tmp = form;
-    while (form_tmp.len && !upper_title)
-      upper_title = utf8::is_Lut(utf8::decode(form_tmp.str, form_tmp.len));
-  }
-
-  // Generate lower case variant if different from given form.
-  if (upper_title) {
-    form_lc.reserve(form.len);
-    utf8::lowercase(form.str, form.len, form_lc);
-  }
 }
 
 } // namespace morphodita
