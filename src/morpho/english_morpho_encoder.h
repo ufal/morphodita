@@ -16,41 +16,17 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "czech_morpho.h"
-#include "english_morpho.h"
-#include "morpho.h"
-#include "morpho_ids.h"
-#include "utils/file_ptr.h"
-#include "utils/new_unique_ptr.h"
+#pragma once
+
+#include "common.h"
 
 namespace ufal {
 namespace morphodita {
 
-morpho* morpho::load(FILE* f) {
-  switch (fgetc(f)) {
-    case morpho_ids::CZECH:
-      {
-        auto res = new_unique_ptr<czech_morpho>();
-        if (res->load(f)) return res.release();
-        break;
-      }
-    case morpho_ids::ENGLISH:
-      {
-        auto res = new_unique_ptr<english_morpho>();
-        if (res->load(f)) return res.release();
-        break;
-      }
-  }
-
-  return nullptr;
-}
-
-morpho* morpho::load(const char* fname) {
-  file_ptr f = fopen(fname, "rb");
-  if (!f) return nullptr;
-
-  return load(f);
-}
+class english_morpho_encoder {
+ public:
+  static void encode(FILE* dictionary, FILE* out);
+};
 
 } // namespace morphodita
 } // namespace ufal

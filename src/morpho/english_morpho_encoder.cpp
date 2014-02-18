@@ -16,40 +16,24 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "czech_morpho.h"
-#include "english_morpho.h"
-#include "morpho.h"
-#include "morpho_ids.h"
-#include "utils/file_ptr.h"
-#include "utils/new_unique_ptr.h"
+#include "english_lemma_addinfo.h"
+#include "english_morpho_encoder.h"
+#include "morpho_dictionary_encoder.h"
+#include "utils/binary_encoder.h"
+#include "utils/compressor.h"
 
 namespace ufal {
 namespace morphodita {
 
-morpho* morpho::load(FILE* f) {
-  switch (fgetc(f)) {
-    case morpho_ids::CZECH:
-      {
-        auto res = new_unique_ptr<czech_morpho>();
-        if (res->load(f)) return res.release();
-        break;
-      }
-    case morpho_ids::ENGLISH:
-      {
-        auto res = new_unique_ptr<english_morpho>();
-        if (res->load(f)) return res.release();
-        break;
-      }
-  }
+void english_morpho_encoder::encode(FILE* dictionary, FILE* out) {
+  binary_encoder enc;
 
-  return nullptr;
-}
+  eprintf("Encoding dictionary.\n");
+  morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, enc);
 
-morpho* morpho::load(const char* fname) {
-  file_ptr f = fopen(fname, "rb");
-  if (!f) return nullptr;
-
-  return load(f);
+  eprintf("Compressing dictionary.\n");
+  if (!compressor::save(out, enc)) runtime_errorf("Cannot compress and write dictionary to file!");
+  eprintf("Dictionary saved.\n");
 }
 
 } // namespace morphodita

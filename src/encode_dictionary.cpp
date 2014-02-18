@@ -20,6 +20,7 @@
 
 #include "morpho/morpho_ids.h"
 #include "morpho/czech_morpho_encoder.h"
+#include "morpho/english_morpho_encoder.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
 #include "utils/set_binary_stdout.h"
@@ -54,6 +55,12 @@ int main(int argc, char* argv[]) {
         fputc(id, stdout);
         czech_morpho_encoder::encode(stdin, prefix_guesser, statistical_guesser, argc > 4 ? parse_int(argv[4], "tag_length") : 15, stdout);
 
+        break;
+      }
+    case morpho_ids::ENGLISH:
+      {
+        fputc(id, stdout);
+        english_morpho_encoder::encode(stdin, stdout);
         break;
       }
     default:

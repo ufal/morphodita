@@ -36,7 +36,6 @@ bool english_morpho::load(FILE* f) {
   if (!compressor::load(f, data)) return false;
 
   try {
-    // Load dictionary
     dictionary.load(data);
   } catch (binary_decoder_error&) {
     return false;
