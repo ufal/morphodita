@@ -16,9 +16,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <algorithm>
-#include <unordered_map>
-
 #include "czech_lemma_addinfo.h"
 #include "czech_morpho_encoder.h"
 #include "morpho_dictionary_encoder.h"
