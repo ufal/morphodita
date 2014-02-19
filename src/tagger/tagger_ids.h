@@ -25,11 +25,12 @@ namespace morphodita {
 
 class tagger_ids {
  public:
-  enum tagger_id { CZECH2 = 0, CZECH3 = 1 };
+  enum tagger_id { CZECH2 = 0, CZECH3 = 1, ENGLISH3 = 2 };
 
   static bool parse(const string& str, tagger_id& id) {
     if (str == "czech2") return id = CZECH2, true;
     if (str == "czech3") return id = CZECH3, true;
+    if (str == "english3") return id = ENGLISH3, true;
     return false;
   }
 };

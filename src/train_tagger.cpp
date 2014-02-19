@@ -18,6 +18,7 @@
 
 #include "common.h"
 #include "tagger/czech_elementary_features.h"
+#include "tagger/english_elementary_features.h"
 #include "tagger/feature_sequences.h"
 #include "tagger/perceptron_tagger_trainer.h"
 #include "tagger/tagger_ids.h"
@@ -40,6 +41,7 @@ int main(int argc, char* argv[]) {
   switch (id) {
     case tagger_ids::CZECH2:
     case tagger_ids::CZECH3:
+    case tagger_ids::ENGLISH3:
       {
         if (argc < 7) runtime_errorf("Usage: %s %s dict use_guesser features iterations prune_features [heldout_data [early_stopping]]", argv[0], argv[1]);
         const char* dict_file = argv[2];
@@ -71,6 +73,9 @@ int main(int argc, char* argv[]) {
             break;
           case tagger_ids::CZECH3:
             tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
+            break;
+          case tagger_ids::ENGLISH3:
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<english_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
             break;
         }
         eprintf("Tagger saved.\n");

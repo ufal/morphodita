@@ -17,6 +17,7 @@
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "czech_elementary_features.h"
+#include "english_elementary_features.h"
 #include "feature_sequences.h"
 #include "perceptron_tagger.h"
 #include "tagger.h"
@@ -38,6 +39,12 @@ tagger* tagger::load(FILE* f) {
     case tagger_ids::CZECH3:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_czech_elementary_features>, 3>>();
+        if (res->load(f)) return res.release();
+        break;
+      }
+    case tagger_ids::ENGLISH3:
+      {
+        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_english_elementary_features>, 3>>();
         if (res->load(f)) return res.release();
         break;
       }
