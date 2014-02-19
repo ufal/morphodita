@@ -33,14 +33,16 @@ class english_morpho_guesser {
 
  private:
   inline void add(const string& tag, const string& form, vector<tagged_lemma>& lemmas) const;
+  inline void add(const string& tag, const string& tag2, const string& form, vector<tagged_lemma>& lemmas) const;
   inline void add(const string& tag, const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
-  inline void add_NNS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
-  inline void add_NNPS(const string& form, vector<tagged_lemma>& lemmas) const;
-  inline void add_VBG(const string& form, vector<tagged_lemma>& lemmas) const;
-  inline void add_VBD_VBN(const string& form, vector<tagged_lemma>& lemmas) const;
-  inline void add_VBZ(const string& form, vector<tagged_lemma>& lemmas) const;
-  inline void add_JJR_RBR(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
-  inline void add_JJS_RBS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
+  inline void add(const string& tag, const string& tag2, const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
+  void add_NNS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
+  void add_NNPS(const string& form, vector<tagged_lemma>& lemmas) const;
+  void add_VBG(const string& form, vector<tagged_lemma>& lemmas) const;
+  void add_VBD_VBN(const string& form, vector<tagged_lemma>& lemmas) const;
+  void add_VBZ(const string& form, vector<tagged_lemma>& lemmas) const;
+  void add_JJR_RBR(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
+  void add_JJS_RBS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
 
   enum { NEGATION_LEN = 0, TO_FOLLOW = 1, TOTAL = 2 };
   persistent_unordered_map negations;
