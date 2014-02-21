@@ -95,7 +95,7 @@ void morpho_statistical_guesser::analyze(string_piece form, vector<tagged_lemma>
             continue;
 
           string lemma;
-          lemma.reserve(pref_add_len - pref_del_len + form.len + suff_add_len - suff_del_len);
+          lemma.reserve(form.len + pref_add_len - pref_del_len + suff_add_len - suff_del_len);
           if (pref_add_len) lemma.append(pref_add, pref_add_len);
           if (pref_del_len + suff_del_len < form.len) lemma.append(form.str + pref_del_len, form.len - pref_del_len - suff_del_len);
           if (suff_add_len) lemma.append(suff_add, suff_add_len);
