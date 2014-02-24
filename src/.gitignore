@@ -3,6 +3,7 @@ benchmark_dictionary
 create_classes
 csts
 encode_dictionary
+fill_lemmas
 libmorphodita.a
 libmorphodita.dyn.a
 libmorphodita.so

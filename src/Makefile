@@ -1,6 +1,6 @@
 include Makefile.options
 
-EXECUTABLES = $(call exe,benchmark_dictionary create_classes csts encode_dictionary morpho_accuracy remap_tags run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer test_dictionary tagger_accuracy train_tagger)
+EXECUTABLES = $(call exe,benchmark_dictionary create_classes csts encode_dictionary fill_lemmas morpho_accuracy remap_tags run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer test_dictionary tagger_accuracy train_tagger)
 LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn) $(call dynlib,libmorphodita)
 all: exe
 exe: $(EXECUTABLES)
@@ -28,6 +28,7 @@ $(call exe,benchmark_dictionary): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,create_classes): $(call obj,morpho/raw_morpho_dictionary_reader utils/input)
 $(call exe,csts): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,encode_dictionary): $(call obj,$(LZMA_ENC_O) morpho/czech_morpho_encoder morpho/english_morpho_encoder morpho/english_morpho_guesser_encoder morpho/morpho_prefix_guesser_encoder morpho/morpho_statistical_guesser_encoder utils/input utils/persistent_unordered_map)
+$(call exe,fill_lemmas): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,morpho_accuracy): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,remap_tags): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,run_morpho_analyze): $(call obj,$(MORPHO_O) utils/input utils/output utils/parse_options)
