@@ -47,6 +47,10 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
   lemmas.clear();
 
   if (form.len) {
+    // Start by calling analyze_special handling numbers and punctiation.
+    analyze_special(form, lemmas);
+    if (!lemmas.empty()) return NO_GUESSER;
+
     // Generate all casing variants if needed (they are different than given form).
     string form_uclc; // first uppercase, rest lowercase
     string form_lc;   // all lowercase
@@ -56,11 +60,6 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
     dictionary.analyze(form, lemmas);
     if (!form_uclc.empty()) dictionary.analyze(form_uclc, lemmas);
     if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
-    if (!lemmas.empty())
-      return guesser == NO_GUESSER || !morpho_guesser.analyze_proper_names(form, form_lc.empty() ? form : form_lc, lemmas) ? NO_GUESSER : GUESSER;
-
-    // If not found, try analyze_special handling numbers and punctiation.
-    analyze_special(form, lemmas);
     if (!lemmas.empty())
       return guesser == NO_GUESSER || !morpho_guesser.analyze_proper_names(form, form_lc.empty() ? form : form_lc, lemmas) ? NO_GUESSER : GUESSER;
 
@@ -103,6 +102,29 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
   // Analyzer for numbers and punctuation.
   if (!form.len) return;
 
+  // One-letter punctuation exceptions.
+  if (form.len == 1)
+    switch(*form.str) {
+      case '.':
+      case '!':
+      case '?': lemmas.emplace_back(string(form.str, form.len), dot_tag); return;
+      case ',': lemmas.emplace_back(string(form.str, form.len), comma_tag); return;
+      case '#': lemmas.emplace_back(string(form.str, form.len), hash_tag); return;
+      case '$': lemmas.emplace_back(string(form.str, form.len), dollar_tag); return;
+      case '[': lemmas.emplace_back(string(form.str, form.len), sym_tag); return;
+      case ']': lemmas.emplace_back(string(form.str, form.len), sym_tag); return;
+      case '%': lemmas.emplace_back(string(form.str, form.len), jj_tag);
+                lemmas.emplace_back(string(form.str, form.len), nn_tag); return;
+      case '&': lemmas.emplace_back(string(form.str, form.len), cc_tag);
+                lemmas.emplace_back(string(form.str, form.len), sym_tag); return;
+      case '*': lemmas.emplace_back(string(form.str, form.len), sym_tag);
+                lemmas.emplace_back(string(form.str, form.len), nn_tag); return;
+      case '@': lemmas.emplace_back(string(form.str, form.len), sym_tag);
+                lemmas.emplace_back(string(form.str, form.len), in_tag); return;
+      case '\'': lemmas.emplace_back(string(form.str, form.len), close_quotation_tag);
+                 lemmas.emplace_back(string(form.str, form.len), pos_tag); return;
+    }
+
   // Try matching a number: [+-]? is_Pn* (, is_Pn{3})? (. is_Pn*)? ([Ee] [+-]? is_Pn+)? with at least one digi
   string_piece number = form;
   char32_t codepoint = utf8::decode(number.str, number.len);
@@ -118,7 +140,7 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
     number = group;
     codepoint = utf8::decode(number.str, number.len);
   }
-  if (codepoint == '.') {
+  if (codepoint == '.' && number.len) {
     codepoint = utf8::decode(number.str, number.len);
     while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   }
@@ -128,13 +150,13 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
     any_digit = false;
     while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   }
-  if (any_digit && !number.len && !codepoint) { lemmas.emplace_back(string(form.str, form.len), number_tag); return; }
-  if (any_digit && !number.len && (codepoint == '.' || codepoint == ',')) { lemmas.emplace_back(string(form.str, form.len - 1), number_tag); return; }
-
-  // Fullstop, question mark, exclamation mark -> dot_tag
-  if (form.len == 1 && (*form.str == '.' || *form.str == '!' || *form.str == '?')) { lemmas.emplace_back(string(form.str, form.len), dot_tag); return; }
-  // Comma -> comma_tag
-  if (form.len == 1 && *form.str == ',') { lemmas.emplace_back(string(form.str, form.len), comma_tag); return; }
+  if (any_digit && !number.len && (!codepoint || codepoint == '.' || codepoint == ',')) {
+    lemmas.emplace_back(string(form.str, form.len - (codepoint == '.' || codepoint == ',')), number_tag);
+    lemmas.emplace_back(string(form.str, form.len - (codepoint == '.' || codepoint == ',')), nnp_tag);
+    if (form.len == 1 + (codepoint == '.') && *form.str >= '1' && *form.str <= '9')
+      lemmas.emplace_back(string(form.str, form.len - (codepoint == '.')), ls_tag);
+    return;
+  }
 
   // Open quotation, end quotation, open parentheses, end parentheses, symbol, or other
   string_piece punctuation = form;
@@ -146,14 +168,14 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
     if (open_parenthesis) open_parenthesis = utf8::is_Ps(codepoint);
     if (close_parenthesis) close_parenthesis = utf8::is_Pe(codepoint);
     if (any_punctuation) any_punctuation = utf8::is_P(codepoint);
-    if (symbol) symbol = utf8::is_S(codepoint);
+    if (symbol) symbol = codepoint == '*' || utf8::is_S(codepoint);
   }
   if (!punctuation.len && open_quotation) { lemmas.emplace_back(string(form.str, form.len), open_quotation_tag); return; }
   if (!punctuation.len && close_quotation) { lemmas.emplace_back(string(form.str, form.len), close_quotation_tag); return; }
   if (!punctuation.len && open_parenthesis) { lemmas.emplace_back(string(form.str, form.len), open_parenthesis_tag); return; }
   if (!punctuation.len && close_parenthesis) { lemmas.emplace_back(string(form.str, form.len), close_parenthesis_tag); return; }
+  if (!punctuation.len && symbol) { lemmas.emplace_back(string(form.str, form.len), sym_tag); return; }
   if (!punctuation.len && any_punctuation) { lemmas.emplace_back(string(form.str, form.len), punctuation_tag); return; }
-  if (!punctuation.len && symbol) { lemmas.emplace_back(string(form.str, form.len), symbol_tag); return; }
 }
 
 } // namespace morphodita

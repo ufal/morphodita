@@ -44,10 +44,11 @@ class english_morpho : public morpho {
   english_morpho_guesser morpho_guesser;
 
   string unknown_tag = "UNK";
-  string number_tag = "CD";
+  string number_tag = "CD", nnp_tag = "NNP", ls_tag = "LS";
   string open_quotation_tag = "``", close_quotation_tag = "''";
   string open_parenthesis_tag = "(", close_parenthesis_tag = ")";
-  string comma_tag = ",", dot_tag = ".", punctuation_tag = ":", symbol_tag = "SYM";
+  string comma_tag = ",", dot_tag = ".", punctuation_tag = ":", hash_tag = "#", dollar_tag = "$";
+  string sym_tag = "SYM", jj_tag = "JJ", nn_tag = "NN", cc_tag = "CC", pos_tag = "POS", in_tag = "IN";
 };
 
 } // namespace morphodita
