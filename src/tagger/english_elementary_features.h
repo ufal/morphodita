@@ -31,9 +31,9 @@ class english_elementary_features : public elementary_features<Map> {
  public:
   english_elementary_features();
 
-  enum features_per_form { FORM, FOLLOWING_VERB_TAG, FOLLOWING_VERB_LEMMA, NUM, CAP, DASH, PREFIX1, PREFIX2, PREFIX3, PREFIX4, PREFIX5, PREFIX6, PREFIX7, PREFIX8, PREFIX9, SUFFIX1, SUFFIX2, SUFFIX3, SUFFIX4, SUFFIX5, SUFFIX6, SUFFIX7, SUFFIX8, SUFFIX9, PER_FORM_TOTAL };
+  enum features_per_form { FORM, NUM, CAP, DASH, PREFIX1, PREFIX2, PREFIX3, PREFIX4, PREFIX5, PREFIX6, PREFIX7, PREFIX8, PREFIX9, SUFFIX1, SUFFIX2, SUFFIX3, SUFFIX4, SUFFIX5, SUFFIX6, SUFFIX7, SUFFIX8, SUFFIX9, PER_FORM_TOTAL };
   enum features_per_tag { TAG, TAG1, LEMMA, PER_TAG_TOTAL };
-  enum features_dynamic { PREVIOUS_VERB_TAG, PREVIOUS_VERB_LEMMA, PREVIOUS_OR_CURRENT_VERB_TAG, PREVIOUS_OR_CURRENT_VERB_LEMMA, DYNAMIC_TOTAL };
+  enum features_dynamic { DYNAMIC_TOTAL };
   enum features_map { MAP_NONE = -1, MAP_FORM, MAP_PREFIX1, MAP_PREFIX2, MAP_PREFIX3, MAP_PREFIX4, MAP_PREFIX5, MAP_PREFIX6, MAP_PREFIX7, MAP_PREFIX8, MAP_PREFIX9, MAP_SUFFIX1, MAP_SUFFIX2, MAP_SUFFIX3, MAP_SUFFIX4, MAP_SUFFIX5, MAP_SUFFIX6, MAP_SUFFIX7, MAP_SUFFIX8, MAP_SUFFIX9, MAP_TAG, MAP_TAG1, MAP_LEMMA, MAP_TOTAL } ;
 
   struct per_form_features { elementary_feature_value values[PER_FORM_TOTAL]; };
@@ -60,8 +60,6 @@ english_elementary_features<Map>::english_elementary_features() {
 template <class Map>
 vector<elementary_feature_description> english_elementary_features<Map>::descriptions = {
   {"Form", PER_FORM, ANY_OFFSET, FORM, MAP_FORM},
-  {"FollowingVerbTag", PER_FORM, ANY_OFFSET, FOLLOWING_VERB_TAG, MAP_TAG},
-  {"FollowingVerbLemma", PER_FORM, ANY_OFFSET, FOLLOWING_VERB_LEMMA, MAP_LEMMA },
   {"Num", PER_FORM, ONLY_CURRENT, NUM, MAP_NONE},
   {"Cap", PER_FORM, ONLY_CURRENT, CAP, MAP_NONE},
   {"Dash", PER_FORM, ONLY_CURRENT, DASH, MAP_NONE},
@@ -87,41 +85,21 @@ vector<elementary_feature_description> english_elementary_features<Map>::descrip
   {"Tag", PER_TAG, ANY_OFFSET, TAG, MAP_TAG},
   {"Tag1", PER_TAG, ANY_OFFSET, TAG1, MAP_TAG1},
   {"Lemma", PER_TAG, ANY_OFFSET, LEMMA, MAP_LEMMA},
-
-  {"PreviousVerbTag", DYNAMIC, ANY_OFFSET, PREVIOUS_VERB_TAG, MAP_TAG},
-  {"PreviousVerbLemma", DYNAMIC, ANY_OFFSET, PREVIOUS_VERB_LEMMA, MAP_LEMMA}
 };
 
 template <class Map>
 void english_elementary_features<Map>::compute_features(const vector<form_with_tags>& forms, int forms_size, vector<per_form_features>& per_form, vector<vector<per_tag_features>>& per_tag) const {
-  // We process the sentence in reverse order, so that we can compute FollowingVerbTag and FollowingVerbLemma directly.
-  elementary_feature_value following_verb_tag = elementary_feature_empty, following_verb_lemma = elementary_feature_empty;
-  for (int i = forms_size - 1; i >= 0; i--) {
-    int verb_candidate = -1;
-
-    // Per_tag features and verb_candidate
+  for (int i = 0; i < forms_size; i++) {
+    // Per_tag features
     for (unsigned j = 0; j < forms[i].tags.size(); j++) {
       per_tag[i][j].values[TAG] = maps[MAP_TAG].value(forms[i].tags[j].tag.c_str(), forms[i].tags[j].tag.size());
       per_tag[i][j].values[TAG1] = forms[i].tags[j].tag.size() >= 1 ? maps[MAP_TAG1].value(forms[i].tags[j].tag.c_str(), 1) : elementary_feature_empty;
       per_tag[i][j].values[LEMMA] = j && forms[i].tags[j-1].lemma == forms[i].tags[j].lemma ? per_tag[i][j-1].values[LEMMA] :
           maps[MAP_LEMMA].value(forms[i].tags[j].lemma.c_str(), forms[i].tags[j].lemma.size());
-
-      if (forms[i].tags[j].tag[0] == 'V') {
-        int tag_compare;
-        verb_candidate = verb_candidate < 0 || (tag_compare = forms[i].tags[j].tag.compare(forms[i].tags[verb_candidate].tag), tag_compare < 0) || (tag_compare == 0 && forms[i].tags[j].lemma < forms[i].tags[verb_candidate].lemma) ? j : verb_candidate;
-      }
     }
 
     // Per_form features
     per_form[i].values[FORM] = maps[MAP_FORM].value(forms[i].form.str, forms[i].form.len);
-    per_form[i].values[FOLLOWING_VERB_TAG] = following_verb_tag;
-    per_form[i].values[FOLLOWING_VERB_LEMMA] = following_verb_lemma;
-
-    // Update following_verb_{tag,lemma} _after_ filling FOLLOWING_VERB_{TAG,LEMMA}.
-    if (verb_candidate >= 0) {
-      following_verb_tag = per_tag[i][verb_candidate].values[TAG];
-      following_verb_lemma = per_tag[i][verb_candidate].values[LEMMA];
-    }
 
     // Ortographic per_form features if needed
     if (forms[i].tags.size() == 1) {
@@ -184,22 +162,7 @@ void english_elementary_features<Map>::compute_features(const vector<form_with_t
 }
 
 template <class Map>
-void english_elementary_features<Map>::compute_dynamic_features(const tagged_lemma& tag, const per_form_features& /*per_form*/, const per_tag_features& per_tag, const dynamic_features* prev_dynamic, dynamic_features& dynamic) const {
-  if (prev_dynamic) {
-    dynamic.values[PREVIOUS_VERB_TAG] = prev_dynamic->values[PREVIOUS_OR_CURRENT_VERB_TAG];
-    dynamic.values[PREVIOUS_VERB_LEMMA] = prev_dynamic->values[PREVIOUS_OR_CURRENT_VERB_LEMMA];
-  } else {
-    dynamic.values[PREVIOUS_VERB_TAG] = elementary_feature_empty;
-    dynamic.values[PREVIOUS_VERB_LEMMA] = elementary_feature_empty;
-  }
-
-  if (tag.tag[0] == 'V') {
-    dynamic.values[PREVIOUS_OR_CURRENT_VERB_TAG] = per_tag.values[TAG];
-    dynamic.values[PREVIOUS_OR_CURRENT_VERB_LEMMA] = per_tag.values[LEMMA];
-  } else {
-    dynamic.values[PREVIOUS_OR_CURRENT_VERB_TAG] = dynamic.values[PREVIOUS_VERB_TAG];
-    dynamic.values[PREVIOUS_OR_CURRENT_VERB_LEMMA] = dynamic.values[PREVIOUS_VERB_LEMMA];
-  }
+void english_elementary_features<Map>::compute_dynamic_features(const tagged_lemma& /*tag*/, const per_form_features& /*per_form*/, const per_tag_features& /*per_tag*/, const dynamic_features* /*prev_dynamic*/, dynamic_features& /*dynamic*/) const {
 }
 
 } // namespace morphodita
