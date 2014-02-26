@@ -56,11 +56,13 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
     dictionary.analyze(form, lemmas);
     if (!form_uclc.empty()) dictionary.analyze(form_uclc, lemmas);
     if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
-    if (!lemmas.empty()) return NO_GUESSER;
+    if (!lemmas.empty())
+      return guesser == NO_GUESSER || !morpho_guesser.analyze_proper_names(form, form_lc.empty() ? form : form_lc, lemmas) ? NO_GUESSER : GUESSER;
 
     // If not found, try analyze_special handling numbers and punctiation.
     analyze_special(form, lemmas);
-    if (!lemmas.empty()) return NO_GUESSER;
+    if (!lemmas.empty())
+      return guesser == NO_GUESSER || !morpho_guesser.analyze_proper_names(form, form_lc.empty() ? form : form_lc, lemmas) ? NO_GUESSER : GUESSER;
 
     // Use English guesser on form_lc if allowed.
     if (guesser == GUESSER)

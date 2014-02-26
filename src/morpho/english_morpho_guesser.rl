@@ -22,57 +22,100 @@ namespace ufal {
 namespace morphodita {
 
 void english_morpho_guesser::load(binary_decoder& data) {
+  unsigned tags = data.next_2B();
+  exceptions_tags.clear();
+  exceptions_tags.reserve(tags);
+  while (tags--) {
+    unsigned len = data.next_1B();
+    exceptions_tags.emplace_back(string(data.next<char>(len), len));
+  }
+
+  exceptions.load(data);
   negations.load(data);
 }
 
 %% machine tag_guesser; write data;
 void english_morpho_guesser::analyze(string_piece form, string_piece form_lc, vector<tagged_lemma>& lemmas) const {
-  bool uppercase = form_lc.str != form.str;
-  string lemma_lc(form_lc.str, form_lc.len), lemma;
-  if (uppercase) lemma.assign(form.str, form.len);
-
-  // Try finding negative prefix
-  unsigned negation_len = 0;
-  for (unsigned prefix = 0; prefix < form_lc.len; prefix++) {
-    auto found = negations.at(form_lc.str, prefix, [](pointer_decoder& data){ data.next<unsigned char>(TOTAL); });
-    if (!found) break;
-    if (found[NEGATION_LEN]) {
-      if (form_lc.len - prefix >= found[TO_FOLLOW]) negation_len = found[NEGATION_LEN];
-      break;
+  // Try exceptions list
+  auto* exception = exceptions.at(form_lc.str, form_lc.len, [](pointer_decoder& data){
+    for (unsigned len = data.next_1B(); len; len--) {
+      data.next<char>(data.next_1B());
+      data.next<uint16_t>(data.next_1B());
     }
+  });
+
+  if (exception) {
+    // Found in exceptions list
+    pointer_decoder data(exception);
+    for (unsigned len = data.next_1B(); len; len--) {
+      unsigned lemma_len = data.next_1B();
+      string lemma(data.next<char>(lemma_len), lemma_len);
+      for (unsigned tags = data.next_1B(); tags; tags--)
+        lemmas.emplace_back(lemma, exceptions_tags[data.next_2B()]);
+    }
+  } else {
+    // Try stripping negative prefix and use rule guesser
+    string lemma_lc(form_lc.str, form_lc.len);
+    // Try finding negative prefix
+    unsigned negation_len = 0;
+    for (unsigned prefix = 1; prefix <= form_lc.len; prefix++) {
+      auto found = negations.at(form_lc.str, prefix, [](pointer_decoder& data){ data.next<unsigned char>(TOTAL); });
+      if (!found) break;
+      if (found[NEGATION_LEN]) {
+        if (form_lc.len - prefix >= found[TO_FOLLOW]) negation_len = found[NEGATION_LEN];
+        break;
+      }
+    }
+
+    // Add default tags
+    add(FW, lemma_lc, lemmas);
+    add(JJ, lemma_lc, negation_len, lemmas);
+    add(RB, lemma_lc, negation_len, lemmas);
+    add(NN, lemma_lc, negation_len, lemmas);
+    add_NNS(lemma_lc, negation_len, lemmas);
+
+    // Add specialized tags
+    const char* p = form_lc.str; int cs;
+    %%{
+      variable pe (form_lc.str + form_lc.len);
+      variable eof (form_lc.str + form_lc.len);
+
+      action add_JJR_RBR { add_JJR_RBR(lemma_lc, negation_len, lemmas); } JJR_RBR = any* ('er' | ('er'|'more'|'less') '-' any*) % add_JJR_RBR;
+      action add_JJS_RBS { add_JJS_RBS(lemma_lc, negation_len, lemmas); } JJS_RBS = any* ('est' | ('est'|'most'|'least') '-' any*) % add_JJS_RBS;
+      action add_VBG { add_VBG(lemma_lc, lemmas); } VBG = any* ('ing' | [^aeiouy]'in') % add_VBG;
+      action add_VBD_VBN { add_VBD_VBN(lemma_lc, lemmas); } VBD_VBN = any* ('ed') % add_VBD_VBN;
+      action add_VBZ { add_VBZ(lemma_lc, lemmas); } VBZ = any* ([^s]'s') % add_VBZ;
+      action add_VB_VBP { add(VB, lemma_lc, lemmas); add(VBP, lemma_lc, lemmas); } VB_VBP = any* ('ss' | [^s]) % add_VB_VBP;
+      action add_SYM { add(SYM, lemma_lc, lemmas); } SYM = any* [^a-zA-Z0-9] any* % add_SYM;
+      action add_CD { add(CD, lemma_lc, lemmas); } CD = (any* [0-9\-] any* | [ixvcmd\.]+) % add_CD;
+
+      main := JJR_RBR | JJS_RBS | VBG | VBD_VBN | VBZ | VB_VBP | SYM | CD;
+      write init;
+      write exec;
+    }%%
   }
 
-  // Add default tags
-  add(FW, lemma_lc, lemmas);
-  add(JJ, lemma_lc, lemmas);
-  add(RB, lemma_lc, lemmas);
-  add(NN, lemma_lc, negation_len, lemmas);
-  add_NNS(lemma_lc, negation_len, lemmas);
-  if (uppercase) {
-    add(NNP, lemma, lemmas);
-    add_NNPS(lemma, lemmas);
+  // Add proper names
+  analyze_proper_names(form, form_lc, lemmas);
+}
+
+bool english_morpho_guesser::analyze_proper_names(string_piece form, string_piece form_lc, vector<tagged_lemma>& lemmas) const {
+  // NNP if form_lc != form or form.str[0] =~ /[0-9']/, NNPS if form_lc != form
+  bool is_NNP = form.str != form_lc.str || (form.len && (*form.str == '\'' || (*form.str >= '0' && *form.str <= '9')));
+  bool is_NNPS = form.str != form_lc.str;
+  if (!is_NNP && !is_NNPS) return false;
+
+  bool was_NNP = false, was_NNPS = false;
+  for (auto&& lemma : lemmas) {
+    was_NNP |= lemma.tag == NNP;
+    was_NNPS |= lemma.tag == NNPS;
   }
+  if (!((is_NNP && !was_NNP) || (is_NNPS && !was_NNPS))) return false;
 
-  // Add specialized tags
-  const char* p = form_lc.str; int cs;
-  %%{
-    variable pe (form_lc.str + form_lc.len);
-    variable eof (form_lc.str + form_lc.len);
-
-    action add_JJR_RBR { add_JJR_RBR(lemma_lc, negation_len, lemmas); } JJR_RBR = any* ('er' | ('er'|'more'|'less') '-' any*) % add_JJR_RBR;
-    action add_JJS_RBS { add_JJS_RBS(lemma_lc, negation_len, lemmas); } JJS_RBS = any* ('est' | ('est'|'most'|'least') '-' any*) % add_JJS_RBS;
-    action add_VBG { add_VBG(lemma_lc, lemmas); } VBG = any* ('ing' | [^aeiouy]'in') % add_VBG;
-    action add_VBD_VBN { add_VBD_VBN(lemma_lc, lemmas); } VBD_VBN = any* ('ed') % add_VBD_VBN;
-    action add_VBZ { add_VBZ(lemma_lc, lemmas); } VBZ = any* ([^s]'s') % add_VBZ;
-    action add_VB_VBP { add(VB, lemma_lc, lemmas); add(VBP, lemma_lc, lemmas); } VB_VBP = any* ('ss' | [^s]) % add_VB_VBP;
-    action add_NNP { if (!uppercase) add(NNP, lemma_lc, lemmas); } NNP = [0-9'] > add_NNP;
-    action add_SYM { add(SYM, lemma_lc, lemmas); } SYM = any* [^a-zA-Z0-9] any* % add_SYM;
-    action add_CD { add(CD, lemma_lc, lemmas); } CD = (any* [0-9\-] any* | [ixvcmd\.]+) % add_CD;
-
-    main := JJR_RBR | JJS_RBS | VBG | VBD_VBN | VBZ | VB_VBP | NNP | SYM | CD;
-    write init;
-    write exec;
-  }%%
+  string lemma(form.str, form.len);
+  if (is_NNP && !was_NNP) add(NNP, lemma, lemmas);
+  if (is_NNPS && !was_NNPS) add_NNPS(lemma, lemmas);
+  return true;
 }
 
 inline void english_morpho_guesser::add(const string& tag, const string& form, vector<tagged_lemma>& lemmas) const {
@@ -128,8 +171,9 @@ void english_morpho_guesser::add_NNS(const string& form, unsigned negation_len, 
     action add_l { add(NNS, REM_ADD(form, 3, "y"), negation_len, lemmas); return; } l = any C 'ies' % add_l;
     action add_m { add(NNS, REM(form, 2), negation_len, lemmas); return; } m = CXY 'oes' % add_m;
     action add_n { add(NNS, REM(form, 1), negation_len, lemmas); return; } n = any 's' % add_n;
+    action add_z { add(NNS, form, negation_len, lemmas); return; } z = any* % add_z;
 
-    main := any* (a | b | c | d | e | f | g | h | i | j | k | l | m | n);
+    main := any* (a | b | c | d | e | f | g | h | i | j | k | l | m | n | z);
     write init;
     write exec;
   }%%
@@ -165,8 +209,9 @@ void english_morpho_guesser::add_NNPS(const string& form, vector<tagged_lemma>& 
     action add_l { add(NNPS, REM_ADD(form, 3, "y"), lemmas); return; } l = any Ci 'ies'i % add_l;
     action add_m { add(NNPS, REM(form, 2), lemmas); return; } m = CXYi 'oes'i % add_m;
     action add_n { add(NNPS, REM(form, 1), lemmas); return; } n = any 's'i % add_n;
+    action add_z { add(NNPS, form, lemmas); return; } z = any* % add_z;
 
-    main := any* (a0 | a | b | c0 | c | d | e | f | g | h | i | j | k | l0 | l | m | n);
+    main := any* (a0 | a | b | c0 | c | d | e | f | g | h | i | j | k | l0 | l | m | n | z);
     write init;
     write exec;
   }%%
@@ -179,26 +224,27 @@ void english_morpho_guesser::add_VBG(const string& form, vector<tagged_lemma>& l
     variable pe (form.c_str() + form.size());
     variable eof (form.c_str() + form.size());
 
-    action add_a { add(NNS, REM(form, 3), lemmas); return; } a = any* CXY 'zing' % add_a;
-    action add_b { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } b = any* VY 'zing' % add_b;
-    action add_c { add(NNS, REM(form, 3), lemmas); return; } c = (any* S2 'ing' | any* C V 'lling' | any* C V CXY2 'ing' | CXY 'ing' | PRE* C V 'nging' | any* 'icking') % add_c;
-    action add_d { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } d = any* C 'ining' % add_d;
-    action add_e { add(NNS, REM(form, 3), lemmas); return; } e = any* C V [npwx] 'ing' % add_e;
-    action add_f { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } f = (any* 'qu' V C 'ing' | any* 'u' V 'ding' | any* C 'leting' | PRE* C+ [ei] 'ting') % add_f;
-    action add_g { add(NNS, REM(form, 3), lemmas); return; } g = any* ([ei] 'ting' | PRE CXY CXY 'eating') % add_g;
-    action add_h { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } h = any* V CXY CXY 'eating' % add_h;
-    action add_i { add(NNS, REM(form, 3), lemmas); return; } i = any* any [eo] 'ating' % add_i;
-    action add_j { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } j = any* (any V 'ating' | V V [cgsv] 'ing') % add_j;
-    action add_k { add(NNS, REM(form, 3), lemmas); return; } k = any* (V V C 'ing' | any [rw] 'ling') % add_k;
-    action add_l { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } l = any* (any 'thing' | CXY [cglsv] 'ing') % add_l;
-    action add_m { add(NNS, REM(form, 3), lemmas); return; } m = any* CXY CXY 'ing' % add_m;
-    action add_n { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } n = any* 'uing' % add_n;
-    action add_o { add(NNS, REM(form, 3), lemmas); return; } o = any* (VY VY 'ing' | 'ying' | CXY 'oing') % add_o;
-    action add_p { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } p = (PRE* C+ 'oring' | any* C [clt] 'oring') % add_p;
-    action add_q { add(NNS, REM(form, 3), lemmas); return; } q = any* [eo] 'ring' % add_q;
-    action add_r { add(NNS, REM_ADD(form, 3, "e"), lemmas); return; } r = any* 'ing' % add_r;
+    action add_a { add(VBG, REM(form, 3), lemmas); return; } a = any* CXY 'zing' % add_a;
+    action add_b { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } b = any* VY 'zing' % add_b;
+    action add_c { add(VBG, REM(form, 3), lemmas); return; } c = (any* S2 'ing' | any* C V 'lling' | any* C V CXY2 'ing' | CXY 'ing' | PRE* C V 'nging' | any* 'icking') % add_c;
+    action add_d { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } d = any* C 'ining' % add_d;
+    action add_e { add(VBG, REM(form, 3), lemmas); return; } e = any* C V [npwx] 'ing' % add_e;
+    action add_f { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } f = (any* 'qu' V C 'ing' | any* 'u' V 'ding' | any* C 'leting' | PRE* C+ [ei] 'ting') % add_f;
+    action add_g { add(VBG, REM(form, 3), lemmas); return; } g = any* ([ei] 'ting' | PRE CXY CXY 'eating') % add_g;
+    action add_h { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } h = any* V CXY CXY 'eating' % add_h;
+    action add_i { add(VBG, REM(form, 3), lemmas); return; } i = any* any [eo] 'ating' % add_i;
+    action add_j { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } j = any* (any V 'ating' | V V [cgsv] 'ing') % add_j;
+    action add_k { add(VBG, REM(form, 3), lemmas); return; } k = any* (V V C 'ing' | any [rw] 'ling') % add_k;
+    action add_l { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } l = any* (any 'thing' | CXY [cglsv] 'ing') % add_l;
+    action add_m { add(VBG, REM(form, 3), lemmas); return; } m = any* CXY CXY 'ing' % add_m;
+    action add_n { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } n = any* 'uing' % add_n;
+    action add_o { add(VBG, REM(form, 3), lemmas); return; } o = any* (VY VY 'ing' | 'ying' | CXY 'oing') % add_o;
+    action add_p { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } p = (PRE* C+ 'oring' | any* C [clt] 'oring') % add_p;
+    action add_q { add(VBG, REM(form, 3), lemmas); return; } q = any* [eo] 'ring' % add_q;
+    action add_r { add(VBG, REM_ADD(form, 3, "e"), lemmas); return; } r = any* 'ing' % add_r;
+    action add_z { add(VBG, form, lemmas); return; } z = any* % add_z;
 
-    main := a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r;
+    main := a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | z;
     write init;
     write exec;
   }%%
@@ -229,8 +275,9 @@ void english_morpho_guesser::add_VBD_VBN(const string& form, vector<tagged_lemma
     action add_p { add(VBD, VBN, REM(form, 1), lemmas); return; } p = any* (any 'thed' | 'ued' | CXY [cglsv] 'ed') % add_p;
     action add_q { add(VBD, VBN, REM(form, 2), lemmas); return; } q = any* (CXY CXY 'ed' | VY VY 'ed') % add_q;
     action add_r { add(VBD, VBN, REM(form, 1), lemmas); return; } r = any* 'ed' % add_r;
+    action add_z { add(VBD, VBN, form, lemmas); return; } z = any* % add_z;
 
-    main := a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r;
+    main := a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | z;
     write init;
     write exec;
   }%%
@@ -252,8 +299,9 @@ void english_morpho_guesser::add_VBZ(const string& form, vector<tagged_lemma>& l
     action add_g { add(VBZ, REM_ADD(form, 3, "y"), lemmas); return; } g = any C 'ies' % add_g;
     action add_h { add(VBZ, REM(form, 2), lemmas); return; } h = CXY 'oes' % add_h;
     action add_i { add(VBZ, REM(form, 1), lemmas); return; } i = any 's' % add_i;
+    action add_z { add(VBZ, form, lemmas); return; } z = any* % add_z;
 
-    main := any* (a | b | c | d | e | f | g | h | i);
+    main := any* (a | b | c | d | e | f | g | h | i | z);
     write init;
     write exec;
   }%%
@@ -272,8 +320,9 @@ void english_morpho_guesser::add_JJR_RBR(const string& form, unsigned negation_l
     action add_d { add(JJR, RBR, REM(form, 2), negation_len, lemmas); return; } d = (V V C 'er' | C V [npwx] 'er') % add_d;
     action add_e { add(JJR, RBR, REM(form, 1), negation_len, lemmas); return; } e = (V C 'er' | (CXY - 'n') [cglsv] 'er' | [ue] 'er') % add_e;
     action add_f { add(JJR, RBR, REM(form, 2), negation_len, lemmas); return; } f = any 'er' % add_f;
+    action add_z { add(JJR, RBR, form, negation_len, lemmas); return; } z = any* % add_z;
 
-    main := any* (a | b | c | d | e | f);
+    main := any* (a | b | c | d | e | f | z);
     write init;
     write exec;
   }%%
@@ -290,10 +339,11 @@ void english_morpho_guesser::add_JJS_RBS(const string& form, unsigned negation_l
     action add_b { add(JJS, RBS, REM(form, 4), negation_len, lemmas); return; } b = C2 'est' % add_b;
     action add_c { add(JJS, RBS, REM_ADD(form, 4, "y"), negation_len, lemmas); return; } c = 'iest' % add_c;
     action add_d { add(JJS, RBS, REM(form, 3), negation_len, lemmas); return; } d = (V V C 'est' | C V [npwx] 'est') % add_d;
-    action add_e { add(JJS, RBS, REM(form, 2), negation_len, lemmas); return; } e = (V C 'est' | (CXY - 'n') [cglsv] 'est' | [ue] 'est') % add_e;
+    action add_e { add(JJS, RBS, REM(form, 2), negation_len, lemmas); return; } e = (V C 'est' | (CXY - 'n') [cglsv] 'est') % add_e;
     action add_f { add(JJS, RBS, REM(form, 3), negation_len, lemmas); return; } f = any{3,} 'est' % add_f;
+    action add_z { add(JJS, RBS, form, negation_len, lemmas); return; } z = any* % add_z;
 
-    main := any* (a | b | c | d | e | f);
+    main := any* (a | b | c | d | e | f | z);
     write init;
     write exec;
   }%%

@@ -60,14 +60,18 @@ int main(int argc, char* argv[]) {
     case morpho_ids::ENGLISH:
       {
         // options: guesser_negations_file
-        file_ptr negations;
+        if (argc < 3) runtime_errorf("Usage: $s english english_guesser_file [english_negation_prefixes]\n", argv[0]);
+        file_ptr guesser, negations;
 
-        if (argc > 2 && strlen(argv[2])) {
-          negations = fopen(argv[2], "r");
-          if (!negations) runtime_errorf("Cannot open negations file '%s'!", argv[2]);
+        guesser = fopen(argv[2], "r");
+        if (!guesser) runtime_errorf("Cannot open guesser file '%s'!", argv[2]);
+        if (argc > 3 && strlen(argv[3])) {
+          negations = fopen(argv[3], "r");
+          if (!negations) runtime_errorf("Cannot open negations file '%s'!", argv[3]);
         }
+
         fputc(id, stdout);
-        english_morpho_encoder::encode(stdin, negations, stdout);
+        english_morpho_encoder::encode(stdin, guesser, negations, stdout);
         break;
       }
     default:

@@ -26,14 +26,14 @@
 namespace ufal {
 namespace morphodita {
 
-void english_morpho_encoder::encode(FILE* dictionary, FILE* negations, FILE* out) {
+void english_morpho_encoder::encode(FILE* dictionary, FILE* guesser, FILE* negations, FILE* out) {
   binary_encoder enc;
 
   eprintf("Encoding dictionary.\n");
   morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, enc);
 
-  eprintf("Encoding negations.\n");
-  english_morpho_guesser_encoder::encode(negations, enc);
+  eprintf("Encoding guesser.\n");
+  english_morpho_guesser_encoder::encode(guesser, negations, enc);
 
   eprintf("Compressing dictionary.\n");
   if (!compressor::save(out, enc)) runtime_errorf("Cannot compress and write dictionary to file!");

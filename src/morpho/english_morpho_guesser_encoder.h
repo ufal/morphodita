@@ -26,7 +26,7 @@ namespace morphodita {
 
 class english_morpho_guesser_encoder {
  public:
-  static void encode(FILE* negations_file, binary_encoder& enc);
+  static void encode(FILE* guesser_file, FILE* negations_file, binary_encoder& enc);
 };
 
 } // namespace morphodita

@@ -30,6 +30,7 @@ class english_morpho_guesser {
  public:
   void load(binary_decoder& data);
   void analyze(string_piece form, string_piece form_lc, vector<tagged_lemma>& lemmas) const;
+  bool analyze_proper_names(string_piece form, string_piece form_lc, vector<tagged_lemma>& lemmas) const;
 
  private:
   inline void add(const string& tag, const string& form, vector<tagged_lemma>& lemmas) const;
@@ -45,6 +46,8 @@ class english_morpho_guesser {
   void add_JJS_RBS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const;
 
   enum { NEGATION_LEN = 0, TO_FOLLOW = 1, TOTAL = 2 };
+  vector<string> exceptions_tags;
+  persistent_unordered_map exceptions;
   persistent_unordered_map negations;
   string CD = "CD", FW = "FW", JJ = "JJ", JJR = "JJR", JJS = "JJS",
          NN = "NN", NNP = "NNP", NNPS = "NNPS", NNS = "NNS", RB = "RB",
