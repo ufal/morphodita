@@ -192,7 +192,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
   }
 
   if (early_stopping && best_iteration >= 0) {
-    eprintf("Chosen tagger model from iteration %d\n", best_iteration);
+    eprintf("Chosen tagger model from iteration %d\n", best_iteration + 1);
     features = best_features;
   }
 }

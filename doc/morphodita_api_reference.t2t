@@ -100,6 +100,7 @@ class tokenizer {
   static [tokenizer #tokenizer]* [new_vertical_tokenizer #tokenizer_new_vertical_tokenizer]();
 
   static [tokenizer #tokenizer]* [new_czech_tokenizer #tokenizer_new_czech_tokenizer]();
+  static [tokenizer #tokenizer]* [new_english_tokenizer #tokenizer_new_english_tokenizer]();
 
   virtual void [set_text #tokenizer_set_text]([string_piece #string_piece] text, bool make_copy = false) = 0;
   virtual bool [next_sentence #tokenizer_next_sentence](std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) = 0;
@@ -123,6 +124,12 @@ the instance after use.
 ``` static [tokenizer #tokenizer] new_czech_tokenizer();
 
 Returns a new instance of a Czech tokenizer. The user should delete it after
+use.
+
+=== tokenizer::new_english_tokenizer ===[tokenizer_new_english_tokenizer]
+``` static [tokenizer #tokenizer] new_english_tokenizer();
+
+Returns a new instance of a English tokenizer. The user should delete it after
 use.
 
 === tokenizer::set_text ===[tokenizer_set_text]

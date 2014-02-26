@@ -20,6 +20,7 @@
 
 #include "morpho/morpho_ids.h"
 #include "morpho/czech_morpho_encoder.h"
+#include "morpho/english_morpho_encoder.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
 #include "utils/set_binary_stdout.h"
@@ -54,6 +55,23 @@ int main(int argc, char* argv[]) {
         fputc(id, stdout);
         czech_morpho_encoder::encode(stdin, prefix_guesser, statistical_guesser, argc > 4 ? parse_int(argv[4], "tag_length") : 15, stdout);
 
+        break;
+      }
+    case morpho_ids::ENGLISH:
+      {
+        // options: guesser_negations_file
+        if (argc < 3) runtime_errorf("Usage: $s english english_guesser_file [english_negation_prefixes]\n", argv[0]);
+        file_ptr guesser, negations;
+
+        guesser = fopen(argv[2], "r");
+        if (!guesser) runtime_errorf("Cannot open guesser file '%s'!", argv[2]);
+        if (argc > 3 && strlen(argv[3])) {
+          negations = fopen(argv[3], "r");
+          if (!negations) runtime_errorf("Cannot open negations file '%s'!", argv[3]);
+        }
+
+        fputc(id, stdout);
+        english_morpho_encoder::encode(stdin, guesser, negations, stdout);
         break;
       }
     default:

@@ -87,6 +87,7 @@ class MORPHODITA_IMPORT tokenizer {
   static tokenizer* new_vertical_tokenizer();
 
   static tokenizer* new_czech_tokenizer();
+  static tokenizer* new_english_tokenizer();
 };
 
 class MORPHODITA_IMPORT morpho {

@@ -288,12 +288,13 @@ The tokenizer can be specified either by using a morphology model
 a tokenizer identifier (``--tokenizer`` option). Currently supported
 tokenizer identifiers are:
 - ``czech``
+- ``english``
 
 
 The full command syntax of ``run_tokenizer`` is
 ```
 run_tokenizer [options] [file[:output_file]]...
-Options: --tokenizer=czech
+Options: --tokenizer=czech|english
          --morphology=morphology_model_file
          --tagger=tagger_model_file
          --output=vertical|xml

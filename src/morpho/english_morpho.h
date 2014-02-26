@@ -21,15 +21,14 @@
 #include <memory>
 
 #include "common.h"
-#include "czech_lemma_addinfo.h"
+#include "english_lemma_addinfo.h"
+#include "english_morpho_guesser.h"
 #include "morpho_dictionary.h"
-#include "morpho_prefix_guesser.h"
-#include "morpho_statistical_guesser.h"
 
 namespace ufal {
 namespace morphodita {
 
-class czech_morpho : public morpho {
+class english_morpho : public morpho {
  public:
   virtual int analyze(string_piece form, morpho::guesser_mode guesser, vector<tagged_lemma>& lemmas) const override;
   virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const;
@@ -41,13 +40,15 @@ class czech_morpho : public morpho {
  private:
   inline void analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const;
 
-  morpho_dictionary<czech_lemma_addinfo> dictionary;
-  unique_ptr<morpho_prefix_guesser<decltype(dictionary)>> prefix_guesser;
-  unique_ptr<morpho_statistical_guesser> statistical_guesser;
+  morpho_dictionary<english_lemma_addinfo> dictionary;
+  english_morpho_guesser morpho_guesser;
 
-  string unknown_tag = "X@-------------";
-  string number_tag = "C=-------------";
-  string punctuation_tag = "Z:-------------";
+  string unknown_tag = "UNK";
+  string number_tag = "CD", nnp_tag = "NNP", ls_tag = "LS";
+  string open_quotation_tag = "``", close_quotation_tag = "''";
+  string open_parenthesis_tag = "(", close_parenthesis_tag = ")";
+  string comma_tag = ",", dot_tag = ".", punctuation_tag = ":", hash_tag = "#", dollar_tag = "$";
+  string sym_tag = "SYM", jj_tag = "JJ", nn_tag = "NN", cc_tag = "CC", pos_tag = "POS", in_tag = "IN";
 };
 
 } // namespace morphodita

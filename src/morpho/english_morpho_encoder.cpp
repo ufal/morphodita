@@ -16,42 +16,27 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "czech_lemma_addinfo.h"
-#include "czech_morpho_encoder.h"
+#include "english_lemma_addinfo.h"
+#include "english_morpho_encoder.h"
+#include "english_morpho_guesser_encoder.h"
 #include "morpho_dictionary_encoder.h"
-#include "morpho_prefix_guesser_encoder.h"
-#include "morpho_statistical_guesser_encoder.h"
 #include "utils/binary_encoder.h"
 #include "utils/compressor.h"
 
 namespace ufal {
 namespace morphodita {
 
-void czech_morpho_encoder::encode(FILE* in_dictionary, FILE* in_prefix_guesser, FILE* in_statistical_guesser, int max_tag_length, FILE* out_morpho) {
+void english_morpho_encoder::encode(FILE* dictionary, FILE* guesser, FILE* negations, FILE* out) {
   binary_encoder enc;
 
-  enc.add_1B(max_tag_length);
-
   eprintf("Encoding dictionary.\n");
-  morpho_dictionary_encoder<czech_lemma_addinfo>::encode(in_dictionary, enc);
+  morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, enc);
 
-  // Load and encode prefix guesser if requested
-  enc.add_1B(in_prefix_guesser != nullptr);
-  if (in_prefix_guesser) {
-    eprintf("Encoding prefix guesser.\n");
-    morpho_prefix_guesser_encoder::encode(in_prefix_guesser, enc);
-  }
+  eprintf("Encoding guesser.\n");
+  english_morpho_guesser_encoder::encode(guesser, negations, enc);
 
-  // Load and encode statistical guesser if requested
-  enc.add_1B(in_statistical_guesser != nullptr);
-  if (in_statistical_guesser) {
-    eprintf("Encoding statistical guesser.\n");
-    morpho_statistical_guesser_encoder::encode(in_statistical_guesser, enc);
-  }
-
-  // done, save the dictionary
   eprintf("Compressing dictionary.\n");
-  if (!compressor::save(out_morpho, enc)) runtime_errorf("Cannot compress and write dictionary to file!");
+  if (!compressor::save(out, enc)) runtime_errorf("Cannot compress and write dictionary to file!");
   eprintf("Dictionary saved.\n");
 }
 

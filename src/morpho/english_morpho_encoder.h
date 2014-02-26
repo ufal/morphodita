@@ -23,19 +23,10 @@
 namespace ufal {
 namespace morphodita {
 
-class tagger_ids {
+class english_morpho_encoder {
  public:
-  enum tagger_id { CZECH2 = 0, CZECH3 = 1, ENGLISH3 = 2 };
-
-  static bool parse(const string& str, tagger_id& id) {
-    if (str == "czech2") return id = CZECH2, true;
-    if (str == "czech3") return id = CZECH3, true;
-    if (str == "english3") return id = ENGLISH3, true;
-    return false;
-  }
+  static void encode(FILE* dictionary, FILE* guesser, FILE* negations, FILE* out);
 };
-
-typedef tagger_ids::tagger_id tagger_id;
 
 } // namespace morphodita
 } // namespace ufal

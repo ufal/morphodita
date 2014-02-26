@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "casing_variants.h"
 #include "czech_morpho.h"
 #include "czech_lemma_addinfo.h"
 #include "morpho_dictionary.h"
@@ -189,59 +190,20 @@ void czech_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemm
   while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   if (codepoint == '.' || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
   while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
-  if (codepoint == 'e' || codepoint == 'E') {
+  if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
     codepoint = utf8::decode(form.str, form.len);
     if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
     any_digit = false;
     while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   }
 
-  if (!form.len && any_digit) {
-    // We found a number. If it ends by , or ., drop it.
-    if (form_ori.str[form_ori.len-1] == '.' || form_ori.str[form_ori.len-1] == ',') form_ori.len--;
+  if (any_digit && !form.len && !codepoint) {
     lemmas.emplace_back(string(form_ori.str, form_ori.len), number_tag);
+  } else if (any_digit && !form.len && (codepoint == '.' || codepoint == ',')) { // allow numbers to end by . or ,
+    lemmas.emplace_back(string(form_ori.str, form_ori.len - 1), number_tag);
   } else if ((first < sizeof(punctuation_additional) && punctuation_additional[first]) ||
              (utf8::is_P(first) && (first >= sizeof(punctuation_exceptions) || !punctuation_exceptions[first])))
     lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);
-}
-
-void czech_morpho::generate_casing_variants(string_piece form, string& form_uclc, string& form_lc) const {
-  // Detect uppercase+titlecase characters.
-  bool first_Lut = false; // first character is uppercase or titlecase
-  bool rest_has_Lut = false; // any character but first is uppercase or titlecase
-  {
-    string_piece form_tmp = form;
-    first_Lut = utf8::is_Lut(utf8::decode(form_tmp.str, form_tmp.len));
-    while (form_tmp.len && !rest_has_Lut)
-      rest_has_Lut = utf8::is_Lut(utf8::decode(form_tmp.str, form_tmp.len));
-  }
-
-  // Generate all casing variants if needed (they are different than given form).
-  // We only replace letters with their lowercase variants.
-  // - form_uclc: first uppercase, rest lowercase
-  // - form_lc: all lowercase
-
-  if (first_Lut && !rest_has_Lut) { // common case allowing fast execution
-    form_lc.reserve(form.len);
-    string_piece form_tmp = form;
-    utf8::append(form_lc, utf8::lowercase(utf8::decode(form_tmp.str, form_tmp.len)));
-    form_lc.append(form_tmp.str, form_tmp.len);
-  } else if (!first_Lut && rest_has_Lut) {
-    form_lc.reserve(form.len);
-    utf8::lowercase(form.str, form.len, form_lc);
-  } else if (first_Lut && rest_has_Lut) {
-    form_lc.reserve(form.len);
-    form_uclc.reserve(form.len);
-    string_piece form_tmp = form;
-    char32_t first = utf8::decode(form_tmp.str, form_tmp.len);
-    utf8::append(form_lc, utf8::lowercase(first));
-    utf8::append(form_uclc, first);
-    while (form_tmp.len) {
-      char32_t lowercase = utf8::lowercase(utf8::decode(form_tmp.str, form_tmp.len));
-      utf8::append(form_lc, lowercase);
-      utf8::append(form_uclc, lowercase);
-    }
-  }
 }
 
 } // namespace morphodita

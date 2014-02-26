@@ -19,6 +19,7 @@
 #include <cstring>
 
 #include "czech_tokenizer.h"
+#include "english_tokenizer.h"
 #include "vertical_tokenizer.h"
 
 namespace ufal {
@@ -30,6 +31,10 @@ tokenizer* tokenizer::new_vertical_tokenizer() {
 
 tokenizer* tokenizer::new_czech_tokenizer() {
   return new czech_tokenizer();
+}
+
+tokenizer* tokenizer::new_english_tokenizer() {
+  return new english_tokenizer();
 }
 
 } // namespace morphodita

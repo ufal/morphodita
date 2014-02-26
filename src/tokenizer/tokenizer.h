@@ -44,6 +44,7 @@ class EXPORT_ATTRIBUTES tokenizer {
   static tokenizer* new_vertical_tokenizer();
 
   static tokenizer* new_czech_tokenizer();
+  static tokenizer* new_english_tokenizer();
 };
 
 } // namespace morphodita
