@@ -1,4 +1,6 @@
-%include "../morphodita.i"
+%module morphodita_java
+
+%include "../morphodita_lcc_methods.i"
 
 %pragma(java) jniclasscode=%{
   static {
