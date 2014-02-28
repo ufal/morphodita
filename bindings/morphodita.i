@@ -137,7 +137,7 @@ class tagger {
     void tag(const std::vector<std::string>& forms, std::vector<tagged_lemma>& tags) const {
       std::vector<string_piece> string_pieces;
       string_pieces.reserve(forms.size());
-      for (auto& form : forms)
+      for (auto&& form : forms)
         string_pieces.emplace_back(form);
       $self->tag(string_pieces, tags);
     }
