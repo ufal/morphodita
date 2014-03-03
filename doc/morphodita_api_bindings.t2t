@@ -1,0 +1,84 @@
+MorphoDiTa API Bindings
+=======================
+
+%!encoding: utf-8
+
+
+=== Helper Structures ===
+
+```
+typedef vector<string> Forms;
+
+struct TaggedForm {
+  string form;
+  string tag;
+};
+typedef vector<TaggedForm> TaggedForms;
+
+struct TaggedLemma {
+  string lemma;
+  string tag;
+};
+typedef vector<TaggedLemma> TaggedLemmas;
+
+struct TaggedLemmaForms {
+  string lemma;
+  TaggedForms forms;
+};
+typedef vector<TaggedLemmaForms> TaggedLemmasForms;
+
+struct TokenRange {
+  size_t start;
+  size_t length;
+};
+typedef vector<TokenRange> TokenRanges;
+```
+
+=== Main Classes ===
+
+```
+class Tokenizer {
+ public:
+  virtual void set_text(const char* text);
+  virtual bool next_sentence(Forms* forms, TokenRanges* tokens);
+
+  static Tokenizer* new_vertical_tokenizer();
+  static Tokenizer* new_czech_tokenizer();
+  static Tokenizer* new_english_tokenizer();
+};
+
+class Morpho {
+ public:
+  static Morpho* load(const char* fname);
+
+  enum { NO_GUESSER = 0, GUESSER = 1 };
+
+  virtual int analyze(const char* form, int guesser, TaggedLemmas& lemmas) const;
+  virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
+  virtual string raw_lemma(const char* lemma) const;
+  virtual string lemma_id(const char* lemma) const;
+
+  virtual Tokenizer* new_tokenizer() const;
+};
+
+class Tagger {
+ public:
+  static Tagger* load(const char* fname);
+
+  virtual const Morpho* get_morpho() const;
+
+  virtual void tag(Forms& forms, TaggedLemmas& tags) const;
+
+  Tokenizer* new_tokenizer() const;
+};
+
+class TagsetConverter {
+ public:
+  static TagsetConverter* new_identity_converter();
+  static TagsetConverter* new_pdt_to_conll2009_converter();
+
+  virtual void convert(TaggedLemma& lemma) const;
+  virtual void convert_analyzed(TaggedLemmas& lemmas) const;
+  virtual void convert_generated(TaggedLemmasForms& forms) const;
+};
+```
