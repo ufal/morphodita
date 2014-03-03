@@ -40,7 +40,7 @@ Language Models
 ---------------
 
 To use MorphoDiTa, a language model is needed. The language models are available
-from LINDAT-Clarin (http://www.lindat.cz) infrastructure and described further
+from LINDAT/CLARIN (http://www.lindat.cz) infrastructure and described further
 in the User's Manual. Currently the following language models are available:
 
 - Czech: latest version 131112 (to be released soon)
@@ -216,7 +216,7 @@ Acknowledgements
 ----------------
 
 This work has been using language resources developed and/or stored and/or
-distributed by the LINDAT-Clarin project of the Ministry of Education of the
+distributed by the LINDAT/CLARIN project of the Ministry of Education of the
 Czech Republic (project LM2010013).
 
 The Czech morphologic system was devised by Jan Hajič.
@@ -1325,7 +1325,7 @@ Authors:
 
 MorphoDiTa website (http://ufal.mff.cuni.cz/morphodita).
 
-MorphoDiTa LINDAT-Clarin entry
+MorphoDiTa LINDAT/CLARIN entry
 (http://hdl.handle.net/11858/00-097C-0000-0023-43CD-0).
 
 
@@ -1333,7 +1333,7 @@ Acknowledgements
 ================
 
 This work has been using language resources developed and/or stored and/or
-distributed by the LINDAT-Clarin project of the Ministry of Education of the
+distributed by the LINDAT/CLARIN project of the Ministry of Education of the
 Czech Republic (project LM2010013).
 
 
