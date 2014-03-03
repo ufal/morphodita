@@ -87,10 +87,11 @@
     <LI><A HREF="#token_range">6.6. Struct token_range</A>
     <LI><A HREF="#tokenizer">6.7. Class tokenizer</A>
       <UL>
-      <LI><A HREF="#tokenizer_new_vertical_tokenizer">6.7.1. tokenizer::new_vertical_tokenizer</A>
-      <LI><A HREF="#tokenizer_new_czech_tokenizer">6.7.2. tokenizer::new_czech_tokenizer</A>
-      <LI><A HREF="#tokenizer_set_text">6.7.3. tokenizer::set_text</A>
-      <LI><A HREF="#tokenizer_next_sentence">6.7.4. tokenizer::next_sentence</A>
+      <LI><A HREF="#tokenizer_set_text">6.7.1. tokenizer::set_text</A>
+      <LI><A HREF="#tokenizer_next_sentence">6.7.2. tokenizer::next_sentence</A>
+      <LI><A HREF="#tokenizer_new_vertical_tokenizer">6.7.3. tokenizer::new_vertical_tokenizer</A>
+      <LI><A HREF="#tokenizer_new_czech_tokenizer">6.7.4. tokenizer::new_czech_tokenizer</A>
+      <LI><A HREF="#tokenizer_new_english_tokenizer">6.7.5. tokenizer::new_english_tokenizer</A>
       </UL>
     <LI><A HREF="#morpho">6.8. Class morpho</A>
       <UL>
@@ -120,11 +121,11 @@
       <LI><A HREF="#tagset_converter_new_pdt_to_conll2009_converter">6.10.5. tagset_converter::new_pdt_to_conll2009_converter()</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc72">Contact</A>
+  <LI><A HREF="#toc73">Contact</A>
   <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc74">8.1. Publications</A>
-    <LI><A HREF="#toc75">8.2. Bibtex for referencing</A>
+    <LI><A HREF="#toc75">8.1. Publications</A>
+    <LI><A HREF="#toc76">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -897,6 +898,7 @@ tokenizer identifiers are:
 
 <UL>
 <LI><CODE>czech</CODE>
+<LI><CODE>english</CODE>
 </UL>
 
 <P>
@@ -905,7 +907,7 @@ The full command syntax of <CODE>run_tokenizer</CODE> is
 
 <PRE>
 run_tokenizer [options] [file[:output_file]]...
-Options: --tokenizer=czech
+Options: --tokenizer=czech|english
          --morphology=morphology_model_file
          --tagger=tagger_model_file
          --output=vertical|xml
@@ -1326,12 +1328,12 @@ class tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_vertical_tokenizer">new_vertical_tokenizer</A>();
-
-  static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_czech_tokenizer">new_czech_tokenizer</A>();
-
   virtual void <A HREF="#tokenizer_set_text">set_text</A>(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
   virtual bool <A HREF="#tokenizer_next_sentence">next_sentence</A>(std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;* forms, std::vector&lt;<A HREF="#token_range">token_range</A>&gt;* tokens) = 0;
+
+  static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_vertical_tokenizer">new_vertical_tokenizer</A>();
+  static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_czech_tokenizer">new_czech_tokenizer</A>();
+  static <A HREF="#tokenizer">tokenizer</A>* <A HREF="#tokenizer_new_english_tokenizer">new_english_tokenizer</A>();
 };
 </PRE>
 
@@ -1344,33 +1346,8 @@ The <A HREF="#tokenizer"><CODE>tokenizer</CODE></A> instances can be obtained ei
 static methods or through instances of <A HREF="#morpho"><CODE>morpho</CODE></A> and <A HREF="#tagger"><CODE>tagger</CODE></A>.
 </P>
 
-<A NAME="tokenizer_new_vertical_tokenizer"></A>
-<H3>6.7.1. tokenizer::new_vertical_tokenizer</H3>
-
-<PRE>
-static <A HREF="#tokenizer">tokenizer</A> new_vertical_tokenizer();
-</PRE>
-
-<P>
-Returns a new instance of a vertical tokenizer, which considers every line to
-be one token, with empty line denoting end of sentence. The user should delete
-the instance after use.
-</P>
-
-<A NAME="tokenizer_new_czech_tokenizer"></A>
-<H3>6.7.2. tokenizer::new_czech_tokenizer</H3>
-
-<PRE>
-static <A HREF="#tokenizer">tokenizer</A> new_czech_tokenizer();
-</PRE>
-
-<P>
-Returns a new instance of a Czech tokenizer. The user should delete it after
-use.
-</P>
-
 <A NAME="tokenizer_set_text"></A>
-<H3>6.7.3. tokenizer::set_text</H3>
+<H3>6.7.1. tokenizer::set_text</H3>
 
 <PRE>
 virtual void set_text(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
@@ -1388,7 +1365,7 @@ tokenizer is released or <CODE>set_text</CODE> is called again.
 </P>
 
 <A NAME="tokenizer_next_sentence"></A>
-<H3>6.7.4. tokenizer::next_sentence</H3>
+<H3>6.7.2. tokenizer::next_sentence</H3>
 
 <PRE>
 virtual bool next_sentence(std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;* forms, std::vector&lt;<A HREF="#token_range">token_range</A>&gt;* tokens) = 0;
@@ -1399,6 +1376,43 @@ Locate and return next sentence of the given text. Returns <CODE>true</CODE> whe
 there are no more sentences in the given text. The arguments are filled with found tokens if not <CODE>NULL</CODE>.
 The <CODE>forms</CODE> contain token ranges in bytes of UTF-8 encoding, the <CODE>tokens</CODE> contain token ranges
 in Unicode characters.
+</P>
+
+<A NAME="tokenizer_new_vertical_tokenizer"></A>
+<H3>6.7.3. tokenizer::new_vertical_tokenizer</H3>
+
+<PRE>
+static <A HREF="#tokenizer">tokenizer</A> new_vertical_tokenizer();
+</PRE>
+
+<P>
+Returns a new instance of a vertical tokenizer, which considers every line to
+be one token, with empty line denoting end of sentence. The user should delete
+the instance after use.
+</P>
+
+<A NAME="tokenizer_new_czech_tokenizer"></A>
+<H3>6.7.4. tokenizer::new_czech_tokenizer</H3>
+
+<PRE>
+static <A HREF="#tokenizer">tokenizer</A> new_czech_tokenizer();
+</PRE>
+
+<P>
+Returns a new instance of a Czech tokenizer. The user should delete it after
+use.
+</P>
+
+<A NAME="tokenizer_new_english_tokenizer"></A>
+<H3>6.7.5. tokenizer::new_english_tokenizer</H3>
+
+<PRE>
+static <A HREF="#tokenizer">tokenizer</A> new_english_tokenizer();
+</PRE>
+
+<P>
+Returns a new instance of a English tokenizer. The user should delete it after
+use.
 </P>
 
 <A NAME="morpho"></A>
@@ -1728,7 +1742,7 @@ are additional FEATs. Because we have only one tag field, we merge these fields
 together by using <CODE>Pos=?|FEAT</CODE>, i.e., the POS is stored as a first FEAT.
 </P>
 
-<A NAME="toc72"></A>
+<A NAME="toc73"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1754,14 +1768,14 @@ Authors:
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT-Clarin project of the Ministry of Education of the Czech Republic (project <I>LM2010013</I>).
 </P>
 
-<A NAME="toc74"></A>
+<A NAME="toc75"></A>
 <H2>8.1. Publications</H2>
 
 <UL>
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc75"></A>
+<A NAME="toc76"></A>
 <H2>8.2. Bibtex for referencing</H2>
 
 <PRE>

@@ -97,13 +97,12 @@ class tokenizer {
  public:
   virtual ~tokenizer() {}
 
-  static [tokenizer #tokenizer]* [new_vertical_tokenizer #tokenizer_new_vertical_tokenizer]();
-
-  static [tokenizer #tokenizer]* [new_czech_tokenizer #tokenizer_new_czech_tokenizer]();
-  static [tokenizer #tokenizer]* [new_english_tokenizer #tokenizer_new_english_tokenizer]();
-
   virtual void [set_text #tokenizer_set_text]([string_piece #string_piece] text, bool make_copy = false) = 0;
   virtual bool [next_sentence #tokenizer_next_sentence](std::vector<[string_piece #string_piece]>* forms, std::vector<[token_range #token_range]>* tokens) = 0;
+
+  static [tokenizer #tokenizer]* [new_vertical_tokenizer #tokenizer_new_vertical_tokenizer]();
+  static [tokenizer #tokenizer]* [new_czech_tokenizer #tokenizer_new_czech_tokenizer]();
+  static [tokenizer #tokenizer]* [new_english_tokenizer #tokenizer_new_english_tokenizer]();
 };
 ```
 
@@ -112,25 +111,6 @@ The class is //not// threadsafe.
 
 The [``tokenizer`` #tokenizer] instances can be obtained either directly using
 static methods or through instances of [``morpho`` #morpho] and [``tagger`` #tagger].
-
-=== tokenizer::new_vertical_tokenizer ===[tokenizer_new_vertical_tokenizer]
-``` static [tokenizer #tokenizer] new_vertical_tokenizer();
-
-Returns a new instance of a vertical tokenizer, which considers every line to
-be one token, with empty line denoting end of sentence. The user should delete
-the instance after use.
-
-=== tokenizer::new_czech_tokenizer ===[tokenizer_new_czech_tokenizer]
-``` static [tokenizer #tokenizer] new_czech_tokenizer();
-
-Returns a new instance of a Czech tokenizer. The user should delete it after
-use.
-
-=== tokenizer::new_english_tokenizer ===[tokenizer_new_english_tokenizer]
-``` static [tokenizer #tokenizer] new_english_tokenizer();
-
-Returns a new instance of a English tokenizer. The user should delete it after
-use.
 
 === tokenizer::set_text ===[tokenizer_set_text]
 ``` virtual void set_text([string_piece #string_piece] text, bool make_copy = false) = 0;
@@ -150,6 +130,25 @@ Locate and return next sentence of the given text. Returns ``true`` when success
 there are no more sentences in the given text. The arguments are filled with found tokens if not ``NULL``.
 The ``forms`` contain token ranges in bytes of UTF-8 encoding, the ``tokens`` contain token ranges
 in Unicode characters.
+
+=== tokenizer::new_vertical_tokenizer ===[tokenizer_new_vertical_tokenizer]
+``` static [tokenizer #tokenizer] new_vertical_tokenizer();
+
+Returns a new instance of a vertical tokenizer, which considers every line to
+be one token, with empty line denoting end of sentence. The user should delete
+the instance after use.
+
+=== tokenizer::new_czech_tokenizer ===[tokenizer_new_czech_tokenizer]
+``` static [tokenizer #tokenizer] new_czech_tokenizer();
+
+Returns a new instance of a Czech tokenizer. The user should delete it after
+use.
+
+=== tokenizer::new_english_tokenizer ===[tokenizer_new_english_tokenizer]
+``` static [tokenizer #tokenizer] new_english_tokenizer();
+
+Returns a new instance of a English tokenizer. The user should delete it after
+use.
 
 
 == Class morpho ==[morpho]

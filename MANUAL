@@ -643,11 +643,12 @@ option), tagger model (--tagger option) or by using a tokenizer identifier
 (--tokenizer option). Currently supported tokenizer identifiers are:
 
 - czech
+- english
 
 The full command syntax of run_tokenizer is
 
   run_tokenizer [options] [file[:output_file]]...
-  Options: --tokenizer=czech
+  Options: --tokenizer=czech|english
            --morphology=morphology_model_file
            --tagger=tagger_model_file
            --output=vertical|xml
@@ -986,12 +987,12 @@ Class tokenizer
    public:
     virtual ~tokenizer() {}
   
-    static tokenizer* new_vertical_tokenizer();
-  
-    static tokenizer* new_czech_tokenizer();
-  
     virtual void set_text(string_piece text, bool make_copy = false) = 0;
     virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
+  
+    static tokenizer* new_vertical_tokenizer();
+    static tokenizer* new_czech_tokenizer();
+    static tokenizer* new_english_tokenizer();
   };
 
 The tokenizer class performs segmentation and tokenization of given text. The
@@ -999,25 +1000,6 @@ class is not threadsafe.
 
 The tokenizer instances can be obtained either directly using static methods or
 through instances of morpho and tagger.
-
-
-tokenizer::new_vertical_tokenizer
----------------------------------
-
-  static tokenizer new_vertical_tokenizer();
-
-Returns a new instance of a vertical tokenizer, which considers every line to be
-one token, with empty line denoting end of sentence. The user should delete the
-instance after use.
-
-
-tokenizer::new_czech_tokenizer
-------------------------------
-
-  static tokenizer new_czech_tokenizer();
-
-Returns a new instance of a Czech tokenizer. The user should delete it after
-use.
 
 
 tokenizer::set_text
@@ -1042,6 +1024,34 @@ Locate and return next sentence of the given text. Returns true when successful
 and false when there are no more sentences in the given text. The arguments are
 filled with found tokens if not NULL. The forms contain token ranges in bytes of
 UTF-8 encoding, the tokens contain token ranges in Unicode characters.
+
+
+tokenizer::new_vertical_tokenizer
+---------------------------------
+
+  static tokenizer new_vertical_tokenizer();
+
+Returns a new instance of a vertical tokenizer, which considers every line to be
+one token, with empty line denoting end of sentence. The user should delete the
+instance after use.
+
+
+tokenizer::new_czech_tokenizer
+------------------------------
+
+  static tokenizer new_czech_tokenizer();
+
+Returns a new instance of a Czech tokenizer. The user should delete it after
+use.
+
+
+tokenizer::new_english_tokenizer
+--------------------------------
+
+  static tokenizer new_english_tokenizer();
+
+Returns a new instance of a English tokenizer. The user should delete it after
+use.
 
 
 Class morpho
