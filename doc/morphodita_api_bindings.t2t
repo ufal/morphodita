@@ -39,12 +39,12 @@ typedef vector<TokenRange> TokenRanges;
 ```
 class Tokenizer {
  public:
-  virtual void set_text(const char* text);
-  virtual bool next_sentence(Forms* forms, TokenRanges* tokens);
+  virtual void setText(const char* text);
+  virtual bool nextSentence(Forms* forms, TokenRanges* tokens);
 
-  static Tokenizer* new_vertical_tokenizer();
-  static Tokenizer* new_czech_tokenizer();
-  static Tokenizer* new_english_tokenizer();
+  static Tokenizer* newVerticalTokenizer();
+  static Tokenizer* newCzechTokenizer();
+  static Tokenizer* newEnglishTokenizer();
 };
 
 class Morpho {
@@ -55,30 +55,30 @@ class Morpho {
 
   virtual int analyze(const char* form, int guesser, TaggedLemmas& lemmas) const;
   virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
-  virtual string raw_lemma(const char* lemma) const;
-  virtual string lemma_id(const char* lemma) const;
+  virtual string rawLemma(const char* lemma) const;
+  virtual string lemmaId(const char* lemma) const;
 
-  virtual Tokenizer* new_tokenizer() const;
+  virtual Tokenizer* newTokenizer() const;
 };
 
 class Tagger {
  public:
   static Tagger* load(const char* fname);
 
-  virtual const Morpho* get_morpho() const;
+  virtual const Morpho* getMorpho() const;
 
   virtual void tag(Forms& forms, TaggedLemmas& tags) const;
 
-  Tokenizer* new_tokenizer() const;
+  Tokenizer* newTokenizer() const;
 };
 
 class TagsetConverter {
  public:
-  static TagsetConverter* new_identity_converter();
-  static TagsetConverter* new_pdt_to_conll2009_converter();
+  static TagsetConverter* newIdentityConverter();
+  static TagsetConverter* newPdtToConll2009Converter();
 
   virtual void convert(TaggedLemma& lemma) const;
-  virtual void convert_analyzed(TaggedLemmas& lemmas) const;
-  virtual void convert_generated(TaggedLemmasForms& forms) const;
+  virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
+  virtual void convertGenerated(TaggedLemmasForms& forms) const;
 };
 ```

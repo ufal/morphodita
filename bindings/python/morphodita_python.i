@@ -2,4 +2,4 @@
 
 %include "python/pystrings.swg"
 
-%include "../common/morphodita_lcc_methods.i"
+%include "../common/morphodita.i"
