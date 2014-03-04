@@ -19,10 +19,10 @@ English models are created using the following data:
 
 
 The resulting models are distributed under the
-[CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence
+[CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
 English models work in MorphoDiTa version 1.0.0 or later.
 
-English models are versioned according to the date when released, the version
+English models are versioned according to the release date, the version
 format is ``YYMMDD``, where ``YY``, ``MM`` and ``DD`` are two-digit
 representation of year, month and day, respectively. The latest version is
 140304.
@@ -63,7 +63,19 @@ Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
 
 The English morphology uses standard Penn Treebank POS tags. Nevertheless,
 the lemma structure is unique:
-- The lemmatizer recognizes negative prefixes and strips them from lemmas.
+- The lemmatizer recognizes negative prefixes and removes it from the lemma.
+  In terms of MorphoDiTa API, //raw lemma// is the lemma without negative prefix.
+- The negative prefix is also stored to allow morphologic generation of word
+  form with the same negative prefix. In terms of MorphoDiTa API, //lemma id//
+  is the raw lemma plus the negative prefix.
+
+
+The negative prefix is separated from the (always nonempty) lemma using a ``^``
+character (``able^un``). During morphologic generation, the negative prefix is honored.
+Furthermore, when the lemma ends with ``^`` (i.e., negative prefix is empty, as
+in ``able^``), forms with negative prefixes are generated. It is also possible
+to generate all forms without any negative prefix by appending ``+`` after the lemma
+(for example ``able+``).
 
 
 === English Model ===
