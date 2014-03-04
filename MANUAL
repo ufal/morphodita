@@ -293,7 +293,7 @@ Main Czech Model
 The main Czech model contains the following files:
 
 czech-morfflex-<version>.dict
-  Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
+  Morphologic dictionary based on the Jan Hajič's (Hajič 2004
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system with PDT tag set
   created from MorfFlex CZ
   (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic dictionary.
@@ -335,7 +335,7 @@ characters of the fifteen-letter tags are used, representing the part of speech
 and detailed part of speech, respectively. There are 67 such two-letter tags.
 
 czech-morfflex-<version>-pos_only.dict
-  Morphologic dictionary only based on the Jan Hajič's (Hajič 2004
+  Morphologic dictionary based on the Jan Hajič's (Hajič 2004
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
   CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic
   dictionary. Only first two tag characters of PDT tag set are used.
