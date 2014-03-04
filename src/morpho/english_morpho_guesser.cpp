@@ -16,6 +16,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
+// This code is a reimplementation of morphologic analyzer Morphium
+// by Johanka Spoustová (Treex::Tool::EnglishMorpho::Analysis Perl module)
+// and reimplementation of morphologic lemmatizer by Martin Popel
+// (Treex::Tool::EnglishMorpho::Lemmatizer Perl module). The latter is based
+// on morpha:
+//   Minnen, G., J. Carroll and D. Pearce (2001). Applied morphological
+//   processing of English, Natural Language Engineering, 7(3). 207-223.
+// Morpha has been released under LGPL as a part of RASP system
+//   http://ilexir.co.uk/applications/rasp/.
+
 #include "english_morpho_guesser.h"
 
 namespace ufal {
