@@ -1,0 +1,12 @@
+Java MorphoDiTa Bindings
+========================
+
+%!encoding: utf-8
+
+To compile Java bindings, run ``make`` in the ``bindings/java`` directory,
+optionally with the described Make options. Java 6 and newer is supported.
+
+The Java installation specified in the environment variable ``JAVA_HOME`` is
+used.  If the environment variable does not exist, the ``JAVA_HOME`` can be
+specified using
+``` make JAVA_HOME=path_to_Java_installation

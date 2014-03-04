@@ -360,3 +360,26 @@ The user should delete the instance after use.
 CoNLL2009 tag set uses two columns for tags -- one is a POS and the other one
 are additional FEATs. Because we have only one tag field, we merge these fields
 together by using ``Pos=?|FEAT``, i.e., the POS is stored as a first FEAT.
+
+
+== C++ Bindings API ==
+
+Bindings for other languages than C++ are created using SWIG from the C++
+bindings API, which is a slightly modified version of the native C++ API.
+Main changes are replacement of [``string_piece`` #string_piece] type by native
+strings and removal of methods using ``FILE``. Here is the C++ bindings API
+declaration:
+
+%!include: morphodita_bindings_api.t2t
+
+== Java Bindings ==
+
+%!include: morphodita_bindings_java_api.t2t
+
+== Perl Bindings ==
+
+%!include: morphodita_bindings_perl_api.t2t
+
+== Python Bindings ==
+
+%!include: morphodita_bindings_python_api.t2t

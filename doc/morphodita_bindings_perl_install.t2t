@@ -1,0 +1,11 @@
+Perl MorphoDiTa Bindings
+========================
+
+%!encoding: utf-8
+
+To compile Perl bindings, run ``make`` in the ``bindings/perl`` directory,
+optionally with the described Make options. Perl 5.8 and later is supported.
+
+Path to the include headers of the required Perl version must be specified
+in the ``PERL_INCLUDE`` variable using
+``` make PERL_INCLUDE=path_to_Perl_includes

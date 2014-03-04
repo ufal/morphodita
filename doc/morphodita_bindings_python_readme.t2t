@@ -1,0 +1,15 @@
+Python MorphoDiTa Bindings
+========================
+
+%!encoding: utf-8
+
+== Installation ==
+%!include: morphodita_bindings_python_install.t2t
+
+
+== Python Bindings API ==
+%!include: morphodita_bindings_python_api.t2t
+
+
+== C++ Bindings API ==
+%!include: morphodita_bindings_api.t2t

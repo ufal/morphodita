@@ -1,0 +1,107 @@
+Python MorphoDiTa Bindings
+========================
+
+Installation
+============
+
+To compile Python bindings, run make in the bindings/python directory,
+optionally with options descriged in MorphoDiTa Installation. Both Python 2.6+
+and Python 3+ are supported.
+
+Path to the include headers of the required Python version must be specified in
+the PYTHON_INCLUDE variable using
+
+  make PYTHON_INCLUDE=path_to_Python_includes
+
+
+Python Bindings API
+===================
+
+MorphoDiTa library is available in the ufal.morphodita module.
+
+The bindings is a straightforward conversion of the C++ bindings API. In Python
+2, strings can be both unicode and UTF-8 encoded str, and the library always
+produces unicode. In Python 3, strings must be only str.
+
+
+C++ Bindings API
+================
+
+
+Helper Structures
+-----------------
+
+  typedef vector<string> Forms;
+  
+  struct TaggedForm {
+    string form;
+    string tag;
+  };
+  typedef vector<TaggedForm> TaggedForms;
+  
+  struct TaggedLemma {
+    string lemma;
+    string tag;
+  };
+  typedef vector<TaggedLemma> TaggedLemmas;
+  
+  struct TaggedLemmaForms {
+    string lemma;
+    TaggedForms forms;
+  };
+  typedef vector<TaggedLemmaForms> TaggedLemmasForms;
+  
+  struct TokenRange {
+    size_t start;
+    size_t length;
+  };
+  typedef vector<TokenRange> TokenRanges;
+
+
+Main Classes
+------------
+
+  class Tokenizer {
+   public:
+    virtual void setText(const char* text);
+    virtual bool nextSentence(Forms* forms, TokenRanges* tokens);
+  
+    static Tokenizer* newVerticalTokenizer();
+    static Tokenizer* newCzechTokenizer();
+    static Tokenizer* newEnglishTokenizer();
+  };
+  
+  class Morpho {
+   public:
+    static Morpho* load(const char* fname);
+  
+    enum { NO_GUESSER = 0, GUESSER = 1 };
+  
+    virtual int analyze(const char* form, int guesser, TaggedLemmas& lemmas) const;
+    virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
+    virtual string rawLemma(const char* lemma) const;
+    virtual string lemmaId(const char* lemma) const;
+  
+    virtual Tokenizer* newTokenizer() const;
+  };
+  
+  class Tagger {
+   public:
+    static Tagger* load(const char* fname);
+  
+    virtual const Morpho* getMorpho() const;
+  
+    virtual void tag(Forms& forms, TaggedLemmas& tags) const;
+  
+    Tokenizer* newTokenizer() const;
+  };
+  
+  class TagsetConverter {
+   public:
+    static TagsetConverter* newIdentityConverter();
+    static TagsetConverter* newPdtToConll2009Converter();
+  
+    virtual void convert(TaggedLemma& lemma) const;
+    virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
+    virtual void convertGenerated(TaggedLemmasForms& forms) const;
+  };

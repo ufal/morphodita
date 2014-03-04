@@ -36,8 +36,8 @@
     <LI><A HREF="#toc12">3.3. Other language bindings</A>
       <UL>
       <LI><A HREF="#toc13">3.3.1. Java</A>
-      <LI><A HREF="#toc14">3.3.2. Python</A>
-      <LI><A HREF="#toc15">3.3.3. Perl</A>
+      <LI><A HREF="#toc14">3.3.2. Perl</A>
+      <LI><A HREF="#toc15">3.3.3. Python</A>
       </UL>
     </UL>
   <LI><A HREF="#toc16">MorphoDiTa User's Manual</A>
@@ -121,12 +121,20 @@
       <LI><A HREF="#tagset_converter_new_identity_converter">6.10.4. tagset_converter::new_identity_converter()</A>
       <LI><A HREF="#tagset_converter_new_pdt_to_conll2009_converter">6.10.5. tagset_converter::new_pdt_to_conll2009_converter()</A>
       </UL>
+    <LI><A HREF="#toc74">6.11. C++ Bindings API</A>
+      <UL>
+      <LI><A HREF="#toc75">6.11.1. Helper Structures</A>
+      <LI><A HREF="#toc76">6.11.2. Main Classes</A>
+      </UL>
+    <LI><A HREF="#toc77">6.12. Java Bindings</A>
+    <LI><A HREF="#toc78">6.13. Perl Bindings</A>
+    <LI><A HREF="#toc79">6.14. Python Bindings</A>
     </UL>
-  <LI><A HREF="#toc74">Contact</A>
+  <LI><A HREF="#toc80">Contact</A>
   <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc76">8.1. Publications</A>
-    <LI><A HREF="#toc77">8.2. Bibtex for referencing</A>
+    <LI><A HREF="#toc82">8.1. Publications</A>
+    <LI><A HREF="#toc83">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -293,7 +301,7 @@ Note that <CODE>make</CODE> in MinGW is usually distributed as <CODE>mingw32-mak
 
 <P>
 To compile Java bindings, run <CODE>make</CODE> in the <CODE>bindings/java</CODE> directory,
-optionally with the described Make options.
+optionally with the described Make options. Java 6 and newer is supported.
 </P>
 <P>
 The Java installation specified in the environment variable <CODE>JAVA_HOME</CODE> is
@@ -305,36 +313,12 @@ specified using
 make JAVA_HOME=path_to_Java_installation
 </PRE>
 
-<P>
-Java 6 and newer is supported.
-</P>
-
 <A NAME="toc14"></A>
-<H3>3.3.2. Python</H3>
-
-<P>
-To compile Python bindings, run <CODE>make</CODE> in the <CODE>bindings/python</CODE> directory,
-optionally with the described Make options.
-</P>
-<P>
-Path to the include headers of the required Python version must be specified
-in the <CODE>PYTHON_INCLUDE</CODE> variable using
-</P>
-
-<PRE>
-make PYTHON_INCLUDE=path_to_Python_includes
-</PRE>
-
-<P>
-Both Python 2.6+ and Python 3+ are supported.
-</P>
-
-<A NAME="toc15"></A>
-<H3>3.3.3. Perl</H3>
+<H3>3.3.2. Perl</H3>
 
 <P>
 To compile Perl bindings, run <CODE>make</CODE> in the <CODE>bindings/perl</CODE> directory,
-optionally with the described Make options.
+optionally with the described Make options. Perl 5.8 and later is supported.
 </P>
 <P>
 Path to the include headers of the required Perl version must be specified
@@ -345,9 +329,22 @@ in the <CODE>PERL_INCLUDE</CODE> variable using
 make PERL_INCLUDE=path_to_Perl_includes
 </PRE>
 
+<A NAME="toc15"></A>
+<H3>3.3.3. Python</H3>
+
 <P>
-Perl 5.8 and later are supported.
+To compile Python bindings, run <CODE>make</CODE> in the <CODE>bindings/python</CODE> directory,
+optionally with options descriged in MorphoDiTa Installation. Both Python 2.6+
+and Python 3+ are supported.
 </P>
+<P>
+Path to the include headers of the required Python version must be specified
+in the <CODE>PYTHON_INCLUDE</CODE> variable using
+</P>
+
+<PRE>
+make PYTHON_INCLUDE=path_to_Python_includes
+</PRE>
 
 <A NAME="toc16"></A>
 <H1>4. MorphoDiTa User's Manual</H1>
@@ -1763,6 +1760,139 @@ together by using <CODE>Pos=?|FEAT</CODE>, i.e., the POS is stored as a first FE
 </P>
 
 <A NAME="toc74"></A>
+<H2>6.11. C++ Bindings API</H2>
+
+<P>
+Bindings for other languages than C++ are created using SWIG from the C++
+bindings API, which is a slightly modified version of the native C++ API.
+Main changes are replacement of <A HREF="#string_piece"><CODE>string_piece</CODE></A> type by native
+strings and removal of methods using <CODE>FILE</CODE>. Here is the C++ bindings API
+declaration:
+</P>
+
+<A NAME="toc75"></A>
+<H3>6.11.1. Helper Structures</H3>
+
+<PRE>
+typedef vector&lt;string&gt; Forms;
+
+struct TaggedForm {
+  string form;
+  string tag;
+};
+typedef vector&lt;TaggedForm&gt; TaggedForms;
+
+struct TaggedLemma {
+  string lemma;
+  string tag;
+};
+typedef vector&lt;TaggedLemma&gt; TaggedLemmas;
+
+struct TaggedLemmaForms {
+  string lemma;
+  TaggedForms forms;
+};
+typedef vector&lt;TaggedLemmaForms&gt; TaggedLemmasForms;
+
+struct TokenRange {
+  size_t start;
+  size_t length;
+};
+typedef vector&lt;TokenRange&gt; TokenRanges;
+</PRE>
+
+<A NAME="toc76"></A>
+<H3>6.11.2. Main Classes</H3>
+
+<PRE>
+class Tokenizer {
+ public:
+  virtual void setText(const char* text);
+  virtual bool nextSentence(Forms* forms, TokenRanges* tokens);
+
+  static Tokenizer* newVerticalTokenizer();
+  static Tokenizer* newCzechTokenizer();
+  static Tokenizer* newEnglishTokenizer();
+};
+
+class Morpho {
+ public:
+  static Morpho* load(const char* fname);
+
+  enum { NO_GUESSER = 0, GUESSER = 1 };
+
+  virtual int analyze(const char* form, int guesser, TaggedLemmas&amp; lemmas) const;
+  virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms&amp; forms) const;
+  virtual string rawLemma(const char* lemma) const;
+  virtual string lemmaId(const char* lemma) const;
+
+  virtual Tokenizer* newTokenizer() const;
+};
+
+class Tagger {
+ public:
+  static Tagger* load(const char* fname);
+
+  virtual const Morpho* getMorpho() const;
+
+  virtual void tag(Forms&amp; forms, TaggedLemmas&amp; tags) const;
+
+  Tokenizer* newTokenizer() const;
+};
+
+class TagsetConverter {
+ public:
+  static TagsetConverter* newIdentityConverter();
+  static TagsetConverter* newPdtToConll2009Converter();
+
+  virtual void convert(TaggedLemma&amp; lemma) const;
+  virtual void convertAnalyzed(TaggedLemmas&amp; lemmas) const;
+  virtual void convertGenerated(TaggedLemmasForms&amp; forms) const;
+};
+</PRE>
+
+<A NAME="toc77"></A>
+<H2>6.12. Java Bindings</H2>
+
+<P>
+MorphoDiTa library is available in the <CODE>cz.cuni.mff.ufal.morphodita</CODE> package.
+</P>
+<P>
+The bindings is a straightforward conversion of the <CODE>C++</CODE> bindings API.
+Vectors do not have native Java interface, see
+<CODE>cz.cuni.mff.ufal.morphodita.Forms</CODE> class for reference. Also, class members
+are accessible and modifiable using using <CODE>getField</CODE> and <CODE>setField</CODE>
+wrappers.
+</P>
+
+<A NAME="toc78"></A>
+<H2>6.13. Perl Bindings</H2>
+
+<P>
+MorphoDiTa library is available in the <CODE>Ufal::MorphoDiTa</CODE> package.
+The classes can be imported into the current namespace using the <CODE>:all</CODE>
+export tag.
+</P>
+<P>
+The bindings is a straightforward conversion of the <CODE>C++</CODE> bindings API.
+Vectors do not have native Perl interface, see <CODE>Ufal::MorphoDiTa::Forms</CODE> for
+reference. Static methods and enumerations are available only through the
+module, not through object instance.
+</P>
+
+<A NAME="toc79"></A>
+<H2>6.14. Python Bindings</H2>
+
+<P>
+MorphoDiTa library is available in the <CODE>ufal.morphodita</CODE> module.
+</P>
+<P>
+The bindings is a straightforward conversion of the <CODE>C++</CODE> bindings API.
+In Python 2, strings can be both <CODE>unicode</CODE> and UTF-8 encoded <CODE>str</CODE>, and the
+library always produces <CODE>unicode</CODE>. In Python 3, strings must be only <CODE>str</CODE>.
+</P>
+
+<A NAME="toc80"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1788,14 +1918,14 @@ Authors:
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT/CLARIN project of the Ministry of Education of the Czech Republic (project <I>LM2010013</I>).
 </P>
 
-<A NAME="toc76"></A>
+<A NAME="toc82"></A>
 <H2>8.1. Publications</H2>
 
 <UL>
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc77"></A>
+<A NAME="toc83"></A>
 <H2>8.2. Bibtex for referencing</H2>
 
 <PRE>

@@ -1,0 +1,15 @@
+Java MorphoDiTa Bindings
+========================
+
+%!encoding: utf-8
+
+== Installation ==
+%!include: morphodita_bindings_java_install.t2t
+
+
+== Java Bindings API ==
+%!include: morphodita_bindings_java_api.t2t
+
+
+== C++ Bindings API ==
+%!include: morphodita_bindings_api.t2t

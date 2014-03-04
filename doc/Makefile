@@ -6,10 +6,14 @@ txt: morphodita.txt morphodita_install.txt
 pdf: morphodita.pdf
 web: web.html web_install.html web_user.html web_api_tutorial.html web_api_reference.html web_about.html
 manual: morphodita.html morphodita.txt morphodita_readme.txt morphodita_install.txt
+manual: morphodita_bindings_java_readme.txt morphodita_bindings_perl_readme.txt morphodita_bindings_python_readme.txt
 	cp morphodita.txt ../MANUAL
 	cp morphodita.html ../MANUAL.html
 	cp morphodita_readme.txt ../README
 	cp morphodita_install.txt ../INSTALL
+	cp morphodita_bindings_java_readme.txt ../bindings/JAVA
+	cp morphodita_bindings_perl_readme.txt ../bindings/PERL
+	cp morphodita_bindings_python_readme.txt ../bindings/PYTHON
 
 morphodita.html: morphodita.t2t *.t2t
 	./txt2tags -t html -C not_web.conf $<

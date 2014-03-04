@@ -1,0 +1,12 @@
+Java MorphoDiTa Bindings
+========================
+
+%!encoding: utf-8
+
+MorphoDiTa library is available in the ``cz.cuni.mff.ufal.morphodita`` package.
+
+The bindings is a straightforward conversion of the ``C++`` bindings API.
+Vectors do not have native Java interface, see
+``cz.cuni.mff.ufal.morphodita.Forms`` class for reference. Also, class members
+are accessible and modifiable using using ``getField`` and ``setField``
+wrappers.

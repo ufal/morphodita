@@ -1,0 +1,15 @@
+Perl MorphoDiTa Bindings
+========================
+
+%!encoding: utf-8
+
+== Installation ==
+%!include: morphodita_bindings_perl_install.t2t
+
+
+== Perl Bindings API ==
+%!include: morphodita_bindings_perl_api.t2t
+
+
+== C++ Bindings API ==
+%!include: morphodita_bindings_api.t2t
