@@ -1,3 +1,12 @@
+Version 0.96 [04 Mar 2014]
+--------------------------
+- Add support for English language.
+  - Provide English morpho + english morpho guesser.
+  - Add English tokenizer.
+  - Add English elementary features and tagger.
+- Provide Perl language bindings.
+- Improve documentation of language bindings.
+
 Version 0.95 [17 Feb 2014]
 --------------------------
 - Provide better options (--input, --output), which also allows
