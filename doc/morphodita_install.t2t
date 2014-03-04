@@ -5,7 +5,7 @@ MorphoDiTa Installation
 
 MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
 a pre-compiled binary package, or source code only. The binary package contains Linux
-and Windows binaries and ``C++`` library, all language bindings (Java, Python)
+and Windows binaries and ``C++`` library, all language bindings (Java, Python, Perl)
 and source code (needed to compile the language bindings).
 
 To use MorphoDiTa, a language model is needed.
@@ -74,3 +74,15 @@ in the ``PYTHON_INCLUDE`` variable using
 ``` make PYTHON_INCLUDE=path_to_Python_includes
 
 Both Python 2.6+ and Python 3+ are supported.
+
+
+=== Perl ===
+
+To compile Perl bindings, run ``make`` in the ``bindings/perl`` directory,
+optionally with the described Make options.
+
+Path to the include headers of the required Perl version must be specified
+in the ``PERL_INCLUDE`` variable using
+``` make PERL_INCLUDE=path_to_Perl_includes
+
+Perl 5.8 and later are supported.

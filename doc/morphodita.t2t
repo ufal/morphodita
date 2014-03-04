@@ -14,7 +14,7 @@ Version 0.95
 
 MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
 a pre-compiled binary package, or source code only. The binary package contains Linux
-and Windows binaries and ``C++`` library, all language bindings (Java, Python)
+and Windows binaries and ``C++`` library, all language bindings (Java, Python, Perl)
 and source code (needed to compile the language bindings).
 
 - [Latest release http://github.com/ufal/morphodita/releases/latest]
@@ -32,7 +32,6 @@ in the User's Manual. Currently the following language models are available:
 
 == Roadmap ==
 
-- further programming language bindings (Perl is planned)
 - more language models (English is planned)
 
 
