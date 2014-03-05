@@ -36,4 +36,4 @@ struct string_piece {
 };
 
 } // namespace morphodita
-}
+} // namespace ufal
