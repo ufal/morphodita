@@ -13,9 +13,21 @@ while (<$unidata>) {
   my @parts = split /;/, $_, -1;
   die "Bad line $_ in UnicodeData.txt" unless @parts == 15;
 
-  my ($code, $cat, $upper, $lower, $title) = @parts[0, 2, 12, 13, 14];
+  my ($code, $name, $cat, $upper, $lower, $title) = @parts[0, 1, 2, 12, 13, 14];
   next if $cat =~ /Co|Cs/;
-  push @{$cats{$cat}}, hex($code);
+
+  $code = hex($code);
+  my $last_code = $code;
+  if ($name =~ /^<(.*), First>$/) {
+    my $range_name = $1;
+    chomp (my $next_line = <$unidata>);
+    my @next_parts = split /;/, $next_line, -1;
+    my ($next_code, $next_name) = @next_parts[0, 1];
+    $next_name =~ /^<$range_name, Last>$/ or die "Unrecognized end '$next_name' of range $range_name";
+    $last_code = hex($next_code);
+  }
+
+  push @{$cats{$cat}}, ($code..$last_code);
   $classes{substr $cat, 0, 1}->{$cat} = 1;
 }
 close $unidata;

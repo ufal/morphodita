@@ -269,8 +269,8 @@ class utf8 {
   static inline void lowercase(const std::string& str, std::string& out);
 
  private:
-  static const char32_t N = 918016;
-  static const int BLOCKS = 3586;
+  static const char32_t N = 1114112;
+  static const int BLOCKS = 4352;
   static const uint8_t DEFAULT_CAT = 30;
   static const char REPLACEMENT_CHAR = '?';
 
