@@ -33,7 +33,9 @@ Czech Republic (project //LM2010013//).
 
 The Czech morphologic system was devised by Jan Hajič.
 
-The guesser research was supported by the projects
+The MorfFlex CZ dictionary was created by Jan Hajič and Jaroslava Hlaváčová.
+
+The morphologic guesser research was supported by the projects
 //1ET101120503// and //1ET101120413// of Academy of Sciences of the Czech
 Republic and //100008/2008// of Charles University Grant Agency. The research
 was performed by Jan Hajič, Jaroslava Hlaváčová and David Kolovratník.
@@ -43,6 +45,13 @@ The tagger algorithm and feature set research was supported by the projects
 //GA405/09/0278// of the Grant Agency of the Czech Republic and //1ET101120503// of
 Academy of Sciences of the Czech Republic. The research was performed by
 Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
+
+The tagger is trained on morphological layer of Prague Dependency Treebank PDT
+2.5, which was supported by the projects //LM2010013//, //LC536//,
+//LN00A063// and //MSM0021620838// of Ministry of Education, Youth and Sports
+of the Czech Republic, and developed by Martin Buben, Jan Hajič, Jiří Hana,
+Hana Hanová, Barbora Hladká, Emil Jeřábek, Lenka Kebortová, Kristýna Kupková,
+Pavel Květoň, Jiří Mírovský, Andrea Pfimpfrová, Jan Štěpánek and Daniel Zeman.
 
 
 ==== Publications ====
