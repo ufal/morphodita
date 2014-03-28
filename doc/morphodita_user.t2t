@@ -24,6 +24,8 @@ MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 
 %!include: morphodita_model_czech-morfflex.t2t
 
+%!include: morphodita_model_english-ptb.t2t
+
 
 == Running the Tagger ==[run_tagger]
 
