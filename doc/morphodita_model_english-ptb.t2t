@@ -3,7 +3,7 @@ English MorphoDiTa Models
 
 %!encoding: utf-8
 
-== English MorphoDiTa Models ==
+== English MorphoDiTa Models ==[english-ptb]
 
 English models are created using the following data:
 - //SCOWL (Spell Checker Oriented Word Lists)//: This word list is used
