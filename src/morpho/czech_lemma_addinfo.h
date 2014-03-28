@@ -34,8 +34,6 @@ struct czech_lemma_addinfo {
 
   inline int parse(string_piece lemma, bool die_on_failure = false);
   inline bool match_lemma_id(const unsigned char* other_addinfo, int other_addinfo_len);
-  inline bool match_comments_partial(const unsigned char* other_addinfo, int other_addinfo_len);
-  inline bool match_comments_full(const unsigned char* other_addinfo, int other_addinfo_len);
 
   vector<unsigned char> data;
 };
@@ -43,8 +41,8 @@ struct czech_lemma_addinfo {
 
 // Definitions
 int czech_lemma_addinfo::raw_lemma_len(string_piece lemma) {
-  // Lemma ends by a '-[0-9]', '`' or '_'.
-  for (unsigned len = 0; len < lemma.len; len++)
+  // Lemma ends by a '-[0-9]', '`' or '_' on non-first position.
+  for (unsigned len = 1; len < lemma.len; len++)
     if (lemma.str[len] == '`' || lemma.str[len] == '_' ||
         (lemma.str[len] == '-' && len+1 < lemma.len && lemma.str[len+1] >= '0' && lemma.str[len+1] <= '9'))
       return len;
@@ -52,8 +50,8 @@ int czech_lemma_addinfo::raw_lemma_len(string_piece lemma) {
 }
 
 int czech_lemma_addinfo::lemma_id_len(string_piece lemma) {
-  // Lemma ends by a '-[0-9]', '`' or '_'.
-  for (unsigned len = 0; len < lemma.len; len++) {
+  // Lemma ends by a '-[0-9]', '`' or '_' on non-first position.
+  for (unsigned len = 1; len < lemma.len; len++) {
     if (lemma.str[len] == '`' || lemma.str[len] == '_')
       return len;
     if (lemma.str[len] == '-' && len+1 < lemma.len && lemma.str[len+1] >= '0' && lemma.str[len+1] <= '9') {
@@ -127,28 +125,6 @@ bool czech_lemma_addinfo::match_lemma_id(const unsigned char* other_addinfo, int
   if (data.empty()) return true;
   if (data[0] != 255 && (!other_addinfo_len || other_addinfo[0] != data[0])) return false;
   return true;
-}
-
-bool czech_lemma_addinfo::match_comments_full(const unsigned char* other_addinfo, int other_addinfo_len) {
-  if (int(data.size()) != other_addinfo_len) return false;
-  return data.size() <= 1 ? true : small_memeq(data.data() + 1, other_addinfo + 1, data.size() - 1);
-}
-
-bool czech_lemma_addinfo::match_comments_partial(const unsigned char* other_addinfo, int other_addinfo_len) {
-  if (data.size() <= 1) return other_addinfo_len <= 1;
-  if (other_addinfo_len <= 1) return false;
-
-  if (int(data.size()) <= other_addinfo_len) {
-    for (int offset = 0; offset <= other_addinfo_len - int(data.size()); offset++)
-      if (small_memeq(data.data() + 1, other_addinfo + 1 + offset, data.size() - 1))
-        return true;
-  } else {
-    for (int offset = 0; offset <= int(data.size()) - other_addinfo_len; offset++)
-      if (small_memeq(other_addinfo + 1, data.data() + 1 + offset, other_addinfo_len - 1))
-        return true;
-  }
-
-  return false;
 }
 
 } // namespace morphodita
