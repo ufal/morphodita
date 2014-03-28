@@ -97,8 +97,8 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     # Segmentation
     action mark_whitespace { whitespace = text; }
     eos = [.!?] | '…';
-    closing = '"' | ';' | utf8_Pe | utf8_Pf;
-    opening = '"' | utf8_Ps | utf8_Pi;
+    closing = '"' | "'" | ';' | utf8_Pe | utf8_Pf;
+    opening = '"' | '`' | utf8_Ps | utf8_Pi;
 
     main := |*
       word_with_split2
