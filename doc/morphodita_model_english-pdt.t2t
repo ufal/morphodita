@@ -18,9 +18,9 @@ English models are created using the following data:
   Copyright: Available only under [LDC User Agreement https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/genericlicense.pdf].
 
 
-The resulting models are distributed under the
-[CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
-English models work in MorphoDiTa version 1.0.0 or later.
+Apart from the mentioned copyrights and licences, the resulting models are
+distributed under the [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/]
+licence.  English models work in MorphoDiTa version 1.0.0 or later.
 
 English models are versioned according to the release date, the version
 format is ``YYMMDD``, where ``YY``, ``MM`` and ``DD`` are two-digit
@@ -97,3 +97,25 @@ The English model contains the following files:
   model size: 6MB.
 
 
+=== No Negations Variant ===
+
+Stripping of negative prefixes (or handling the lemmas with negative prefixes
+stripped) may not be desirable. Therefore, a variant of the English model
+denoted by ``no_negation`` is provided, which does not strip negative prefixes
+from lemmas.
+
+: ``english-pdt-<version>-no_negation.dict``
+  Morphologic dictionary which does not strip negative lemma prefixes. The
+  SCOWL word list has been automatically analyzed and lemmatized and uses as
+  the dictionary. The guesser performing the analyzation and lemmatization is
+  available.
+
+: ``english-pdt-<version>-no_negation.tagger``
+  Tagger which does not strip negative lemma prefixes, trained on the training
+  portion of Wall Street Journal (Sections 0-18) and tuned on the development
+  portion (Sections 19-21). Contains the
+  ``english-pdt-<version>-no_negation.dict`` morphologic dictionary.
+
+  The latest version ``english-pdt-140304-no_negation.tagger`` reaches 97.25%
+  tag accuracy on Wall Street Journal test portion (Section 22-24). Model
+  speed: ~60k words/s, model size: 6MB.
