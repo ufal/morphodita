@@ -47,3 +47,7 @@ $(EXECUTABLES): $(call exe,%): $(call obj,%)
 
 clean:
 	@$(call rmdir,.objs) $(call rm,$(LIBRARIES) $(EXECUTABLES) $(call implib,libmorphodita))
+
+# dump library sources
+lib_sources:
+	@echo $(patsubst %,%.cpp,$(MORPHODITA_O))
