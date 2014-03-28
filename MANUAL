@@ -1,13 +1,13 @@
-MorphoDiTa: Morphologic Dictionary and Tagger
+MorphoDiTa: Morphological Dictionary and Tagger
 Version 0.96
 
 Introduction
 ============
 
-MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for
-morphologic analysis of natural language texts. It performs morphologic
-analysis, morphologic generation, tagging and tokenization and is distributed as
-a standalone tool or a library, along with trained linguistic models. In the
+MorphoDiTa: Morphological Dictionary and Tagger is an open-source tool for
+morphological analysis of natural language texts. It performs morphological
+analysis, morphological generation, tagging and tokenization and is distributed
+as a standalone tool or a library, along with trained linguistic models. In the
 Czech language, MorphoDiTa achieves state-of-the-art results with a throughput
 around 10-200K words per second. MorphoDiTa is a free software under LGPL
 (http://www.gnu.org/licenses/lgpl.html) license and the linguistic models are
@@ -72,7 +72,7 @@ Platforms and Requirements
 
 MorphoDiTa is available as a standalone tool and as a library for Linux/Windows.
 It does not require any additional libraries. As any supervised machine learning
-tool, it needs trained linguistic models to perform morphologic analysis. The
+tool, it needs trained linguistic models to perform morphological analysis. The
 models for the Czech language are available with the tool.
 
 
@@ -177,14 +177,14 @@ the PYTHON_INCLUDE variable using
 MorphoDiTa User's Manual
 ========================
 
-In a natural language text, the task of morphologic analysis is to assign for
+In a natural language text, the task of morphological analysis is to assign for
 each token (word) in a sentence its lemma (cannonical form) and a part-of-speech
-tag (POS tag). This is usually achieved in two steps: a morphologic dictionary
+tag (POS tag). This is usually achieved in two steps: a morphological dictionary
 looks up all possible lemmas and POS tags for each word, and subsequently, a
-morphologic tagger picks for each word the best lemma-POS tag candidate. The
+morphological tagger picks for each word the best lemma-POS tag candidate. The
 second task is called a disambiguation.
 
-MorphoDiTa also performs these two steps of morphologic analysis: It first
+MorphoDiTa also performs these two steps of morphological analysis: It first
 outputs all possible pairs of lemma and POS tag for each token. Consequently,
 the optimal combination of lemmas and POS tags is selected for the words in a
 sentence using an algorithm described in Spoustová et al. 2009
@@ -208,7 +208,7 @@ dictionary and the Czech tagger is trained on PDT 2.5
 or later.
 
 Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser are
-implemented and can be optionally used when performing morphologic analysis.
+implemented and can be optionally used when performing morphological analysis.
 
 Czech models are versioned according to the version of the MorfFlex CZ
 morphological dictionary used, the version format is YYMMDD, where YY, MM and DD
@@ -227,12 +227,14 @@ This work has been using language resources developed and/or stored and/or
 distributed by the LINDAT/CLARIN project of the Ministry of Education of the
 Czech Republic (project LM2010013).
 
-The Czech morphologic system was devised by Jan Hajič.
+The Czech morphological system was devised by Jan Hajič.
 
-The guesser research was supported by the projects 1ET101120503 and 1ET101120413
-of Academy of Sciences of the Czech Republic and 100008/2008 of Charles
-University Grant Agency. The research was performed by Jan Hajič, Jaroslava
-Hlaváčová and David Kolovratník.
+The MorfFlex CZ dictionary was created by Jan Hajič and Jaroslava Hlaváčová.
+
+The morphological guesser research was supported by the projects 1ET101120503
+and 1ET101120413 of Academy of Sciences of the Czech Republic and 100008/2008 of
+Charles University Grant Agency. The research was performed by Jan Hajič,
+Jaroslava Hlaváčová and David Kolovratník.
 
 The tagger algorithm and feature set research was supported by the projects
 MSM0021620838 and LC536 of Ministry of Education, Youth and Sports of the Czech
@@ -240,6 +242,13 @@ Republic, GA405/09/0278 of the Grant Agency of the Czech Republic and
 1ET101120503 of Academy of Sciences of the Czech Republic. The research was
 performed by Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav
 Spousta.
+
+The tagger is trained on morphological layer of Prague Dependency Treebank PDT
+2.5, which was supported by the projects LM2010013, LC536, LN00A063 and
+MSM0021620838 of Ministry of Education, Youth and Sports of the Czech Republic,
+and developed by Martin Buben, Jan Hajič, Jiří Hana, Hana Hanová, Barbora
+Hladká, Emil Jeřábek, Lenka Kebortová, Kristýna Kupková, Pavel Květoň,
+Jiří Mírovský, Andrea Pfimpfrová, Jan Štěpánek and Daniel Zeman.
 
 
 Publications
@@ -261,10 +270,10 @@ Publications
   Linguistics.
 
 
-Czech Morphologic System
-------------------------
+Czech Morphological System
+--------------------------
 
-In the Czech language, MorphoDiTa uses Czech morphologic system by Jan Hajič
+In the Czech language, MorphoDiTa uses Czech morphological system by Jan Hajič
 (Hajič 2004 (http://books.google.cz/books?id=sB63AAAACAAJ)). In this system,
 which we call PDT tag set, the tags are positional with 15 positions
 corresponding to part of speech, detailed part of speech, gender, number, case,
@@ -288,21 +297,22 @@ Main Czech Model
 The main Czech model contains the following files:
 
 czech-morfflex-<version>.dict
-  Morphologic dictionary based on the Jan Hajič's (Hajič 2004
+  Morphological dictionary based on the Jan Hajič's (Hajič 2004
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system with PDT tag set
   created from MorfFlex CZ
-  (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic dictionary.
+  (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphological
+  dictionary.
   
 czech-morfflex-<version>.tagger-best_accuracy
   Best and slowest tagger (Viterbi of order 3) trained on the training portion
   of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set.
-  Contains the czech-morfflex-<version>.dict morphologic dictionary.
+  Contains the czech-morfflex-<version>.dict morphological dictionary.
   
   The latest version czech-morfflex-131112.tagger-best_accuracy reaches 95.67%
   tag accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphologic tags and
+  (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphological tags and
   lemmas were remapped using the czech-morfflex-131112.dict dictionary). Model
-  speed: ~10k words/s, model size: 17MB. For comparison, model trained by
+  speed: ~10k words/s, model size: 18MB. For comparison, model trained by
   Featurama (http://sourceforge.net/projects/featurama/) (state-of-the-art Czech
   tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
@@ -310,14 +320,14 @@ czech-morfflex-<version>.tagger-best_accuracy
 czech-morfflex-<version>.tagger-fast
   Faster tagger with slightly worse results (Viterbi of order 2) trained on the
   training portion of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the
-  neopren feature set. Contains the czech-morfflex-<version>.dict morphologic
+  neopren feature set. Contains the czech-morfflex-<version>.dict morphological
   dictionary.
   
   The latest version czech-morfflex-131112.tagger-fast reaches 94.70% tag
   accuracy, 97.64% lemma accuracy and 93.94% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5) etest data (whose morphologic tags and lemmas
-  were remapped using the czech-morfflex-131112.dict dictionary). Model speed:
-  ~60k words/s, model size: 11MB.
+  (http://ufal.mff.cuni.cz/pdt2.5) etest data (whose morphological tags and
+  lemmas were remapped using the czech-morfflex-131112.dict dictionary). Model
+  speed: ~60k words/s, model size: 11MB.
 
 
 Part of Speech Only Variant
@@ -330,32 +340,32 @@ characters of the fifteen-letter tags are used, representing the part of speech
 and detailed part of speech, respectively. There are 67 such two-letter tags.
 
 czech-morfflex-<version>-pos_only.dict
-  Morphologic dictionary based on the Jan Hajič's (Hajič 2004
+  Morphological dictionary based on the Jan Hajič's (Hajič 2004
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
-  CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic
+  CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphological
   dictionary. Only first two tag characters of PDT tag set are used.
   
 czech-morfflex-<version>-pos_only.tagger
   Very fast tagger trained on the training portion of PDT 2.5
   (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set. Containins
-  the czech-morfflex-<version>-pos_only.dict morphologic dictionary.
+  the czech-morfflex-<version>-pos_only.dict morphological dictionary.
   
   The latest version czech-morfflex-131112-pos_only.tagger reaches 99.18% tag
   accuracy, 97.61% lemma accuracy and 97.56% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5) etest data (which morphologic tags and lemmas
-  were remapped using the czech-morfflex-131112-pos_only.dict dictionary). Model
-  speed: ~200k words/s, model size: 4MB.
+  (http://ufal.mff.cuni.cz/pdt2.5) etest data (which morphological tags and
+  lemmas were remapped using the czech-morfflex-131112-pos_only.dict
+  dictionary). Model speed: ~200k words/s, model size: 4MB.
 
 
 Raw Lemmas Variant
 ------------------
 
-The Czech morphologic system distinguish different meanings of same lemmas by
+The Czech morphological system distinguish different meanings of same lemmas by
 numbering the lemmas with multiple meanings and supplying additional comments
-for every lemma meaning, as described and demonstrated in Czech Morphologic
+for every lemma meaning, as described and demonstrated in Czech Morphological
 System. Sometimes this may be undesirable, for example when comparing to systems
 which do not use the MorfFlex CZ
-(http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphologic dictionary.
+(http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphological dictionary.
 
 Therefore, all already mentioned Czech models have a variant which does not
 disambiguate lemma meanings and provides no additional comments. (In terms of
@@ -453,20 +463,20 @@ output formats are:
 Running the Morphology
 ----------------------
 
-There are multiple commands performing morphologic tasks. The run_morpho_analyze
-executable performs morphologic analysis and the run_morpho_generate executable
-performs morphologic generation. The output of these commands is suitable for
-automatic processing.
+There are multiple commands performing morphological tasks. The
+run_morpho_analyze executable performs morphological analysis and the
+run_morpho_generate executable performs morphological generation. The output of
+these commands is suitable for automatic processing.
 
-The run_morpho_cli executable performs both morphologic analysis and generation,
-but is designed to be used interactively and produces more human-readable
-output.
+The run_morpho_cli executable performs both morphological analysis and
+generation, but is designed to be used interactively and produces more
+human-readable output.
 
 
-Morphologic Analysis
---------------------
+Morphological Analysis
+----------------------
 
-The morphologic analysis can be performed by running
+The morphological analysis can be performed by running
 
   run_morpho_analyze morphology_model use_guesser
 
@@ -475,7 +485,7 @@ and segmented, or it can be a plain text which is tokenized and segmented
 automatically. The input files are specified same as with the run_tagger
 command.
 
-Some morphologic models contain both a manually created dictionary and a
+Some morphological models contain both a manually created dictionary and a
 guesser. Therefore, a numeric use_guesser argument is required. If non-zero, the
 guesser is used, otherwise not.
 
@@ -520,7 +530,7 @@ output formats are:
 
 - xml (default): Simple XML format without a root element, using using
   <token><analysis lemma="..." tag="..."/><analysis...>...</token> element to
-  encode morphologic analysis.
+  encode morphological analysis.
   
   Example output for input Děti pojedou k babičce. Už se těší. (line
   breaks added):
@@ -552,24 +562,24 @@ output formats are:
 
 
 
-Morphologic Generation
-----------------------
+Morphological Generation
+------------------------
 
-The morphologic generation can be performed by running
+The morphological generation can be performed by running
 
   run_morpho_generate morphology_model use_guesser
 
 The input is assumed to be in UTF-8 encoding. The input files are specified same
 as with the run_tagger command.
 
-Input for morphologic generation has to be in vertical format, each line
+Input for morphological generation has to be in vertical format, each line
 containing a lemma, which can be optionally followed by a tab and a tag
 wildcard. The output has the same number of lines as input, line l contains tab
 separated form-lemma-tag triplets which can be generated from the lemma on he
 input line l. If a tag wildcard was provided, only triplets with matching tags
 are returned.
 
-Some morphologic models contain both a manually created dictionary and a
+Some morphological models contain both a manually created dictionary and a
 guesser. Therefore, a numeric use_guesser argument is required. If non-zero, the
 guesser is used, otherwise not.
 
@@ -610,7 +620,7 @@ Tag Wildcards
 
 When only forms with a specific tag should be generated for a given lemma, tag
 wildcard can be specified. The tag wildcard is a simple wildcard allowing to
-filter the results of morphologic generation.
+filter the results of morphological generation.
 
 Most characters of a tag wildcard match corresponding characters of a tag, with
 the following exceptions:
@@ -622,11 +632,11 @@ the following exceptions:
  - [^chars] matches any of the characters not listed.
 
 
-Interactive Morphologic Analysis and Generation
------------------------------------------------
+Interactive Morphological Analysis and Generation
+-------------------------------------------------
 
-Morphologic analysis and generation which is interactive and more human readable
-can be run using:
+Morphological analysis and generation which is interactive and more human
+readable can be run using:
 
   run_morpho_cli morphology_model
 
@@ -652,11 +662,12 @@ option), tagger model (--tagger option) or by using a tokenizer identifier
 
 - czech
 - english
+- generic
 
 The full command syntax of run_tokenizer is
 
   run_tokenizer [options] [file[:output_file]]...
-  Options: --tokenizer=czech|english
+  Options: --tokenizer=czech|english|generic
            --morphology=morphology_model_file
            --tagger=tagger_model_file
            --output=vertical|xml
@@ -766,20 +777,21 @@ public members: std::string lemma and std:string tag, corresponding to predicted
 lemma and tag, respectively.
 
 
-Morphologic Dictionary API
---------------------------
+Morphological Dictionary API
+----------------------------
 
-The main access to MorphoDiTa morphologic dictionary is through class morpho. An
-example of this interface usage can be found in a program file run_morpho.cpp.
+The main access to MorphoDiTa morphological dictionary is through class morpho.
+An example of this interface usage can be found in a program file
+run_morpho.cpp.
 
 
 Dictionary Construction
 -----------------------
 
-Similarly to the tagger, MorphoDiTa morphologic dictionary is constructed by an
-overloaded factory method which accepts either a C file pointer (FILE*) or a C
-string const char* with the file name of the dictionary. The factory method
-returns a pointer to morphologic dictionary or NULL if unsuccessful.
+Similarly to the tagger, MorphoDiTa morphological dictionary is constructed by
+an overloaded factory method which accepts either a C file pointer (FILE*) or a
+C string const char* with the file name of the dictionary. The factory method
+returns a pointer to morphological dictionary or NULL if unsuccessful.
 
   #include morpho/morpho.h
   
@@ -804,20 +816,20 @@ Please note that you should not delete this pointer as it is owned by the tagger
 class instance.
 
 
-Morphologic Analysis
---------------------
+Morphological Analysis
+----------------------
 
-MorphoDiTa morphologic dictionary offers two functionalities: It either analyzes
-the given word, that means it outputs all possible lemma-tag pairs candidates
-for the given form; or for a given lemma-tag pair, it generates a form or a
-whole list of possible forms.
+MorphoDiTa morphological dictionary offers two functionalities: It either
+analyzes the given word, that means it outputs all possible lemma-tag pairs
+candidates for the given form; or for a given lemma-tag pair, it generates a
+form or a whole list of possible forms.
 
-In the first case, one performs morphologic analysis for a given word by calling
-a method morpho::analyze:
+In the first case, one performs morphological analysis for a given word by
+calling a method morpho::analyze:
 
   int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const;
 
-An example (assuming that morphologic dictionary is already constructed, see
+An example (assuming that morphological dictionary is already constructed, see
 previous example):
 
   vector<tagged_lemma> lemmas;    // output
@@ -837,7 +849,7 @@ the output to this vector.
 Generation
 ----------
 
-MorphoDiTa performs morphologic generation from a given lemma:
+MorphoDiTa performs morphological generation from a given lemma:
 
   int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
                std::vector<tagged_lemma_forms>& forms) const;
@@ -858,8 +870,9 @@ Or even more, for example, in the Czech positional morphology tagging system
 to generate something like "all forms in fourth case", then tag_wildcard should
 be set to ????4. Please see Section "Czech Morphology" in User's Manual for more
 details about the Czech positional tagging system. The previous example applies
-to morphologic annotation applied to PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/),
-however, the tag wildcards can be used in any morphologic tagging system.
+to morphological annotation applied to PDT 2.5
+(http://ufal.mff.cuni.cz/pdt2.5/), however, the tag wildcards can be used in any
+morphological tagging system.
 
 Most characters of a tag wildcard match corresponding characters of a tag, with
 the following exceptions:
@@ -885,7 +898,7 @@ Questions and Answers
 ---------------------
 
 What is a Guesser Mode?
-  Morphologic analysis may try to guess the lemma and tag of an uknown word.
+  Morphological analysis may try to guess the lemma and tag of an uknown word.
   This option is turned on by morpho::GUESSER and off by morpho::NO_GUESSER.
   
 Why `string_piece`` and not const char* or std::string?
@@ -920,7 +933,7 @@ The lemmas used by MorphoDiTa consist of three parts:
 These parts are stored in one string and the boundaries between them can be
 determined by morpho::raw_lemma_len and morpho::lemma_id_len methods. Analyzer
 and tagger always return lemma in this structured form. When performing
-morphologic generation, either raw lemma or both raw lemma and lemma id can be
+morphological generation, either raw lemma or both raw lemma and lemma id can be
 specified, any lemma comments are ignored.
 
 
@@ -1001,6 +1014,7 @@ Class tokenizer
     static tokenizer* new_vertical_tokenizer();
     static tokenizer* new_czech_tokenizer();
     static tokenizer* new_english_tokenizer();
+    static tokenizer* new_generic_tokenizer();
   };
 
 The tokenizer class performs segmentation and tokenization of given text. The
@@ -1062,6 +1076,15 @@ Returns a new instance of a English tokenizer. The user should delete it after
 use.
 
 
+tokenizer::new_generic_tokenizer
+--------------------------------
+
+  static tokenizer new_generic_tokenizer();
+
+Returns a new instance of a generic tokenizer. The user should delete it after
+use.
+
+
 Class morpho
 ------------
 
@@ -1084,8 +1107,8 @@ Class morpho
     virtual tokenizer* new_tokenizer() const = 0;
   };
 
-A morpho instance represents a morphologic dictionary. Such a dictionary allow
-morphologic analysis, morphologic generation provide information about lemma
+A morpho instance represents a morphological dictionary. Such a dictionary allow
+morphological analysis, morphological generation provide information about lemma
 structure and provides a suitable tokenizer. All methods are thread-safe.
 
 
@@ -1124,9 +1147,9 @@ morpho::analyze()
 
   virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
 
-Perform morphologic analysis of a form. The guesser parameter specifies whether
-a guesser can be used if the form is not found in the dictionary. Output is
-assigned to the lemmas vector.
+Perform morphological analysis of a form. The guesser parameter specifies
+whether a guesser can be used if the form is not found in the dictionary. Output
+is assigned to the lemmas vector.
 
 If the form is found in the dictionary, analyses are assigned to lemmas and
 NO_GUESSER returned. If guesser == GUESSER and the form analyses are found using
@@ -1141,7 +1164,7 @@ morpho::generate()
   virtual int generate(string_piece lemmma, const char* tag_wildcard, guesser_mode guesser,
                        std::vector<tagged_lemma_forms>& forms) const = 0;
 
-Perform morphologic generation of a lemma. Optionally a tag_wildcard can be
+Perform morphological generation of a lemma. Optionally a tag_wildcard can be
 specified (or be NULL) and if so, results are filtered using this wildcard. The
 guesser parameter speficies whether a guesser can be used if the lemma is not
 found in the dictionary. Output is assigned to the forms vector.
@@ -1206,7 +1229,7 @@ Class tagger
   };
 
 A tagger instance represents a tagger, which perform disambiguation of
-morphologic analyses. All methods are thread-safe.
+morphological analyses. All methods are thread-safe.
 
 
 tagger::load(const char*)
@@ -1244,7 +1267,7 @@ tagger::tag()
 
   virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
 
-Perform morphologic analysis and subsequent disambiguation. Accepts a
+Perform morphological analysis and subsequent disambiguation. Accepts a
 std::vector of string_piece and fills the output vector of tagged_lemma.
 
 
@@ -1372,6 +1395,7 @@ Main Classes
     static Tokenizer* newVerticalTokenizer();
     static Tokenizer* newCzechTokenizer();
     static Tokenizer* newEnglishTokenizer();
+    static Tokenizer* newGenericTokenizer();
   };
   
   class Morpho {

@@ -3,14 +3,14 @@ MorphoDiTa User's Manual
 
 %!encoding: utf-8
 
-In a natural language text, the task of morphologic analysis is to assign for
+In a natural language text, the task of morphological analysis is to assign for
 each token (word) in a sentence its lemma (cannonical form) and
 a part-of-speech tag (POS tag). This is usually achieved in two steps:
-a morphologic dictionary looks up all possible lemmas and POS tags for each
-word, and subsequently, a morphologic tagger picks for each word the best
+a morphological dictionary looks up all possible lemmas and POS tags for each
+word, and subsequently, a morphological tagger picks for each word the best
 lemma-POS tag candidate. The second task is called a disambiguation.
 
-MorphoDiTa also performs these two steps of morphologic analysis: It first
+MorphoDiTa also performs these two steps of morphological analysis: It first
 outputs all possible pairs of lemma and POS tag for each token. Consequently,
 the optimal combination of lemmas and POS tags is selected for the words in
 a sentence using an algorithm described in
@@ -107,17 +107,17 @@ těší	těšit_:T	VB-S---3P-AA---
 
 == Running the Morphology ==
 
-There are multiple commands performing morphologic tasks.
-The [``run_morpho_analyze`` #run_morpho_analyze] executable performs morphologic analysis and
-the [``run_morpho_generate`` #run_morpho_generate] executable performs morphologic generation.
+There are multiple commands performing morphological tasks.
+The [``run_morpho_analyze`` #run_morpho_analyze] executable performs morphological analysis and
+the [``run_morpho_generate`` #run_morpho_generate] executable performs morphological generation.
 The output of these commands is suitable for automatic processing.
 
-The [``run_morpho_cli`` #run_morpho_cli] executable performs both morphologic analysis and generation,
+The [``run_morpho_cli`` #run_morpho_cli] executable performs both morphological analysis and generation,
 but is designed to be used interactively and produces more human-readable output.
 
-=== Morphologic Analysis ===[run_morpho_analyze]
+=== Morphological Analysis ===[run_morpho_analyze]
 
-The morphologic analysis can be performed by running
+The morphological analysis can be performed by running
 ``` run_morpho_analyze morphology_model use_guesser
 
 The input is assumed to be in UTF-8 encoding and can be either already
@@ -125,7 +125,7 @@ tokenized and segmented, or it can be a plain text which is tokenized and
 segmented automatically. The input files are specified same as with the
 [``run_tagger`` #run_tagger] command.
 
-Some morphologic models contain both a manually created dictionary and
+Some morphological models contain both a manually created dictionary and
 a guesser. Therefore, a numeric ``use_guesser`` argument is required.
 If non-zero, the guesser is used, otherwise not.
 
@@ -164,7 +164,7 @@ The output format is specified using the ``--output`` option. Currently
 supported output formats are:
 - ``xml`` (default): Simple XML format without a root element, using
   using ``<token><analysis lemma="..." tag="..."/><analysis...>...</token>``
-  element to encode morphologic analysis.
+  element to encode morphological analysis.
 
   Example output for input ``Děti pojedou k babičce. Už se těší.`` (line breaks added):
 ```
@@ -197,22 +197,22 @@ těší	těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
 ```
 
 
-=== Morphologic Generation ===[run_morpho_generate]
+=== Morphological Generation ===[run_morpho_generate]
 
-The morphologic generation can be performed by running
+The morphological generation can be performed by running
 ``` run_morpho_generate morphology_model use_guesser
 
 The input is assumed to be in UTF-8 encoding. The input files are specified
 same as with the [``run_tagger`` #run_tagger] command.
 
-Input for morphologic generation has to be in vertical format, each line
+Input for morphological generation has to be in vertical format, each line
 containing a lemma, which can be optionally followed by a tab and a
 [tag wildcard #tag_wildcard]. The output has the same number of lines as input,
 line //l// contains tab separated form-lemma-tag triplets which can be generated
 from the lemma on he input line //l//. If a tag wildcard was provided, only
 triplets with matching tags are returned.
 
-Some morphologic models contain both a manually created dictionary and
+Some morphological models contain both a manually created dictionary and
 a guesser. Therefore, a numeric ``use_guesser`` argument is required.
 If non-zero, the guesser is used, otherwise not.
 
@@ -253,7 +253,7 @@ input lemmas and wildcards.
 
 When only forms with a specific tag should be generated for a given lemma, tag
 wildcard can be specified. The tag wildcard is a simple wildcard allowing to filter
-the results of morphologic generation.
+the results of morphological generation.
 
 Most characters of a tag wildcard match corresponding characters of a tag, with the following exceptions:
  - ``?`` matches any character of a tag.
@@ -262,10 +262,10 @@ Most characters of a tag wildcard match corresponding characters of a tag, with 
  - ``[^chars]`` matches any of the characters //not// listed.
 
 
-=== Interactive Morphologic Analysis and Generation ===[run_morpho_cli]
+=== Interactive Morphological Analysis and Generation ===[run_morpho_cli]
 
 
-Morphologic analysis and generation which is interactive and more human readable
+Morphological analysis and generation which is interactive and more human readable
 can be run using:
 ``` run_morpho_cli morphology_model
 

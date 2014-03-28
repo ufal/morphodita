@@ -69,6 +69,7 @@ Main Classes
     static Tokenizer* newVerticalTokenizer();
     static Tokenizer* newCzechTokenizer();
     static Tokenizer* newEnglishTokenizer();
+    static Tokenizer* newGenericTokenizer();
   };
   
   class Morpho {

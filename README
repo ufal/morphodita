@@ -1,10 +1,10 @@
 MorphoDiTa
 ==========
 
-MorphoDiTa: Morphologic Dictionary and Tagger is an open-source tool for
-morphologic analysis of natural language texts. It performs morphologic
-analysis, morphologic generation, tagging and tokenization and is distributed as
-a standalone tool or a library, along with trained linguistic models. In the
+MorphoDiTa: Morphological Dictionary and Tagger is an open-source tool for
+morphological analysis of natural language texts. It performs morphological
+analysis, morphological generation, tagging and tokenization and is distributed
+as a standalone tool or a library, along with trained linguistic models. In the
 Czech language, MorphoDiTa achieves state-of-the-art results with a throughput
 around 10-200K words per second. MorphoDiTa is a free software under LGPL
 (http://www.gnu.org/licenses/lgpl.html) license and the linguistic models are

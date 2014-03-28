@@ -7,7 +7,7 @@ English MorphoDiTa Models
 
 English models are created using the following data:
 - //SCOWL (Spell Checker Oriented Word Lists)//: This word list is used
-  in morphologic generation to create all possible word forms of a given
+  in morphological generation to create all possible word forms of a given
   word.
 
   Copyright: //Copyright 2000-2011 by Kevin Atkinson. Permission to use, copy, modify, distribute and sell these word lists, the associated scripts, the output created from the scripts, and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appears in all copies and that both that copyright notice and this permission notice appear in supporting documentation. Kevin Atkinson makes no representations about the suitability of this array for any purpose. It is provided "as is" without express or implied warranty.//
@@ -37,7 +37,7 @@ This work has been using language resources developed and/or stored and/or
 distributed by the LINDAT/CLARIN project of the Ministry of Education of the
 Czech Republic (project //LM2010013//).
 
-The morphologic POS analyzer development was supported by grant of the Ministry
+The morphological POS analyzer development was supported by grant of the Ministry
 of Education, Youth and Sports of the Czech Republic No. //LC536// "Center for
 Computational Linguistics". The morphological POS analyzer research was
 performed by Johanka Spoustová (Spoustová 2008; the ``Treex::Tool::EnglishMorpho::Analysis``
@@ -62,19 +62,19 @@ Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. //[Semi-Supervised Training for the Averaged Perceptron POS Tagger. http://aclweb.org/anthology//E/E09/E09-1087.pdf]// In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 
 
-=== English Morphologic System ===[english_morphologic_system]
+=== English Morphological System ===
 
 The English morphology uses standard Penn Treebank POS tags. Nevertheless,
 the lemma structure is unique:
 - The lemmatizer recognizes negative prefixes and removes it from the lemma.
   In terms of MorphoDiTa API, //raw lemma// is the lemma without negative prefix.
-- The negative prefix is also stored to allow morphologic generation of word
+- The negative prefix is also stored to allow morphological generation of word
   form with the same negative prefix. In terms of MorphoDiTa API, //lemma id//
   is the raw lemma plus the negative prefix.
 
 
 The negative prefix is separated from the (always nonempty) lemma using a ``^``
-character (``able^un``). During morphologic generation, the negative prefix is honored.
+character (``able^un``). During morphological generation, the negative prefix is honored.
 Furthermore, when the lemma ends with ``^`` (i.e., negative prefix is empty, as
 in ``able^``), forms with negative prefixes are generated. It is also possible
 to generate all forms without any negative prefix by appending ``+`` after the lemma
@@ -86,14 +86,14 @@ to generate all forms without any negative prefix by appending ``+`` after the l
 The English model contains the following files:
 
 : ``english-pdt-<version>.dict``
-  Morphologic dictionary. The SCOWL word list has been automatically analyzed
+  Morphological dictionary. The SCOWL word list has been automatically analyzed
   and lemmatized and uses as the dictionary. The guesser performing the analyzation
   and lemmatization is available.
 
 : ``english-pdt-<version>.tagger``
   Tagger trained on the training portion of Wall Street Journal (Sections 0-18)
   and tuned on the development portion (Sections 19-21). Contains the
-  ``english-pdt-<version>.dict`` morphologic dictionary.
+  ``english-pdt-<version>.dict`` morphological dictionary.
 
   The latest version ``english-pdt-140304.tagger`` reaches 97.27% tag
   accuracy on Wall Street Journal test portion (Section 22-24). Model speed: ~60k words/s,
@@ -108,7 +108,7 @@ denoted by ``no_negation`` is provided, which does not strip negative prefixes
 from lemmas.
 
 : ``english-pdt-<version>-no_negation.dict``
-  Morphologic dictionary which does not strip negative lemma prefixes. The
+  Morphological dictionary which does not strip negative lemma prefixes. The
   SCOWL word list has been automatically analyzed and lemmatized and uses as
   the dictionary. The guesser performing the analyzation and lemmatization is
   available.
@@ -117,7 +117,7 @@ from lemmas.
   Tagger which does not strip negative lemma prefixes, trained on the training
   portion of Wall Street Journal (Sections 0-18) and tuned on the development
   portion (Sections 19-21). Contains the
-  ``english-pdt-<version>-no_negation.dict`` morphologic dictionary.
+  ``english-pdt-<version>-no_negation.dict`` morphological dictionary.
 
   The latest version ``english-pdt-140304-no_negation.tagger`` reaches 97.25%
   tag accuracy on Wall Street Journal test portion (Section 22-24). Model

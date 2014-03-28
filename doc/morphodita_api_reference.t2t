@@ -26,7 +26,7 @@ determined by
 [``morpho::raw_lemma_len`` #morpho_raw_lemma_len] and
 [``morpho::lemma_id_len`` #morpho_lemma_id_len] methods.
 Analyzer and tagger always return lemma in this structured form. When
-performing morphologic generation, either //raw lemma// or both //raw lemma// and
+performing morphological generation, either //raw lemma// or both //raw lemma// and
 //lemma id// can be specified, any //lemma comments// are ignored.
 
 
@@ -180,8 +180,8 @@ class morpho {
 };
 ```
 
-A [``morpho`` #morpho] instance represents a morphologic dictionary. Such a dictionary allow
-morphologic analysis, morphologic generation provide information about lemma structure
+A [``morpho`` #morpho] instance represents a morphological dictionary. Such a dictionary allow
+morphological analysis, morphological generation provide information about lemma structure
 and provides a suitable tokenizer. All methods are thread-safe.
 
 === morpho::load(const char*) ===[morpho_load_cstring]
@@ -208,7 +208,7 @@ morpho does not guess unknown words.
 === morpho::analyze() ===[morpho_analyze]
 ``` virtual int analyze([string_piece #string_piece] form, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma #tagged_lemma]>& lemmas) const = 0;
 
-Perform morphologic analysis of a form. The guesser parameter specifies whether
+Perform morphological analysis of a form. The guesser parameter specifies whether
 a guesser can be used if the form is not found in the dictionary. Output is
 assigned to the lemmas vector.
 
@@ -224,7 +224,7 @@ virtual int generate([string_piece #string_piece] lemmma, const char* tag_wildca
                      std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
 ```
 
-Perform morphologic generation of a lemma. Optionally a tag_wildcard can be
+Perform morphological generation of a lemma. Optionally a tag_wildcard can be
 specified (or be ``NULL``) and if so, results are filtered using this wildcard.
 The guesser parameter speficies whether a guesser can be used if the lemma is
 not found in the dictionary. Output is assigned to the forms vector.
@@ -282,7 +282,7 @@ class tagger {
 ```
 
 A [``tagger`` #tagger] instance represents a tagger, which perform disambiguation of
-morphologic analyses. All methods are thread-safe.
+morphological analyses. All methods are thread-safe.
 
 === tagger::load(const char*) ===[tagger_load_cstring]
 ``` static [tagger #tagger]* load(const char* fname);
@@ -309,7 +309,7 @@ tagger destructor.
 === tagger::tag() ===[tagger_tag]
 ``` virtual void tag(const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags) const = 0;
 
-Perform morphologic analysis and subsequent disambiguation. Accepts
+Perform morphological analysis and subsequent disambiguation. Accepts
 a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vector of [``tagged_lemma`` #tagged_lemma].
 
 === tagger::new_tokenizer ===[tagger_new_tokenizer]

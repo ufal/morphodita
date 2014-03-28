@@ -1,4 +1,4 @@
-MorphoDiTa: Morphologic Dictionary and Tagger
+MorphoDiTa: Morphological Dictionary and Tagger
 Version 0.96
 
 %!encoding: utf-8
@@ -51,7 +51,7 @@ referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and
 
 == Platforms and Requirements ==
 
-MorphoDiTa is available as a standalone tool and as a library for Linux/Windows. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphologic analysis. The models for the Czech language are available with the tool.
+MorphoDiTa is available as a standalone tool and as a library for Linux/Windows. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphological analysis. The models for the Czech language are available with the tool.
 
 
 = MorphoDiTa Installation =

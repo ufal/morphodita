@@ -74,18 +74,18 @@ output vector correspond to indexes in input vector.  ``tagged_lemma`` has two
 public members: ``std::string lemma`` and ``std:string tag``, corresponding to
 predicted lemma and tag, respectively.
 
-== Morphologic Dictionary API ==
+== Morphological Dictionary API ==
 
-The main access to MorphoDiTa morphologic dictionary is through class
+The main access to MorphoDiTa morphological dictionary is through class
 ``morpho``. An example of this interface usage can be found in a program file
 ``run_morpho.cpp``.
 
 === Dictionary Construction ===
 
-Similarly to the tagger, MorphoDiTa morphologic dictionary is constructed by an
+Similarly to the tagger, MorphoDiTa morphological dictionary is constructed by an
 overloaded factory method which accepts either a C file pointer (``FILE*``)
 or a C string ``const char*`` with the file name of the dictionary.
-The factory method returns a pointer to morphologic dictionary or ``NULL`` if
+The factory method returns a pointer to morphological dictionary or ``NULL`` if
 unsuccessful.
 
 ```
@@ -114,21 +114,21 @@ virtual const morpho* get_morpho() const = 0;
 Please note that you should not delete this pointer as it is owned by the
 ``tagger`` class instance.
 
-=== Morphologic Analysis ===
+=== Morphological Analysis ===
 
-MorphoDiTa morphologic dictionary offers two functionalities: It either
+MorphoDiTa morphological dictionary offers two functionalities: It either
 //analyzes// the given word, that means it outputs all possible lemma-tag pairs
 candidates for the given form; or for a given lemma-tag pair, it //generates//
 a form or a whole list of possible forms.
 
-In the first case, one performs morphologic analysis for a given word by
+In the first case, one performs morphological analysis for a given word by
 calling a method ``morpho::analyze``:
 
 ```
 int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const;
 ```
 
-An example (assuming that morphologic dictionary is already constructed, see
+An example (assuming that morphological dictionary is already constructed, see
 previous example):
 
 ```
@@ -148,7 +148,7 @@ method ``morpho::analyze`` assigns the output to this vector.
 
 === Generation ===
 
-MorphoDiTa performs morphologic generation from a given lemma:
+MorphoDiTa performs morphological generation from a given lemma:
 
 ```
 int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
@@ -169,9 +169,9 @@ Or even more, for example, in the Czech positional morphology tagging system
 one may even wish to generate something like "all forms in fourth case",
 then ``tag_wildcard`` should be set to ``????4``.
 Please see Section "Czech Morphology" in User's Manual for more details about the Czech positional tagging system.
-The previous example applies to morphologic annotation applied to
+The previous example applies to morphological annotation applied to
 [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/], however, the tag wildcards can be used in any
-morphologic tagging system.
+morphological tagging system.
 
 Most characters of a tag wildcard match corresponding characters of a tag, with the following exceptions:
  - ``?`` matches any character of a tag.
@@ -192,7 +192,7 @@ is found by the guesser, ``GUESSER`` is returned. Otherwise, forms are cleared a
 == Questions and Answers ==[faq]
 
 : **What is a Guesser Mode?**
-  Morphologic analysis may try to guess the lemma and tag of an uknown word.
+  Morphological analysis may try to guess the lemma and tag of an uknown word.
   This option is turned on by ``morpho::GUESSER`` and off by
   ``morpho::NO_GUESSER``.
 
