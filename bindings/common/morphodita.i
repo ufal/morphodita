@@ -95,6 +95,10 @@ class tokenizer {
   %rename(newEnglishTokenizer) new_english_tokenizer;
   %newobject new_english_tokenizer;
   static tokenizer* new_english_tokenizer();
+
+  %rename(newGenericTokenizer) new_generic_tokenizer;
+  %newobject new_generic_tokenizer;
+  static tokenizer* new_generic_tokenizer();
 };
 
 %rename(Morpho) morpho;

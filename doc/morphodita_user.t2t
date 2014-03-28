@@ -289,12 +289,13 @@ a tokenizer identifier (``--tokenizer`` option). Currently supported
 tokenizer identifiers are:
 - ``czech``
 - ``english``
+- ``generic``
 
 
 The full command syntax of ``run_tokenizer`` is
 ```
 run_tokenizer [options] [file[:output_file]]...
-Options: --tokenizer=czech|english
+Options: --tokenizer=czech|english|generic
          --morphology=morphology_model_file
          --tagger=tagger_model_file
          --output=vertical|xml

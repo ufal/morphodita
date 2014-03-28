@@ -33,7 +33,7 @@ static void tokenize_xml(FILE* in, FILE* out, tokenizer& tokenizer);
 int main(int argc, char* argv[]) {
   options_map options;
   bool show_usage = false;
-  show_usage = !parse_options({{"tokenizer", {"czech", "english"}},
+  show_usage = !parse_options({{"tokenizer", {"czech", "english", "generic"}},
                               {"morphology", {""}},
                               {"tagger", {""}},
                               {"output",{"vertical","xml"}}}, argc, argv, options);
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
   }
   if (show_usage)
     runtime_errorf("Usage: %s [options] [file[:output_file]]...\n"
-                   "Options: --tokenizer=czech|english\n"
+                   "Options: --tokenizer=czech|english|generic\n"
                    "         --morphology=morphology_model_file\n"
                    "         --tagger=tagger_model_file\n"
                    "         --output=vertical|xml", argv[0]);
@@ -55,6 +55,7 @@ int main(int argc, char* argv[]) {
   unique_ptr<tokenizer> tokenizer;
   if (options.count("tokenizer") && options["tokenizer"] == "czech") tokenizer.reset(tokenizer::new_czech_tokenizer());
   else if (options.count("tokenizer") && options["tokenizer"] == "english") tokenizer.reset(tokenizer::new_english_tokenizer());
+  else if (options.count("tokenizer") && options["tokenizer"] == "generic") tokenizer.reset(tokenizer::new_generic_tokenizer());
   else if (options.count("morphology")) {
     eprintf("Loading dictionary: ");
     unique_ptr<morpho> dictionary(morpho::load(options["morphology"].c_str()));
