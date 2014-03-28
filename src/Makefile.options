@@ -43,7 +43,7 @@ else ifdef PROFILE
   LD_FLAGS += -pg
 else ifdef RELEASE
   C_FLAGS += -O3 -DNDEBUG -flto
-  LD_FLAGS += -s
+  LD_FLAGS += -s -flto
 else
   C_FLAGS += -O3
   LD_FLAGS += -s
