@@ -18,9 +18,12 @@ English models are created using the following data:
   Copyright: Available only under [LDC User Agreement https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/genericlicense.pdf].
 
 
+Please note that currently you must have LDC licence for Wall Street Journal to
+use the English models in MorphoDiTa.
+
 Apart from the mentioned copyrights and licences, the resulting models are
 distributed under the [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/]
-licence.  English models work in MorphoDiTa version 1.0.0 or later.
+licence. English models work in MorphoDiTa version 1.0.0 or later.
 
 English models are versioned according to the release date, the version
 format is ``YYMMDD``, where ``YY``, ``MM`` and ``DD`` are two-digit
