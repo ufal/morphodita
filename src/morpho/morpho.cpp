@@ -18,6 +18,7 @@
 
 #include "czech_morpho.h"
 #include "english_morpho.h"
+#include "generic_morpho.h"
 #include "morpho.h"
 #include "morpho_ids.h"
 #include "utils/file_ptr.h"
@@ -37,6 +38,12 @@ morpho* morpho::load(FILE* f) {
     case morpho_ids::ENGLISH:
       {
         auto res = new_unique_ptr<english_morpho>();
+        if (res->load(f)) return res.release();
+        break;
+      }
+    case morpho_ids::GENERIC:
+      {
+        auto res = new_unique_ptr<generic_morpho>();
         if (res->load(f)) return res.release();
         break;
       }

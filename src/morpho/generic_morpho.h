@@ -18,24 +18,33 @@
 
 #pragma once
 
+#include <memory>
+
 #include "common.h"
+#include "generic_lemma_addinfo.h"
+#include "morpho_dictionary.h"
+#include "morpho_statistical_guesser.h"
 
 namespace ufal {
 namespace morphodita {
 
-class morpho_ids {
+class generic_morpho : public morpho {
  public:
-  enum morpho_id { CZECH = 0, ENGLISH = 1, GENERIC = 2 };
+  virtual int analyze(string_piece form, morpho::guesser_mode guesser, vector<tagged_lemma>& lemmas) const override;
+  virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const;
+  virtual int raw_lemma_len(string_piece lemma) const override;
+  virtual int lemma_id_len(string_piece lemma) const override;
+  virtual tokenizer* new_tokenizer() const override;
 
-  static bool parse(const string& str, morpho_id& id) {
-    if (str == "czech") return id = CZECH, true;
-    if (str == "english") return id = ENGLISH, true;
-    if (str == "generic") return id = GENERIC, true;
-    return false;
-  }
+  bool load(FILE* f);
+ private:
+  inline void analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const;
+
+  morpho_dictionary<generic_lemma_addinfo> dictionary;
+  unique_ptr<morpho_statistical_guesser> statistical_guesser;
+
+  string unknown_tag, number_tag, punctuation_tag, symbol_tag;
 };
-
-typedef morpho_ids::morpho_id morpho_id;
 
 } // namespace morphodita
 } // namespace ufal
