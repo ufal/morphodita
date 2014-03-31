@@ -3,3 +3,4 @@
 #include "XSUB.h"
 
 MODULE = Ufal::MorphoDiTa::XS PACKAGE = Ufal::MorphoDiTa
+VERSIONCHECK: DISABLE
