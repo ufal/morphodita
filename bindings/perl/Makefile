@@ -26,4 +26,4 @@ morphodita_perl.cpp: morphodita_perl.i ../common/morphodita.i
 
 .PHONY: clean
 clean:
-	@$(call rmdir,Ufal) $(call rm,$(TARGETS) $(wildcard *.cpp))
+	@$(call rmdir,Ufal) $(call rm,$(TARGETS) $(wildcard *.cpp)) $(call rmdir,cpan/Ufal-MorphoDiTa)
