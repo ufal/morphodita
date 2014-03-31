@@ -4,6 +4,11 @@
 
 %pragma(java) jniclasscode=%{
   static {
-    System.loadLibrary("morphodita_java");
+    java.io.File localMorphodita = new java.io.File(System.mapLibraryName("morphodita_java"));
+
+    if (localMorphodita.exists())
+      System.load(localMorphodita.getAbsolutePath());
+    else
+      System.loadLibrary("morphodita_java");
   }
 %}

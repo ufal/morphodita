@@ -11,7 +11,7 @@ else
   JAVA_MODULE=$(call dynlib,libmorphodita_java)
 endif
 
-TARGETS = $(JAVA_MODULE)
+TARGETS = $(JAVA_MODULE) morphodita.jar
 
 all: $(TARGETS)
 
@@ -24,6 +24,10 @@ $(JAVA_MODULE): morphodita_java.cpp $(JAVA_MORPHODITA_LIB)
 morphodita_java.cpp: morphodita_java.i ../common/morphodita.i
 	@$(call mkdir,cz/cuni/mff/ufal/morphodita)
 	swig $(SWIG_FLAGS) -java -package cz.cuni.mff.ufal.morphodita -outdir cz/cuni/mff/ufal/morphodita -o $@ $<
+
+morphodita.jar: morphodita_java.cpp
+	javac -source 1.4 -Xlint:-options $(wildcard cz/cuni/mff/ufal/morphodita/*.java)
+	jar cf $@ $(patsubst %.java,%.class,$(wildcard cz/cuni/mff/ufal/morphodita/*.java))
 
 .PHONY: clean
 clean:
