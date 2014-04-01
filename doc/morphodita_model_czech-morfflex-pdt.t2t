@@ -3,7 +3,7 @@ Czech MorphoDiTa Models
 
 %!encoding: utf-8
 
-== Czech MorphoDiTa Models ==[czech-morfflex]
+== Czech MorphoDiTa Models ==[czech-morfflex-pdt]
 
 Czech models are distributed under the
 [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
@@ -25,7 +25,7 @@ Compared to Featurama http://sourceforge.net/projects/featurama/
 (state-of-the-art Czech tagger implementation), the models are 5 times faster
 and 10 times smaller.
 
-=== Acknowledgements ===[czech_morfflex_acknowledgements]
+=== Acknowledgements ===[czech-morfflex-pdt_acknowledgements]
 
 This work has been using language resources developed and/or stored and/or
 distributed by the LINDAT/CLARIN project of the Ministry of Education of the
