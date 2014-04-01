@@ -21,6 +21,7 @@
 #include "morpho/morpho_ids.h"
 #include "morpho/czech_morpho_encoder.h"
 #include "morpho/english_morpho_encoder.h"
+#include "morpho/generic_morpho_encoder.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
 #include "utils/set_binary_stdout.h"
@@ -59,8 +60,7 @@ int main(int argc, char* argv[]) {
       }
     case morpho_ids::ENGLISH:
       {
-        // options: guesser_negations_file
-        if (argc < 3) runtime_errorf("Usage: $s english english_guesser_file [english_negation_prefixes]\n", argv[0]);
+        if (argc < 3) runtime_errorf("Usage: %s english english_guesser_file [english_negation_prefixes]\n", argv[0]);
         file_ptr guesser, negations;
 
         guesser = fopen(argv[2], "r");
@@ -72,6 +72,24 @@ int main(int argc, char* argv[]) {
 
         fputc(id, stdout);
         english_morpho_encoder::encode(stdin, guesser, negations, stdout);
+        break;
+      }
+    case morpho_ids::GENERIC:
+      {
+        if (argc < 6) runtime_errorf("Usage: %s generic unknown_tag number_tag punctuation_tag symbol_tag [statistical_guesser]\n", argv[0]);
+        generic_morpho_encoder::tags tags;
+        tags.unknown_tag = argv[2];
+        tags.number_tag = argv[3];
+        tags.punctuation_tag = argv[4];
+        tags.symbol_tag = argv[5];
+        file_ptr statistical_guesser;
+        if (argc > 6 && strlen(argv[6])) {
+          statistical_guesser = fopen(argv[6], "r");
+          if (!statistical_guesser) runtime_errorf("Cannot open statistical guesser file '%s'!", argv[6]);
+        }
+
+        fputc(id, stdout);
+        generic_morpho_encoder::encode(stdin, tags, statistical_guesser, stdout);
         break;
       }
     default:

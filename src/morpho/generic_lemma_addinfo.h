@@ -34,6 +34,8 @@ struct generic_lemma_addinfo {
 
   inline int parse(string_piece lemma, bool die_on_failure = false);
   inline bool match_lemma_id(const unsigned char* other_addinfo, int other_addinfo_len);
+
+  vector<unsigned char> data;
 };
 
 

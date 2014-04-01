@@ -39,10 +39,14 @@ bool generic_morpho::load(FILE* f) {
 
   try {
     // Load tags
-    unsigned tag_length = data.next_1B();
-    if (tag_length < unknown_tag.size()) unknown_tag.erase(tag_length);
-    if (tag_length < number_tag.size()) number_tag.erase(tag_length);
-    if (tag_length < punctuation_tag.size()) punctuation_tag.erase(tag_length);
+    unsigned length = data.next_1B();
+    unknown_tag.assign(data.next<char>(length), length);
+    length = data.next_1B();
+    number_tag.assign(data.next<char>(length), length);
+    length = data.next_1B();
+    punctuation_tag.assign(data.next<char>(length), length);
+    length = data.next_1B();
+    symbol_tag.assign(data.next<char>(length), length);
 
     // Load dictionary
     dictionary.load(data);
@@ -64,10 +68,6 @@ int generic_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
   lemmas.clear();
 
   if (form.len) {
-    // Start by calling analyze_special without any casing changes.
-    analyze_special(form, lemmas);
-    if (!lemmas.empty()) return NO_GUESSER;
-
     // Generate all casing variants if needed (they are different than given form).
     string form_uclc; // first uppercase, rest lowercase
     string form_lc;   // all lowercase
@@ -77,6 +77,10 @@ int generic_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
     dictionary.analyze(form, lemmas);
     if (!form_uclc.empty()) dictionary.analyze(form_uclc, lemmas);
     if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
+    if (!lemmas.empty()) return NO_GUESSER;
+
+    // Then call analyze_special to handle numbers, punctuation and symbols.
+    analyze_special(form, lemmas);
     if (!lemmas.empty()) return NO_GUESSER;
 
     // For the statistical guesser, use all casing variants.
@@ -122,58 +126,47 @@ tokenizer* generic_morpho::new_tokenizer() const {
   return new generic_tokenizer();
 }
 
-// What characters are considered punctuation except for the ones in unicode Punctuation category.
-static bool punctuation_additional[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1/*$*/,
-  0,0,0,0,0,0,1/*+*/,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1/*<*/,1/*=*/,1/*>*/,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,1/*^*/,0,1/*`*/,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1/*|*/,0,1/*~*/,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1/*ˇ*/};
-
-// What characters of unicode Punctuation category are not considered punctuation.
-static bool punctuation_exceptions[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,1/*§*/};
-
 void generic_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const {
-  // Analyzer for numbers and punctuation.
+  // Analyzer for numbers, punctuation and symbols.
   // Number is anything matching [+-]? is_Pn* ([.,] is_Pn*)? ([Ee] [+-]? is_Pn+)? for at least one is_Pn* nonempty.
   // Punctuation is any form beginning with either unicode punctuation or punctuation_exceptions character.
   // Beware that numbers takes precedence, so - is punctuation, -3 is number, -. is punctuation, -.3 is number.
   if (!form.len) return;
 
-  string_piece form_ori = form;
-  char32_t first = utf8::decode(form.str, form.len);
+  string_piece number = form;
+  char32_t first = utf8::decode(number.str, number.len);
 
   // Try matching a number.
   char32_t codepoint = first;
   bool any_digit = false;
-  if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
-  if (codepoint == '.' || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
+  if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
+  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  if ((codepoint == '.' && number.len) || codepoint == ',') codepoint = utf8::decode(number.str, number.len);
+  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
-    codepoint = utf8::decode(form.str, form.len);
-    if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
+    codepoint = utf8::decode(number.str, number.len);
+    if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
     any_digit = false;
-    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
+    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   }
 
-  if (any_digit && !form.len && !codepoint) {
-    lemmas.emplace_back(string(form_ori.str, form_ori.len), number_tag);
-  } else if (any_digit && !form.len && (codepoint == '.' || codepoint == ',')) { // allow numbers to end by . or ,
-    lemmas.emplace_back(string(form_ori.str, form_ori.len - 1), number_tag);
-  } else if ((first < sizeof(punctuation_additional) && punctuation_additional[first]) ||
-             (utf8::is_P(first) && (first >= sizeof(punctuation_exceptions) || !punctuation_exceptions[first])))
+  if (any_digit && !number.len && (!codepoint || codepoint == '.')) {
+    lemmas.emplace_back(string(form.str, form.len - (codepoint == '.')), number_tag);
+    return;
+  }
+
+  // Try matching punctuation or symbol.
+  bool punctuation = true, symbol = true;
+  string_piece form_ori = form;
+  while (form.len) {
+    codepoint = utf8::decode(form.str, form.len);
+    punctuation &= utf8::is_P(codepoint);
+    symbol &= utf8::is_S(codepoint);
+  }
+  if (punctuation)
     lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);
+  else if (symbol)
+    lemmas.emplace_back(string(form_ori.str, form_ori.len), symbol_tag);
 }
 
 } // namespace morphodita
