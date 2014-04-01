@@ -26,11 +26,11 @@
 namespace ufal {
 namespace morphodita {
 
-void english_morpho_encoder::encode(FILE* dictionary, FILE* guesser, FILE* negations, FILE* out) {
+void english_morpho_encoder::encode(FILE* dictionary, int max_suffix_len, FILE* guesser, FILE* negations, FILE* out) {
   binary_encoder enc;
 
   eprintf("Encoding dictionary.\n");
-  morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, enc);
+  morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, max_suffix_len, enc);
 
   eprintf("Encoding guesser.\n");
   english_morpho_guesser_encoder::encode(guesser, negations, enc);

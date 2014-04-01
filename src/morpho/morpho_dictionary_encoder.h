@@ -20,12 +20,15 @@
 
 #include <algorithm>
 #include <map>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 
 #include "common.h"
+#include "raw_morpho_dictionary_reader.h"
 #include "utils/binary_encoder.h"
 #include "utils/input.h"
+#include "utils/new_unique_ptr.h"
 #include "utils/parse_int.h"
 #include "utils/persistent_unordered_map.h"
 
@@ -36,90 +39,186 @@ namespace morphodita {
 template <class LemmaAddinfo>
 class morpho_dictionary_encoder {
  public:
-  static void encode(FILE* f, binary_encoder& enc);
+  static void encode(FILE* f, int max_suffix_len, binary_encoder& enc);
 };
-
 
 // Definitions
-class histogram {
- public:
-  void add(const string& str) {
-    if (str.size() >= lengths.size()) lengths.resize(str.size() + 1);
-    lengths[str.size()].insert(str);
-  }
-
-  void encode(binary_encoder& enc) {
-    enc.add_1B(lengths.size());
-    for (auto&& set : lengths)
-      enc.add_4B(set.size());
-  }
-
-  vector<unordered_set<string>> lengths;
-};
-
 template <class LemmaAddinfo>
-struct lemma_info {
-  lemma_info(string lemma) {
-    this->lemma = lemma.substr(0, addinfo.parse(lemma, true));
-  }
+class dictionary {
+ public:
+  void load(FILE* f, int max_suffix_len);
+  void encode(binary_encoder& enc);
 
-  string lemma;
-  LemmaAddinfo addinfo;
-  struct lemma_form_info {
-    lemma_form_info(string form, int clas) : form(form), clas(clas) {
-      if (this->clas != clas) runtime_errorf("Class number does not fit in 16 bits!");
+ private:
+  class trie {
+   public:
+    trie() : depth(0) {}
+
+    void add(const char* str) {
+      if (!*str) return;
+
+      for (auto&& child : children)
+        if (child.first == *str) {
+          child.second->add(str + 1);
+          depth = max(depth, 1 + child.second->depth);
+          return;
+        }
+      children.emplace_back(*str, new_unique_ptr<trie>());
+      children.back().second->add(str + 1);
+      depth = max(depth, 1 + children.back().second->depth);
     }
 
-    string form;
-    uint16_t clas;
+    string find_candidate_prefix(int max_suffix_len) {
+      string current, best;
+      int best_length = 0;
+      find_candidate_prefix(max_suffix_len, current, best, best_length, 0);
+      return best;
+    }
+    void find_candidate_prefix(int max_suffix_len, string& current, string& best, int& best_length, int length) {
+      if (depth < max_suffix_len && length > best_length) {
+        best = current;
+        best_length = length;
+      }
+      for (auto&& child : children) {
+        current.push_back(child.first);
+        child.second->find_candidate_prefix(max_suffix_len, current, best, best_length, children.size() == 1 ? length + 1 : 1);
+        current.resize(current.size() - 1);
+      }
+    }
 
-    bool operator<(const lemma_form_info& other) const { return form < other.form || (form == other.form && clas < other.clas); }
+    vector<pair<char, unique_ptr<trie>>> children;
+    int depth;
   };
-  vector<lemma_form_info> forms;
 
-  bool operator<(const lemma_info& other) const { return lemma < other.lemma || (lemma == other.lemma && addinfo.data < other.addinfo.data); }
-};
+  class histogram {
+   public:
+    void add(const string& str) {
+      if (str.size() >= lengths.size()) lengths.resize(str.size() + 1);
+      lengths[str.size()].insert(str);
+    }
 
-template <class LemmaAddinfo>
-void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, binary_encoder& enc) {
-  vector<lemma_info<LemmaAddinfo>> lemmas;
-  histogram lemmas_hist, forms_hist;
+    void encode(binary_encoder& enc) {
+      enc.add_1B(lengths.size());
+      for (auto&& set : lengths)
+        enc.add_4B(set.size());
+    }
+
+    vector<unordered_set<string>> lengths;
+  };
+
+  struct lemma_info {
+    lemma_info(string lemma) {
+      this->lemma = lemma.substr(0, addinfo.parse(lemma, true));
+    }
+
+    string lemma;
+    LemmaAddinfo addinfo;
+    struct lemma_form_info {
+      lemma_form_info(string form, int clas) : form(form), clas(clas) {}
+
+      string form;
+      int clas;
+
+      bool operator<(const lemma_form_info& other) const { return form < other.form || (form == other.form && clas < other.clas); }
+    };
+    vector<lemma_form_info> forms;
+
+    bool operator<(const lemma_info& other) const { return lemma < other.lemma || (lemma == other.lemma && addinfo.data < other.addinfo.data); }
+  };
+
+  unordered_map<string, int> classes;
   unordered_map<string, map<int, vector<int>>> suffixes;
 
   vector<string> tags;
   unordered_map<string, int> tags_map;
 
-  // Load lemmas and classes
-  string line;
-  vector<string> tokens;
-  while(getline(f, line)) {
-    split(line, '\t', tokens);
-    if (tokens.empty()) break;
-    if (tokens.size() < 3 || (tokens.size() % 2) == 0) runtime_errorf("Line morphological dictionary line '%s' is corrupt!", line.c_str());
+  histogram lemmas_hist, forms_hist;
 
-    lemmas.emplace_back(tokens[0]);
-    auto& lemma = lemmas.back();
+  vector<lemma_info> lemmas;
+};
 
-    lemmas_hist.add(lemma.lemma);
-    for (unsigned i = 1; i < tokens.size(); i += 2) {
-      lemma.forms.emplace_back(tokens[i], parse_int(tokens[i+1].c_str(), "class_number"));
-      forms_hist.add(tokens[i]);
+template <class LemmaAddinfo>
+void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, int max_suffix_len, binary_encoder& enc) {
+  dictionary<LemmaAddinfo> dict;
+
+  // Load the dictionary and create classes
+  dict.load(f, max_suffix_len);
+
+  // Encode the dictionary
+  dict.encode(enc);
+}
+
+template <class LemmaAddinfo>
+void dictionary<LemmaAddinfo>::load(FILE* f, int max_suffix_len) {
+  // Load lemmas and create classes
+  raw_morpho_dictionary_reader raw(f);
+  string lemma;
+  vector<pair<string, string>> forms;
+  while(raw.next_lemma(lemma, forms)) {
+    // Make sure forms are unique
+    sort(forms.begin(), forms.end());
+    auto forms_end = unique(forms.begin(), forms.end());
+    if (forms_end != forms.end()) {
+      eprintf("Warning: repeated form-tag in lemma %s.\n", lemma.c_str());
+      forms.erase(forms_end, forms.end());
     }
-    stable_sort(lemma.forms.begin(), lemma.forms.end());
+
+    // Create lemma_info
+    lemmas.emplace_back(lemma);
+    auto& lemma_info = lemmas.back();
+    lemmas_hist.add(lemma_info.lemma);
+
+    // Create classes
+    while (!forms.empty()) {
+      trie t;
+      for (auto&& form : forms)
+        t.add(form.first.c_str());
+
+      // Find prefix of forms in class being added.
+      string prefix = t.find_candidate_prefix(max_suffix_len);
+
+      // Find forms of the class being added.
+      auto start = forms.begin();
+      while (start != forms.end() && start->first.compare(0, prefix.size(), prefix) != 0) start++;
+      if (start == forms.end()) runtime_errorf("Internal error when generating classes, cannot find prefix '%s'!", prefix.c_str());
+      auto end = start;
+      while (end != forms.end() && end->first.compare(0, prefix.size(), prefix) == 0) end++;
+
+      // Find common prefix of class forms -- may be larger than prefix.
+      int common_prefix = prefix.size();
+      while (common_prefix < int(start->first.size()) && start->first[common_prefix] == (end-1)->first[common_prefix]) common_prefix++;
+
+      string clas;
+      for (auto form = start; form != end; form++) {
+        if (!clas.empty()) clas.push_back('\t');
+        clas.append(form->first, common_prefix, string::npos);
+        clas.push_back('\t');
+        clas.append(form->second);
+      }
+
+      auto class_it = classes.emplace(clas, classes.size());
+      int class_id = class_it.first->second;
+      if (class_it.second) {
+        // New class, add it, together with its tags.
+        for (auto form = start; form != end; form++) {
+          int tag = tags_map.emplace(form->second, tags.size()).first->second;
+          if (tag >= int(tags.size())) tags.emplace_back(form->second);
+          suffixes[form->first.substr(common_prefix)][class_id].emplace_back(tag);
+        }
+      }
+
+      // Move forms in the class being added to lemma and remove them from unprocessed forms.
+      lemma_info.forms.emplace_back(start->first.substr(0, common_prefix), class_id);
+      forms_hist.add(lemma_info.forms.back().form);
+      forms.erase(start, end);
+    }
+    stable_sort(lemma_info.forms.begin(), lemma_info.forms.end());
   }
   stable_sort(lemmas.begin(), lemmas.end());
+}
 
-  for (int clas = 0; getline(f, line); clas++) {
-    split(line, '\t', tokens);
-    if (tokens.size() < 2 || (tokens.size() % 2) == 1) runtime_errorf("Line morphological dictionary line '%s' is corrupt!", line.c_str());
-    for (unsigned i = 0; i < tokens.size(); i += 2) {
-      int tag = tags_map.emplace(tokens[i+1], tags.size()).first->second;
-      if (tag >= int(tags.size())) tags.emplace_back(tokens[i+1]);
-
-      suffixes[tokens[i]][clas].emplace_back(tag);
-    }
-  }
-
+template <class LemmaAddinfo>
+void dictionary<LemmaAddinfo>::encode(binary_encoder& enc) {
   // Encode lemmas and forms
   lemmas_hist.encode(enc);
   forms_hist.encode(enc);

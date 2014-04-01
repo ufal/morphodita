@@ -1,6 +1,5 @@
 .objs/
 benchmark_dictionary
-create_classes
 csts
 encode_dictionary
 fill_lemmas

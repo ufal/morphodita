@@ -28,7 +28,7 @@ class generic_morpho_encoder {
   struct tags {
     string unknown_tag, number_tag, punctuation_tag, symbol_tag;
   };
-  static void encode(FILE* in_dictionary, const tags& tags, FILE* in_statistical_guesser, FILE* out_morpho);
+  static void encode(FILE* in_dictionary, int max_suffix_len, const tags& tags, FILE* in_statistical_guesser, FILE* out_morpho);
 };
 
 } // namespace morphodita

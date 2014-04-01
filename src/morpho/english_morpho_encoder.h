@@ -25,7 +25,7 @@ namespace morphodita {
 
 class english_morpho_encoder {
  public:
-  static void encode(FILE* dictionary, FILE* guesser, FILE* negations, FILE* out);
+  static void encode(FILE* dictionary, int max_suffix_len, FILE* guesser, FILE* negations, FILE* out);
 };
 
 } // namespace morphodita

@@ -27,7 +27,7 @@
 namespace ufal {
 namespace morphodita {
 
-void generic_morpho_encoder::encode(FILE* in_dictionary, const tags& tags, FILE* in_statistical_guesser, FILE* out_morpho) {
+void generic_morpho_encoder::encode(FILE* in_dictionary, int max_suffix_len, const tags& tags, FILE* in_statistical_guesser, FILE* out_morpho) {
   binary_encoder enc;
 
   enc.add_1B(tags.unknown_tag.size());
@@ -40,7 +40,7 @@ void generic_morpho_encoder::encode(FILE* in_dictionary, const tags& tags, FILE*
   enc.add_str(tags.symbol_tag);
 
   eprintf("Encoding dictionary.\n");
-  morpho_dictionary_encoder<generic_lemma_addinfo>::encode(in_dictionary, enc);
+  morpho_dictionary_encoder<generic_lemma_addinfo>::encode(in_dictionary, max_suffix_len, enc);
 
   // Load and encode statistical guesser if requested
   enc.add_1B(in_statistical_guesser != nullptr);
