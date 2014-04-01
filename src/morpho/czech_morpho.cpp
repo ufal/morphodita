@@ -71,10 +71,6 @@ int czech_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagged
   lemmas.clear();
 
   if (form.len) {
-    // Start by calling analyze_special without any casing changes.
-    analyze_special(form, lemmas);
-    if (!lemmas.empty()) return NO_GUESSER;
-
     // Generate all casing variants if needed (they are different than given form).
     string form_uclc; // first uppercase, rest lowercase
     string form_lc;   // all lowercase
@@ -84,6 +80,10 @@ int czech_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagged
     dictionary.analyze(form, lemmas);
     if (!form_uclc.empty()) dictionary.analyze(form_uclc, lemmas);
     if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
+    if (!lemmas.empty()) return NO_GUESSER;
+
+    // Then call analyze_special to handle numbers and punctuation.
+    analyze_special(form, lemmas);
     if (!lemmas.empty()) return NO_GUESSER;
 
     // For the prefix guesser, use only form_lc.
@@ -188,7 +188,7 @@ void czech_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemm
   bool any_digit = false;
   if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
   while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
-  if (codepoint == '.' || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
+  if ((codepoint == '.' && form.len) || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
   while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
     codepoint = utf8::decode(form.str, form.len);
@@ -197,10 +197,8 @@ void czech_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemm
     while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   }
 
-  if (any_digit && !form.len && !codepoint) {
-    lemmas.emplace_back(string(form_ori.str, form_ori.len), number_tag);
-  } else if (any_digit && !form.len && (codepoint == '.' || codepoint == ',')) { // allow numbers to end by . or ,
-    lemmas.emplace_back(string(form_ori.str, form_ori.len - 1), number_tag);
+  if (any_digit && !form.len && (!codepoint || codepoint == '.')) {
+    lemmas.emplace_back(string(form_ori.str, form_ori.len - (codepoint == '.')), number_tag);
   } else if ((first < sizeof(punctuation_additional) && punctuation_additional[first]) ||
              (utf8::is_P(first) && (first >= sizeof(punctuation_exceptions) || !punctuation_exceptions[first])))
     lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);

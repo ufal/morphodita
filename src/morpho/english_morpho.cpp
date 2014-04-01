@@ -47,10 +47,6 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
   lemmas.clear();
 
   if (form.len) {
-    // Start by calling analyze_special handling numbers and punctiation.
-    analyze_special(form, lemmas);
-    if (!lemmas.empty()) return NO_GUESSER;
-
     // Generate all casing variants if needed (they are different than given form).
     string form_uclc; // first uppercase, rest lowercase
     string form_lc;   // all lowercase
@@ -62,6 +58,10 @@ int english_morpho::analyze(string_piece form, guesser_mode guesser, vector<tagg
     if (!form_lc.empty()) dictionary.analyze(form_lc, lemmas);
     if (!lemmas.empty())
       return guesser == NO_GUESSER || !morpho_guesser.analyze_proper_names(form, form_lc.empty() ? form : form_lc, lemmas) ? NO_GUESSER : GUESSER;
+
+    // Then call analyze_special to handle numbers, punctuation and symbols.
+    analyze_special(form, lemmas);
+    if (!lemmas.empty()) return NO_GUESSER;
 
     // Use English guesser on form_lc if allowed.
     if (guesser == GUESSER)
@@ -150,9 +150,9 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
     any_digit = false;
     while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   }
-  if (any_digit && !number.len && (!codepoint || codepoint == '.' || codepoint == ',')) {
-    lemmas.emplace_back(string(form.str, form.len - (codepoint == '.' || codepoint == ',')), number_tag);
-    lemmas.emplace_back(string(form.str, form.len - (codepoint == '.' || codepoint == ',')), nnp_tag);
+  if (any_digit && !number.len && (!codepoint || codepoint == '.')) {
+    lemmas.emplace_back(string(form.str, form.len - (codepoint == '.')), number_tag);
+    lemmas.emplace_back(string(form.str, form.len - (codepoint == '.')), nnp_tag);
     if (form.len == 1 + (codepoint == '.') && *form.str >= '1' && *form.str <= '9')
       lemmas.emplace_back(string(form.str, form.len - (codepoint == '.')), ls_tag);
     return;
