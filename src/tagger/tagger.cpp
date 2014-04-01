@@ -18,6 +18,7 @@
 
 #include "czech_elementary_features.h"
 #include "english_elementary_features.h"
+#include "generic_elementary_features.h"
 #include "feature_sequences.h"
 #include "perceptron_tagger.h"
 #include "tagger.h"
@@ -45,6 +46,24 @@ tagger* tagger::load(FILE* f) {
     case tagger_ids::ENGLISH3:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_english_elementary_features>, 3>>();
+        if (res->load(f)) return res.release();
+        break;
+      }
+    case tagger_ids::GENERIC2:
+      {
+        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 2>>();
+        if (res->load(f)) return res.release();
+        break;
+      }
+    case tagger_ids::GENERIC3:
+      {
+        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 3>>();
+        if (res->load(f)) return res.release();
+        break;
+      }
+    case tagger_ids::GENERIC4:
+      {
+        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 4>>();
         if (res->load(f)) return res.release();
         break;
       }
