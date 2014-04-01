@@ -76,6 +76,16 @@ struct token_range {
   token_range(size_t start, size_t length) : start(start), length(length) {}
 };
 
+class MORPHODITA_IMPORT version {
+ public:
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+
+  // Returns current MorphoDiTa version.
+  static version current();
+};
+
 class MORPHODITA_IMPORT tokenizer {
  public:
   virtual ~tokenizer() {}

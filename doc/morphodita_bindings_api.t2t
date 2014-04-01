@@ -37,6 +37,15 @@ typedef vector<TokenRange> TokenRanges;
 === Main Classes ===
 
 ```
+class Version {
+ public:
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+
+  static Version current();
+};
+
 class Tokenizer {
  public:
   virtual void setText(const char* text);

@@ -59,6 +59,16 @@ struct token_range {
 %template(TokenRanges) std::vector<token_range>;
 typedef std::vector<token_range> TokenTanges;
 
+%rename(Version) version;
+class version {
+ public:
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+
+  static version current();
+};
+
 %rename(Tokenizer) tokenizer;
 %nodefaultctor tokenizer;
 class tokenizer {

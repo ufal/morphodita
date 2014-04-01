@@ -10,6 +10,22 @@ The strings used in the MorphoDiTa API are always UTF-8 encoded (except from
 file paths, whose encoding is system dependent).
 
 
+== MorphoDiTa Versioning ==[versioning]
+
+MorphoDiTa version consists of three numbers //major.minor.patch// with the
+following semantics:
+
+- Two versions with the same //major.minor// have the same API with the same
+  behaviour, apart from bugs. Therefore, if only //patch// is increased, the
+  new version is only a bug-fix release.
+- If two versions //v// and //u// have the same //major//, but //minor(v)// is
+  greater than //minor(u)//, version //v// contains only additions to the API.
+  In other words, the API of //u// is all present in //v// with the same
+  behaviour (once again apart from bugs). It is therefore safe to upgrade to
+  a newer MorphoDiTa version with the same //major//.
+- If two versions differ in //major//, their API may differ in any way.
+
+
 == Lemma Structure ==[lemma_structure]
 
 The lemmas used by MorphoDiTa consist of three parts:
@@ -90,6 +106,27 @@ struct token_range {
 The [``token_range`` #token_range] represent a range of a token as returned by a [tokenizer #tokenizer].
 The ``start`` and ``length`` fields specify the token position in Unicode
 characters, not in bytes of UTF-8 encoding.
+
+== Class version ==[version]
+```
+class version {
+ public:
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+
+  static [version #version] [current #version_current]();
+};
+```
+
+The [``version`` #version] class represents MorphoDiTa version.
+See [MorphoDiTa Versioning #versioning] for more information.
+
+=== version::current ===[version_current]
+``` static [version #version] current();
+
+Returns current MorphoDiTa version.
+
 
 == Class tokenizer ==[tokenizer]
 ```
