@@ -61,7 +61,6 @@ int main(int argc, char* argv[]) {
         tagger->tag(forms, tags);
 
         for (unsigned i = 0; i < tags.size(); i++) {
-          printf("%s\t%s\n", tags[i].lemma.c_str(), tags[i].tag.c_str());
           correct[TAGS] += tags[i].tag == sentence[i].tag;
           correct[LEMMAS] += tags[i].lemma == sentence[i].lemma;
           correct[BOTH] += tags[i].lemma == sentence[i].lemma && tags[i].tag == sentence[i].tag;
@@ -72,7 +71,6 @@ int main(int argc, char* argv[]) {
         forms.clear();
       }
       if (eof) break;
-      putchar('\n');
     } else {
       // Just add a word to the sentence
       split(line, '\t', tokens);
