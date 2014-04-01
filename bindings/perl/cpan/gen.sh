@@ -32,7 +32,10 @@ perl -e '%p=(); while(<>) {
 # Prepare API documentation and examples
 make -C ../../../doc morphodita_bindings_api.txt
 
-( echo =head2 C++ API bindings
+( echo =head2 Wrapped C++ API
+  echo
+  echo The C++ API being wrapped follows. For a API reference of the original
+  echo C++ API, see L\<http://ufal.mff.cuni.cz/morphodita/api-reference\>.
   echo
   tail -n+4 ../../../doc/morphodita_bindings_api.txt | sed 's/^/  /'
   echo

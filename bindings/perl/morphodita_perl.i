@@ -16,11 +16,11 @@
 
 =head1 NAME
 
-UFal::MorphoDiTa - bindings to Morphodita library L<http://ufal.mff.cuni.cz/>.
+UFal::MorphoDiTa - bindings to Morphodita library L<http://ufal.mff.cuni.cz/morphodita>.
 
 =head1 DESCRIPTION
 
-C<Ufal::MorphoDiTa> is a Perl binding to Morphodita library L<http://ufal.mff.cuni.cz/>.
+C<Ufal::MorphoDiTa> is a Perl binding to Morphodita library L<http://ufal.mff.cuni.cz/morphodita>.
 
 All classes can be imported into the current namespace using the C<all> export tag.
 
