@@ -34,6 +34,13 @@ endif
 # switches
 C_FLAGS += -std=c++11 -W -Wall -mtune=generic -I. -fvisibility=hidden
 LD_FLAGS += -static-libgcc -static-libstdc++
+ifeq ($(BITS),32)
+  C_FLAGS += -m32 -march=i686
+  LD_FLAGS += -m32
+else ifeq ($(BITS),64)
+  C_FLAGS += -m64
+  LD_FLAGS += -m64
+endif
 ifdef DEBUG
   C_FLAGS += -O3 -ggdb -DDEBUG
 else ifdef DEBUG_MORE
@@ -43,18 +50,10 @@ else ifdef PROFILE
   LD_FLAGS += -pg
 else ifdef RELEASE
   C_FLAGS += -O3 -DNDEBUG -flto
-  LD_FLAGS += -s -flto
+  LD_FLAGS += -s $(C_FLAGS) #Pass all C_FLAGS because of -flto
 else
   C_FLAGS += -O3
   LD_FLAGS += -s
-endif
-
-ifeq ($(BITS),32)
-  C_FLAGS += -m32 -march=i686
-  LD_FLAGS += -m32
-else ifeq ($(BITS),64)
-  C_FLAGS += -m64
-  LD_FLAGS += -m64
 endif
 
 DYN_C_FLAGS += $(C_FLAGS)
