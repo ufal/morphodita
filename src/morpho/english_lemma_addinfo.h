@@ -49,7 +49,7 @@ int english_lemma_addinfo::raw_lemma_len(string_piece lemma) {
       return len;
     if (len + 1 < lemma.len && lemma.str[len] == '^') {
       bool ok = true;
-      for (unsigned i = len + 1; ok && i < lemma.len; len++)
+      for (unsigned i = len + 1; ok && i < lemma.len; i++)
         ok &= (lemma.str[i] >= 'A' && lemma.str[i] <= 'Z') ||
             (lemma.str[i] >= 'a' && lemma.str[i] <= 'z') ||
             (i > len + 1 && lemma.str[i] == '-');
