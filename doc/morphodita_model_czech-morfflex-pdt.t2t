@@ -91,12 +91,12 @@ The main Czech model contains the following files:
   system with PDT tag set created from
   [MorfFlex CZ http://hdl.handle.net/11858/00-097C-0000-0015-A780-9] morphological dictionary.
 
-: ``czech-morfflex-<version>.tagger-best_accuracy``
+: ``czech-morfflex-pdt-<version>.tagger-best_accuracy``
   Best and slowest tagger (Viterbi of order 3) trained on the training portion
   of [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] using the ``neopren`` feature
   set. Contains the ``czech-morfflex-<version>.dict`` morphological dictionary.
 
-  The latest version ``czech-morfflex-131112.tagger-best_accuracy`` reaches 95.67% tag
+  The latest version ``czech-morfflex-pdt-131112.tagger-best_accuracy`` reaches 95.67% tag
   accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on
   [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] etest data (whose morphological tags and lemmas
   were remapped using the ``czech-morfflex-131112.dict`` dictionary). Model speed: ~10k words/s,
@@ -105,12 +105,12 @@ The main Czech model contains the following files:
   Czech tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
 
-: ``czech-morfflex-<version>.tagger-fast``
+: ``czech-morfflex-pdt-<version>.tagger-fast``
   Faster tagger with slightly worse results (Viterbi of order 2) trained on the
   training portion of [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] using the ``neopren``
   feature set. Contains the ``czech-morfflex-<version>.dict`` morphological dictionary.
 
-  The latest version ``czech-morfflex-131112.tagger-fast`` reaches 94.70% tag accuracy,
+  The latest version ``czech-morfflex-pdt-131112.tagger-fast`` reaches 94.70% tag accuracy,
   97.64% lemma accuracy and 93.94% overall accuracy on
   [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data (whose morphological tags and lemmas
   were remapped using the ``czech-morfflex-131112.dict`` dictionary). Model speed: ~60k words/s,
@@ -131,13 +131,13 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
   [MorfFlex CZ http://hdl.handle.net/11858/00-097C-0000-0015-A780-9] morphological dictionary.
   Only first two tag characters of PDT tag set are used.
 
-: ``czech-morfflex-<version>-pos_only.tagger``
+: ``czech-morfflex-pdt-<version>-pos_only.tagger``
   Very fast tagger trained on the training portion of
   [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/] using the ``neopren`` feature
   set. Containins the ``czech-morfflex-<version>-pos_only.dict`` morphological dictionary.
 
-  The latest version ``czech-morfflex-131112-pos_only.tagger`` reaches 99.18% tag
-  accuracy, 97.61% lemma accuracy and 97.56% overall accuracy on
+  The latest version ``czech-morfflex-pdt-131112-pos_only.tagger`` reaches 99.20% tag
+  accuracy, 97.64% lemma accuracy and 97.60% overall accuracy on
   [PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5] etest data (which morphological tags and lemmas
   were remapped using the ``czech-morfflex-131112-pos_only.dict`` dictionary).
   Model speed: ~200k words/s, model size: 4MB.
