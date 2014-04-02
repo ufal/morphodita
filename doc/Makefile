@@ -11,9 +11,9 @@ manual: morphodita_bindings_java_readme.txt morphodita_bindings_perl_readme.txt 
 	cp morphodita.html ../MANUAL.html
 	cp morphodita_readme.txt ../README
 	cp morphodita_install.txt ../INSTALL
-	cp morphodita_bindings_java_readme.txt ../bindings/JAVA
-	cp morphodita_bindings_perl_readme.txt ../bindings/PERL
-	cp morphodita_bindings_python_readme.txt ../bindings/PYTHON
+	cp morphodita_bindings_java_readme.txt ../bindings/README.JAVA
+	cp morphodita_bindings_perl_readme.txt ../bindings/README.PERL
+	cp morphodita_bindings_python_readme.txt ../bindings/README.PYTHON
 
 morphodita.html: morphodita.t2t *.t2t
 	./txt2tags -t html -C not_web.conf $<
