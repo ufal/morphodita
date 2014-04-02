@@ -25,6 +25,9 @@ MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 %!include: morphodita_model_czech-morfflex-pdt.t2t
 
 
+%!include: morphodita_model_english-morphium-wsj.t2t
+
+
 == Running the Tagger ==[run_tagger]
 
 Probably the most common usage of MorphoDita is running a tagger to tag your data using

@@ -3,7 +3,7 @@ English MorphoDiTa Models
 
 %!encoding: utf-8
 
-== English MorphoDiTa Models ==[english-ptb]
+== English MorphoDiTa Models ==[english-morphium-wsj]
 
 English models are created using the following data:
 - //SCOWL (Spell Checker Oriented Word Lists)//: This word list is used
@@ -15,15 +15,12 @@ English models are created using the following data:
 - //Wall Street Journal//, part of the Penn Treebank 3: Morphologically
   annotated texts which are commonly used to train English POS tagger.
 
-  Copyright: Available only under [LDC User Agreement https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/genericlicense.pdf].
+  Licensing: Available as LDC99T42 in LDC catalog under LDC User Agreement.
 
 
-Please note that currently you must have LDC licence for Wall Street Journal to
-use the English models in MorphoDiTa.
-
-Apart from the mentioned copyrights and licences, the resulting models are
-distributed under the [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/]
-licence. English models work in MorphoDiTa version 1.0.0 or later.
+The resulting models are distributed under the
+[CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
+English models work in MorphoDiTa version 1.0.0 or later.
 
 English models are versioned according to the release date, the version
 format is ``YYMMDD``, where ``YY``, ``MM`` and ``DD`` are two-digit
@@ -31,7 +28,7 @@ representation of year, month and day, respectively. The latest version is
 140304.
 
 
-=== Acknowledgements ===[english_morfflex_acknowledgements]
+=== Acknowledgements ===[english-morphium-wsj_acknowledgements]
 
 This work has been using language resources developed and/or stored and/or
 distributed by the LINDAT/CLARIN project of the Ministry of Education of the
