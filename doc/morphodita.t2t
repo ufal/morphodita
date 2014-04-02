@@ -1,5 +1,5 @@
 MorphoDiTa: Morphological Dictionary and Tagger
-Version 0.96
+Version 1.0.0
 
 %!encoding: utf-8
 
@@ -28,11 +28,7 @@ from [LINDAT/CLARIN http://www.lindat.cz] infrastructure and described further
 in the User's Manual. Currently the following language models are available:
 
 - Czech: latest version 131112 (to be released soon)
-
-
-== Roadmap ==
-
-- more language models (English is planned)
+- English: latest version 140304 (to be released soon)
 
 
 == License ==
@@ -93,6 +89,9 @@ Authors:
 = Acknowledgements =[morphodita_acknowledgements]
 
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT/CLARIN project of the Ministry of Education of the Czech Republic (project //LM2010013//).
+
+%web% Acknowledgements for individual language models are listed in [MorphoDiTa User's Manual page morphodita/users-manual].
+%not_web% Acknowledgements for individual language models are listed in MorphoDiTa User's Manual.
 
 
 == Publications ==

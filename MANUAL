@@ -1,5 +1,5 @@
 MorphoDiTa: Morphological Dictionary and Tagger
-Version 0.96
+Version 1.0.0
 
 Introduction
 ============
@@ -44,12 +44,7 @@ from LINDAT/CLARIN (http://www.lindat.cz) infrastructure and described further
 in the User's Manual. Currently the following language models are available:
 
 - Czech: latest version 131112 (to be released soon)
-
-
-Roadmap
--------
-
-- more language models (English is planned)
+- English: latest version 140304 (to be released soon)
 
 
 License
@@ -81,16 +76,19 @@ MorphoDiTa Installation
 
 MorphoDiTa releases are available on GitHub (http://github.com/ufal/morphodita),
 either as a pre-compiled binary package, or source code only. The binary package
-contains Linux and Windows binaries and C++ library, all language bindings
-(Java, Python, Perl) and source code (needed to compile the language bindings).
+contains Linux and Windows binaries, C++ library binary, Java bindings binary,
+and source code of all language bindings (Java, Python, Perl) and MorphoDiTa.
+While the binary packages do not contain compiled Python or Perl bindings,
+packages for those languages are available in standard package repositories,
+i.e. on PyPI and CPAN.
 
 To use MorphoDiTa, a language model is needed. Here is a list of available
 language models (http://ufal.mff.cuni.cz/morphodita#language_models).
 
-To use MorphoDiTa in other languages than C++, it must be compiled manually. The
-sources are available on GitHub (http://github.com/ufal/morphodita), both in the
-pre-compiled binary package releases
-(http://github.com/ufal/morphodita/releases) and also separately.
+If you want to compile MorphoDiTa manually, sources are available on on GitHub
+(http://github.com/ufal/morphodita), both in the pre-compiled binary package
+releases (http://github.com/ufal/morphodita/releases) and in the repository
+itself.
 
 
 Requirements
@@ -140,8 +138,11 @@ Other language bindings
 Java
 ----
 
-To compile Java bindings, run make in the bindings/java directory, optionally
-with the described Make options. Java 6 and newer is supported.
+Binary Java bindings are available in MorphoDiTa binary packages.
+
+To compile Java bindings manually, run make in the bindings/java directory,
+optionally with the options descriged in MorphoDiTa Installation. Java 6 and
+newer is supported.
 
 The Java installation specified in the environment variable JAVA_HOME is used.
 If the environment variable does not exist, the JAVA_HOME can be specified using
@@ -152,8 +153,11 @@ If the environment variable does not exist, the JAVA_HOME can be specified using
 Perl
 ----
 
-To compile Perl bindings, run make in the bindings/perl directory, optionally
-with the described Make options. Perl 5.8 and later is supported.
+The Perl bindings are available as Ufal-MorphoDiTa package on CPAN.
+
+To compile Perl bindings manually, run make in the bindings/perl directory,
+optionally with the options descriged in MorphoDiTa Installation. Perl 5.10 and
+later is supported.
 
 Path to the include headers of the required Perl version must be specified in
 the PERL_INCLUDE variable using
@@ -164,7 +168,9 @@ the PERL_INCLUDE variable using
 Python
 ------
 
-To compile Python bindings, run make in the bindings/python directory,
+The Python bindings are available as ufal.morphodita package on PyPI.
+
+To compile Python bindings manually, run make in the bindings/python directory,
 optionally with options descriged in MorphoDiTa Installation. Both Python 2.6+
 and Python 3+ are supported.
 
@@ -303,27 +309,27 @@ czech-morfflex-<version>.dict
   (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphological
   dictionary.
   
-czech-morfflex-<version>.tagger-best_accuracy
+czech-morfflex-pdt-<version>.tagger-best_accuracy
   Best and slowest tagger (Viterbi of order 3) trained on the training portion
   of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set.
   Contains the czech-morfflex-<version>.dict morphological dictionary.
   
-  The latest version czech-morfflex-131112.tagger-best_accuracy reaches 95.67%
-  tag accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on PDT 2.5
-  (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphological tags and
+  The latest version czech-morfflex-pdt-131112.tagger-best_accuracy reaches
+  95.67% tag accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on PDT
+  2.5 (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphological tags and
   lemmas were remapped using the czech-morfflex-131112.dict dictionary). Model
   speed: ~10k words/s, model size: 18MB. For comparison, model trained by
   Featurama (http://sourceforge.net/projects/featurama/) (state-of-the-art Czech
   tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
   
-czech-morfflex-<version>.tagger-fast
+czech-morfflex-pdt-<version>.tagger-fast
   Faster tagger with slightly worse results (Viterbi of order 2) trained on the
   training portion of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the
   neopren feature set. Contains the czech-morfflex-<version>.dict morphological
   dictionary.
   
-  The latest version czech-morfflex-131112.tagger-fast reaches 94.70% tag
+  The latest version czech-morfflex-pdt-131112.tagger-fast reaches 94.70% tag
   accuracy, 97.64% lemma accuracy and 93.94% overall accuracy on PDT 2.5
   (http://ufal.mff.cuni.cz/pdt2.5) etest data (whose morphological tags and
   lemmas were remapped using the czech-morfflex-131112.dict dictionary). Model
@@ -345,13 +351,13 @@ czech-morfflex-<version>-pos_only.dict
   CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphological
   dictionary. Only first two tag characters of PDT tag set are used.
   
-czech-morfflex-<version>-pos_only.tagger
+czech-morfflex-pdt-<version>-pos_only.tagger
   Very fast tagger trained on the training portion of PDT 2.5
   (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set. Containins
   the czech-morfflex-<version>-pos_only.dict morphological dictionary.
   
-  The latest version czech-morfflex-131112-pos_only.tagger reaches 99.18% tag
-  accuracy, 97.61% lemma accuracy and 97.56% overall accuracy on PDT 2.5
+  The latest version czech-morfflex-pdt-131112-pos_only.tagger reaches 99.20%
+  tag accuracy, 97.64% lemma accuracy and 97.60% overall accuracy on PDT 2.5
   (http://ufal.mff.cuni.cz/pdt2.5) etest data (which morphological tags and
   lemmas were remapped using the czech-morfflex-131112-pos_only.dict
   dictionary). Model speed: ~200k words/s, model size: 4MB.
@@ -371,6 +377,148 @@ Therefore, all already mentioned Czech models have a variant which does not
 disambiguate lemma meanings and provides no additional comments. (In terms of
 MorphoDiTa API, the lemmas are raw lemmas with empty lemma ids and lemma
 comments.) These model variants are denoted by raw_lemmas.
+
+
+English MorphoDiTa Models
+-------------------------
+
+English models are created using the following data:
+
+- SCOWL (Spell Checker Oriented Word Lists): This word list is used in
+  morphological generation to create all possible word forms of a given word.
+  
+  Copyright: Copyright 2000-2011 by Kevin Atkinson. Permission to use, copy,
+  modify, distribute and sell these word lists, the associated scripts, the
+  output created from the scripts, and its documentation for any purpose is
+  hereby granted without fee, provided that the above copyright notice appears
+  in all copies and that both that copyright notice and this permission notice
+  appear in supporting documentation. Kevin Atkinson makes no representations
+  about the suitability of this array for any purpose. It is provided "as is"
+  without express or implied warranty.
+  
+- Wall Street Journal, part of the Penn Treebank 3: Morphologically annotated
+  texts which are commonly used to train English POS tagger.
+  
+  Licensing: Available as LDC99T42 in LDC catalog under LDC User Agreement.
+
+The resulting models are distributed under the CC BY-NC-SA
+(http://creativecommons.org/licenses/by-nc-sa/3.0/) licence. English models work
+in MorphoDiTa version 1.0.0 or later.
+
+English models are versioned according to the release date, the version format
+is YYMMDD, where YY, MM and DD are two-digit representation of year, month and
+day, respectively. The latest version is 140304.
+
+
+Acknowledgements
+----------------
+
+This work has been using language resources developed and/or stored and/or
+distributed by the LINDAT/CLARIN project of the Ministry of Education of the
+Czech Republic (project LM2010013).
+
+The morphological POS analyzer development was supported by grant of the
+Ministry of Education, Youth and Sports of the Czech Republic No. LC536 "Center
+for Computational Linguistics". The morphological POS analyzer research was
+performed by Johanka Spoustová (Spoustová 2008; the
+Treex::Tool::EnglishMorpho::Analysis Perl module). The lemmatizer was
+implemented by Martin Popel (Popel 2009; the
+Treex::Tool::EnglishMorpho::Lemmatizer Perl module). The lemmatizer is based on
+morpha, which was released under LGPL licence as a part of RASP system
+(http://ilexir.co.uk/applications/rasp).
+
+The tagger algorithm and feature set research was supported by the projects
+MSM0021620838 and LC536 of Ministry of Education, Youth and Sports of the Czech
+Republic, GA405/09/0278 of the Grant Agency of the Czech Republic and
+1ET101120503 of Academy of Sciences of the Czech Republic. The research was
+performed by Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav
+Spousta.
+
+
+Publications
+------------
+
+- (Popel 2009) Martin Popel. Ways to Improve the Quality of English-Czech
+  Machine Translation. (http://ufal.mff.cuni.cz/~popel/papers/master_thesis.pdf)
+  Master Thesis at Institute of Formal and Applied Linguistics, Faculty of
+  Mathematics and Physics, Charles University in Prague (2009).
+  
+- (Spoustová 2008) Drahomíra "johanka" Spoustová. Morphium - morphological
+  analyser for Penn treebank POS tagset. (http://ufal.mff.cuni.cz/morphium/)
+  Perl Software developed at Institute of Formal and Applied Linguistics,
+  Faculty of Mathematics and Physics, Charles University in Prague (2008).
+  
+- (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
+  Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
+  Perceptron POS Tagger. (http://aclweb.org/anthology//E/E09/E09-1087.pdf) In
+  Proceedings of the 12th Conference of the European Chapter of the ACL (EACL
+  2009), pages 763-771, Athens, Greece, March. Association for Computational
+  Linguistics.
+
+
+English Morphological System
+----------------------------
+
+The English morphology uses standard Penn Treebank POS tags. Nevertheless, the
+lemma structure is unique:
+
+- The lemmatizer recognizes negative prefixes and removes it from the lemma. In
+  terms of MorphoDiTa API, raw lemma is the lemma without negative prefix.
+- The negative prefix is also stored to allow morphological generation of word
+  form with the same negative prefix. In terms of MorphoDiTa API, lemma id is
+  the raw lemma plus the negative prefix.
+
+The negative prefix is separated from the (always nonempty) lemma using a ^
+character (able^un). During morphological generation, the negative prefix is
+honored. Furthermore, when the lemma ends with ^ (i.e., negative prefix is
+empty, as in able^), forms with negative prefixes are generated. It is also
+possible to generate all forms without any negative prefix by appending + after
+the lemma (for example able+).
+
+
+English Model
+-------------
+
+The English model contains the following files:
+
+english-morphium-<version>.dict
+  Morphological dictionary. The SCOWL word list has been automatically analyzed
+  and lemmatized and uses as the dictionary. The guesser performing the
+  analyzation and lemmatization is available.
+  
+english-morphium-wsj-<version>.tagger
+  Tagger trained on the training portion of Wall Street Journal (Sections 0-18)
+  and tuned on the development portion (Sections 19-21). Contains the
+  english-morphium-<version>.dict morphological dictionary.
+  
+  The latest version english-morphium-wsj-140304.tagger reaches 97.27% tag
+  accuracy on Wall Street Journal test portion (Section 22-24). Model speed:
+  ~60k words/s, model size: 6MB.
+
+
+No Negations Variant
+--------------------
+
+Stripping of negative prefixes (or handling the lemmas with negative prefixes
+stripped) may not be desirable. Therefore, a variant of the English model
+denoted by no_negation is provided, which does not strip negative prefixes from
+lemmas.
+
+english-morphium-<version>-no_negation.dict
+  Morphological dictionary which does not strip negative lemma prefixes. The
+  SCOWL word list has been automatically analyzed and lemmatized and uses as the
+  dictionary. The guesser performing the analyzation and lemmatization is
+  available.
+  
+english-morphium-wsj-<version>-no_negation.tagger
+  Tagger which does not strip negative lemma prefixes, trained on the training
+  portion of Wall Street Journal (Sections 0-18) and tuned on the development
+  portion (Sections 19-21). Contains the
+  english-morphium-<version>-no_negation.dict morphological dictionary.
+  
+  The latest version english-morphium-wsj-140304-no_negation.tagger reaches
+  97.25% tag accuracy on Wall Street Journal test portion (Section 22-24). Model
+  speed: ~60k words/s, model size: 6MB.
 
 
 Running the Tagger
@@ -919,6 +1067,23 @@ The strings used in the MorphoDiTa API are always UTF-8 encoded (except from
 file paths, whose encoding is system dependent).
 
 
+MorphoDiTa Versioning
+---------------------
+
+MorphoDiTa version consists of three numbers major.minor.patch with the
+following semantics:
+
+- Two versions with the same major.minor have the same API with the same
+  behaviour, apart from bugs. Therefore, if only patch is increased, the new
+  version is only a bug-fix release.
+- If two versions v and u have the same major, but minor(v) is greater than
+  minor(u), version v contains only additions to the API. In other words, the
+  API of u is all present in v with the same behaviour (once again apart from
+  bugs). It is therefore safe to upgrade to a newer MorphoDiTa version with the
+  same major.
+- If two versions differ in major, their API may differ in any way.
+
+
 Lemma Structure
 ---------------
 
@@ -999,6 +1164,30 @@ Struct token_range
 The token_range represent a range of a token as returned by a tokenizer. The
 start and length fields specify the token position in Unicode characters, not in
 bytes of UTF-8 encoding.
+
+
+Class version
+-------------
+
+  class version {
+   public:
+    unsigned major;
+    unsigned minor;
+    unsigned patch;
+  
+    static version current();
+  };
+
+The version class represents MorphoDiTa version. See MorphoDiTa Versioning for
+more information.
+
+
+version::current
+----------------
+
+  static version current();
+
+Returns current MorphoDiTa version.
 
 
 Class tokenizer
@@ -1387,6 +1576,15 @@ Helper Structures
 Main Classes
 ------------
 
+  class Version {
+   public:
+    unsigned major;
+    unsigned minor;
+    unsigned patch;
+  
+    static Version current();
+  };
+  
   class Tokenizer {
    public:
     virtual void setText(const char* text);
@@ -1437,19 +1635,24 @@ Main Classes
 Java Bindings
 -------------
 
-MorphoDiTa library is available in the cz.cuni.mff.ufal.morphodita package.
+MorphoDiTa library bindings is available in the cz.cuni.mff.ufal.morphodita
+package.
 
 The bindings is a straightforward conversion of the C++ bindings API. Vectors do
 not have native Java interface, see cz.cuni.mff.ufal.morphodita.Forms class for
 reference. Also, class members are accessible and modifiable using using
 getField and setField wrappers.
 
+The bindings require native C++ library morphodita_java (called
+libmorphodita_java on Linux). If the library is found in the current directory,
+it is used, otherwise standard library search process is used.
+
 
 Perl Bindings
 -------------
 
-MorphoDiTa library is available in the Ufal::MorphoDiTa package. The classes can
-be imported into the current namespace using the :all export tag.
+MorphoDiTa library bindings is available in the Ufal::MorphoDiTa package. The
+classes can be imported into the current namespace using the :all export tag.
 
 The bindings is a straightforward conversion of the C++ bindings API. Vectors do
 not have native Perl interface, see Ufal::MorphoDiTa::Forms for reference.
@@ -1460,7 +1663,7 @@ through object instance.
 Python Bindings
 ---------------
 
-MorphoDiTa library is available in the ufal.morphodita module.
+MorphoDiTa library bindings is available in the ufal.morphodita module.
 
 The bindings is a straightforward conversion of the C++ bindings API. In Python
 2, strings can be both unicode and UTF-8 encoded str, and the library always
@@ -1488,6 +1691,9 @@ Acknowledgements
 This work has been using language resources developed and/or stored and/or
 distributed by the LINDAT/CLARIN project of the Ministry of Education of the
 Czech Republic (project LM2010013).
+
+Acknowledgements for individual language models are listed in MorphoDiTa User's
+Manual.
 
 
 Publications

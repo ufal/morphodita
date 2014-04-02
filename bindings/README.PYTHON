@@ -4,7 +4,9 @@ Python MorphoDiTa Bindings
 Installation
 ============
 
-To compile Python bindings, run make in the bindings/python directory,
+The Python bindings are available as ufal.morphodita package on PyPI.
+
+To compile Python bindings manually, run make in the bindings/python directory,
 optionally with options descriged in MorphoDiTa Installation. Both Python 2.6+
 and Python 3+ are supported.
 
@@ -17,7 +19,7 @@ the PYTHON_INCLUDE variable using
 Python Bindings API
 ===================
 
-MorphoDiTa library is available in the ufal.morphodita module.
+MorphoDiTa library bindings is available in the ufal.morphodita module.
 
 The bindings is a straightforward conversion of the C++ bindings API. In Python
 2, strings can be both unicode and UTF-8 encoded str, and the library always
@@ -61,6 +63,15 @@ Helper Structures
 Main Classes
 ------------
 
+  class Version {
+   public:
+    unsigned major;
+    unsigned minor;
+    unsigned patch;
+  
+    static Version current();
+  };
+  
   class Tokenizer {
    public:
     virtual void setText(const char* text);

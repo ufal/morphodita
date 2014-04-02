@@ -9,7 +9,7 @@
 
 <DIV CLASS="header" ID="header">
 <H1>MorphoDiTa: Morphological Dictionary and Tagger</H1>
-<H2>Version 0.96</H2>
+<H2>Version 1.0.0</H2>
 </DIV>
 
 <DIV CLASS="toc">
@@ -22,120 +22,131 @@
       <UL>
       <LI><A HREF="#language_models">2.1.1. Language Models</A>
       </UL>
-    <LI><A HREF="#toc5">2.2. Roadmap</A>
-    <LI><A HREF="#toc6">2.3. License</A>
-    <LI><A HREF="#toc7">2.4. Platforms and Requirements</A>
+    <LI><A HREF="#toc5">2.2. License</A>
+    <LI><A HREF="#toc6">2.3. Platforms and Requirements</A>
     </UL>
-  <LI><A HREF="#toc8">MorphoDiTa Installation</A>
+  <LI><A HREF="#toc7">MorphoDiTa Installation</A>
     <UL>
-    <LI><A HREF="#toc9">3.1. Requirements</A>
-    <LI><A HREF="#toc10">3.2. Compilation</A>
+    <LI><A HREF="#toc8">3.1. Requirements</A>
+    <LI><A HREF="#toc9">3.2. Compilation</A>
       <UL>
-      <LI><A HREF="#toc11">3.2.1. Windows</A>
+      <LI><A HREF="#toc10">3.2.1. Windows</A>
       </UL>
-    <LI><A HREF="#toc12">3.3. Other language bindings</A>
+    <LI><A HREF="#toc11">3.3. Other language bindings</A>
       <UL>
-      <LI><A HREF="#toc13">3.3.1. Java</A>
-      <LI><A HREF="#toc14">3.3.2. Perl</A>
-      <LI><A HREF="#toc15">3.3.3. Python</A>
+      <LI><A HREF="#toc12">3.3.1. Java</A>
+      <LI><A HREF="#toc13">3.3.2. Perl</A>
+      <LI><A HREF="#toc14">3.3.3. Python</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc16">MorphoDiTa User's Manual</A>
+  <LI><A HREF="#toc15">MorphoDiTa User's Manual</A>
     <UL>
-    <LI><A HREF="#czech-morfflex">4.1. Czech MorphoDiTa Models</A>
+    <LI><A HREF="#czech-morfflex-pdt">4.1. Czech MorphoDiTa Models</A>
       <UL>
-      <LI><A HREF="#czech_morfflex_acknowledgements">4.1.1. Acknowledgements</A>
+      <LI><A HREF="#czech-morfflex-pdt_acknowledgements">4.1.1. Acknowledgements</A>
       <LI><A HREF="#czech_morphological_system">4.1.2. Czech Morphological System</A>
-      <LI><A HREF="#toc20">4.1.3. Main Czech Model</A>
-      <LI><A HREF="#toc21">4.1.4. Part of Speech Only Variant</A>
-      <LI><A HREF="#toc22">4.1.5. Raw Lemmas Variant</A>
+      <LI><A HREF="#toc19">4.1.3. Main Czech Model</A>
+      <LI><A HREF="#toc20">4.1.4. Part of Speech Only Variant</A>
+      <LI><A HREF="#toc21">4.1.5. Raw Lemmas Variant</A>
       </UL>
-    <LI><A HREF="#run_tagger">4.2. Running the Tagger</A>
+    <LI><A HREF="#english-morphium-wsj">4.2. English MorphoDiTa Models</A>
       <UL>
-      <LI><A HREF="#toc24">4.2.1. Input Formats</A>
-      <LI><A HREF="#toc25">4.2.2. Tag Set Conversion</A>
-      <LI><A HREF="#toc26">4.2.3. Output Formats</A>
+      <LI><A HREF="#english-morphium-wsj_acknowledgements">4.2.1. Acknowledgements</A>
+      <LI><A HREF="#toc24">4.2.2. English Morphological System</A>
+      <LI><A HREF="#toc25">4.2.3. English Model</A>
+      <LI><A HREF="#toc26">4.2.4. No Negations Variant</A>
       </UL>
-    <LI><A HREF="#toc27">4.3. Running the Morphology</A>
+    <LI><A HREF="#run_tagger">4.3. Running the Tagger</A>
       <UL>
-      <LI><A HREF="#run_morpho_analyze">4.3.1. Morphological Analysis</A>
-      <LI><A HREF="#run_morpho_generate">4.3.2. Morphological Generation</A>
-      <LI><A HREF="#run_morpho_cli">4.3.3. Interactive Morphological Analysis and Generation</A>
+      <LI><A HREF="#toc28">4.3.1. Input Formats</A>
+      <LI><A HREF="#toc29">4.3.2. Tag Set Conversion</A>
+      <LI><A HREF="#toc30">4.3.3. Output Formats</A>
       </UL>
-    <LI><A HREF="#run_tokenizer">4.4. Running the Tokenizer</A>
+    <LI><A HREF="#toc31">4.4. Running the Morphology</A>
       <UL>
-      <LI><A HREF="#toc32">4.4.1. Output Formats</A>
+      <LI><A HREF="#run_morpho_analyze">4.4.1. Morphological Analysis</A>
+      <LI><A HREF="#run_morpho_generate">4.4.2. Morphological Generation</A>
+      <LI><A HREF="#run_morpho_cli">4.4.3. Interactive Morphological Analysis and Generation</A>
+      </UL>
+    <LI><A HREF="#run_tokenizer">4.5. Running the Tokenizer</A>
+      <UL>
+      <LI><A HREF="#toc36">4.5.1. Output Formats</A>
       </UL>
     </UL>
-  <LI><A HREF="#toc33">MorphoDiTa API Tutorial</A>
+  <LI><A HREF="#toc37">MorphoDiTa API Tutorial</A>
     <UL>
-    <LI><A HREF="#toc34">5.1. Tagger API</A>
-    <LI><A HREF="#toc35">5.2. Morphological Dictionary API</A>
+    <LI><A HREF="#toc38">5.1. Tagger API</A>
+    <LI><A HREF="#toc39">5.2. Morphological Dictionary API</A>
       <UL>
-      <LI><A HREF="#toc36">5.2.1. Dictionary Construction</A>
-      <LI><A HREF="#toc37">5.2.2. Morphological Analysis</A>
-      <LI><A HREF="#toc38">5.2.3. Generation</A>
+      <LI><A HREF="#toc40">5.2.1. Dictionary Construction</A>
+      <LI><A HREF="#toc41">5.2.2. Morphological Analysis</A>
+      <LI><A HREF="#toc42">5.2.3. Generation</A>
       </UL>
     <LI><A HREF="#faq">5.3. Questions and Answers</A>
     </UL>
-  <LI><A HREF="#toc40">MorphoDiTa API Reference</A>
+  <LI><A HREF="#toc44">MorphoDiTa API Reference</A>
     <UL>
-    <LI><A HREF="#lemma_structure">6.1. Lemma Structure</A>
-    <LI><A HREF="#string_piece">6.2. Struct string_piece</A>
-    <LI><A HREF="#tagged_form">6.3. Struct tagged_form</A>
-    <LI><A HREF="#tagged_lemma">6.4. Struct tagged_lemma</A>
-    <LI><A HREF="#tagged_lemma_forms">6.5. Struct tagged_lemma_forms</A>
-    <LI><A HREF="#token_range">6.6. Struct token_range</A>
-    <LI><A HREF="#tokenizer">6.7. Class tokenizer</A>
+    <LI><A HREF="#versioning">6.1. MorphoDiTa Versioning</A>
+    <LI><A HREF="#lemma_structure">6.2. Lemma Structure</A>
+    <LI><A HREF="#string_piece">6.3. Struct string_piece</A>
+    <LI><A HREF="#tagged_form">6.4. Struct tagged_form</A>
+    <LI><A HREF="#tagged_lemma">6.5. Struct tagged_lemma</A>
+    <LI><A HREF="#tagged_lemma_forms">6.6. Struct tagged_lemma_forms</A>
+    <LI><A HREF="#token_range">6.7. Struct token_range</A>
+    <LI><A HREF="#version">6.8. Class version</A>
       <UL>
-      <LI><A HREF="#tokenizer_set_text">6.7.1. tokenizer::set_text</A>
-      <LI><A HREF="#tokenizer_next_sentence">6.7.2. tokenizer::next_sentence</A>
-      <LI><A HREF="#tokenizer_new_vertical_tokenizer">6.7.3. tokenizer::new_vertical_tokenizer</A>
-      <LI><A HREF="#tokenizer_new_czech_tokenizer">6.7.4. tokenizer::new_czech_tokenizer</A>
-      <LI><A HREF="#tokenizer_new_english_tokenizer">6.7.5. tokenizer::new_english_tokenizer</A>
-      <LI><A HREF="#tokenizer_new_generic_tokenizer">6.7.6. tokenizer::new_generic_tokenizer</A>
+      <LI><A HREF="#version_current">6.8.1. version::current</A>
       </UL>
-    <LI><A HREF="#morpho">6.8. Class morpho</A>
+    <LI><A HREF="#tokenizer">6.9. Class tokenizer</A>
       <UL>
-      <LI><A HREF="#morpho_load_cstring">6.8.1. morpho::load(const char*)</A>
-      <LI><A HREF="#morpho_load_FILE">6.8.2. morpho::load(FILE*)</A>
-      <LI><A HREF="#morpho_guesser_mode">6.8.3. morpho::guesser_mode</A>
-      <LI><A HREF="#morpho_analyze">6.8.4. morpho::analyze()</A>
-      <LI><A HREF="#morpho_generate">6.8.5. morpho::generate()</A>
-      <LI><A HREF="#morpho_raw_lemma_len">6.8.6. morpho::raw_lemma_len</A>
-      <LI><A HREF="#morpho_lemma_id_len">6.8.7. morpho::lemma_id_len</A>
-      <LI><A HREF="#morpho_new_tokenizer">6.8.8. morpho::new_tokenizer</A>
+      <LI><A HREF="#tokenizer_set_text">6.9.1. tokenizer::set_text</A>
+      <LI><A HREF="#tokenizer_next_sentence">6.9.2. tokenizer::next_sentence</A>
+      <LI><A HREF="#tokenizer_new_vertical_tokenizer">6.9.3. tokenizer::new_vertical_tokenizer</A>
+      <LI><A HREF="#tokenizer_new_czech_tokenizer">6.9.4. tokenizer::new_czech_tokenizer</A>
+      <LI><A HREF="#tokenizer_new_english_tokenizer">6.9.5. tokenizer::new_english_tokenizer</A>
+      <LI><A HREF="#tokenizer_new_generic_tokenizer">6.9.6. tokenizer::new_generic_tokenizer</A>
       </UL>
-    <LI><A HREF="#tagger">6.9. Class tagger</A>
+    <LI><A HREF="#morpho">6.10. Class morpho</A>
       <UL>
-      <LI><A HREF="#tagger_load_cstring">6.9.1. tagger::load(const char*)</A>
-      <LI><A HREF="#tagger_load_FILE">6.9.2. tagger::load(FILE*)</A>
-      <LI><A HREF="#tagger_get_morpho">6.9.3. tagger::get_morpho()</A>
-      <LI><A HREF="#tagger_tag">6.9.4. tagger::tag()</A>
-      <LI><A HREF="#tagger_new_tokenizer">6.9.5. tagger::new_tokenizer</A>
+      <LI><A HREF="#morpho_load_cstring">6.10.1. morpho::load(const char*)</A>
+      <LI><A HREF="#morpho_load_FILE">6.10.2. morpho::load(FILE*)</A>
+      <LI><A HREF="#morpho_guesser_mode">6.10.3. morpho::guesser_mode</A>
+      <LI><A HREF="#morpho_analyze">6.10.4. morpho::analyze()</A>
+      <LI><A HREF="#morpho_generate">6.10.5. morpho::generate()</A>
+      <LI><A HREF="#morpho_raw_lemma_len">6.10.6. morpho::raw_lemma_len</A>
+      <LI><A HREF="#morpho_lemma_id_len">6.10.7. morpho::lemma_id_len</A>
+      <LI><A HREF="#morpho_new_tokenizer">6.10.8. morpho::new_tokenizer</A>
       </UL>
-    <LI><A HREF="#tagset_converter">6.10. Class tagset_converter</A>
+    <LI><A HREF="#tagger">6.11. Class tagger</A>
       <UL>
-      <LI><A HREF="#tagset_converter_convert">6.10.1. tagset_converter::convert()</A>
-      <LI><A HREF="#tagset_converter_convert_analyzed">6.10.2. tagset_converter::convert_analyzed()</A>
-      <LI><A HREF="#tagset_converter_convert_generated">6.10.3. tagset_converter::convert_generated()</A>
-      <LI><A HREF="#tagset_converter_new_identity_converter">6.10.4. tagset_converter::new_identity_converter()</A>
-      <LI><A HREF="#tagset_converter_new_pdt_to_conll2009_converter">6.10.5. tagset_converter::new_pdt_to_conll2009_converter()</A>
+      <LI><A HREF="#tagger_load_cstring">6.11.1. tagger::load(const char*)</A>
+      <LI><A HREF="#tagger_load_FILE">6.11.2. tagger::load(FILE*)</A>
+      <LI><A HREF="#tagger_get_morpho">6.11.3. tagger::get_morpho()</A>
+      <LI><A HREF="#tagger_tag">6.11.4. tagger::tag()</A>
+      <LI><A HREF="#tagger_new_tokenizer">6.11.5. tagger::new_tokenizer</A>
       </UL>
-    <LI><A HREF="#toc75">6.11. C++ Bindings API</A>
+    <LI><A HREF="#tagset_converter">6.12. Class tagset_converter</A>
       <UL>
-      <LI><A HREF="#toc76">6.11.1. Helper Structures</A>
-      <LI><A HREF="#toc77">6.11.2. Main Classes</A>
+      <LI><A HREF="#tagset_converter_convert">6.12.1. tagset_converter::convert()</A>
+      <LI><A HREF="#tagset_converter_convert_analyzed">6.12.2. tagset_converter::convert_analyzed()</A>
+      <LI><A HREF="#tagset_converter_convert_generated">6.12.3. tagset_converter::convert_generated()</A>
+      <LI><A HREF="#tagset_converter_new_identity_converter">6.12.4. tagset_converter::new_identity_converter()</A>
+      <LI><A HREF="#tagset_converter_new_pdt_to_conll2009_converter">6.12.5. tagset_converter::new_pdt_to_conll2009_converter()</A>
       </UL>
-    <LI><A HREF="#toc78">6.12. Java Bindings</A>
-    <LI><A HREF="#toc79">6.13. Perl Bindings</A>
-    <LI><A HREF="#toc80">6.14. Python Bindings</A>
+    <LI><A HREF="#toc82">6.13. C++ Bindings API</A>
+      <UL>
+      <LI><A HREF="#toc83">6.13.1. Helper Structures</A>
+      <LI><A HREF="#toc84">6.13.2. Main Classes</A>
+      </UL>
+    <LI><A HREF="#toc85">6.14. Java Bindings</A>
+    <LI><A HREF="#toc86">6.15. Perl Bindings</A>
+    <LI><A HREF="#toc87">6.16. Python Bindings</A>
     </UL>
-  <LI><A HREF="#toc81">Contact</A>
+  <LI><A HREF="#toc88">Contact</A>
   <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc83">8.1. Publications</A>
-    <LI><A HREF="#toc84">8.2. Bibtex for referencing</A>
+    <LI><A HREF="#toc90">8.1. Publications</A>
+    <LI><A HREF="#toc91">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -192,17 +203,11 @@ in the User's Manual. Currently the following language models are available:
 
 <UL>
 <LI>Czech: latest version 131112 (to be released soon)
+<LI>English: latest version 140304 (to be released soon)
 </UL>
 
 <A NAME="toc5"></A>
-<H2>2.2. Roadmap</H2>
-
-<UL>
-<LI>more language models (English is planned)
-</UL>
-
-<A NAME="toc6"></A>
-<H2>2.3. License</H2>
+<H2>2.2. License</H2>
 
 <P>
 MorphoDiTa is an open-source project and is freely available for non-commercial
@@ -218,33 +223,36 @@ referencing <A HREF="http://ufal.mff.cuni.cz/morphodita">MorphoDiTa website</A> 
 <A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Spoustová et al. 2009</A>.
 </P>
 
-<A NAME="toc7"></A>
-<H2>2.4. Platforms and Requirements</H2>
+<A NAME="toc6"></A>
+<H2>2.3. Platforms and Requirements</H2>
 
 <P>
 MorphoDiTa is available as a standalone tool and as a library for Linux/Windows. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphological analysis. The models for the Czech language are available with the tool.
 </P>
 
-<A NAME="toc8"></A>
+<A NAME="toc7"></A>
 <H1>3. MorphoDiTa Installation</H1>
 
 <P>
 MorphoDiTa releases are available on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, either as
 a pre-compiled binary package, or source code only. The binary package contains Linux
-and Windows binaries and <CODE>C++</CODE> library, all language bindings (Java, Python, Perl)
-and source code (needed to compile the language bindings).
+and Windows binaries, <CODE>C++</CODE> library binary, Java bindings binary, and source code of
+all language bindings (Java, Python, Perl) and MorphoDiTa. While the binary
+packages do not contain compiled Python or Perl bindings, packages for those
+languages are available in standard package repositories, i.e. on PyPI and CPAN.
 </P>
 <P>
 To use MorphoDiTa, a language model is needed.
 <A HREF="http://ufal.mff.cuni.cz/morphodita#language_models">Here is a list of available language models</A>.
 </P>
 <P>
-To use MorphoDiTa in other languages than <CODE>C++</CODE>, it must be compiled manually. The sources are available
-on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, both in the
-<A HREF="http://github.com/ufal/morphodita/releases">pre-compiled binary package releases</A> and also separately.
+If you want to compile MorphoDiTa manually, sources are available on on
+<A HREF="http://github.com/ufal/morphodita">GitHub</A>, both in the
+<A HREF="http://github.com/ufal/morphodita/releases">pre-compiled binary package releases</A>
+and in the repository itself.
 </P>
 
-<A NAME="toc9"></A>
+<A NAME="toc8"></A>
 <H2>3.1. Requirements</H2>
 
 <UL>
@@ -253,7 +261,7 @@ on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, both in the
 <LI><CODE>SWIG 2.0.5</CODE> or newer for language bindings other than <CODE>C++</CODE>
 </UL>
 
-<A NAME="toc10"></A>
+<A NAME="toc9"></A>
 <H2>3.2. Compilation</H2>
 
 <P>
@@ -272,7 +280,7 @@ Make targets and options:
 <LI><CODE>DEBUG=1</CODE>: compile with debug informations and C++ library debugging
 </UL>
 
-<A NAME="toc11"></A>
+<A NAME="toc10"></A>
 <H3>3.2.1. Windows</H3>
 
 <P>
@@ -294,15 +302,19 @@ make WINCMD=1
 Note that <CODE>make</CODE> in MinGW is usually distributed as <CODE>mingw32-make</CODE>.
 </P>
 
-<A NAME="toc12"></A>
+<A NAME="toc11"></A>
 <H2>3.3. Other language bindings</H2>
 
-<A NAME="toc13"></A>
+<A NAME="toc12"></A>
 <H3>3.3.1. Java</H3>
 
 <P>
-To compile Java bindings, run <CODE>make</CODE> in the <CODE>bindings/java</CODE> directory,
-optionally with the described Make options. Java 6 and newer is supported.
+Binary Java bindings are available in MorphoDiTa binary packages.
+</P>
+<P>
+To compile Java bindings manually, run <CODE>make</CODE> in the <CODE>bindings/java</CODE>
+directory, optionally with the options descriged in MorphoDiTa Installation.
+Java 6 and newer is supported.
 </P>
 <P>
 The Java installation specified in the environment variable <CODE>JAVA_HOME</CODE> is
@@ -314,12 +326,16 @@ specified using
 make JAVA_HOME=path_to_Java_installation
 </PRE>
 
-<A NAME="toc14"></A>
+<A NAME="toc13"></A>
 <H3>3.3.2. Perl</H3>
 
 <P>
-To compile Perl bindings, run <CODE>make</CODE> in the <CODE>bindings/perl</CODE> directory,
-optionally with the described Make options. Perl 5.8 and later is supported.
+The Perl bindings are available as <CODE>Ufal-MorphoDiTa</CODE> package on CPAN.
+</P>
+<P>
+To compile Perl bindings manually, run <CODE>make</CODE> in the <CODE>bindings/perl</CODE>
+directory, optionally with the options descriged in MorphoDiTa Installation.
+Perl 5.10 and later is supported.
 </P>
 <P>
 Path to the include headers of the required Perl version must be specified
@@ -330,13 +346,16 @@ in the <CODE>PERL_INCLUDE</CODE> variable using
 make PERL_INCLUDE=path_to_Perl_includes
 </PRE>
 
-<A NAME="toc15"></A>
+<A NAME="toc14"></A>
 <H3>3.3.3. Python</H3>
 
 <P>
-To compile Python bindings, run <CODE>make</CODE> in the <CODE>bindings/python</CODE> directory,
-optionally with options descriged in MorphoDiTa Installation. Both Python 2.6+
-and Python 3+ are supported.
+The Python bindings are available as <CODE>ufal.morphodita</CODE> package on PyPI.
+</P>
+<P>
+To compile Python bindings manually, run <CODE>make</CODE> in the <CODE>bindings/python</CODE>
+directory, optionally with options descriged in MorphoDiTa Installation. Both
+Python 2.6+ and Python 3+ are supported.
 </P>
 <P>
 Path to the include headers of the required Python version must be specified
@@ -347,7 +366,7 @@ in the <CODE>PYTHON_INCLUDE</CODE> variable using
 make PYTHON_INCLUDE=path_to_Python_includes
 </PRE>
 
-<A NAME="toc16"></A>
+<A NAME="toc15"></A>
 <H1>4. MorphoDiTa User's Manual</H1>
 
 <P>
@@ -372,7 +391,7 @@ tools and interfaces. The C++ library is described elsewhere, either in
 MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 </P>
 
-<A NAME="czech-morfflex"></A>
+<A NAME="czech-morfflex-pdt"></A>
 <H2>4.1. Czech MorphoDiTa Models</H2>
 
 <P>
@@ -400,7 +419,7 @@ Compared to Featurama <A HREF="http://sourceforge.net/projects/featurama/">http:
 and 10 times smaller.
 </P>
 
-<A NAME="czech_morfflex_acknowledgements"></A>
+<A NAME="czech-morfflex-pdt_acknowledgements"></A>
 <H3>4.1.1. Acknowledgements</H3>
 
 <P>
@@ -471,7 +490,7 @@ For a more detailed reference about the Czech morphology, please see
 <A HREF="http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html">Lemma and Tag Structure in PDT 2.0</A>.
 </P>
 
-<A NAME="toc20"></A>
+<A NAME="toc19"></A>
 <H3>4.1.3. Main Czech Model</H3>
 
 <P>
@@ -484,12 +503,12 @@ The main Czech model contains the following files:
   system with PDT tag set created from
   <A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphological dictionary.
 <P></P>
-<DT><CODE>czech-morfflex-&lt;version&gt;.tagger-best_accuracy</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-&lt;version&gt;.tagger-best_accuracy</CODE></DT><DD>
   Best and slowest tagger (Viterbi of order 3) trained on the training portion
   of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> using the <CODE>neopren</CODE> feature
   set. Contains the <CODE>czech-morfflex-&lt;version&gt;.dict</CODE> morphological dictionary.
 <P></P>
-  The latest version <CODE>czech-morfflex-131112.tagger-best_accuracy</CODE> reaches 95.67% tag
+  The latest version <CODE>czech-morfflex-pdt-131112.tagger-best_accuracy</CODE> reaches 95.67% tag
   accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on
   <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> etest data (whose morphological tags and lemmas
   were remapped using the <CODE>czech-morfflex-131112.dict</CODE> dictionary). Model speed: ~10k words/s,
@@ -498,19 +517,19 @@ The main Czech model contains the following files:
   Czech tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
 <P></P>
-<DT><CODE>czech-morfflex-&lt;version&gt;.tagger-fast</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-&lt;version&gt;.tagger-fast</CODE></DT><DD>
   Faster tagger with slightly worse results (Viterbi of order 2) trained on the
   training portion of <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> using the <CODE>neopren</CODE>
   feature set. Contains the <CODE>czech-morfflex-&lt;version&gt;.dict</CODE> morphological dictionary.
 <P></P>
-  The latest version <CODE>czech-morfflex-131112.tagger-fast</CODE> reaches 94.70% tag accuracy,
+  The latest version <CODE>czech-morfflex-pdt-131112.tagger-fast</CODE> reaches 94.70% tag accuracy,
   97.64% lemma accuracy and 93.94% overall accuracy on
   <A HREF="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</A> etest data (whose morphological tags and lemmas
   were remapped using the <CODE>czech-morfflex-131112.dict</CODE> dictionary). Model speed: ~60k words/s,
   model size: 11MB.
 </DL>
 
-<A NAME="toc21"></A>
+<A NAME="toc20"></A>
 <H3>4.1.4. Part of Speech Only Variant</H3>
 
 <P>
@@ -528,19 +547,19 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
   <A HREF="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</A> morphological dictionary.
   Only first two tag characters of PDT tag set are used.
 <P></P>
-<DT><CODE>czech-morfflex-&lt;version&gt;-pos_only.tagger</CODE></DT><DD>
+<DT><CODE>czech-morfflex-pdt-&lt;version&gt;-pos_only.tagger</CODE></DT><DD>
   Very fast tagger trained on the training portion of
   <A HREF="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</A> using the <CODE>neopren</CODE> feature
   set. Containins the <CODE>czech-morfflex-&lt;version&gt;-pos_only.dict</CODE> morphological dictionary.
 <P></P>
-  The latest version <CODE>czech-morfflex-131112-pos_only.tagger</CODE> reaches 99.18% tag
-  accuracy, 97.61% lemma accuracy and 97.56% overall accuracy on
+  The latest version <CODE>czech-morfflex-pdt-131112-pos_only.tagger</CODE> reaches 99.20% tag
+  accuracy, 97.64% lemma accuracy and 97.60% overall accuracy on
   <A HREF="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</A> etest data (which morphological tags and lemmas
   were remapped using the <CODE>czech-morfflex-131112-pos_only.dict</CODE> dictionary).
   Model speed: ~200k words/s, model size: 4MB.
 </DL>
 
-<A NAME="toc22"></A>
+<A NAME="toc21"></A>
 <H3>4.1.5. Raw Lemmas Variant</H3>
 
 <P>
@@ -558,8 +577,152 @@ MorphoDiTa API, the lemmas are <I>raw lemmas</I> with empty <I>lemma ids</I> and
 <I>lemma comments</I>.) These model variants are denoted by <CODE>raw_lemmas</CODE>.
 </P>
 
+<A NAME="english-morphium-wsj"></A>
+<H2>4.2. English MorphoDiTa Models</H2>
+
+<P>
+English models are created using the following data:
+</P>
+
+<UL>
+<LI><I>SCOWL (Spell Checker Oriented Word Lists)</I>: This word list is used
+  in morphological generation to create all possible word forms of a given
+  word.
+<P></P>
+  Copyright: <I>Copyright 2000-2011 by Kevin Atkinson. Permission to use, copy, modify, distribute and sell these word lists, the associated scripts, the output created from the scripts, and its documentation for any purpose is hereby granted without fee, provided that the above copyright notice appears in all copies and that both that copyright notice and this permission notice appear in supporting documentation. Kevin Atkinson makes no representations about the suitability of this array for any purpose. It is provided "as is" without express or implied warranty.</I>
+<P></P>
+<LI><I>Wall Street Journal</I>, part of the Penn Treebank 3: Morphologically
+  annotated texts which are commonly used to train English POS tagger.
+<P></P>
+  Licensing: Available as LDC99T42 in LDC catalog under LDC User Agreement.
+</UL>
+
+<P>
+The resulting models are distributed under the
+<A HREF="http://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA</A> licence.
+English models work in MorphoDiTa version 1.0.0 or later.
+</P>
+<P>
+English models are versioned according to the release date, the version
+format is <CODE>YYMMDD</CODE>, where <CODE>YY</CODE>, <CODE>MM</CODE> and <CODE>DD</CODE> are two-digit
+representation of year, month and day, respectively. The latest version is
+140304.
+</P>
+
+<A NAME="english-morphium-wsj_acknowledgements"></A>
+<H3>4.2.1. Acknowledgements</H3>
+
+<P>
+This work has been using language resources developed and/or stored and/or
+distributed by the LINDAT/CLARIN project of the Ministry of Education of the
+Czech Republic (project <I>LM2010013</I>).
+</P>
+<P>
+The morphological POS analyzer development was supported by grant of the Ministry
+of Education, Youth and Sports of the Czech Republic No. <I>LC536</I> "Center for
+Computational Linguistics". The morphological POS analyzer research was
+performed by Johanka Spoustová (Spoustová 2008; the <CODE>Treex::Tool::EnglishMorpho::Analysis</CODE>
+Perl module). The lemmatizer was implemented by Martin Popel (Popel 2009; the
+<CODE>Treex::Tool::EnglishMorpho::Lemmatizer</CODE> Perl module). The lemmatizer is
+based on <CODE>morpha</CODE>, which was released under LGPL licence as a part of
+<A HREF="http://ilexir.co.uk/applications/rasp">RASP system</A>.
+</P>
+<P>
+The tagger algorithm and feature set research was supported by the projects
+<I>MSM0021620838</I> and <I>LC536</I> of Ministry of Education, Youth and Sports of the Czech Republic,
+<I>GA405/09/0278</I> of the Grant Agency of the Czech Republic and <I>1ET101120503</I> of
+Academy of Sciences of the Czech Republic. The research was performed by
+Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
+</P>
+
+<H4>4.2.1.1. Publications</H4>
+
+<UL>
+<LI>(Popel 2009) Martin Popel. <I><A HREF="http://ufal.mff.cuni.cz/~popel/papers/master_thesis.pdf">Ways to Improve the Quality of English-Czech Machine Translation.</A></I> Master Thesis at Institute of Formal and Applied Linguistics, Faculty of Mathematics and Physics, Charles University in Prague (2009).
+<P></P>
+<LI>(Spoustová 2008) Drahomíra "johanka" Spoustová. <I><A HREF="http://ufal.mff.cuni.cz/morphium/">Morphium &ndash; morphological analyser for Penn treebank POS tagset.</A></I> Perl Software developed at Institute of Formal and Applied Linguistics, Faculty of Mathematics and Physics, Charles University in Prague (2008).
+<P></P>
+<LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
+</UL>
+
+<A NAME="toc24"></A>
+<H3>4.2.2. English Morphological System</H3>
+
+<P>
+The English morphology uses standard Penn Treebank POS tags. Nevertheless,
+the lemma structure is unique:
+</P>
+
+<UL>
+<LI>The lemmatizer recognizes negative prefixes and removes it from the lemma.
+  In terms of MorphoDiTa API, <I>raw lemma</I> is the lemma without negative prefix.
+<LI>The negative prefix is also stored to allow morphological generation of word
+  form with the same negative prefix. In terms of MorphoDiTa API, <I>lemma id</I>
+  is the raw lemma plus the negative prefix.
+</UL>
+
+<P>
+The negative prefix is separated from the (always nonempty) lemma using a <CODE>^</CODE>
+character (<CODE>able^un</CODE>). During morphological generation, the negative prefix is honored.
+Furthermore, when the lemma ends with <CODE>^</CODE> (i.e., negative prefix is empty, as
+in <CODE>able^</CODE>), forms with negative prefixes are generated. It is also possible
+to generate all forms without any negative prefix by appending <CODE>+</CODE> after the lemma
+(for example <CODE>able+</CODE>).
+</P>
+
+<A NAME="toc25"></A>
+<H3>4.2.3. English Model</H3>
+
+<P>
+The English model contains the following files:
+</P>
+
+<DL>
+<DT><CODE>english-morphium-&lt;version&gt;.dict</CODE></DT><DD>
+  Morphological dictionary. The SCOWL word list has been automatically analyzed
+  and lemmatized and uses as the dictionary. The guesser performing the analyzation
+  and lemmatization is available.
+<P></P>
+<DT><CODE>english-morphium-wsj-&lt;version&gt;.tagger</CODE></DT><DD>
+  Tagger trained on the training portion of Wall Street Journal (Sections 0-18)
+  and tuned on the development portion (Sections 19-21). Contains the
+  <CODE>english-morphium-&lt;version&gt;.dict</CODE> morphological dictionary.
+<P></P>
+  The latest version <CODE>english-morphium-wsj-140304.tagger</CODE> reaches 97.27% tag
+  accuracy on Wall Street Journal test portion (Section 22-24). Model speed: ~60k words/s,
+  model size: 6MB.
+</DL>
+
+<A NAME="toc26"></A>
+<H3>4.2.4. No Negations Variant</H3>
+
+<P>
+Stripping of negative prefixes (or handling the lemmas with negative prefixes
+stripped) may not be desirable. Therefore, a variant of the English model
+denoted by <CODE>no_negation</CODE> is provided, which does not strip negative prefixes
+from lemmas.
+</P>
+
+<DL>
+<DT><CODE>english-morphium-&lt;version&gt;-no_negation.dict</CODE></DT><DD>
+  Morphological dictionary which does not strip negative lemma prefixes. The
+  SCOWL word list has been automatically analyzed and lemmatized and uses as
+  the dictionary. The guesser performing the analyzation and lemmatization is
+  available.
+<P></P>
+<DT><CODE>english-morphium-wsj-&lt;version&gt;-no_negation.tagger</CODE></DT><DD>
+  Tagger which does not strip negative lemma prefixes, trained on the training
+  portion of Wall Street Journal (Sections 0-18) and tuned on the development
+  portion (Sections 19-21). Contains the
+  <CODE>english-morphium-&lt;version&gt;-no_negation.dict</CODE> morphological dictionary.
+<P></P>
+  The latest version <CODE>english-morphium-wsj-140304-no_negation.tagger</CODE> reaches 97.25%
+  tag accuracy on Wall Street Journal test portion (Section 22-24). Model
+  speed: ~60k words/s, model size: 6MB.
+</DL>
+
 <A NAME="run_tagger"></A>
-<H2>4.2. Running the Tagger</H2>
+<H2>4.3. Running the Tagger</H2>
 
 <P>
 Probably the most common usage of MorphoDita is running a tagger to tag your data using
@@ -592,8 +755,8 @@ Options: --input=untokenized|vertical
          --output=vertical|xml
 </PRE>
 
-<A NAME="toc24"></A>
-<H3>4.2.1. Input Formats</H3>
+<A NAME="toc28"></A>
+<H3>4.3.1. Input Formats</H3>
 
 <P>
 The input format is specified using the <CODE>--input</CODE> option. Currently supported
@@ -607,8 +770,8 @@ input formats are:
   a word, with empty line denoting end of sentence.
 </UL>
 
-<A NAME="toc25"></A>
-<H3>4.2.2. Tag Set Conversion</H3>
+<A NAME="toc29"></A>
+<H3>4.3.2. Tag Set Conversion</H3>
 
 <P>
 Some tag sets can be converted to different ones. Currently supported tag set
@@ -619,8 +782,8 @@ conversions are:
 <LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
 </UL>
 
-<A NAME="toc26"></A>
-<H3>4.2.3. Output Formats</H3>
+<A NAME="toc30"></A>
+<H3>4.3.3. Output Formats</H3>
 
 <P>
 The output format is specified using the <CODE>--output</CODE> option. Currently
@@ -668,8 +831,8 @@ těší	těšit_:T	VB-S---3P-AA---
 
 </UL>
 
-<A NAME="toc27"></A>
-<H2>4.3. Running the Morphology</H2>
+<A NAME="toc31"></A>
+<H2>4.4. Running the Morphology</H2>
 
 <P>
 There are multiple commands performing morphological tasks.
@@ -683,7 +846,7 @@ but is designed to be used interactively and produces more human-readable output
 </P>
 
 <A NAME="run_morpho_analyze"></A>
-<H3>4.3.1. Morphological Analysis</H3>
+<H3>4.4.1. Morphological Analysis</H3>
 
 <P>
 The morphological analysis can be performed by running
@@ -715,7 +878,7 @@ Options: --input=untokenized|vertical
          --output=vertical|xml
 </PRE>
 
-<H4>4.3.1.1. Input Formats</H4>
+<H4>4.4.1.1. Input Formats</H4>
 
 <P>
 The input format is specified using the <CODE>--input</CODE> option. Currently supported
@@ -735,7 +898,7 @@ necessary. Therefore, the input is processed by whole paragraphs (ending
 by an empty line).
 </P>
 
-<H4>4.3.1.2. Tag Set Conversion</H4>
+<H4>4.4.1.2. Tag Set Conversion</H4>
 
 <P>
 Some tag sets can be converted to different ones. Currently supported tag set
@@ -746,7 +909,7 @@ conversions are:
 <LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
 </UL>
 
-<H4>4.3.1.3. Output Formats</H4>
+<H4>4.4.1.3. Output Formats</H4>
 
 <P>
 The output format is specified using the <CODE>--output</CODE> option. Currently
@@ -794,7 +957,7 @@ těší	těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
 </UL>
 
 <A NAME="run_morpho_generate"></A>
-<H3>4.3.2. Morphological Generation</H3>
+<H3>4.4.2. Morphological Generation</H3>
 
 <P>
 The morphological generation can be performed by running
@@ -852,7 +1015,7 @@ k	k-1	RR--3----------	ke	k-1	RV--3----------	ku	k-1	RV--3---------1
 babičce babička NNFS3-----A----
 </PRE>
 
-<H4>4.3.2.1. Tag Set Conversion</H4>
+<H4>4.4.2.1. Tag Set Conversion</H4>
 
 <P>
 Some tag sets can be converted to different ones. Currently supported tag set
@@ -869,7 +1032,7 @@ input lemmas and wildcards.
 </P>
 
 <A NAME="tag_wildcard"></A>
-<H4>4.3.2.2. Tag Wildcards</H4>
+<H4>4.4.2.2. Tag Wildcards</H4>
 
 <P>
 When only forms with a specific tag should be generated for a given lemma, tag
@@ -888,7 +1051,7 @@ Most characters of a tag wildcard match corresponding characters of a tag, with 
  </UL>
 
 <A NAME="run_morpho_cli"></A>
-<H3>4.3.3. Interactive Morphological Analysis and Generation</H3>
+<H3>4.4.3. Interactive Morphological Analysis and Generation</H3>
 
 <P>
 Morphological analysis and generation which is interactive and more human readable
@@ -908,7 +1071,7 @@ are generated.
 </P>
 
 <A NAME="run_tokenizer"></A>
-<H2>4.4. Running the Tokenizer</H2>
+<H2>4.5. Running the Tokenizer</H2>
 
 <P>
 Using the <CODE>run_tokenizer</CODE> executable it is possible to perform only
@@ -943,8 +1106,8 @@ Options: --tokenizer=czech|english|generic
          --output=vertical|xml
 </PRE>
 
-<A NAME="toc32"></A>
-<H3>4.4.1. Output Formats</H3>
+<A NAME="toc36"></A>
+<H3>4.5.1. Output Formats</H3>
 
 <P>
 The output format is specified using the <CODE>--output</CODE> option. Currently
@@ -986,7 +1149,7 @@ těší
 
 </UL>
 
-<A NAME="toc33"></A>
+<A NAME="toc37"></A>
 <H1>5. MorphoDiTa API Tutorial</H1>
 
 <P>
@@ -1000,7 +1163,7 @@ The MorphoDiTa API is defined in header <CODE>morphodita.h</CODE> and resides in
 using namespace ufal::morphodita;
 </PRE>
 
-<A NAME="toc34"></A>
+<A NAME="toc38"></A>
 <H2>5.1. Tagger API</H2>
 
 <P>
@@ -1071,7 +1234,7 @@ public members: <CODE>std::string lemma</CODE> and <CODE>std:string tag</CODE>, 
 predicted lemma and tag, respectively.
 </P>
 
-<A NAME="toc35"></A>
+<A NAME="toc39"></A>
 <H2>5.2. Morphological Dictionary API</H2>
 
 <P>
@@ -1080,7 +1243,7 @@ The main access to MorphoDiTa morphological dictionary is through class
 <CODE>run_morpho.cpp</CODE>.
 </P>
 
-<A NAME="toc36"></A>
+<A NAME="toc40"></A>
 <H3>5.2.1. Dictionary Construction</H3>
 
 <P>
@@ -1121,7 +1284,7 @@ Please note that you should not delete this pointer as it is owned by the
 <CODE>tagger</CODE> class instance.
 </P>
 
-<A NAME="toc37"></A>
+<A NAME="toc41"></A>
 <H3>5.2.2. Morphological Analysis</H3>
 
 <P>
@@ -1161,7 +1324,7 @@ caller must provide an output vector <CODE>std::vector&lt;tagged_lemma&gt;</CODE
 method <CODE>morpho::analyze</CODE> assigns the output to this vector.
 </P>
 
-<A NAME="toc38"></A>
+<A NAME="toc42"></A>
 <H3>5.2.3. Generation</H3>
 
 <P>
@@ -1232,7 +1395,7 @@ is found by the guesser, <CODE>GUESSER</CODE> is returned. Otherwise, forms are 
   implicit conversion rules.
 </DL>
 
-<A NAME="toc40"></A>
+<A NAME="toc44"></A>
 <H1>6. MorphoDiTa API Reference</H1>
 
 <P>
@@ -1244,8 +1407,28 @@ The strings used in the MorphoDiTa API are always UTF-8 encoded (except from
 file paths, whose encoding is system dependent).
 </P>
 
+<A NAME="versioning"></A>
+<H2>6.1. MorphoDiTa Versioning</H2>
+
+<P>
+MorphoDiTa version consists of three numbers <I>major.minor.patch</I> with the
+following semantics:
+</P>
+
+<UL>
+<LI>Two versions with the same <I>major.minor</I> have the same API with the same
+  behaviour, apart from bugs. Therefore, if only <I>patch</I> is increased, the
+  new version is only a bug-fix release.
+<LI>If two versions <I>v</I> and <I>u</I> have the same <I>major</I>, but <I>minor(v)</I> is
+  greater than <I>minor(u)</I>, version <I>v</I> contains only additions to the API.
+  In other words, the API of <I>u</I> is all present in <I>v</I> with the same
+  behaviour (once again apart from bugs). It is therefore safe to upgrade to
+  a newer MorphoDiTa version with the same <I>major</I>.
+<LI>If two versions differ in <I>major</I>, their API may differ in any way.
+</UL>
+
 <A NAME="lemma_structure"></A>
-<H2>6.1. Lemma Structure</H2>
+<H2>6.2. Lemma Structure</H2>
 
 <P>
 The lemmas used by MorphoDiTa consist of three parts:
@@ -1270,7 +1453,7 @@ performing morphological generation, either <I>raw lemma</I> or both <I>raw lemm
 </P>
 
 <A NAME="string_piece"></A>
-<H2>6.2. Struct string_piece</H2>
+<H2>6.3. Struct string_piece</H2>
 
 <PRE>
 struct string_piece {
@@ -1291,7 +1474,7 @@ the referenced string exists as long as the <A HREF="#string_piece"><CODE>string
 </P>
 
 <A NAME="tagged_form"></A>
-<H2>6.3. Struct tagged_form</H2>
+<H2>6.4. Struct tagged_form</H2>
 
 <PRE>
 struct tagged_form {
@@ -1306,7 +1489,7 @@ pair.
 </P>
 
 <A NAME="tagged_lemma"></A>
-<H2>6.4. Struct tagged_lemma</H2>
+<H2>6.5. Struct tagged_lemma</H2>
 
 <PRE>
 struct tagged_lemma {
@@ -1321,7 +1504,7 @@ pair.
 </P>
 
 <A NAME="tagged_lemma_forms"></A>
-<H2>6.5. Struct tagged_lemma_forms</H2>
+<H2>6.6. Struct tagged_lemma_forms</H2>
 
 <PRE>
 struct tagged_lemma_forms {
@@ -1335,7 +1518,7 @@ The <A HREF="#tagged_lemma_forms"><CODE>tagged_lemma_forms</CODE></A> represents
 </P>
 
 <A NAME="token_range"></A>
-<H2>6.6. Struct token_range</H2>
+<H2>6.7. Struct token_range</H2>
 
 <PRE>
 struct token_range {
@@ -1350,8 +1533,38 @@ The <CODE>start</CODE> and <CODE>length</CODE> fields specify the token position
 characters, not in bytes of UTF-8 encoding.
 </P>
 
+<A NAME="version"></A>
+<H2>6.8. Class version</H2>
+
+<PRE>
+class version {
+ public:
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+
+  static <A HREF="#version">version</A> <A HREF="#version_current">current</A>();
+};
+</PRE>
+
+<P>
+The <A HREF="#version"><CODE>version</CODE></A> class represents MorphoDiTa version.
+See <A HREF="#versioning">MorphoDiTa Versioning</A> for more information.
+</P>
+
+<A NAME="version_current"></A>
+<H3>6.8.1. version::current</H3>
+
+<PRE>
+static <A HREF="#version">version</A> current();
+</PRE>
+
+<P>
+Returns current MorphoDiTa version.
+</P>
+
 <A NAME="tokenizer"></A>
-<H2>6.7. Class tokenizer</H2>
+<H2>6.9. Class tokenizer</H2>
 
 <PRE>
 class tokenizer {
@@ -1378,7 +1591,7 @@ static methods or through instances of <A HREF="#morpho"><CODE>morpho</CODE></A>
 </P>
 
 <A NAME="tokenizer_set_text"></A>
-<H3>6.7.1. tokenizer::set_text</H3>
+<H3>6.9.1. tokenizer::set_text</H3>
 
 <PRE>
 virtual void set_text(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
@@ -1396,7 +1609,7 @@ tokenizer is released or <CODE>set_text</CODE> is called again.
 </P>
 
 <A NAME="tokenizer_next_sentence"></A>
-<H3>6.7.2. tokenizer::next_sentence</H3>
+<H3>6.9.2. tokenizer::next_sentence</H3>
 
 <PRE>
 virtual bool next_sentence(std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;* forms, std::vector&lt;<A HREF="#token_range">token_range</A>&gt;* tokens) = 0;
@@ -1410,7 +1623,7 @@ in Unicode characters.
 </P>
 
 <A NAME="tokenizer_new_vertical_tokenizer"></A>
-<H3>6.7.3. tokenizer::new_vertical_tokenizer</H3>
+<H3>6.9.3. tokenizer::new_vertical_tokenizer</H3>
 
 <PRE>
 static <A HREF="#tokenizer">tokenizer</A> new_vertical_tokenizer();
@@ -1423,7 +1636,7 @@ the instance after use.
 </P>
 
 <A NAME="tokenizer_new_czech_tokenizer"></A>
-<H3>6.7.4. tokenizer::new_czech_tokenizer</H3>
+<H3>6.9.4. tokenizer::new_czech_tokenizer</H3>
 
 <PRE>
 static <A HREF="#tokenizer">tokenizer</A> new_czech_tokenizer();
@@ -1435,7 +1648,7 @@ use.
 </P>
 
 <A NAME="tokenizer_new_english_tokenizer"></A>
-<H3>6.7.5. tokenizer::new_english_tokenizer</H3>
+<H3>6.9.5. tokenizer::new_english_tokenizer</H3>
 
 <PRE>
 static <A HREF="#tokenizer">tokenizer</A> new_english_tokenizer();
@@ -1447,7 +1660,7 @@ use.
 </P>
 
 <A NAME="tokenizer_new_generic_tokenizer"></A>
-<H3>6.7.6. tokenizer::new_generic_tokenizer</H3>
+<H3>6.9.6. tokenizer::new_generic_tokenizer</H3>
 
 <PRE>
 static <A HREF="#tokenizer">tokenizer</A> new_generic_tokenizer();
@@ -1459,7 +1672,7 @@ use.
 </P>
 
 <A NAME="morpho"></A>
-<H2>6.8. Class morpho</H2>
+<H2>6.10. Class morpho</H2>
 
 <PRE>
 class morpho {
@@ -1489,7 +1702,7 @@ and provides a suitable tokenizer. All methods are thread-safe.
 </P>
 
 <A NAME="morpho_load_cstring"></A>
-<H3>6.8.1. morpho::load(const char*)</H3>
+<H3>6.10.1. morpho::load(const char*)</H3>
 
 <PRE>
 static <A HREF="#morpho">morpho</A>* load(const char* fname);
@@ -1502,7 +1715,7 @@ after use.
 </P>
 
 <A NAME="morpho_load_FILE"></A>
-<H3>6.8.2. morpho::load(FILE*)</H3>
+<H3>6.10.2. morpho::load(FILE*)</H3>
 
 <PRE>
 static <A HREF="#morpho">morpho</A>* load(FILE* f);
@@ -1515,7 +1728,7 @@ delete after use.
 </P>
 
 <A NAME="morpho_guesser_mode"></A>
-<H3>6.8.3. morpho::guesser_mode</H3>
+<H3>6.10.3. morpho::guesser_mode</H3>
 
 <PRE>
 enum <A HREF="#morpho_guesser_mode">guesser_mode</A> { NO_GUESSER = 0, GUESSER = 1 };
@@ -1528,7 +1741,7 @@ morpho does not guess unknown words.
 </P>
 
 <A NAME="morpho_analyze"></A>
-<H3>6.8.4. morpho::analyze()</H3>
+<H3>6.10.4. morpho::analyze()</H3>
 
 <PRE>
 virtual int analyze(<A HREF="#string_piece">string_piece</A> form, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; lemmas) const = 0;
@@ -1548,7 +1761,7 @@ analysis containing given form as lemma and a tag for unknown word.
 </P>
 
 <A NAME="morpho_generate"></A>
-<H3>6.8.5. morpho::generate()</H3>
+<H3>6.10.5. morpho::generate()</H3>
 
 <PRE>
 virtual int generate(<A HREF="#string_piece">string_piece</A> lemmma, const char* tag_wildcard, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser,
@@ -1578,7 +1791,7 @@ is returned. If <CODE>guesser == GUESSER</CODE> and the lemma is found by the gu
 </P>
 
 <A NAME="morpho_raw_lemma_len"></A>
-<H3>6.8.6. morpho::raw_lemma_len</H3>
+<H3>6.10.6. morpho::raw_lemma_len</H3>
 
 <PRE>
 virtual int raw_lemma_len(<A HREF="#string_piece">string_piece</A> lemma) const = 0;
@@ -1590,7 +1803,7 @@ a <I>raw lemma</I> (see <A HREF="#lemma_structure">Lemma Structure</A>).
 </P>
 
 <A NAME="morpho_lemma_id_len"></A>
-<H3>6.8.7. morpho::lemma_id_len</H3>
+<H3>6.10.7. morpho::lemma_id_len</H3>
 
 <PRE>
 virtual int lemma_id_len(<A HREF="#string_piece">string_piece</A> lemma) const = 0;
@@ -1605,7 +1818,7 @@ do not identify the lemma.
 </P>
 
 <A NAME="morpho_new_tokenizer"></A>
-<H3>6.8.8. morpho::new_tokenizer</H3>
+<H3>6.10.8. morpho::new_tokenizer</H3>
 
 <PRE>
 virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
@@ -1617,7 +1830,7 @@ exists. The user should delete it after use.
 </P>
 
 <A NAME="tagger"></A>
-<H2>6.9. Class tagger</H2>
+<H2>6.11. Class tagger</H2>
 
 <PRE>
 class tagger {
@@ -1641,7 +1854,7 @@ morphological analyses. All methods are thread-safe.
 </P>
 
 <A NAME="tagger_load_cstring"></A>
-<H3>6.9.1. tagger::load(const char*)</H3>
+<H3>6.11.1. tagger::load(const char*)</H3>
 
 <PRE>
 static <A HREF="#tagger">tagger</A>* load(const char* fname);
@@ -1654,7 +1867,7 @@ after use.
 </P>
 
 <A NAME="tagger_load_FILE"></A>
-<H3>6.9.2. tagger::load(FILE*)</H3>
+<H3>6.11.2. tagger::load(FILE*)</H3>
 
 <PRE>
 static <A HREF="#tagger">tagger</A>* load(FILE* f);
@@ -1667,7 +1880,7 @@ delete after use.
 </P>
 
 <A NAME="tagger_get_morpho"></A>
-<H3>6.9.3. tagger::get_morpho()</H3>
+<H3>6.11.3. tagger::get_morpho()</H3>
 
 <PRE>
 virtual const <A HREF="#morpho">morpho</A>* get_morpho() const = 0;
@@ -1680,7 +1893,7 @@ tagger destructor.
 </P>
 
 <A NAME="tagger_tag"></A>
-<H3>6.9.4. tagger::tag()</H3>
+<H3>6.11.4. tagger::tag()</H3>
 
 <PRE>
 virtual void tag(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tags) const = 0;
@@ -1692,7 +1905,7 @@ a <CODE>std::vector</CODE> of <A HREF="#string_piece"><CODE>string_piece</CODE><
 </P>
 
 <A NAME="tagger_new_tokenizer"></A>
-<H3>6.9.5. tagger::new_tokenizer</H3>
+<H3>6.11.5. tagger::new_tokenizer</H3>
 
 <PRE>
 virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
@@ -1705,7 +1918,7 @@ exists. The user should delete it after use.  The call is equal to
 </P>
 
 <A NAME="tagset_converter"></A>
-<H2>6.10. Class tagset_converter</H2>
+<H2>6.12. Class tagset_converter</H2>
 
 <PRE>
 class tagset_converter {
@@ -1722,7 +1935,7 @@ class tagset_converter {
 </PRE>
 
 <A NAME="tagset_converter_convert"></A>
-<H3>6.10.1. tagset_converter::convert()</H3>
+<H3>6.12.1. tagset_converter::convert()</H3>
 
 <PRE>
 virtual void convert(<A HREF="#tagged_lemma">tagged_lemma</A>&amp; tagged_lemma) const = 0;
@@ -1733,7 +1946,7 @@ Convert the given tagged lemma.
 </P>
 
 <A NAME="tagset_converter_convert_analyzed"></A>
-<H3>6.10.2. tagset_converter::convert_analyzed()</H3>
+<H3>6.12.2. tagset_converter::convert_analyzed()</H3>
 
 <PRE>
 virtual void convert_analyzed(std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tagged_lemmas) const = 0;
@@ -1745,7 +1958,7 @@ Convert the given results of <A HREF="#morpho_analyze">morpho::analyze</A>. Apar
 </P>
 
 <A NAME="tagset_converter_convert_generated"></A>
-<H3>6.10.3. tagset_converter::convert_generated()</H3>
+<H3>6.12.3. tagset_converter::convert_generated()</H3>
 
 <PRE>
 virtual void convert_generated(std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
@@ -1757,7 +1970,7 @@ Convert the given results of <A HREF="#morpho_generate">morpho::generate</A>. Ap
 </P>
 
 <A NAME="tagset_converter_new_identity_converter"></A>
-<H3>6.10.4. tagset_converter::new_identity_converter()</H3>
+<H3>6.12.4. tagset_converter::new_identity_converter()</H3>
 
 <PRE>
 static <A HREF="#tagset_converter">tagset_converter*</A> new_identity_converter();
@@ -1769,7 +1982,7 @@ identity converter do nothing. The user should delete the instance after use.
 </P>
 
 <A NAME="tagset_converter_new_pdt_to_conll2009_converter"></A>
-<H3>6.10.5. tagset_converter::new_pdt_to_conll2009_converter()</H3>
+<H3>6.12.5. tagset_converter::new_pdt_to_conll2009_converter()</H3>
 
 <PRE>
 static <A HREF="#tagset_converter">tagset_converter*</A> new_pdt_to_conll2009_converter();
@@ -1785,8 +1998,8 @@ are additional FEATs. Because we have only one tag field, we merge these fields
 together by using <CODE>Pos=?|FEAT</CODE>, i.e., the POS is stored as a first FEAT.
 </P>
 
-<A NAME="toc75"></A>
-<H2>6.11. C++ Bindings API</H2>
+<A NAME="toc82"></A>
+<H2>6.13. C++ Bindings API</H2>
 
 <P>
 Bindings for other languages than C++ are created using SWIG from the C++
@@ -1796,8 +2009,8 @@ strings and removal of methods using <CODE>FILE</CODE>. Here is the C++ bindings
 declaration:
 </P>
 
-<A NAME="toc76"></A>
-<H3>6.11.1. Helper Structures</H3>
+<A NAME="toc83"></A>
+<H3>6.13.1. Helper Structures</H3>
 
 <PRE>
 typedef vector&lt;string&gt; Forms;
@@ -1827,10 +2040,19 @@ struct TokenRange {
 typedef vector&lt;TokenRange&gt; TokenRanges;
 </PRE>
 
-<A NAME="toc77"></A>
-<H3>6.11.2. Main Classes</H3>
+<A NAME="toc84"></A>
+<H3>6.13.2. Main Classes</H3>
 
 <PRE>
+class Version {
+ public:
+  unsigned major;
+  unsigned minor;
+  unsigned patch;
+
+  static Version current();
+};
+
 class Tokenizer {
  public:
   virtual void setText(const char* text);
@@ -1878,11 +2100,12 @@ class TagsetConverter {
 };
 </PRE>
 
-<A NAME="toc78"></A>
-<H2>6.12. Java Bindings</H2>
+<A NAME="toc85"></A>
+<H2>6.14. Java Bindings</H2>
 
 <P>
-MorphoDiTa library is available in the <CODE>cz.cuni.mff.ufal.morphodita</CODE> package.
+MorphoDiTa library bindings is available in the <CODE>cz.cuni.mff.ufal.morphodita</CODE>
+package.
 </P>
 <P>
 The bindings is a straightforward conversion of the <CODE>C++</CODE> bindings API.
@@ -1891,12 +2114,17 @@ Vectors do not have native Java interface, see
 are accessible and modifiable using using <CODE>getField</CODE> and <CODE>setField</CODE>
 wrappers.
 </P>
+<P>
+The bindings require native C++ library <CODE>morphodita_java</CODE> (called
+<CODE>libmorphodita_java</CODE> on Linux). If the library is found in the current
+directory, it is used, otherwise standard library search process is used.
+</P>
 
-<A NAME="toc79"></A>
-<H2>6.13. Perl Bindings</H2>
+<A NAME="toc86"></A>
+<H2>6.15. Perl Bindings</H2>
 
 <P>
-MorphoDiTa library is available in the <CODE>Ufal::MorphoDiTa</CODE> package.
+MorphoDiTa library bindings is available in the <CODE>Ufal::MorphoDiTa</CODE> package.
 The classes can be imported into the current namespace using the <CODE>:all</CODE>
 export tag.
 </P>
@@ -1907,11 +2135,11 @@ reference. Static methods and enumerations are available only through the
 module, not through object instance.
 </P>
 
-<A NAME="toc80"></A>
-<H2>6.14. Python Bindings</H2>
+<A NAME="toc87"></A>
+<H2>6.16. Python Bindings</H2>
 
 <P>
-MorphoDiTa library is available in the <CODE>ufal.morphodita</CODE> module.
+MorphoDiTa library bindings is available in the <CODE>ufal.morphodita</CODE> module.
 </P>
 <P>
 The bindings is a straightforward conversion of the <CODE>C++</CODE> bindings API.
@@ -1919,7 +2147,7 @@ In Python 2, strings can be both <CODE>unicode</CODE> and UTF-8 encoded <CODE>st
 library always produces <CODE>unicode</CODE>. In Python 3, strings must be only <CODE>str</CODE>.
 </P>
 
-<A NAME="toc81"></A>
+<A NAME="toc88"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -1944,15 +2172,18 @@ Authors:
 <P>
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT/CLARIN project of the Ministry of Education of the Czech Republic (project <I>LM2010013</I>).
 </P>
+<P>
+Acknowledgements for individual language models are listed in MorphoDiTa User's Manual.
+</P>
 
-<A NAME="toc83"></A>
+<A NAME="toc90"></A>
 <H2>8.1. Publications</H2>
 
 <UL>
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc84"></A>
+<A NAME="toc91"></A>
 <H2>8.2. Bibtex for referencing</H2>
 
 <PRE>

@@ -3,16 +3,19 @@ MorphoDiTa Installation
 
 MorphoDiTa releases are available on GitHub (http://github.com/ufal/morphodita),
 either as a pre-compiled binary package, or source code only. The binary package
-contains Linux and Windows binaries and C++ library, all language bindings
-(Java, Python, Perl) and source code (needed to compile the language bindings).
+contains Linux and Windows binaries, C++ library binary, Java bindings binary,
+and source code of all language bindings (Java, Python, Perl) and MorphoDiTa.
+While the binary packages do not contain compiled Python or Perl bindings,
+packages for those languages are available in standard package repositories,
+i.e. on PyPI and CPAN.
 
 To use MorphoDiTa, a language model is needed. Here is a list of available
 language models (http://ufal.mff.cuni.cz/morphodita#language_models).
 
-To use MorphoDiTa in other languages than C++, it must be compiled manually. The
-sources are available on GitHub (http://github.com/ufal/morphodita), both in the
-pre-compiled binary package releases
-(http://github.com/ufal/morphodita/releases) and also separately.
+If you want to compile MorphoDiTa manually, sources are available on on GitHub
+(http://github.com/ufal/morphodita), both in the pre-compiled binary package
+releases (http://github.com/ufal/morphodita/releases) and in the repository
+itself.
 
 
 Requirements
@@ -62,8 +65,11 @@ Other language bindings
 Java
 ----
 
-To compile Java bindings, run make in the bindings/java directory, optionally
-with the described Make options. Java 6 and newer is supported.
+Binary Java bindings are available in MorphoDiTa binary packages.
+
+To compile Java bindings manually, run make in the bindings/java directory,
+optionally with the options descriged in MorphoDiTa Installation. Java 6 and
+newer is supported.
 
 The Java installation specified in the environment variable JAVA_HOME is used.
 If the environment variable does not exist, the JAVA_HOME can be specified using
@@ -74,8 +80,11 @@ If the environment variable does not exist, the JAVA_HOME can be specified using
 Perl
 ----
 
-To compile Perl bindings, run make in the bindings/perl directory, optionally
-with the described Make options. Perl 5.8 and later is supported.
+The Perl bindings are available as Ufal-MorphoDiTa package on CPAN.
+
+To compile Perl bindings manually, run make in the bindings/perl directory,
+optionally with the options descriged in MorphoDiTa Installation. Perl 5.10 and
+later is supported.
 
 Path to the include headers of the required Perl version must be specified in
 the PERL_INCLUDE variable using
@@ -86,7 +95,9 @@ the PERL_INCLUDE variable using
 Python
 ------
 
-To compile Python bindings, run make in the bindings/python directory,
+The Python bindings are available as ufal.morphodita package on PyPI.
+
+To compile Python bindings manually, run make in the bindings/python directory,
 optionally with options descriged in MorphoDiTa Installation. Both Python 2.6+
 and Python 3+ are supported.
 

@@ -4,8 +4,11 @@ Java MorphoDiTa Bindings
 Installation
 ============
 
-To compile Java bindings, run make in the bindings/java directory, optionally
-with the described Make options. Java 6 and newer is supported.
+Binary Java bindings are available in MorphoDiTa binary packages.
+
+To compile Java bindings manually, run make in the bindings/java directory,
+optionally with the options descriged in MorphoDiTa Installation. Java 6 and
+newer is supported.
 
 The Java installation specified in the environment variable JAVA_HOME is used.
 If the environment variable does not exist, the JAVA_HOME can be specified using
@@ -16,12 +19,17 @@ If the environment variable does not exist, the JAVA_HOME can be specified using
 Java Bindings API
 =================
 
-MorphoDiTa library is available in the cz.cuni.mff.ufal.morphodita package.
+MorphoDiTa library bindings is available in the cz.cuni.mff.ufal.morphodita
+package.
 
 The bindings is a straightforward conversion of the C++ bindings API. Vectors do
 not have native Java interface, see cz.cuni.mff.ufal.morphodita.Forms class for
 reference. Also, class members are accessible and modifiable using using
 getField and setField wrappers.
+
+The bindings require native C++ library morphodita_java (called
+libmorphodita_java on Linux). If the library is found in the current directory,
+it is used, otherwise standard library search process is used.
 
 
 C++ Bindings API
@@ -61,6 +69,15 @@ Helper Structures
 Main Classes
 ------------
 
+  class Version {
+   public:
+    unsigned major;
+    unsigned minor;
+    unsigned patch;
+  
+    static Version current();
+  };
+  
   class Tokenizer {
    public:
     virtual void setText(const char* text);
