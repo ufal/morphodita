@@ -1,4 +1,10 @@
 Revision history for Ufal-MorphoDiTa
 
+1.0.0.3 [02 Apr 14]
+        Specify pod encoding and change AUTHOR to AUTHORS.
+
+1.0.0.2 [02 Apr 14]
+        Fix typo in NAME section of pod documentation.
+
 1.0.0.1 [02 Apr 14]
         First version bindings for MorphoDiTa 1.0.0.

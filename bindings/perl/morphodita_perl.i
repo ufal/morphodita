@@ -14,9 +14,11 @@
                 *Tokenizer:: *Morpho:: *Tagger:: *TagsetConverter:: *Version::);
 %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
+=encoding utf-8
+
 =head1 NAME
 
-UFal::MorphoDiTa - bindings to Morphodita library L<http://ufal.mff.cuni.cz/morphodita>.
+Ufal::MorphoDiTa - bindings to Morphodita library L<http://ufal.mff.cuni.cz/morphodita>.
 
 =head1 DESCRIPTION
 
@@ -29,7 +31,7 @@ Vectors do not have native Perl interface, see L<Ufal::MorphoDiTa::Forms>
 source for reference. Static methods and enumerations are available only
 through the module, not through object instance.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Milan Straka <straka@ufal.mff.cuni.cz>
 
