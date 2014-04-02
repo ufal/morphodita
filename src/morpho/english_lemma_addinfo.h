@@ -41,10 +41,21 @@ struct english_lemma_addinfo {
 
 // Definitions
 int english_lemma_addinfo::raw_lemma_len(string_piece lemma) {
-  // Lemma ends by a '^' or '+' on non-first position.
-  for (unsigned len = 1; len < lemma.len; len++)
-    if (lemma.str[len] == '^' || lemma.str[len] == '+')
+  // Lemma ends either by
+  // - '^' on non-first position followed by nothing or [A-Za-z][-A-Za-z]*
+  // - '+' on non-first position followed by nothing
+  for (unsigned len = 1; len < lemma.len; len++) {
+    if (len + 1 == lemma.len && (lemma.str[len] == '^' || lemma.str[len] == '+'))
       return len;
+    if (len + 1 < lemma.len && lemma.str[len] == '^') {
+      bool ok = true;
+      for (unsigned i = len + 1; ok && i < lemma.len; len++)
+        ok &= (lemma.str[i] >= 'A' && lemma.str[i] <= 'Z') ||
+            (lemma.str[i] >= 'a' && lemma.str[i] <= 'z') ||
+            (i > len + 1 && lemma.str[i] == '-');
+      if (ok) return len;
+    }
+  }
   return lemma.len;
 }
 
