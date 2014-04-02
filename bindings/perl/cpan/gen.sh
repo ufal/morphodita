@@ -9,7 +9,7 @@ rm -rf $dir
 mkdir -p $dir
 
 # Local files
-cp Build.PL Changes README $dir
+cp -a Build.PL Changes ../../../LICENSE README ../examples $dir
 
 # MorphoDiTa sources
 mkdir $dir/morphodita
@@ -63,3 +63,5 @@ sed '/^=head1 AUTHOR/ {
 }' -i $dir/lib/Ufal/MorphoDiTa.pm
 
 rm gen.sh.doc
+
+(cd Ufal-MorphoDiTa && perl Build.PL && perl Build manifest && perl Build distclean && rm -f MANIFEST.SKIP.bak)

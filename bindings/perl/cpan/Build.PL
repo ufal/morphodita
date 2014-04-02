@@ -15,7 +15,7 @@ SUBCLASS
 
 my $builder = $class->new(
     module_name          => 'Ufal::MorphoDiTa',
-    license              => 'lgpl3',
+    license              => 'lgpl',
     dist_author          => 'Milan Straka <straka@ufal.mff.cuni.cz>',
     dist_abstract        => 'Bindings to MorphoDiTa library',
     dist_version_from    => 'lib/Ufal/MorphoDiTa.pm',
