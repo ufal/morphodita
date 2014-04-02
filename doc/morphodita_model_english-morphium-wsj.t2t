@@ -82,17 +82,17 @@ to generate all forms without any negative prefix by appending ``+`` after the l
 
 The English model contains the following files:
 
-: ``english-pdt-<version>.dict``
+: ``english-morphium-<version>.dict``
   Morphological dictionary. The SCOWL word list has been automatically analyzed
   and lemmatized and uses as the dictionary. The guesser performing the analyzation
   and lemmatization is available.
 
-: ``english-pdt-<version>.tagger``
+: ``english-morphium-wsj-<version>.tagger``
   Tagger trained on the training portion of Wall Street Journal (Sections 0-18)
   and tuned on the development portion (Sections 19-21). Contains the
-  ``english-pdt-<version>.dict`` morphological dictionary.
+  ``english-morphium-<version>.dict`` morphological dictionary.
 
-  The latest version ``english-pdt-140304.tagger`` reaches 97.27% tag
+  The latest version ``english-morphium-wsj-140304.tagger`` reaches 97.27% tag
   accuracy on Wall Street Journal test portion (Section 22-24). Model speed: ~60k words/s,
   model size: 6MB.
 
@@ -104,18 +104,18 @@ stripped) may not be desirable. Therefore, a variant of the English model
 denoted by ``no_negation`` is provided, which does not strip negative prefixes
 from lemmas.
 
-: ``english-pdt-<version>-no_negation.dict``
+: ``english-morphium-<version>-no_negation.dict``
   Morphological dictionary which does not strip negative lemma prefixes. The
   SCOWL word list has been automatically analyzed and lemmatized and uses as
   the dictionary. The guesser performing the analyzation and lemmatization is
   available.
 
-: ``english-pdt-<version>-no_negation.tagger``
+: ``english-morphium-wsj-<version>-no_negation.tagger``
   Tagger which does not strip negative lemma prefixes, trained on the training
   portion of Wall Street Journal (Sections 0-18) and tuned on the development
   portion (Sections 19-21). Contains the
-  ``english-pdt-<version>-no_negation.dict`` morphological dictionary.
+  ``english-morphium-<version>-no_negation.dict`` morphological dictionary.
 
-  The latest version ``english-pdt-140304-no_negation.tagger`` reaches 97.25%
+  The latest version ``english-morphium-wsj-140304-no_negation.tagger`` reaches 97.25%
   tag accuracy on Wall Street Journal test portion (Section 22-24). Model
   speed: ~60k words/s, model size: 6MB.
