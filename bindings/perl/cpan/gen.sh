@@ -29,39 +29,8 @@ perl -e '%p=(); while(<>) {
   print "our \$VERSION = '"'$1'"';\n" if /^package ([^;]*);$/ and not $p{$1}++;
 } ' -i $dir/lib/Ufal/MorphoDiTa.pm
 
-# Prepare API documentation and examples
-make -C ../../../doc morphodita_bindings_api.txt
+# POD file
+./MorphoDiTa.pod.sh >$dir/lib/Ufal/MorphoDiTa.pod
 
-( echo =head2 Wrapped C++ API
-  echo
-  echo The C++ API being wrapped follows. For a API reference of the original
-  echo C++ API, see L\<http://ufal.mff.cuni.cz/morphodita/api-reference\>.
-  echo
-  tail -n+4 ../../../doc/morphodita_bindings_api.txt | sed 's/^/  /'
-  echo
-  echo =head1 Examples
-  echo
-  echo =head2 run_morpho_cli
-  echo
-  echo Simple example performing morphological analysis and generation.
-  echo
-  sed '1,/^[^#]/d' ../examples/run_morpho_cli.pl | sed 's/^/  /'
-  echo
-  echo =head2 run_tagger
-  echo
-  echo Simple example performing tokenization and PoS tagging.
-  echo
-  sed '1,/^[^#]/d' ../examples/run_tagger.pl | sed 's/^/  /'
-  echo
-) > gen.sh.doc
-
-# Add it to pm
-sed '/^=head1 AUTHOR/ {
-  r gen.sh.doc
-  a =head1 AUTHOR
-  d
-}' -i $dir/lib/Ufal/MorphoDiTa.pm
-
-rm gen.sh.doc
-
+# Generate manifest
 (cd Ufal-MorphoDiTa && perl Build.PL && perl Build manifest && perl Build distclean && rm -f MANIFEST.SKIP.bak)

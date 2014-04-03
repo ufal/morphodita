@@ -1,5 +1,10 @@
 Revision history for Ufal-MorphoDiTa
 
+1.0.0.4 [03 Apr 14]
+        Move documentation to separate pod file.
+        Remove -xc++ option and change --std=c++11 to -std=c++11.
+        Really change AUTHOR to AUTHORS.
+
 1.0.0.3 [02 Apr 14]
         Specify pod encoding and change AUTHOR to AUTHORS.
 

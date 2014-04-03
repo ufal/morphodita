@@ -28,7 +28,7 @@ my $builder = $class->new(
         'Test::More' => 0,
     },
     add_to_cleanup       => [ 'Ufal-MorphoDiTa-*' ],
-    extra_compiler_flags => ['-xc++', '--std=c++11', '-fvisibility=hidden'],
+    extra_compiler_flags => ['-std=c++11', '-fvisibility=hidden'],
     extra_linker_flags   => ['-s', '-lstdc++' ],
     include_dirs         => ['morphodita/include' ],
     c_source             => 'morphodita',
