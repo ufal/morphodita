@@ -43,16 +43,16 @@ int external_morpho::analyze(string_piece form, guesser_mode /*guesser*/, vector
   lemmas.clear();
 
   if (form.len) {
-    // Split form using \t into lemma-tag pairs.
+    // Split form using ' ' into lemma-tag pairs.
     for (string_piece lemmatags = form; lemmatags.len; ) {
       auto lemma_start = lemmatags.str;
-      while (lemmatags.len && *lemmatags.str != '\t') lemmatags.len--, lemmatags.str++;
+      while (lemmatags.len && *lemmatags.str != ' ') lemmatags.len--, lemmatags.str++;
       if (!lemmatags.len) break;
       auto lemma_len = lemmatags.str - lemma_start;
       lemmatags.len--, lemmatags.str++;
 
       auto tag_start = lemmatags.str;
-      while (lemmatags.len && *lemmatags.str != '\t') lemmatags.len--, lemmatags.str++;
+      while (lemmatags.len && *lemmatags.str != ' ') lemmatags.len--, lemmatags.str++;
       auto tag_len = lemmatags.str - tag_start;
       if (lemmatags.len) lemmatags.len--, lemmatags.str++;
 
@@ -73,22 +73,22 @@ int external_morpho::generate(string_piece lemma, const char* tag_wildcard, morp
 
   if (lemma.len) {
     bool any_result = false;
-    // Split lemma using \t into form-lemma-tag pairs.
+    // Split lemma using ' ' into form-lemma-tag pairs.
     for (string_piece formlemmatags = lemma; formlemmatags.len; ) {
       auto form_start = formlemmatags.str;
-      while (formlemmatags.len && *formlemmatags.str != '\t') formlemmatags.len--, formlemmatags.str++;
+      while (formlemmatags.len && *formlemmatags.str != ' ') formlemmatags.len--, formlemmatags.str++;
       if (!formlemmatags.len) break;
       auto form_len = formlemmatags.str - form_start;
       formlemmatags.len--, formlemmatags.str++;
 
       auto lemma_start = formlemmatags.str;
-      while (formlemmatags.len && *formlemmatags.str != '\t') formlemmatags.len--, formlemmatags.str++;
+      while (formlemmatags.len && *formlemmatags.str != ' ') formlemmatags.len--, formlemmatags.str++;
       if (!formlemmatags.len) break;
       auto lemma_len = formlemmatags.str - lemma_start;
       formlemmatags.len--, formlemmatags.str++;
 
       auto tag_start = formlemmatags.str;
-      while (formlemmatags.len && *formlemmatags.str != '\t') formlemmatags.len--, formlemmatags.str++;
+      while (formlemmatags.len && *formlemmatags.str != ' ') formlemmatags.len--, formlemmatags.str++;
       auto tag_len = formlemmatags.str - tag_start;
       if (formlemmatags.len) formlemmatags.len--, formlemmatags.str++;
 
