@@ -27,8 +27,8 @@ To use MorphoDiTa, a language model is needed. The language models are available
 from [LINDAT/CLARIN http://www.lindat.cz] infrastructure and described further
 in the User's Manual. Currently the following language models are available:
 
-- Czech: latest version 131112 (to be released soon)
-- English: latest version 140304 (to be released soon)
+- Czech: [latest version 131112 http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1]
+- English: [latest version 140304 http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0]
 
 
 == License ==
