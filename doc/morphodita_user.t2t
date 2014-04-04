@@ -336,3 +336,98 @@ těší
 .
 
 ```
+
+
+== Custom Morphological and Tagging Models ==[custom_models]
+
+It is possible to create custom morphological and tagging models.
+
+=== Custom Morphological Models ===
+
+Custom morphological models can be created using ``encode_dictionary`` binary.
+
+The ``encode_dictionary`` reads input from standard input and input and
+prints MorphoDiTa morphological model on standard output.
+
+The input of ``encode_dictionary`` is a textual representation of morphological
+dictionary. It should be UTF-8 encoded and every line should be a tab separated
+triplet ``lemma \t tag \t form``. All forms of one lemma must appear in
+a continuous region and no line should appear more than once (``sort -u`` can
+be used to achieve this).
+
+Run ``encode_dictionary`` with the following options:
+``` encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag
+- ``generic``: This parameter defines tokenizer and other language specific
+  behaviour. Other values than ``generic`` take different options and are not
+  documented.
+
+- ``max_suffix_len``: Maximum length of suffixes in automatically inferred
+  inflexion classes.  If unsure, use 8 (we use 8 for Czech and 4 for English).
+  Smaller values produce larger and slightly faster models.
+
+- ``unknown_tag``: Assigned to a form during analysis if no matching tag can be
+  found.
+
+- ``number_tag``: Assigned to a form during analysis if the form was not found
+  in the dictionary and it looks like a number. Can be the same as
+  ``unknown_tag``.
+
+- ``punctuation_tag``: Assigned to a form during analysis if the form was not found
+  in the dictionary and it consists of Unicode characters in the Punctuation
+  category. Can be the same as ``unknown_tag``.
+
+- ``symbol_tag``: Assigned to a form during analysis if the form was not found
+  in the dictionary and it consists of Unicode characters in the Symbol
+  category. Can be the same as ``unknown_tag``.
+
+
+Example input data:
+```
+dog	NN	dog
+dog	NNS	dogs
+go	VB	go
+go	VBP	go
+go	VBZ	goes
+go	VBG	going
+go	VBD	went
+```
+
+Example command line:
+``` encode_dictionary generic 8 UNK NUM PUNC SYM <input_data >output_model
+
+
+==== Using External Morphology ====
+
+Sometimes it is useful to train MorphoDiTa tagger using an external
+morphological analysis, without having suitable MorphoDiTa dictionary.
+
+That is possible using a so called //external morphology model//. External
+morphology model can be created easily using
+``` encode_dictionary external unknown_tag
+No standard input is read in this case. The ``unknown_tag`` parameter is used when
+no tag is assigned to a word form during analysis. The resulting model is
+printed on standard output.
+
+The external morphology model does not contain any morphological dictionary.
+Instead, it expects the user to perform morphologic analysis and generation
+on their own. Therefore, the input form to analysis is expected to be space
+separated lemma-tag pairs, which are returned by the analysis. Similarly, the
+input lemma to generation is expected to be space separated form-lemma-tag
+triplets, which are again returned by the generation (possibly filtered by
+a tag wildcard).
+
+Note that the tokenizer returned by the external morphology model is the same
+as the tokenizer of the generic model, and split input on spaces. Therefore, it
+can be used to tokenize input, the tokens then passed to the external
+morphology, and the results can be (after proper formatting) used as input
+to MorphoDiTa.
+
+Example input form for analysis using external morphology model:
+``` go VB go VBP
+
+Example input lemma for generation using external morphology model:
+``` go go VB go go VBP goes go VBZ going go VBG went go VBG
+
+=== Custom Tagging Models ===
+
+Custom tagging models can be trained using ``train_tagger`` binary.
