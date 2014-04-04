@@ -43,7 +43,7 @@ lemmas = TaggedLemmas()
 lemmas_forms = TaggedLemmasForms()
 line = sys.stdin.readline()
 while line:
-  tokens = line.rstrip('\r\n').split(' ')
+  tokens = line.rstrip('\r\n').split('\t')
   if len(tokens) == 1: # analyze
     result = morpho.analyze(tokens[0], morpho.GUESSER, lemmas)
 

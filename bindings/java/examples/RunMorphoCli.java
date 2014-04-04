@@ -38,7 +38,7 @@ class RunMorphoCli {
     TaggedLemmasForms lemmas_forms = new TaggedLemmasForms();
     Scanner reader = new Scanner(System.in);
     while (reader.hasNextLine()) {
-      String[] tokens = reader.nextLine().split(" ", -1);
+      String[] tokens = reader.nextLine().split("\t", -1);
 
       if (tokens.length == 1) /* analyze */ {
         int result = morpho.analyze(tokens[0], morpho.GUESSER, lemmas);

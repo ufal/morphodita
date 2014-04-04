@@ -34,7 +34,7 @@ my $lemmas = TaggedLemmas->new();
 my $lemmas_forms = TaggedLemmasForms->new();
 while (<>) {
   chomp;
-  my @tokens = split /\s+/, $_, -1;
+  my @tokens = split /\t/, $_, -1;
   if (@tokens == 1) { #Analyze
     my $result = $morpho->analyze($tokens[0], $Morpho::GUESSER, $lemmas);
     my $guesser = $result == $Morpho::GUESSER ? "Guesser " : "";

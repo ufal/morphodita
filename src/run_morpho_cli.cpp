@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
   string line;
   vector<string> tokens;
   while (getline(stdin, line)) {
-    split(line, ' ', tokens);
+    split(line, '\t', tokens);
     if /* analyze */ (tokens.size() == 1) {
       vector<tagged_lemma> lemmas;
       auto result = dictionary->analyze(tokens[0], morpho::GUESSER, lemmas);

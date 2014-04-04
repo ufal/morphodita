@@ -272,11 +272,11 @@ Morphological analysis and generation which is interactive and more human readab
 can be run using:
 ``` run_morpho_cli morphology_model
 
-The input is read from standard input, command on each line. If there is no space
-on a line, analysis is performed on the given word. Otherwise generation is performed
-on the first word, using the rest of the line as a [tag wildcard #tag_wildcard].
-If the second word is empty (i.e., the input is for example ``on ``), all forms
-are generated.
+The input is read from standard input, command on each line. If there is no tab
+on a line, analysis is performed on the given word. If there is a tab on
+a line, generation is performed on the first word, using the second word as
+a [tag wildcard #tag_wildcard].  If the second word is empty (i.e., the input
+is for example ``on	``), all forms are generated.
 
 == Running the Tokenizer ==[run_tokenizer]
 
