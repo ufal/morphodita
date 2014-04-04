@@ -3,7 +3,8 @@ Perl MorphoDiTa Bindings
 
 %!encoding: utf-8
 
-MorphoDiTa library bindings is available in the ``Ufal::MorphoDiTa`` package.
+MorphoDiTa library bindings is available in the
+[``Ufal::MorphoDiTa`` http://search.cpan.org/~straka/Ufal-MorphoDiTa/] package.
 The classes can be imported into the current namespace using the ``:all``
 export tag.
 
