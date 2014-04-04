@@ -28,7 +28,7 @@ static void LzmaFree(void* /*p*/, void *address) { delete[] (char*) address; }
 static lzma::ISzAlloc lzmaAllocator = { LzmaAlloc, LzmaFree };
 
 bool compressor::save(FILE* f, const binary_encoder& enc) {
-  size_t uncompressed_size = enc.data.size(), compressed_size = 2 * enc.data.size();
+  size_t uncompressed_size = enc.data.size(), compressed_size = 2 * enc.data.size() + 100;
   vector<unsigned char> compressed(compressed_size);
 
   lzma::CLzmaEncProps props;
