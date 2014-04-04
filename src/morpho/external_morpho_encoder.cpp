@@ -16,27 +16,23 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
-
-#include "common.h"
+#include "external_morpho_encoder.h"
+#include "utils/binary_encoder.h"
+#include "utils/compressor.h"
 
 namespace ufal {
 namespace morphodita {
 
-class morpho_ids {
- public:
-  enum morpho_id { CZECH = 0, ENGLISH = 1, GENERIC = 2, EXTERNAL = 3 };
+void external_morpho_encoder::encode(const string& unknown_tag, FILE* out_morpho) {
+  binary_encoder enc;
 
-  static bool parse(const string& str, morpho_id& id) {
-    if (str == "czech") return id = CZECH, true;
-    if (str == "english") return id = ENGLISH, true;
-    if (str == "generic") return id = GENERIC, true;
-    if (str == "external") return id = EXTERNAL, true;
-    return false;
-  }
-};
+  // Save unknown_tag
+  enc.add_1B(unknown_tag.size());
+  enc.add_str(unknown_tag);
 
-typedef morpho_ids::morpho_id morpho_id;
+  if (!compressor::save(out_morpho, enc)) runtime_errorf("Cannot compress and write dictionary to file!");
+  eprintf("Dictionary saved.\n");
+}
 
 } // namespace morphodita
 } // namespace ufal

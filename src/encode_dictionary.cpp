@@ -21,6 +21,7 @@
 #include "morpho/morpho_ids.h"
 #include "morpho/czech_morpho_encoder.h"
 #include "morpho/english_morpho_encoder.h"
+#include "morpho/external_morpho_encoder.h"
 #include "morpho/generic_morpho_encoder.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
@@ -95,6 +96,15 @@ int main(int argc, char* argv[]) {
 
         fputc(id, stdout);
         generic_morpho_encoder::encode(stdin, max_suffix_len, tags, statistical_guesser, stdout);
+        break;
+      }
+    case morpho_ids::EXTERNAL:
+      {
+        if (argc < 3) runtime_errorf("Usage: %s external unknown_tag\n", argv[0]);
+        string unknown_tag = argv[2];
+
+        fputc(id, stdout);
+        external_morpho_encoder::encode(unknown_tag, stdout);
         break;
       }
     default:
