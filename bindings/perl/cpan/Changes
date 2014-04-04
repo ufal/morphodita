@@ -1,5 +1,9 @@
 Revision history for Ufal-MorphoDiTa
 
+1.0.0.5 [04 Apr 14]
+        Update MorphoDiTa sources to version 1.0.0.
+        Earlier releases contained pre-release of MorphoDiTa.
+
 1.0.0.4 [03 Apr 14]
         Move documentation to separate pod file.
         Remove -xc++ option and change --std=c++11 to -std=c++11.
