@@ -1,4 +1,4 @@
 {
-  global: initmorphodita_python; PyInit_morphodita_python;
+  global: initufal_morphodita; PyInit_ufal_morphodita;
   local: *;
 };
