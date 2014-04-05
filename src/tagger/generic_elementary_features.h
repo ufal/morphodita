@@ -86,10 +86,10 @@ vector<elementary_feature_description> generic_elementary_features<Map>::descrip
 
   {"Tag", PER_TAG, ANY_OFFSET, TAG, MAP_TAG},
   {"Tag1", PER_TAG, ANY_OFFSET, TAG1, MAP_TAG1},
-  {"Tag2", PER_TAG, ANY_OFFSET, TAG2, MAP_TAG1},
-  {"Tag3", PER_TAG, ANY_OFFSET, TAG3, MAP_TAG1},
-  {"Tag4", PER_TAG, ANY_OFFSET, TAG4, MAP_TAG1},
-  {"Tag5", PER_TAG, ANY_OFFSET, TAG5, MAP_TAG1},
+  {"Tag2", PER_TAG, ANY_OFFSET, TAG2, MAP_TAG2},
+  {"Tag3", PER_TAG, ANY_OFFSET, TAG3, MAP_TAG3},
+  {"Tag4", PER_TAG, ANY_OFFSET, TAG4, MAP_TAG4},
+  {"Tag5", PER_TAG, ANY_OFFSET, TAG5, MAP_TAG5},
   {"Lemma", PER_TAG, ANY_OFFSET, LEMMA, MAP_LEMMA},
 
   {"PreviousVerbTag", DYNAMIC, ANY_OFFSET, PREVIOUS_VERB_TAG, MAP_TAG},
