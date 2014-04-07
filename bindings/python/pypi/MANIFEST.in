@@ -1,3 +1,4 @@
+include Changes
 include LICENSE
 graft examples
 graft morphodita
