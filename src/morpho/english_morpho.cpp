@@ -94,6 +94,10 @@ int english_morpho::lemma_id_len(string_piece lemma) const {
   return english_lemma_addinfo::lemma_id_len(lemma);
 }
 
+int english_morpho::raw_form_len(string_piece form) const {
+  return form.len;
+}
+
 tokenizer* english_morpho::new_tokenizer() const {
   return new english_tokenizer();
 }

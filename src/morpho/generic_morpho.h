@@ -34,6 +34,7 @@ class generic_morpho : public morpho {
   virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, vector<tagged_lemma_forms>& forms) const;
   virtual int raw_lemma_len(string_piece lemma) const override;
   virtual int lemma_id_len(string_piece lemma) const override;
+  virtual int raw_form_len(string_piece form) const override;
   virtual tokenizer* new_tokenizer() const override;
 
   bool load(FILE* f);

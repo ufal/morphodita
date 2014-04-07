@@ -122,6 +122,10 @@ int generic_morpho::lemma_id_len(string_piece lemma) const {
   return generic_lemma_addinfo::lemma_id_len(lemma);
 }
 
+int generic_morpho::raw_form_len(string_piece form) const {
+  return form.len;
+}
+
 tokenizer* generic_morpho::new_tokenizer() const {
   return new generic_tokenizer();
 }

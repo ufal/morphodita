@@ -137,6 +137,11 @@ class morpho {
     std::string lemma_id(const char* lemma) const {
       return std::string(lemma, $self->lemma_id_len(lemma));
     }
+
+    %rename(rawForm) raw_form;
+    std::string raw_form(const char* form) const {
+      return std::string(form, $self->raw_form_len(form));
+    }
   }
 
   %rename(newTokenizer) new_tokenizer;

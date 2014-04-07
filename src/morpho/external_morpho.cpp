@@ -112,11 +112,21 @@ int external_morpho::generate(string_piece lemma, const char* tag_wildcard, morp
 }
 
 int external_morpho::raw_lemma_len(string_piece lemma) const {
-  return lemma.len;
+  unsigned lemma_len = 0;
+  while (lemma_len < lemma.len && lemma.str[lemma_len] != ' ') lemma_len++;
+  return lemma_len;
 }
 
 int external_morpho::lemma_id_len(string_piece lemma) const {
-  return lemma.len;
+  unsigned lemma_len = 0;
+  while (lemma_len < lemma.len && lemma.str[lemma_len] != ' ') lemma_len++;
+  return lemma_len;
+}
+
+int external_morpho::raw_form_len(string_piece form) const {
+  unsigned form_len = 0;
+  while (form_len < form.len && form.str[form_len] != ' ') form_len++;
+  return form_len;
 }
 
 tokenizer* external_morpho::new_tokenizer() const {

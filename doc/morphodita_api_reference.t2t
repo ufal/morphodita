@@ -212,6 +212,7 @@ class morpho {
 
   virtual int [raw_lemma_len #morpho_raw_lemma_len]([string_piece #string_piece] lemma) const = 0;
   virtual int [lemma_id_len #morpho_lemma_id_len]([string_piece #string_piece] lemma) const = 0;
+  virtual int [raw_form_len #morpho_raw_form_len]([string_piece #string_piece] form) const = 0;
 
   virtual [tokenizer #tokenizer]* [new_tokenizer #morpho_new_tokenizer]() const = 0;
 };
@@ -293,6 +294,13 @@ a //raw lemma// plus a //lemma id// (see [Lemma Structure #lemma_structure]).
 Therefore, the substring of the original lemma of this length is a unique
 lemma identifier. The rest of the original lemma are lemma comments which
 do not identify the lemma.
+
+=== morpho::raw_form_len ===[morpho_raw_form_len]
+``` virtual int raw_form_len([string_piece #string_piece] form) const = 0;
+
+When given a form, returns the length of a //raw form//. This is used only in
+//external morphology model//, where form contains also morphological analyses,
+and this call can return the length of the form without the analyses.
 
 === morpho::new_tokenizer ===[morpho_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;

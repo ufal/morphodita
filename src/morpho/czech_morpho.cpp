@@ -148,6 +148,10 @@ int czech_morpho::lemma_id_len(string_piece lemma) const {
   return czech_lemma_addinfo::lemma_id_len(lemma);
 }
 
+int czech_morpho::raw_form_len(string_piece form) const {
+  return form.len;
+}
+
 tokenizer* czech_morpho::new_tokenizer() const {
   return new czech_tokenizer();
 }

@@ -414,7 +414,9 @@ their own. Therefore, the input form to analysis is expected to be followed by
 space separated lemma-tag pairs, which are returned by the analysis.
 Similarly, the input lemma to generation is expected to be followed by space
 separated form-tag pairs, which are again returned by the generation (possibly
-filtered by a tag wildcard).
+filtered by a tag wildcard). (To extract the length of the form or lemma itself
+even when followed by external analyses, API calls ``raw_form_len`` or
+``raw_lemma_len`` and ``lemma_id_len`` can be used.)
 
 Note that the tokenizer returned by the external morphology model is the same
 as the tokenizer of the generic model, and splits input on spaces. Therefore,
