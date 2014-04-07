@@ -33,6 +33,8 @@ static void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& t
 static void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
+  show_version_if_requested(argc, argv);
+
   options_map options;
   if (!parse_options({{"input",{"untokenized", "vertical"}},
                       {"convert_tagset",{""}},

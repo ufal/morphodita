@@ -21,6 +21,7 @@
 
 #include "tagger/tagger.h"
 #include "utils/input.h"
+#include "utils/parse_options.h"
 
 using namespace ufal::morphodita;
 
@@ -31,6 +32,8 @@ struct word {
 };
 
 int main(int argc, char* argv[]) {
+  show_version_if_requested(argc, argv);
+
   if (argc <= 1) runtime_errorf("Usage: %s tagger_file", argv[0]);
 
   eprintf("Loading tagger: ");

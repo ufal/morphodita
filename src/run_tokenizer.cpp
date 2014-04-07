@@ -31,6 +31,8 @@ static void tokenize_vertical(FILE* in, FILE* out, tokenizer& tokenizer);
 static void tokenize_xml(FILE* in, FILE* out, tokenizer& tokenizer);
 
 int main(int argc, char* argv[]) {
+  show_version_if_requested(argc, argv);
+
   options_map options;
   bool show_usage = false;
   show_usage = !parse_options({{"tokenizer", {"czech", "english", "generic"}},

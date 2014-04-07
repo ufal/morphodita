@@ -30,6 +30,8 @@ using namespace ufal::morphodita;
 static void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
+  show_version_if_requested(argc, argv);
+
   options_map options;
   if (!parse_options({{"convert_tagset",{""}}}, argc, argv, options) ||
       argc < 3)

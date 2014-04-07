@@ -25,11 +25,14 @@
 #include "morpho/generic_morpho_encoder.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
+#include "utils/parse_options.h"
 #include "utils/set_binary_stdout.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
+  show_version_if_requested(argc, argv);
+
   if (argc <= 1) runtime_errorf("Usage: %s morpho_identifier [options]\n", argv[0]);
 
   morpho_id id;

@@ -20,10 +20,13 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/parse_options.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
+  show_version_if_requested(argc, argv);
+
   if (argc <= 1) runtime_errorf("Usage: %s dict_file", argv[0]);
 
   eprintf("Loading dictionary: ");

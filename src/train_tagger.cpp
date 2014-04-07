@@ -25,11 +25,14 @@
 #include "tagger/tagger_trainer.h"
 #include "utils/file_ptr.h"
 #include "utils/parse_int.h"
+#include "utils/parse_options.h"
 #include "utils/set_binary_stdout.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
+  show_version_if_requested(argc, argv);
+
   if (argc < 2) runtime_errorf("Usage: %s tagger_identifier [options]", argv[0]);
 
   tagger_id id;

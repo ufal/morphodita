@@ -17,8 +17,10 @@
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstring>
+#include <cstdlib>
 
 #include "parse_options.h"
+#include "version/version.h"
 
 namespace ufal {
 namespace morphodita {
@@ -58,6 +60,23 @@ bool parse_options(const unordered_map<string, unordered_set<string>>& allowed, 
 
   argc = args;
   return true;
+}
+
+void show_version_if_requested(int argc, char* argv[]) {
+  for (int argi = 1; argi < argc; argi++)
+    if (argv[argi][0] == '-') {
+      if (strcmp(argv[argi], "--") == 0) break;
+      if (strcmp(argv[argi] + 1 + (argv[argi][1] == '-'), "version") == 0) {
+        version version = version::current();
+
+        eprintf("MorphoDiTa version %u.%u.%u\n"
+                "Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of\n"
+                "Mathematics and Physics, Charles University in Prague, Czech Republic.\n",
+                version.major, version.minor, version.patch);
+
+        exit(0);
+      }
+    }
 }
 
 } // namespace morphodita
