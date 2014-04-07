@@ -20,12 +20,12 @@ English models are created using the following data:
 
 The resulting models are distributed under the
 [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] licence.
-English models work in MorphoDiTa version 1.0.0 or later.
+English models work in MorphoDiTa version 1.1.0 or later.
 
 English models are versioned according to the release date, the version
 format is ``YYMMDD``, where ``YY``, ``MM`` and ``DD`` are two-digit
 representation of year, month and day, respectively. The latest version is
-140304.
+140407.
 
 
 === Acknowledgements ===[english-morphium-wsj_acknowledgements]
@@ -92,7 +92,7 @@ The English model contains the following files:
   and tuned on the development portion (Sections 19-21). Contains the
   ``english-morphium-<version>.dict`` morphological dictionary.
 
-  The latest version ``english-morphium-wsj-140304.tagger`` reaches 97.27% tag
+  The latest version ``english-morphium-wsj-140407.tagger`` reaches 97.27% tag
   accuracy on Wall Street Journal test portion (Section 22-24). Model speed: ~60k words/s,
   model size: 6MB.
 
@@ -116,6 +116,14 @@ from lemmas.
   portion (Sections 19-21). Contains the
   ``english-morphium-<version>-no_negation.dict`` morphological dictionary.
 
-  The latest version ``english-morphium-wsj-140304-no_negation.tagger`` reaches 97.25%
+  The latest version ``english-morphium-wsj-140407-no_negation.tagger`` reaches 97.25%
   tag accuracy on Wall Street Journal test portion (Section 22-24). Model
   speed: ~60k words/s, model size: 6MB.
+
+
+=== English Model Changes ===
+: ``english-morphium-140407`` and ``english-morphium-wsj-140407`` (require MorphoDiTa 1.1.0 or later)
+  Recognize also "non-" as a negative prefix. Formerly, only "non" was recognized.
+
+: ``english-morphium-140304`` and ``english-morphium-wsj-140304`` (require MorphoDiTa 1.0.0 or later)
+  Initial release.
