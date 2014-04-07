@@ -19,7 +19,8 @@ the PYTHON_INCLUDE variable using
 Python Bindings API
 ===================
 
-MorphoDiTa library bindings is available in the ufal.morphodita module.
+MorphoDiTa library bindings is available in the ufal.morphodita
+(http://pypi.python.org/pypi/ufal.morphodita) module.
 
 The bindings is a straightforward conversion of the C++ bindings API. In Python
 2, strings can be both unicode and UTF-8 encoded str, and the library always
@@ -93,6 +94,7 @@ Main Classes
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
     virtual string rawLemma(const char* lemma) const;
     virtual string lemmaId(const char* lemma) const;
+    virtual string rawForm(const char* form) const;
   
     virtual Tokenizer* newTokenizer() const;
   };

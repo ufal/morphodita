@@ -19,8 +19,9 @@ the PERL_INCLUDE variable using
 Perl Bindings API
 =================
 
-MorphoDiTa library bindings is available in the Ufal::MorphoDiTa package. The
-classes can be imported into the current namespace using the :all export tag.
+MorphoDiTa library bindings is available in the Ufal::MorphoDiTa
+(http://search.cpan.org/~straka/Ufal-MorphoDiTa/) package. The classes can be
+imported into the current namespace using the :all export tag.
 
 The bindings is a straightforward conversion of the C++ bindings API. Vectors do
 not have native Perl interface, see Ufal::MorphoDiTa::Forms for reference.
@@ -95,6 +96,7 @@ Main Classes
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
     virtual string rawLemma(const char* lemma) const;
     virtual string lemmaId(const char* lemma) const;
+    virtual string rawForm(const char* form) const;
   
     virtual Tokenizer* newTokenizer() const;
   };

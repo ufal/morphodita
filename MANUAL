@@ -43,8 +43,10 @@ To use MorphoDiTa, a language model is needed. The language models are available
 from LINDAT/CLARIN (http://www.lindat.cz) infrastructure and described further
 in the User's Manual. Currently the following language models are available:
 
-- Czech: latest version 131112 (to be released soon)
-- English: latest version 140304 (to be released soon)
+- Czech: latest version 131112
+  (http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1)
+- English: latest version 140304
+  (http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0)
 
 
 License
@@ -788,11 +790,11 @@ readable can be run using:
 
   run_morpho_cli morphology_model
 
-The input is read from standard input, command on each line. If there is no
-space on a line, analysis is performed on the given word. Otherwise generation
-is performed on the first word, using the rest of the line as a tag wildcard. If
-the second word is empty (i.e., the input is for example ``on ``), all forms are
-generated.
+The input is read from standard input, command on each line. If there is no tab
+on a line, analysis is performed on the given word. If there is a tab on a line,
+generation is performed on the first word, using the second word as a tag
+wildcard.  If the second word is empty (i.e., the input is for example ``on	``),
+all forms are generated.
 
 
 Running the Tokenizer
@@ -853,6 +855,377 @@ output formats are:
   .
   
 
+
+
+Custom Morphological and Tagging Models
+---------------------------------------
+
+It is possible to create custom morphological and tagging models.
+
+
+Custom Morphological Models
+---------------------------
+
+Custom morphological models can be created using encode_dictionary binary.
+
+The encode_dictionary reads from standard input and prints MorphoDiTa
+morphological model on standard output.  The input of encode_dictionary is a
+textual representation of morphological dictionary. It should be UTF-8 encoded
+and every line should be a tab separated triplet lemma \t tag \t form. All forms
+of one lemma must appear in a continuous region and no line should appear more
+than once (sort -u can be used to achieve this).
+
+Run encode_dictionary with the following options:
+
+  encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag
+
+- generic: This parameter defines tokenizer and other language specific
+  behaviour. Other values than generic take different options and are not
+  documented.
+  
+- max_suffix_len: Maximum length of suffixes in automatically inferred
+  inflexion classes.  If unsure, use 8 (we use 8 for Czech and 4 for English).
+  Smaller values produce larger and slightly faster models.
+  
+- unknown_tag: Assigned to a form during analysis if no matching tag can be
+  found.
+  
+- number_tag: Assigned to a form during analysis if the form was not found in
+  the dictionary and it looks like a number. Can be the same as unknown_tag.
+  
+- punctuation_tag: Assigned to a form during analysis if the form was not found
+  in the dictionary and it consists of Unicode characters in the Punctuation
+  category. Can be the same as unknown_tag.
+  
+- symbol_tag: Assigned to a form during analysis if the form was not found in
+  the dictionary and it consists of Unicode characters in the Symbol category.
+  Can be the same as unknown_tag.
+
+Example input data:
+
+  dog	NN	dog
+  dog	NNS	dogs
+  go	VB	go
+  go	VBP	go
+  go	VBZ	goes
+  go	VBG	going
+  go	VBD	went
+
+Example command line:
+
+  encode_dictionary generic 8 UNK NUM PUNC SYM <input_data >output_model
+
+
+Using External Morphology
+-------------------------
+
+Sometimes it is useful to train MorphoDiTa tagger using external morphological
+analysis, without having a MorphoDiTa morphological dictionary.
+
+That is possible using a so called external morphology model. External
+morphology model can be created easily using
+
+  encode_dictionary external unknown_tag >output_model
+
+No standard input is read in this case. The unknown_tag parameter is used when
+no tag is assigned to a word form during analysis. The resulting model is
+printed on standard output.
+
+The external morphology model does not contain any morphological dictionary.
+Instead, it expects the user to perform morphological analysis and generation on
+their own. Therefore, the input form to analysis is expected to be followed by
+space separated lemma-tag pairs, which are returned by the analysis. Similarly,
+the input lemma to generation is expected to be followed by space separated
+form-tag pairs, which are again returned by the generation (possibly filtered by
+a tag wildcard). (To extract the length of the form or lemma itself even when
+followed by external analyses, API calls raw_form_len or raw_lemma_len and
+lemma_id_len can be used.)
+
+Note that the tokenizer returned by the external morphology model is the same as
+the tokenizer of the generic model, and splits input on spaces. Therefore, it
+can be used to tokenize input, the tokens then passed to the external
+morphology, and the results can be after proper formatting used as input to
+MorphoDiTa in vertical input format.
+
+Example input form for analysis using external morphology model:
+
+  wishes wish NNS wish VBZ
+
+Example input lemma for generation using external morphology model:
+
+  go go VB go VBP goes VBZ going VBG went VBG
+
+
+Custom Tagging Models
+---------------------
+
+Custom tagging models can be trained using train_tagger binary, which has the
+following options:
+
+  train_tagger generic_234 morphology use_guesser features iterations prune_features [heldout_data [early_stopping]] <input_data >tagger_model
+
+- generic_234: This parameter defines the tagger (elementary features and
+  algorithm) and the order of Viterbi decoding. Use either generic2, generic3 or
+  generic4. If unsure, use generic3 (best released Czech and English models use
+  generic3). The generic2 produces faster, but less accurate models, generic4
+  produces larger and only marginally better models.
+  
+- morphology: File with the morphological dictionary to use.
+  
+- use_guesser: Use 0/1 to specify whether morphological guesser should be used.
+  Unless you have a good reason not to, use 1.
+  
+- features: File with feature sequences for the tagger. The file format and
+  available elementary features are described in following section.
+  
+- iterations: Number of training iterations. For English, values 5-10 are used,
+  for Czech, values 10-15 are used. Can be affected by early_stopping.
+  
+- prune_features: Use 0/1 to disable/enable pruning of feature sequences not
+  found in training data. Use 1 for smaller and marginally less accurate models,
+  and 0 for larger and marginally better models. If unsure, use 1 (best released
+  Czech and English models use 1).
+  
+- heldout_data: Optional file with heldout data in the same format as input
+  data.  If supplied, accuracy is measured on the heldout data after every
+  training iteration.
+  
+- early_stopping: Optionally use 0/1 to disable/enable early stopping. If early
+  stopping is enabled, the resulting model is not the one after the last
+  training iteration, but the one with best heldout data accuracy.
+
+Example command line (use morphology from morpho.dict, features from features.ft
+and no heldout data):
+
+  train_tagger generic3 morpho.dict 1 features.ft 10 1 <input.data >tagger.model
+
+Example command line (use morphology from morpho.dict, features from features.ft
+and use heldout data with early stopping):
+
+  train_tagger generic3 morpho.dict 1 features.ft 15 1 heldout.data 1 <input.data >tagger.model
+
+See next sections for examples of input data and feature files.
+
+
+Input Data Format
+-----------------
+
+The input data (and the heldout data) represent a sequence of sentences.
+Different sentences do not interact in any way. Words of one sentence are stored
+on consecutive lines, each line containing tab separated triplet form \t lemma
+\t tag in UTF-8 encoding. End of sentence is denoted by an empty line.
+
+Example:
+
+  Děti	dítě	NNFP1-----A----
+  pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
+  k	k-1	RR--3----------
+  babičce	babička	NNFS3-----A----
+  .	.	Z:-------------
+  
+  Už	už-1	Db-------------
+  se	se_^(zvr._zájmeno/částice)	P7-X4----------
+  těší	těšit_:T	VB-S---3P-AA---
+  .	.	Z:-------------
+
+
+Feature File Format
+-------------------
+
+The features used in the tagger have major influence on tagging performance. The
+feature file contains several feature sequences, each sequence consisting of
+several elementary features. The elementary features are computed by MorphoDiTa
+and different tagger models can have a different set of elementary features.
+Here we describe elementary features of generic tagger:
+
+- Form: word form
+- Prefix1 .. Prefix9: word form prefix of length 1..9 (measured in Unicode
+  characters)
+- Suffix1 .. Suffix9: word form suffix of length 1..9 (measured in Unicode
+  characters)
+- Num: whether the word form contains at least one numbers (Unicode category
+  Number)
+- Cap: whether the word form contains at least one uppercase or titlecase
+  letter
+- Dash: whether the word form contains at least one dash (Unicode category
+  'Punctuation, Dash')
+- Tag: word form PoS tag
+- Tag1 .. Tag5: letter 1..5 of word form PoS tag
+- Lemma: word form lemma
+- FollowingVerbTag: PoS tag of a nearest following verb, i.e., a nearest
+  following word form with at least one of the PoS tags starting with V
+- FollowingVerbLemma: lemma of a nearest following verb, i.e., a nearest
+  following word form with at least one of the PoS tags starting with V
+- PreviousVerbTag: PoS tag of a nearest previous verb, i.e., a nearest previous
+  word whose PoS tag (assigned by the tagger) starts with V
+- PreviousVerbTag: lemma of a nearest previous verb, i.e., a nearest previous
+  word whose PoS tag (assigned by the tagger) starts with V
+
+The feature file defines feature sequences which can be applied to a word form.
+A feature sequence consists of elementary features assigned to the given form or
+its neighbours.
+
+Every line in the feature file defines one feature sequence. A feature sequence
+consists of comma joined space separated pairs of elementary feature and an
+offset to which does the elementary feature apply (i.e., Form 0 or Tag 0,Lemma
+-1). The file format is strict and does not allow any additional spaces or
+commas.
+
+Note that offset of some of the elementary features is affected by the order or
+Viterbi decoding used. Notably, if Viterbi decoding of order N is utilized, Tag
+and Lemma can be used inside the decoded window, i.e., only with offsets -N+1 ..
+0.
+
+For inspiration, we present feature files used for releases Czech and English
+MorphoDiTa models. Both these feature files are slight modifications of feature
+files described in the paper Spoustová et al. 2009: Drahomíra "johanka"
+Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. Semi-Supervised
+Training for the Averaged Perceptron POS Tagger.
+(http://aclweb.org/anthology//E/E09/E09-1087.pdf) In Proceedings of the 12th
+Conference of the European Chapter of the ACL (EACL 2009), pages 763-771,
+Athens, Greece, March. Association for Computational Linguistics.
+
+Feature file for English:
+
+  Tag 0,Form 0
+  Tag 0,Prefix1 0
+  Tag 0,Prefix2 0
+  Tag 0,Prefix3 0
+  Tag 0,Prefix4 0
+  Tag 0,Prefix5 0
+  Tag 0,Prefix6 0
+  Tag 0,Prefix7 0
+  Tag 0,Prefix8 0
+  Tag 0,Prefix9 0
+  Tag 0,Suffix1 0
+  Tag 0,Suffix2 0
+  Tag 0,Suffix3 0
+  Tag 0,Suffix4 0
+  Tag 0,Suffix5 0
+  Tag 0,Suffix6 0
+  Tag 0,Suffix7 0
+  Tag 0,Suffix8 0
+  Tag 0,Suffix9 0
+  Tag 0,Num 0
+  Tag 0,Cap 0
+  Tag 0,Dash 0
+  Tag 0,Tag -1
+  Tag 0,Tag -1,Tag -2
+  Tag 0,Form -1
+  Tag 0,Form -2
+  Tag 0,Form -1,Form -2
+  Tag 0,Form 1
+  Tag 0,Form 1,Form 2
+  Tag 0,Tag1 -1
+  Tag 0,Lemma -1
+  Lemma 0,Tag -1
+
+Feature file for Czech (note that some feature sequences predict only part of
+PoS tags trying to overcome data sparseness; Tag2 is extended PoS, Tag3 is
+gender, Tag5 is case):
+
+  Tag 0
+  Tag 0,Tag -1
+  Tag 0,Tag -1,Tag -2
+  Tag 0,Tag -2
+  Tag 0,Form 0
+  Tag 0,Form 0,Form -1
+  Tag 0,Form -1
+  Tag 0,Form -2
+  Tag 0,PreviousVerbTag 0
+  Tag 0,PreviousVerbLemma 0
+  Tag 0,FollowingVerbTag 0
+  Tag 0,FollowingVerbLemma 0
+  Tag 0,Lemma -1
+  Lemma 0,Tag -1
+  Tag 0,Form 1
+  Tag2 0,Tag5 0
+  Tag2 0,Tag5 0,Tag2 -1,Tag5 -1
+  Tag2 0,Tag5 0,Tag2 -1,Tag5 -1,Tag2 -2,Tag5 -2
+  Tag5 0
+  Tag5 0,Tag -1
+  Tag5 0,Tag -1,Tag -2
+  Tag5 0,Tag -2
+  Tag5 0,Form 0
+  Tag5 0,Form 0,Form -1
+  Tag5 0,Form -1
+  Tag5 0,Form -2
+  Tag5 0,PreviousVerbTag 0
+  Tag5 0,PreviousVerbLemma 0
+  Tag5 0,FollowingVerbTag 0
+  Tag5 0,FollowingVerbLemma 0
+  Tag5 0,Lemma -1
+  Tag5 0,Form 1
+  Tag3 0
+  Tag3 0,Tag -1
+  Tag3 0,Tag -1,Tag -2
+  Tag3 0,Tag -2
+  Tag3 0,Form 0
+  Tag3 0,Form 0,Form -1
+  Tag3 0,Form -1
+  Tag3 0,Form -2
+  Tag3 0,PreviousVerbTag 0
+  Tag3 0,PreviousVerbLemma 0
+  Tag3 0,FollowingVerbTag 0
+  Tag3 0,FollowingVerbLemma 0
+  Tag3 0,Lemma -1
+  Tag3 0,Form 1
+  Tag 0,Prefix1 0
+  Tag 0,Prefix2 0
+  Tag 0,Prefix3 0
+  Tag 0,Prefix4 0
+  Tag 0,Suffix1 0
+  Tag 0,Suffix2 0
+  Tag 0,Suffix3 0
+  Tag 0,Suffix4 0
+  Tag 0,Num 0
+  Tag 0,Cap 0
+  Tag 0,Dash 0
+  Tag5 0,Suffix1 0
+  Tag5 0,Suffix2 0
+  Tag5 0,Suffix3 0
+  Tag5 0,Suffix4 0
+
+Feature file for Czech, Part of Speech only variant:
+
+  Tag 0
+  Tag 0,Tag -1
+  Tag 0,Tag -1,Tag -2
+  Tag 0,Tag -2
+  Tag 0,Form 0
+  Tag 0,Form 0,Form -1
+  Tag 0,Form -1
+  Tag 0,Form -2
+  Tag 0,PreviousVerbTag 0
+  Tag 0,PreviousVerbLemma 0
+  Tag 0,FollowingVerbTag 0
+  Tag 0,FollowingVerbLemma 0
+  Tag 0,Lemma -1
+  Lemma 0,Tag -1
+  Tag 0,Form 1
+  Tag 0,Prefix1 0
+  Tag 0,Prefix2 0
+  Tag 0,Prefix3 0
+  Tag 0,Prefix4 0
+  Tag 0,Suffix1 0
+  Tag 0,Suffix2 0
+  Tag 0,Suffix3 0
+  Tag 0,Suffix4 0
+  Tag 0,Num 0
+  Tag 0,Cap 0
+  Tag 0,Dash 0
+
+
+Measuring Tagger Accuracy
+-------------------------
+
+Measuring custom tagger accuracy can be performed by running:
+
+  tagger_accuracy tagger_model <test_data
+
+This binary reads input in the same format as train_tagger, i.e., tab separated
+form-lemma-tag triplets, and evaluates the accuracy of the tagger model on the
+given testing data.
 
 
 MorphoDiTa API Tutorial
@@ -1292,6 +1665,7 @@ Class morpho
   
     virtual int raw_lemma_len(string_piece lemma) const = 0;
     virtual int lemma_id_len(string_piece lemma) const = 0;
+    virtual int raw_form_len(string_piece form) const = 0;
   
     virtual tokenizer* new_tokenizer() const = 0;
   };
@@ -1389,6 +1763,16 @@ When given a lemma returned by the dictionary, returns the length of a raw lemma
 plus a lemma id (see Lemma Structure). Therefore, the substring of the original
 lemma of this length is a unique lemma identifier. The rest of the original
 lemma are lemma comments which do not identify the lemma.
+
+
+morpho::raw_form_len
+--------------------
+
+  virtual int raw_form_len(string_piece form) const = 0;
+
+When given a form, returns the length of a raw form. This is used only in
+external morphology model, where form contains also morphological analyses, and
+this call can return the length of the form without the analyses.
 
 
 morpho::new_tokenizer
@@ -1606,6 +1990,7 @@ Main Classes
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
     virtual string rawLemma(const char* lemma) const;
     virtual string lemmaId(const char* lemma) const;
+    virtual string rawForm(const char* form) const;
   
     virtual Tokenizer* newTokenizer() const;
   };
@@ -1651,8 +2036,9 @@ it is used, otherwise standard library search process is used.
 Perl Bindings
 -------------
 
-MorphoDiTa library bindings is available in the Ufal::MorphoDiTa package. The
-classes can be imported into the current namespace using the :all export tag.
+MorphoDiTa library bindings is available in the Ufal::MorphoDiTa
+(http://search.cpan.org/~straka/Ufal-MorphoDiTa/) package. The classes can be
+imported into the current namespace using the :all export tag.
 
 The bindings is a straightforward conversion of the C++ bindings API. Vectors do
 not have native Perl interface, see Ufal::MorphoDiTa::Forms for reference.
@@ -1663,7 +2049,8 @@ through object instance.
 Python Bindings
 ---------------
 
-MorphoDiTa library bindings is available in the ufal.morphodita module.
+MorphoDiTa library bindings is available in the ufal.morphodita
+(http://pypi.python.org/pypi/ufal.morphodita) module.
 
 The bindings is a straightforward conversion of the C++ bindings API. In Python
 2, strings can be both unicode and UTF-8 encoded str, and the library always

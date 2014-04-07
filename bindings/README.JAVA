@@ -99,6 +99,7 @@ Main Classes
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
     virtual string rawLemma(const char* lemma) const;
     virtual string lemmaId(const char* lemma) const;
+    virtual string rawForm(const char* form) const;
   
     virtual Tokenizer* newTokenizer() const;
   };
