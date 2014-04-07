@@ -66,8 +66,6 @@ void english_morpho_guesser_encoder::encode(FILE* guesser_file, FILE* negations_
 
     unsigned to_follow = parse_int(tokens[1].c_str(), "to_follow in english negation file");
 
-    for (unsigned i = 0; i < tokens[0].size(); i++)
-      if (negations[tokens[0].substr(0, i)].negation_len) runtime_errorf("A prefix of negation '%s' in english negation file is repeated!", tokens[0].c_str());
     if (negations.count(tokens[0])) runtime_errorf("The negation '%s' in english negation file is repeated!", tokens[0].c_str());
     negations.emplace(tokens[0], negation_info(negation_len, to_follow));
   }
@@ -92,7 +90,7 @@ void english_morpho_guesser_encoder::encode(FILE* guesser_file, FILE* negations_
   }).save(enc);
 
   // Save negations
-  persistent_unordered_map(negations, 5, [](binary_encoder& enc, const negation_info& negation) {
+  persistent_unordered_map(negations, 5, true, false, [](binary_encoder& enc, const negation_info& negation) {
     enc.add_1B(negation.negation_len);
     enc.add_1B(negation.to_follow);
   }).save(enc);

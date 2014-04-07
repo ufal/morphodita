@@ -204,7 +204,6 @@ void english_morpho_guesser::analyze(string_piece form, string_piece form_lc, ve
       if (!found) break;
       if (found[NEGATION_LEN]) {
         if (form_lc.len - prefix >= found[TO_FOLLOW]) negation_len = found[NEGATION_LEN];
-        break;
       }
     }
 
