@@ -1,3 +1,9 @@
+Version 1.0.1
+-------------
+- Allow English negative prefix rules to overlap, allowing
+  to use also "non-" as negative prefix in additon to "non".
+- Clarify stable/development versions.
+
 Version 1.0.0 [07 Apr 14]
 -------------------------
 - Initial public release.
