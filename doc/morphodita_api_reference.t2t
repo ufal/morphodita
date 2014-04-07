@@ -15,6 +15,8 @@ file paths, whose encoding is system dependent).
 MorphoDiTa version consists of three numbers //major.minor.patch// with the
 following semantics:
 
+- Even //patch// versions denote stable releases, odd //patch// versions denote
+  development releases.
 - Two versions with the same //major.minor// have the same API with the same
   behaviour, apart from bugs. Therefore, if only //patch// is increased, the
   new version is only a bug-fix release.
