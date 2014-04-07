@@ -88,6 +88,7 @@ void perceptron_tagger<FeatureSequences, order>::tag(const vector<string_piece>&
       c->tagged_forms[i].form = forms[i];
 
     dict->analyze(c->tagged_forms[i].form, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, c->tagged_forms[i].tags);
+    c->tagged_forms[i].form.len = dict->raw_form_len(c->tagged_forms[i].form);
   }
 
   if (c->tags.size() < forms.size()) c->tags.resize(forms.size() * 2);

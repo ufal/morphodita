@@ -102,7 +102,7 @@ double tagger_trainer<TaggerTrainer>::load_data(FILE* f, const morpho& d, bool u
     forms++;
     sentence& s = sentences.back();
     s.forms.emplace_back(tokens[0]);
-    s.forms_with_tags.emplace_back(s.forms.back());
+    s.forms_with_tags.emplace_back(string_piece(s.forms.back().c_str(), d.raw_form_len(s.forms.back())));
     s.gold.emplace_back(tokens[1], tokens[2]);
     s.gold_index.emplace_back(-1);
     for (auto&& lemma : lemmas) {
