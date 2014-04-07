@@ -43,8 +43,13 @@ int external_morpho::analyze(string_piece form, guesser_mode /*guesser*/, vector
   lemmas.clear();
 
   if (form.len) {
-    // Split form using ' ' into lemma-tag pairs.
-    for (string_piece lemmatags = form; lemmatags.len; ) {
+    // Start by skipping the first form
+    string_piece lemmatags = form;
+    while (lemmatags.len && *lemmatags.str != ' ') lemmatags.len--, lemmatags.str++;
+    if (lemmatags.len) lemmatags.len--, lemmatags.str++;
+
+    // Split lemmatags using ' ' into lemma-tag pairs.
+    while (lemmatags.len) {
       auto lemma_start = lemmatags.str;
       while (lemmatags.len && *lemmatags.str != ' ') lemmatags.len--, lemmatags.str++;
       if (!lemmatags.len) break;
@@ -72,38 +77,31 @@ int external_morpho::generate(string_piece lemma, const char* tag_wildcard, morp
   tag_filter filter(tag_wildcard);
 
   if (lemma.len) {
+    // Start by locating the lemma
+    string_piece formtags = lemma;
+    while (formtags.len && *formtags.str != ' ') formtags.len--, formtags.str++;
+    string_piece real_lemma(lemma.str, lemma.len - formtags.len);
+    if (formtags.len) formtags.len--, formtags.str++;
+
+    // Split formtags using ' ' into form-tag pairs.
     bool any_result = false;
-    // Split lemma using ' ' into form-lemma-tag pairs.
-    for (string_piece formlemmatags = lemma; formlemmatags.len; ) {
-      auto form_start = formlemmatags.str;
-      while (formlemmatags.len && *formlemmatags.str != ' ') formlemmatags.len--, formlemmatags.str++;
-      if (!formlemmatags.len) break;
-      auto form_len = formlemmatags.str - form_start;
-      formlemmatags.len--, formlemmatags.str++;
+    while (formtags.len) {
+      auto form_start = formtags.str;
+      while (formtags.len && *formtags.str != ' ') formtags.len--, formtags.str++;
+      if (!formtags.len) break;
+      auto form_len = formtags.str - form_start;
+      formtags.len--, formtags.str++;
 
-      auto lemma_start = formlemmatags.str;
-      while (formlemmatags.len && *formlemmatags.str != ' ') formlemmatags.len--, formlemmatags.str++;
-      if (!formlemmatags.len) break;
-      auto lemma_len = formlemmatags.str - lemma_start;
-      formlemmatags.len--, formlemmatags.str++;
-
-      auto tag_start = formlemmatags.str;
-      while (formlemmatags.len && *formlemmatags.str != ' ') formlemmatags.len--, formlemmatags.str++;
-      auto tag_len = formlemmatags.str - tag_start;
-      if (formlemmatags.len) formlemmatags.len--, formlemmatags.str++;
+      auto tag_start = formtags.str;
+      while (formtags.len && *formtags.str != ' ') formtags.len--, formtags.str++;
+      auto tag_len = formtags.str - tag_start;
+      if (formtags.len) formtags.len--, formtags.str++;
 
       any_result = true;
       string tag(tag_start, tag_len);
       if (filter.matches(tag.c_str())) {
-        string lemma(lemma_start, lemma_len);
-        // Find the lemma in forms, searching from back (so that when lemmas
-        // are grouped, we can locale repeated lemma in constant time).
-        int lemma_index = -1;
-        for (int i = int(forms.size()) - 1; lemma_index < 0 && i >= 0; i--)
-          if (forms[i].lemma == lemma)
-            lemma_index = i;
-        if (lemma_index < 0) lemma_index = forms.size(), forms.emplace_back(lemma);
-        forms[lemma_index].forms.emplace_back(string(form_start, form_len), tag);
+        if (forms.empty()) forms.emplace_back(string(real_lemma.str, real_lemma.len));
+        forms.back().forms.emplace_back(string(form_start, form_len), tag);
       }
     }
 

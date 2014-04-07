@@ -409,24 +409,24 @@ no tag is assigned to a word form during analysis. The resulting model is
 printed on standard output.
 
 The external morphology model does not contain any morphological dictionary.
-Instead, it expects the user to perform morphologic analysis and generation
-on their own. Therefore, the input form to analysis is expected to be space
-separated lemma-tag pairs, which are returned by the analysis. Similarly, the
-input lemma to generation is expected to be space separated form-lemma-tag
-triplets, which are again returned by the generation (possibly filtered by
-a tag wildcard).
+Instead, it expects the user to perform morphologic analysis and generation on
+their own. Therefore, the input form to analysis is expected to be followed by
+space separated lemma-tag pairs, which are returned by the analysis.
+Similarly, the input lemma to generation is expected to be followed by space
+separated form-tag pairs, which are again returned by the generation (possibly
+filtered by a tag wildcard).
 
 Note that the tokenizer returned by the external morphology model is the same
-as the tokenizer of the generic model, and split input on spaces. Therefore, it
-can be used to tokenize input, the tokens then passed to the external
-morphology, and the results can be (after proper formatting) used as input
-to MorphoDiTa.
+as the tokenizer of the generic model, and splits input on spaces. Therefore,
+it can be used to tokenize input, the tokens then passed to the external
+morphology, and the results can be after proper formatting used as input to
+MorphoDiTa in vertical input format.
 
 Example input form for analysis using external morphology model:
-``` go VB go VBP
+``` wishes wish NNS wish VBZ
 
 Example input lemma for generation using external morphology model:
-``` go go VB go go VBP goes go VBZ going go VBG went go VBG
+``` go go VB go VBP goes VBZ going VBG went VBG
 
 === Custom Tagging Models ===
 
