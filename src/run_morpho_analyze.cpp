@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "morpho/morpho.h"
+#include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
 #include "utils/input.h"
 #include "utils/output.h"
@@ -37,21 +38,32 @@ int main(int argc, char* argv[]) {
   options_map options;
   if (!parse_options({{"input",{"untokenized", "vertical"}},
                       {"convert_tagset",{""}},
-                      {"output",{"vertical","xml"}}}, argc, argv, options) ||
+                      {"output",{"vertical","xml"}},
+                      {"from_tagger",{}}}, argc, argv, options) ||
       argc < 3)
     runtime_errorf("Usage: %s [options] dict_file use_guesser [file[:output_file]]...\n"
                    "Options: --input=untokenized|vertical\n"
                    "         --convert_tagset=pdt_to_conll2009\n"
-                   "         --output=vertical|xml", argv[0]);
+                   "         --output=vertical|xml\n"
+                   "         --from_tagger", argv[0]);
 
-  eprintf("Loading dictionary: ");
-  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+  unique_ptr<morpho> morpho;
+  unique_ptr<tagger> tagger;
+  if (options.count("from_tagger")) {
+    eprintf("Loading dictionary from tagger: ");
+    tagger.reset(tagger::load(argv[1]));
+    if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
+  } else {
+    eprintf("Loading dictionary: ");
+    morpho.reset(morpho::load(argv[1]));
+    if (!morpho) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+  }
   eprintf("done\n");
+  auto& dictionary = options.count("from_tagger") ? *tagger->get_morpho() : *morpho;
 
   bool use_guesser = parse_int(argv[2], "use_guesser");
 
-  unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : dictionary->new_tokenizer());
+  unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : dictionary.new_tokenizer());
   if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
 
   unique_ptr<tagset_converter> tagset_converter;
@@ -64,9 +76,9 @@ int main(int argc, char* argv[]) {
   }
 
   if (options.count("output") && options["output"] == "vertical")
-    process_args(3, argc, argv, analyze_vertical, *dictionary, use_guesser, *tokenizer, *tagset_converter);
+    process_args(3, argc, argv, analyze_vertical, dictionary, use_guesser, *tokenizer, *tagset_converter);
   else
-    process_args(3, argc, argv, analyze_xml, *dictionary, use_guesser, *tokenizer, *tagset_converter);
+    process_args(3, argc, argv, analyze_xml, dictionary, use_guesser, *tokenizer, *tagset_converter);
 
   return 0;
 }

@@ -650,12 +650,16 @@ Some morphological models contain both a manually created dictionary and a
 guesser. Therefore, a numeric use_guesser argument is required. If non-zero, the
 guesser is used, otherwise not.
 
+Because tagger models contain an embedded morphological model, a tagger model
+can be used instead of morphological one if --from_tagger option is specified.
+
 The full command syntax of run_morpho_analyze is
 
   run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
   Options: --input=untokenized|vertical
            --convert_tagset=pdt_to_conll2009
            --output=vertical|xml
+           --from_tagger
 
 
 Input Formats
@@ -744,10 +748,14 @@ Some morphological models contain both a manually created dictionary and a
 guesser. Therefore, a numeric use_guesser argument is required. If non-zero, the
 guesser is used, otherwise not.
 
+Because tagger models contain an embedded morphological model, a tagger model
+can be used instead of morphological one if --from_tagger option is specified.
+
 The full command syntax of run_morpho_generate is
 
   run_morpho_generate [options] morphology_model use_guesser [input_file[:output_file]]...
   Options: --convert_tagset=pdt_to_conll2009
+           --from_tagger
 
 Example input data:
 
@@ -806,6 +814,14 @@ on a line, analysis is performed on the given word. If there is a tab on a line,
 generation is performed on the first word, using the second word as a tag
 wildcard.  If the second word is empty (i.e., the input is for example ``on	``),
 all forms are generated.
+
+Because tagger models contain an embedded morphological model, a tagger model
+can be used instead of morphological one if --from_tagger option is specified.
+
+The full command syntax of run_morpho_cli is
+
+  run_morpho_cli [options] morphology_model
+  Options: --from_tagger
 
 
 Running the Tokenizer

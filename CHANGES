@@ -2,6 +2,9 @@ Version 1.0.1
 -------------
 - Allow English negative prefix rules to overlap, allowing
   to use also "non-" as negative prefix in additon to "non".
+- Allow passing tagger model instead of morphological model
+  to run_morpho_analyze, run_morpho_cli and run_morpho_generate
+  binaries.
 - Add "--version" option printing current version of binaries.
 - Clarify stable/development versions.
 

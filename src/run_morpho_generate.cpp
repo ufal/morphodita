@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "morpho/morpho.h"
+#include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
 #include "utils/input.h"
 #include "utils/parse_int.h"
@@ -27,21 +28,32 @@
 
 using namespace ufal::morphodita;
 
-static void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter);
+static void generate(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
   show_version_if_requested(argc, argv);
 
   options_map options;
-  if (!parse_options({{"convert_tagset",{""}}}, argc, argv, options) ||
+  if (!parse_options({{"convert_tagset",{""}},
+                      {"from_tagger",{}}}, argc, argv, options) ||
       argc < 3)
     runtime_errorf("Usage: %s [options] dict_file use_guesser [file[:output_file]]...\n"
-                   "Options: --convert_tagset=pdt_to_conll2009", argv[0]);
+                   "Options: --convert_tagset=pdt_to_conll2009\n"
+                   "         --from_tagger", argv[0]);
 
-  eprintf("Loading dictionary: ");
-  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+  unique_ptr<morpho> morpho;
+  unique_ptr<tagger> tagger;
+  if (options.count("from_tagger")) {
+    eprintf("Loading dictionary from tagger: ");
+    tagger.reset(tagger::load(argv[1]));
+    if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
+  } else {
+    eprintf("Loading dictionary: ");
+    morpho.reset(morpho::load(argv[1]));
+    if (!morpho) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+  }
   eprintf("done\n");
+  auto& dictionary = options.count("from_tagger") ? *tagger->get_morpho() : *morpho;
 
   bool use_guesser = parse_int(argv[2], "use_guesser");
 
@@ -54,12 +66,12 @@ int main(int argc, char* argv[]) {
     if (!tagset_converter) runtime_errorf("Cannot create identity tag set converter!");
   }
 
-  process_args(3, argc, argv, generate, *dictionary, use_guesser, *tagset_converter);
+  process_args(3, argc, argv, generate, dictionary, use_guesser, *tagset_converter);
 
   return 0;
 }
 
-void generate(FILE* in, FILE* out, morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter) {
+void generate(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter) {
   string line;
   vector<tagged_lemma_forms> forms;
 

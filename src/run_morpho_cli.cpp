@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "morpho/morpho.h"
+#include "tagger/tagger.h"
 #include "utils/input.h"
 #include "utils/parse_options.h"
 
@@ -27,12 +28,25 @@ using namespace ufal::morphodita;
 int main(int argc, char* argv[]) {
   show_version_if_requested(argc, argv);
 
-  if (argc <= 1) runtime_errorf("Usage: %s dict_file", argv[0]);
+  options_map options;
+  if (!parse_options({{"from_tagger",{}}}, argc, argv, options) ||
+      argc < 2)
+    runtime_errorf("Usage: %s [options] dict_file\n"
+                   "Options: --from_tagger", argv[0]);
 
-  eprintf("Loading dictionary: ");
-  unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+  unique_ptr<morpho> morpho;
+  unique_ptr<tagger> tagger;
+  if (options.count("from_tagger")) {
+    eprintf("Loading dictionary from tagger: ");
+    tagger.reset(tagger::load(argv[1]));
+    if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
+  } else {
+    eprintf("Loading dictionary: ");
+    morpho.reset(morpho::load(argv[1]));
+    if (!morpho) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+  }
   eprintf("done\n");
+  auto& dictionary = options.count("from_tagger") ? *tagger->get_morpho() : *morpho;
 
   string line;
   vector<string> tokens;
@@ -40,7 +54,7 @@ int main(int argc, char* argv[]) {
     split(line, '\t', tokens);
     if /* analyze */ (tokens.size() == 1) {
       vector<tagged_lemma> lemmas;
-      auto result = dictionary->analyze(tokens[0], morpho::GUESSER, lemmas);
+      auto result = dictionary.analyze(tokens[0], morpho::GUESSER, lemmas);
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
       for (auto&& lemma : lemmas)
@@ -48,7 +62,7 @@ int main(int argc, char* argv[]) {
 
     } else if /* generate */ (tokens.size() == 2) {
       vector<tagged_lemma_forms> forms;
-      auto result = dictionary->generate(tokens[0], tokens[1].c_str(), morpho::GUESSER, forms);
+      auto result = dictionary.generate(tokens[0], tokens[1].c_str(), morpho::GUESSER, forms);
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
       for (auto&& lemma : forms) {

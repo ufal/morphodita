@@ -886,6 +886,11 @@ a guesser. Therefore, a numeric <CODE>use_guesser</CODE> argument is required.
 If non-zero, the guesser is used, otherwise not.
 </P>
 <P>
+Because tagger models contain an embedded morphological model, a tagger model
+can be used instead of morphological one if <CODE>--from_tagger</CODE> option is
+specified.
+</P>
+<P>
 The full command syntax of <CODE>run_morpho_analyze</CODE> is
 </P>
 
@@ -894,6 +899,7 @@ run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]..
 Options: --input=untokenized|vertical
          --convert_tagset=pdt_to_conll2009
          --output=vertical|xml
+         --from_tagger
 </PRE>
 
 <H4>4.4.1.1. Input Formats</H4>
@@ -1003,12 +1009,18 @@ a guesser. Therefore, a numeric <CODE>use_guesser</CODE> argument is required.
 If non-zero, the guesser is used, otherwise not.
 </P>
 <P>
+Because tagger models contain an embedded morphological model, a tagger model
+can be used instead of morphological one if <CODE>--from_tagger</CODE> option is
+specified.
+</P>
+<P>
 The full command syntax of <CODE>run_morpho_generate</CODE> is
 </P>
 
 <PRE>
 run_morpho_generate [options] morphology_model use_guesser [input_file[:output_file]]...
 Options: --convert_tagset=pdt_to_conll2009
+         --from_tagger
 </PRE>
 
 <P>
@@ -1087,6 +1099,19 @@ a line, generation is performed on the first word, using the second word as
 a <A HREF="#tag_wildcard">tag wildcard</A>.  If the second word is empty (i.e., the input
 is for example ``on	``), all forms are generated.
 </P>
+<P>
+Because tagger models contain an embedded morphological model, a tagger model
+can be used instead of morphological one if <CODE>--from_tagger</CODE> option is
+specified.
+</P>
+<P>
+The full command syntax of <CODE>run_morpho_cli</CODE> is
+</P>
+
+<PRE>
+run_morpho_cli [options] morphology_model
+Options: --from_tagger
+</PRE>
 
 <A NAME="run_tokenizer"></A>
 <H2>4.5. Running the Tokenizer</H2>
