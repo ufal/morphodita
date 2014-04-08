@@ -212,7 +212,7 @@ Czech models are distributed under the CC BY-NC-SA
 morphology uses the MorfFlex CZ
 (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) Czech morphological
 dictionary and the Czech tagger is trained on PDT 2.5
-(http://ufal.mff.cuni.cz/pdt2.5/). Czech models work in MorphoDiTa version 1.0.0
+(http://ufal.mff.cuni.cz/pdt2.5/). Czech models work in MorphoDiTa version 1.0
 or later.
 
 Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser are
@@ -405,7 +405,7 @@ English models are created using the following data:
 
 The resulting models are distributed under the CC BY-NC-SA
 (http://creativecommons.org/licenses/by-nc-sa/3.0/) licence. English models work
-in MorphoDiTa version 1.1.0 or later.
+in MorphoDiTa version 1.1 or later.
 
 English models are versioned according to the release date, the version format
 is YYMMDD, where YY, MM and DD are two-digit representation of year, month and
@@ -526,11 +526,11 @@ english-morphium-wsj-<version>-no_negation.tagger
 English Model Changes
 ---------------------
 
-english-morphium-140407 and english-morphium-wsj-140407 (require MorphoDiTa 1.1.0 or later)
+english-morphium-140407 and english-morphium-wsj-140407 (require MorphoDiTa 1.1 or later)
   Recognize also "non-" as a negative prefix. Formerly, only "non" was
   recognized.
   
-english-morphium-140304 and english-morphium-wsj-140304 (require MorphoDiTa 1.0.0 or later)
+english-morphium-140304 and english-morphium-wsj-140304 (require MorphoDiTa 1.0 or later)
   Initial release.
 
 
