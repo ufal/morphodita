@@ -1,5 +1,5 @@
-Version 1.1.0
--------------
+Version 1.1.0 [09 Apr 14]
+-------------------------
 - Allow English negative prefix rules to overlap, allowing
   to use also "non-" as negative prefix in additon to "non".
 - Allow passing tagger model instead of morphological model
