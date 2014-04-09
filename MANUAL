@@ -33,7 +33,8 @@ contains Linux and Windows binaries and C++ library, all language bindings
 (Java, Python, Perl) and source code (needed to compile the language bindings).
 
 - Latest release (http://github.com/ufal/morphodita/releases/latest)
-- All releases (http://github.com/ufal/morphodita/releases)
+- All releases (http://github.com/ufal/morphodita/releases), Changelog
+  (https://github.com/ufal/morphodita/blob/master/CHANGES)
 
 
 Language Models
