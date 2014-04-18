@@ -1,8 +1,11 @@
-$(call lib,../../src/libmorphodita):
+$(call lib,../../src/libmorphodita): force
 	$(MAKE) -C $(dir $@) $(notdir $@)
 
-$(call lib,../../src/libmorphodita.dyn):
+$(call lib,../../src/libmorphodita.dyn): force
 	$(MAKE) -C $(dir $@) $(notdir $@)
+
+.PHONY: force
+force:
 
 .PHONY: veryclean
 veryclean: clean
