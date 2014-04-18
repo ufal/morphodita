@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
       argc < 2)
     runtime_errorf("Usage: %s [options] tagger_file [file[:output_file]]...\n"
                    "Options: --input=untokenized|vertical\n"
-                   "         --convert_tagset=pdt_to_conll2009\n"
+                   "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
                    "         --output=vertical|xml", argv[0]);
 
   eprintf("Loading tagger: ");
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 
   unique_ptr<tagset_converter> tagset_converter;
   if (options.count("convert_tagset")) {
-    tagset_converter.reset(new_tagset_converter(options["convert_tagset"]));
+    tagset_converter.reset(new_tagset_converter(options["convert_tagset"], *tagger->get_morpho()));
     if (!tagset_converter) runtime_errorf("Unknown tag set converter '%s'!", options["convert_tagset"].c_str());
   } else {
     tagset_converter.reset(tagset_converter::new_identity_converter());

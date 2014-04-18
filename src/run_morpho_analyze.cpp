@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
       argc < 3)
     runtime_errorf("Usage: %s [options] dict_file use_guesser [file[:output_file]]...\n"
                    "Options: --input=untokenized|vertical\n"
-                   "         --convert_tagset=pdt_to_conll2009\n"
+                   "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
                    "         --output=vertical|xml\n"
                    "         --from_tagger", argv[0]);
 
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 
   unique_ptr<tagset_converter> tagset_converter;
   if (options.count("convert_tagset")) {
-    tagset_converter.reset(new_tagset_converter(options["convert_tagset"]));
+    tagset_converter.reset(new_tagset_converter(options["convert_tagset"], dictionary));
     if (!tagset_converter) runtime_errorf("Unknown tag set converter '%s'!", options["convert_tagset"].c_str());
   } else {
     tagset_converter.reset(tagset_converter::new_identity_converter());

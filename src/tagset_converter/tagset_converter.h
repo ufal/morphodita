@@ -41,9 +41,16 @@ class EXPORT_ATTRIBUTES tagset_converter {
   static tagset_converter* new_identity_converter();
 
   static tagset_converter* new_pdt_to_conll2009_converter();
+  static tagset_converter* new_strip_lemma_comment_converter(const morpho& dictionary);
+  static tagset_converter* new_strip_lemma_id_converter(const morpho& dictionary);
 };
 
-tagset_converter* new_tagset_converter(const string& name);
+// Helper method for creating tagset_converter from instance name.
+tagset_converter* new_tagset_converter(const string& name, const morpho& dictionary);
+
+// Helper methods making sure remapped results are unique.
+void tagset_converter_unique_analyzed(vector<tagged_lemma>& tagged_lemmas);
+void tagset_converter_unique_generated(vector<tagged_lemma_forms>& forms);
 
 } // namespace morphodita
 } // namespace ufal

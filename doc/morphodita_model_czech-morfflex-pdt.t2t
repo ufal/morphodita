@@ -145,6 +145,8 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
 
 === Raw Lemmas Variant ===
 
+//Deprecated: These model variants are deprecated as of MorphoDiTa 1.2, because very similar functionality can be achieved using ``strip_lemma_id`` tag set converter. Next release of the models will not contain these variants.//
+
 The Czech morphological system distinguish different meanings of same lemmas by
 numbering the lemmas with multiple meanings and supplying additional comments
 for every lemma meaning, as described and demonstrated in

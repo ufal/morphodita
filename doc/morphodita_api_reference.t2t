@@ -379,6 +379,8 @@ class tagset_converter {
 
   static [tagset_converter* #tagset_converter] [new_identity_converter #tagset_converter_new_identity_converter]();
   static [tagset_converter* #tagset_converter] [new_pdt_to_conll2009_converter #tagset_converter_new_pdt_to_conll2009_converter]();
+  static [tagset_converter* #tagset_converter] [new_strip_lemma_comment_converter #tagset_converter_new_strip_lemma_comment_converter](const [morpho #morpho]& dictionary);
+  static [tagset_converter* #tagset_converter] [new_strip_lemma_id_converter #tagset_converter_new_strip_lemma_id_converter](const [morpho #morpho]& dictionary);
 };
 ```
 
@@ -414,6 +416,22 @@ The user should delete the instance after use.
 CoNLL2009 tag set uses two columns for tags -- one is a POS and the other one
 are additional FEATs. Because we have only one tag field, we merge these fields
 together by using ``Pos=?|FEAT``, i.e., the POS is stored as a first FEAT.
+
+=== tagset_converter::new_strip_lemma_comment_converter() ===[tagset_converter_new_strip_lemma_comment_converter]
+``` static [tagset_converter* #tagset_converter] new_strip_lemma_comment_converter(const [morpho #morpho]& dictionary);
+
+Returns a new instance of a tag set converter stripping
+[lemma comment #lemma_structure] using the given [``morpho`` #morpho] instance,
+which must remain valid during existence of the tag set converter. The user
+should delete the tag set converter instance after use.
+
+=== tagset_converter::new_strip_lemma_id_converter() ===[tagset_converter_new_strip_lemma_id_converter]
+``` static [tagset_converter* #tagset_converter] new_strip_lemma_id_converter(const [morpho #morpho]& dictionary);
+
+Returns a new instance of a tag set converter stripping
+[lemma id #lemma_structure] using the given [``morpho`` #morpho] instance,
+which must remain valid during existence of the tag set converter. The user
+should delete the tag set converter instance after use.
 
 
 == C++ Bindings API ==

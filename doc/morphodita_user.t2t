@@ -47,7 +47,7 @@ The full command syntax of ``run_tagger`` is
 ```
 run_tagger [options] tagger_file [file[:output_file]]...
 Options: --input=untokenized|vertical
-         --convert_tagset=pdt_to_conll2009
+         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
          --output=vertical|xml
 ```
 
@@ -65,7 +65,9 @@ input formats are:
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
-- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set.
+- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set,
+- ``strip_lemma_comment``: strip lemma comment (see Lemma Structure in API Reference),
+- ``strip_lemma_id``: strip lemma id (see Lemma Structure in API Reference).
 
 
 === Output Formats ===
@@ -140,7 +142,7 @@ The full command syntax of ``run_morpho_analyze`` is
 ```
 run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
 Options: --input=untokenized|vertical
-         --convert_tagset=pdt_to_conll2009
+         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
          --output=vertical|xml
          --from_tagger
 ```
@@ -163,7 +165,9 @@ by an empty line).
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
-- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set.
+- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set,
+- ``strip_lemma_comment``: strip lemma comment (see Lemma Structure in API Reference),
+- ``strip_lemma_id``: strip lemma id (see Lemma Structure in API Reference).
 
 
 ==== Output Formats ====
@@ -231,7 +235,7 @@ specified.
 The full command syntax of ``run_morpho_generate`` is
 ```
 run_morpho_generate [options] morphology_model use_guesser [input_file[:output_file]]...
-Options: --convert_tagset=pdt_to_conll2009
+Options: --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
          --from_tagger
 ```
 
@@ -255,7 +259,9 @@ babičce babička NNFS3-----A----
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
-- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set.
+- ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set,
+- ``strip_lemma_comment``: strip lemma comment (see Lemma Structure in API Reference),
+- ``strip_lemma_id``: strip lemma id (see Lemma Structure in API Reference).
 
 
 Note that the tag set conversion is applied only to the output, not to the

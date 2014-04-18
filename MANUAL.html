@@ -139,21 +139,23 @@
       <LI><A HREF="#tagset_converter_convert_generated">6.12.3. tagset_converter::convert_generated()</A>
       <LI><A HREF="#tagset_converter_new_identity_converter">6.12.4. tagset_converter::new_identity_converter()</A>
       <LI><A HREF="#tagset_converter_new_pdt_to_conll2009_converter">6.12.5. tagset_converter::new_pdt_to_conll2009_converter()</A>
+      <LI><A HREF="#tagset_converter_new_strip_lemma_comment_converter">6.12.6. tagset_converter::new_strip_lemma_comment_converter()</A>
+      <LI><A HREF="#tagset_converter_new_strip_lemma_id_converter">6.12.7. tagset_converter::new_strip_lemma_id_converter()</A>
       </UL>
-    <LI><A HREF="#toc87">6.13. C++ Bindings API</A>
+    <LI><A HREF="#toc89">6.13. C++ Bindings API</A>
       <UL>
-      <LI><A HREF="#toc88">6.13.1. Helper Structures</A>
-      <LI><A HREF="#toc89">6.13.2. Main Classes</A>
+      <LI><A HREF="#toc90">6.13.1. Helper Structures</A>
+      <LI><A HREF="#toc91">6.13.2. Main Classes</A>
       </UL>
-    <LI><A HREF="#toc90">6.14. Java Bindings</A>
-    <LI><A HREF="#toc91">6.15. Perl Bindings</A>
-    <LI><A HREF="#toc92">6.16. Python Bindings</A>
+    <LI><A HREF="#toc92">6.14. Java Bindings</A>
+    <LI><A HREF="#toc93">6.15. Perl Bindings</A>
+    <LI><A HREF="#toc94">6.16. Python Bindings</A>
     </UL>
-  <LI><A HREF="#toc93">Contact</A>
+  <LI><A HREF="#toc95">Contact</A>
   <LI><A HREF="#morphodita_acknowledgements">Acknowledgements</A>
     <UL>
-    <LI><A HREF="#toc95">8.1. Publications</A>
-    <LI><A HREF="#toc96">8.2. Bibtex for referencing</A>
+    <LI><A HREF="#toc97">8.1. Publications</A>
+    <LI><A HREF="#toc98">8.2. Bibtex for referencing</A>
     </UL>
   </OL>
 
@@ -570,6 +572,9 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
 <H3>4.1.5. Raw Lemmas Variant</H3>
 
 <P>
+<I>Deprecated: These model variants are deprecated as of MorphoDiTa 1.2, because very similar functionality can be achieved using <CODE>strip_lemma_id</CODE> tag set converter. Next release of the models will not contain these variants.</I>
+</P>
+<P>
 The Czech morphological system distinguish different meanings of same lemmas by
 numbering the lemmas with multiple meanings and supplying additional comments
 for every lemma meaning, as described and demonstrated in
@@ -769,7 +774,7 @@ The full command syntax of <CODE>run_tagger</CODE> is
 <PRE>
 run_tagger [options] tagger_file [file[:output_file]]...
 Options: --input=untokenized|vertical
-         --convert_tagset=pdt_to_conll2009
+         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
          --output=vertical|xml
 </PRE>
 
@@ -797,7 +802,9 @@ conversions are:
 </P>
 
 <UL>
-<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
+<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set,
+<LI><CODE>strip_lemma_comment</CODE>: strip lemma comment (see Lemma Structure in API Reference),
+<LI><CODE>strip_lemma_id</CODE>: strip lemma id (see Lemma Structure in API Reference).
 </UL>
 
 <A NAME="toc31"></A>
@@ -897,7 +904,7 @@ The full command syntax of <CODE>run_morpho_analyze</CODE> is
 <PRE>
 run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
 Options: --input=untokenized|vertical
-         --convert_tagset=pdt_to_conll2009
+         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
          --output=vertical|xml
          --from_tagger
 </PRE>
@@ -930,7 +937,9 @@ conversions are:
 </P>
 
 <UL>
-<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
+<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set,
+<LI><CODE>strip_lemma_comment</CODE>: strip lemma comment (see Lemma Structure in API Reference),
+<LI><CODE>strip_lemma_id</CODE>: strip lemma id (see Lemma Structure in API Reference).
 </UL>
 
 <H4>4.4.1.3. Output Formats</H4>
@@ -1019,7 +1028,7 @@ The full command syntax of <CODE>run_morpho_generate</CODE> is
 
 <PRE>
 run_morpho_generate [options] morphology_model use_guesser [input_file[:output_file]]...
-Options: --convert_tagset=pdt_to_conll2009
+Options: --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
          --from_tagger
 </PRE>
 
@@ -1053,7 +1062,9 @@ conversions are:
 </P>
 
 <UL>
-<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set.
+<LI><CODE>pdt_to_conll2009</CODE>: convert Czech PDT tag set to CoNLL 2009 tag set,
+<LI><CODE>strip_lemma_comment</CODE>: strip lemma comment (see Lemma Structure in API Reference),
+<LI><CODE>strip_lemma_id</CODE>: strip lemma id (see Lemma Structure in API Reference).
 </UL>
 
 <P>
@@ -2427,6 +2438,8 @@ class tagset_converter {
 
   static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_identity_converter">new_identity_converter</A>();
   static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_pdt_to_conll2009_converter">new_pdt_to_conll2009_converter</A>();
+  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_strip_lemma_comment_converter">new_strip_lemma_comment_converter</A>(const <A HREF="#morpho">morpho</A>&amp; dictionary);
+  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_strip_lemma_id_converter">new_strip_lemma_id_converter</A>(const <A HREF="#morpho">morpho</A>&amp; dictionary);
 };
 </PRE>
 
@@ -2494,7 +2507,35 @@ are additional FEATs. Because we have only one tag field, we merge these fields
 together by using <CODE>Pos=?|FEAT</CODE>, i.e., the POS is stored as a first FEAT.
 </P>
 
-<A NAME="toc87"></A>
+<A NAME="tagset_converter_new_strip_lemma_comment_converter"></A>
+<H3>6.12.6. tagset_converter::new_strip_lemma_comment_converter()</H3>
+
+<PRE>
+static <A HREF="#tagset_converter">tagset_converter*</A> new_strip_lemma_comment_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
+</PRE>
+
+<P>
+Returns a new instance of a tag set converter stripping
+<A HREF="#lemma_structure">lemma comment</A> using the given <A HREF="#morpho"><CODE>morpho</CODE></A> instance,
+which must remain valid during existence of the tag set converter. The user
+should delete the tag set converter instance after use.
+</P>
+
+<A NAME="tagset_converter_new_strip_lemma_id_converter"></A>
+<H3>6.12.7. tagset_converter::new_strip_lemma_id_converter()</H3>
+
+<PRE>
+static <A HREF="#tagset_converter">tagset_converter*</A> new_strip_lemma_id_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
+</PRE>
+
+<P>
+Returns a new instance of a tag set converter stripping
+<A HREF="#lemma_structure">lemma id</A> using the given <A HREF="#morpho"><CODE>morpho</CODE></A> instance,
+which must remain valid during existence of the tag set converter. The user
+should delete the tag set converter instance after use.
+</P>
+
+<A NAME="toc89"></A>
 <H2>6.13. C++ Bindings API</H2>
 
 <P>
@@ -2505,7 +2546,7 @@ strings and removal of methods using <CODE>FILE</CODE>. Here is the C++ bindings
 declaration:
 </P>
 
-<A NAME="toc88"></A>
+<A NAME="toc90"></A>
 <H3>6.13.1. Helper Structures</H3>
 
 <PRE>
@@ -2536,7 +2577,7 @@ struct TokenRange {
 typedef vector&lt;TokenRange&gt; TokenRanges;
 </PRE>
 
-<A NAME="toc89"></A>
+<A NAME="toc91"></A>
 <H3>6.13.2. Main Classes</H3>
 
 <PRE>
@@ -2590,6 +2631,8 @@ class TagsetConverter {
  public:
   static TagsetConverter* newIdentityConverter();
   static TagsetConverter* newPdtToConll2009Converter();
+  static TagsetConverter* newStripLemmaCommentConverter(const Morpho&amp; morpho);
+  static TagsetConverter* newStripLemmaIdConverter(const Morpho&amp; morpho);
 
   virtual void convert(TaggedLemma&amp; lemma) const;
   virtual void convertAnalyzed(TaggedLemmas&amp; lemmas) const;
@@ -2597,7 +2640,7 @@ class TagsetConverter {
 };
 </PRE>
 
-<A NAME="toc90"></A>
+<A NAME="toc92"></A>
 <H2>6.14. Java Bindings</H2>
 
 <P>
@@ -2617,7 +2660,7 @@ The bindings require native C++ library <CODE>morphodita_java</CODE> (called
 directory, it is used, otherwise standard library search process is used.
 </P>
 
-<A NAME="toc91"></A>
+<A NAME="toc93"></A>
 <H2>6.15. Perl Bindings</H2>
 
 <P>
@@ -2633,7 +2676,7 @@ reference. Static methods and enumerations are available only through the
 module, not through object instance.
 </P>
 
-<A NAME="toc92"></A>
+<A NAME="toc94"></A>
 <H2>6.16. Python Bindings</H2>
 
 <P>
@@ -2646,7 +2689,7 @@ In Python 2, strings can be both <CODE>unicode</CODE> and UTF-8 encoded <CODE>st
 library always produces <CODE>unicode</CODE>. In Python 3, strings must be only <CODE>str</CODE>.
 </P>
 
-<A NAME="toc93"></A>
+<A NAME="toc95"></A>
 <H1>7. Contact</H1>
 
 <P>
@@ -2675,14 +2718,14 @@ This work has been using language resources developed and/or stored and/or distr
 Acknowledgements for individual language models are listed in MorphoDiTa User's Manual.
 </P>
 
-<A NAME="toc95"></A>
+<A NAME="toc97"></A>
 <H2>8.1. Publications</H2>
 
 <UL>
 <LI>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <I><A HREF="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</A></I> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 </UL>
 
-<A NAME="toc96"></A>
+<A NAME="toc98"></A>
 <H2>8.2. Bibtex for referencing</H2>
 
 <PRE>

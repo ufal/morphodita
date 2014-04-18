@@ -195,4 +195,12 @@ class tagset_converter {
   %rename(newPdtToConll2009Converter) new_pdt_to_conll2009_converter;
   %newobject new_pdt_to_conll2009_converter;
   static tagset_converter* new_pdt_to_conll2009_converter();
+
+  %rename(newStripLemmaCommentConverter) new_strip_lemma_comment_converter;
+  %newobject new_strip_lemma_comment_converter;
+  static tagset_converter* new_strip_lemma_comment_converter(const morpho& dictionary);
+
+  %rename(newStripLemmaIdConverter) new_strip_lemma_id_converter;
+  %newobject new_strip_lemma_id_converter;
+  static tagset_converter* new_strip_lemma_id_converter(const morpho& dictionary);
 };

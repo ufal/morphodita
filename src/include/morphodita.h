@@ -193,6 +193,8 @@ class MORPHODITA_IMPORT tagset_converter {
   static tagset_converter* new_identity_converter();
 
   static tagset_converter* new_pdt_to_conll2009_converter();
+  static tagset_converter* new_strip_lemma_comment_converter(const morpho& dictionary);
+  static tagset_converter* new_strip_lemma_id_converter(const morpho& dictionary);
 };
 
 } // namespace morphodita

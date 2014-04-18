@@ -116,6 +116,8 @@ Main Classes
    public:
     static TagsetConverter* newIdentityConverter();
     static TagsetConverter* newPdtToConll2009Converter();
+    static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
+    static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
   
     virtual void convert(TaggedLemma& lemma) const;
     virtual void convertAnalyzed(TaggedLemmas& lemmas) const;

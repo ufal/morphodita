@@ -1,3 +1,8 @@
+Version 1.1.1 [not yet released]
+--------------------------------
+- Add strip_lemma_comment and strip_lemma_id tag set converters.
+
+
 Version 1.1.0 [09 Apr 14]
 -------------------------
 - Allow English negative prefix rules to overlap, allowing
@@ -7,6 +12,7 @@ Version 1.1.0 [09 Apr 14]
   binaries.
 - Add "--version" option printing current version of binaries.
 - Clarify stable/development versions.
+
 
 Version 1.0.0 [07 Apr 14]
 -------------------------
