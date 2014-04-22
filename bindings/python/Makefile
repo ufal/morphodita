@@ -24,4 +24,4 @@ morphodita_python.cpp: morphodita_python.i ../common/morphodita.i
 
 .PHONY: clean
 clean:
-	@$(call rmdir,ufal) $(call rm,$(TARGETS) $(wildcard *.cpp))
+	@$(call rmdir,ufal) $(call rm,$(TARGETS) morphodita_python.cpp)
