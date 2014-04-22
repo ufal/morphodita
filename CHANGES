@@ -1,4 +1,4 @@
-Version 1.1.1 [not yet released]
+Version 1.2.0 [22 Apr 14]
 --------------------------------
 - Add strip_lemma_comment and strip_lemma_id tag set converters.
 
