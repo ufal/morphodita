@@ -27,8 +27,9 @@
 #include "morpho_statistical_guesser.h"
 #include "tag_filter.h"
 #include "tokenizer/czech_tokenizer.h"
+#include "unilib/unicode.h"
+#include "unilib/utf8.h"
 #include "utils/compressor.h"
-#include "utils/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -191,20 +192,20 @@ void czech_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemm
   char32_t codepoint = first;
   bool any_digit = false;
   if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
+  while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   if ((codepoint == '.' && form.len) || codepoint == ',') codepoint = utf8::decode(form.str, form.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
+  while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
     codepoint = utf8::decode(form.str, form.len);
     if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(form.str, form.len);
     any_digit = false;
-    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(form.str, form.len);
+    while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(form.str, form.len);
   }
 
   if (any_digit && !form.len && (!codepoint || codepoint == '.')) {
     lemmas.emplace_back(string(form_ori.str, form_ori.len - (codepoint == '.')), number_tag);
   } else if ((first < sizeof(punctuation_additional) && punctuation_additional[first]) ||
-             (utf8::is_P(first) && (first >= sizeof(punctuation_exceptions) || !punctuation_exceptions[first])))
+             ((unicode::category(first) & unicode::P) && (first >= sizeof(punctuation_exceptions) || !punctuation_exceptions[first])))
     lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);
 }
 

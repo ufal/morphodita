@@ -1,5 +1,10 @@
-Version 1.2.0 [22 Apr 14]
+Version 1.2.1 [not yet released]
 --------------------------------
+- Use UniLib instead of MorphoDiTa specific utf8 class.
+
+
+Version 1.2.0 [22 Apr 14]
+-------------------------
 - Add strip_lemma_comment and strip_lemma_id tag set converters.
 
 

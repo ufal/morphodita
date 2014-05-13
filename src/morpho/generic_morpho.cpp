@@ -27,8 +27,9 @@
 #include "morpho_statistical_guesser.h"
 #include "tag_filter.h"
 #include "tokenizer/generic_tokenizer.h"
+#include "unilib/unicode.h"
+#include "unilib/utf8.h"
 #include "utils/compressor.h"
-#include "utils/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -144,14 +145,14 @@ void generic_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
   char32_t codepoint = first;
   bool any_digit = false;
   if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   if ((codepoint == '.' && number.len) || codepoint == ',') codepoint = utf8::decode(number.str, number.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
     codepoint = utf8::decode(number.str, number.len);
     if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
     any_digit = false;
-    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+    while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   }
 
   if (any_digit && !number.len && (!codepoint || codepoint == '.')) {
@@ -164,8 +165,8 @@ void generic_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
   string_piece form_ori = form;
   while (form.len) {
     codepoint = utf8::decode(form.str, form.len);
-    punctuation &= utf8::is_P(codepoint);
-    symbol &= utf8::is_S(codepoint);
+    punctuation = punctuation && unicode::category(codepoint) & unicode::P;
+    symbol = symbol && unicode::category(codepoint) & unicode::S;
   }
   if (punctuation)
     lemmas.emplace_back(string(form_ori.str, form_ori.len), punctuation_tag);

@@ -19,7 +19,8 @@
 #pragma once
 
 #include "elementary_features.h"
-#include "utils/utf8.h"
+#include "unilib/unicode.h"
+#include "unilib/utf8.h"
 #include "viterbi.h"
 
 namespace ufal {
@@ -158,10 +159,10 @@ void generic_elementary_features<Map>::compute_features(const vector<form_with_t
       while (form.len) {
         indices[(index++) % 18] = form.str - form_start;
 
-        char32_t chr = utf8::decode(form.str, form.len);
-        num |= utf8::is_N(chr);
-        cap |= utf8::is_Lut(chr);
-        dash |= utf8::is_Pd(chr);
+        unicode::category_t cat = unicode::category(utf8::decode(form.str, form.len));
+        num = num || cat & unicode::N;
+        cap = cap || cat & unicode::Lut;
+        dash = dash || cat & unicode::Pd;
 
         if (index == 10 || (!form.len && index < 10)) {
           per_form[i].values[PREFIX1] = maps[MAP_PREFIX1].value(form_start, indices[1]);

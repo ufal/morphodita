@@ -23,8 +23,9 @@
 #include "english_morpho.h"
 #include "tag_filter.h"
 #include "tokenizer/english_tokenizer.h"
+#include "unilib/unicode.h"
+#include "unilib/utf8.h"
 #include "utils/compressor.h"
-#include "utils/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -134,25 +135,25 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
   char32_t codepoint = utf8::decode(number.str, number.len);
   bool any_digit = false;
   if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
-  while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   while (codepoint == ',') {
     string_piece group = number;
-    if (!utf8::is_N(utf8::decode(group.str, group.len))) break;
-    if (!utf8::is_N(utf8::decode(group.str, group.len))) break;
-    if (!utf8::is_N(utf8::decode(group.str, group.len))) break;
+    if (unicode::category(utf8::decode(group.str, group.len) & ~unicode::N)) break;
+    if (unicode::category(utf8::decode(group.str, group.len) & ~unicode::N)) break;
+    if (unicode::category(utf8::decode(group.str, group.len) & ~unicode::N)) break;
     any_digit = true;
     number = group;
     codepoint = utf8::decode(number.str, number.len);
   }
   if (codepoint == '.' && number.len) {
     codepoint = utf8::decode(number.str, number.len);
-    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+    while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   }
   if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
     codepoint = utf8::decode(number.str, number.len);
     if (codepoint == '+' || codepoint == '-') codepoint = utf8::decode(number.str, number.len);
     any_digit = false;
-    while (utf8::is_N(codepoint)) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+    while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(number.str, number.len);
   }
   if (any_digit && !number.len && (!codepoint || codepoint == '.')) {
     lemmas.emplace_back(string(form.str, form.len - (codepoint == '.')), number_tag);
@@ -167,12 +168,12 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
   bool open_quotation = true, close_quotation = true, open_parenthesis = true, close_parenthesis = true, any_punctuation = true, symbol = true;
   while ((symbol || any_punctuation) && punctuation.len) {
     codepoint = utf8::decode(punctuation.str, punctuation.len);
-    if (open_quotation) open_quotation = codepoint == '`' || utf8::is_Pi(codepoint);
-    if (close_quotation) close_quotation = codepoint == '\'' || codepoint == '"' || utf8::is_Pf(codepoint);
-    if (open_parenthesis) open_parenthesis = utf8::is_Ps(codepoint);
-    if (close_parenthesis) close_parenthesis = utf8::is_Pe(codepoint);
-    if (any_punctuation) any_punctuation = utf8::is_P(codepoint);
-    if (symbol) symbol = codepoint == '*' || utf8::is_S(codepoint);
+    if (open_quotation) open_quotation = codepoint == '`' || unicode::category(codepoint) & unicode::Pi;
+    if (close_quotation) close_quotation = codepoint == '\'' || codepoint == '"' || unicode::category(codepoint) & unicode::Pf;
+    if (open_parenthesis) open_parenthesis = unicode::category(codepoint) & unicode::Ps;
+    if (close_parenthesis) close_parenthesis = unicode::category(codepoint) & unicode::Pe;
+    if (any_punctuation) any_punctuation = unicode::category(codepoint) & unicode::P;
+    if (symbol) symbol = codepoint == '*' || unicode::category(codepoint) & unicode::S;
   }
   if (!punctuation.len && open_quotation) { lemmas.emplace_back(string(form.str, form.len), open_quotation_tag); return; }
   if (!punctuation.len && close_quotation) { lemmas.emplace_back(string(form.str, form.len), close_quotation_tag); return; }

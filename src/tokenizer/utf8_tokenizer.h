@@ -20,8 +20,9 @@
 
 #include "common.h"
 #include "tokenizer.h"
+#include "unilib/unicode.h"
+#include "unilib/utf8.h"
 #include "utils/threadsafe_stack.h"
-#include "utils/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -45,8 +46,8 @@ class utf8_tokenizer : public tokenizer {
   inline bool emergency_sentence_split(const vector<string_piece>& forms) {
     // Implement emergency splitting for large sentences
     return forms.size() >= 500 ||
-           (forms.size() >= 450 && utf8::is_P(utf8::first(forms.back().str))) ||
-           (forms.size() >= 400 && utf8::is_Po(utf8::first(forms.back().str)));
+           (forms.size() >= 450 && unicode::category(utf8::first(forms.back().str)) & unicode::P) ||
+           (forms.size() >= 400 && unicode::category(utf8::first(forms.back().str)) & unicode::Po);
   }
 
   const char* text = nullptr;

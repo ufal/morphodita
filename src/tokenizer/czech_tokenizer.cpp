@@ -20,7 +20,8 @@
 #include <unordered_set>
 
 #include "czech_tokenizer.h"
-#include "utils/utf8.h"
+#include "unilib/unicode.h"
+#include "unilib/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -6321,7 +6322,6 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
   const char* ts, *te;
   const char* text_start = text;
 
-  char32_t unary_chr;
   const char* unary_text;
   const char* whitespace = nullptr; // Suppress "may be uninitialized" warning
   
@@ -6370,13 +6370,13 @@ _resume:
 	case 0: {
 		_widec = (short)(256u + (( (unsigned char)*text) - 0u));
 		if ( 
- text == text_start || (utf8_back(unary_text=text, text_start), unary_chr = utf8::first(unary_text, text - unary_text), !utf8::is_L(unary_chr) && !utf8::is_M(unary_chr) && !utf8::is_N(unary_chr) && !utf8::is_Pd(unary_chr))  ) _widec += 256;
+ text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N | unicode::Pd))  ) _widec += 256;
 		break;
 	}
 	case 1: {
 		_widec = (short)(768u + (( (unsigned char)*text) - 0u));
 		if ( 
- text == text_start || (utf8_back(unary_text=text, text_start), unary_chr = utf8::first(unary_text, text - unary_text), !utf8::is_L(unary_chr) && !utf8::is_M(unary_chr) && !utf8::is_N(unary_chr) && unary_chr != '+')  ) _widec += 256;
+ text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N) && *unary_text != '+')  ) _widec += 256;
 		break;
 	}
 				}
@@ -6461,10 +6461,11 @@ _eof_trans:
           if (!forms.empty()) {
             // Is it single Lut?
             string_piece form = forms.back();
-            eos_word_exception = utf8::is_Lut(utf8::decode(form.str, form.len)) && !form.len;
+            eos_word_exception = unicode::category(utf8::decode(form.str, form.len)) & unicode::Lut && !form.len;
 
             // Is the lower case variant in eos_word_exceptions?
-            buffer.clear(); utf8::lowercase(forms.back().str, forms.back().len, buffer);
+            buffer.clear();
+            utf8::map(unicode::lowercase, forms.back().str, forms.back().len, buffer);
             eos_word_exception |= eos_word_exceptions.count(buffer);
           }
 

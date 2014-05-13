@@ -20,7 +20,8 @@
 
 #include "common.h"
 #include "tokenizer/string_piece.h"
-#include "utils/utf8.h"
+#include "unilib/unicode.h"
+#include "unilib/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -31,9 +32,9 @@ inline void generate_casing_variants(string_piece form, string& form_uclc, strin
   bool rest_has_Lut = false; // any character but first is uppercase or titlecase
   {
     string_piece form_tmp = form;
-    first_Lut = utf8::is_Lut(utf8::decode(form_tmp.str, form_tmp.len));
+    first_Lut = unicode::category(utf8::decode(form_tmp.str, form_tmp.len)) & unicode::Lut;
     while (form_tmp.len && !rest_has_Lut)
-      rest_has_Lut = utf8::is_Lut(utf8::decode(form_tmp.str, form_tmp.len));
+      rest_has_Lut = unicode::category(utf8::decode(form_tmp.str, form_tmp.len)) & unicode::Lut;
   }
 
   // Generate all casing variants if needed (they are different than given form).
@@ -44,20 +45,20 @@ inline void generate_casing_variants(string_piece form, string& form_uclc, strin
   if (first_Lut && !rest_has_Lut) { // common case allowing fast execution
     form_lc.reserve(form.len);
     string_piece form_tmp = form;
-    utf8::append(form_lc, utf8::lowercase(utf8::decode(form_tmp.str, form_tmp.len)));
+    utf8::append(form_lc, unicode::lowercase(utf8::decode(form_tmp.str, form_tmp.len)));
     form_lc.append(form_tmp.str, form_tmp.len);
   } else if (!first_Lut && rest_has_Lut) {
     form_lc.reserve(form.len);
-    utf8::lowercase(form.str, form.len, form_lc);
+    utf8::map(unicode::lowercase, form.str, form.len, form_lc);
   } else if (first_Lut && rest_has_Lut) {
     form_lc.reserve(form.len);
     form_uclc.reserve(form.len);
     string_piece form_tmp = form;
     char32_t first = utf8::decode(form_tmp.str, form_tmp.len);
-    utf8::append(form_lc, utf8::lowercase(first));
+    utf8::append(form_lc, unicode::lowercase(first));
     utf8::append(form_uclc, first);
     while (form_tmp.len) {
-      char32_t lowercase = utf8::lowercase(utf8::decode(form_tmp.str, form_tmp.len));
+      char32_t lowercase = unicode::lowercase(utf8::decode(form_tmp.str, form_tmp.len));
       utf8::append(form_lc, lowercase);
       utf8::append(form_uclc, lowercase);
     }
