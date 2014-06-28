@@ -42,7 +42,7 @@ additional licensing conditions.
 
 If you use this tool for scientific work, please give credit to us by
 referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and
-[Spoustová et al. 2009 http://aclweb.org/anthology//E/E09/E09-1087.pdf].
+[Straková et al. 2014 http://www.aclweb.org/anthology/P/P14/P14-5003].
 
 
 == Platforms and Requirements ==
@@ -96,21 +96,23 @@ This work has been using language resources developed and/or stored and/or distr
 
 == Publications ==
 
+- (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan. //[Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity Recognition. http://www.aclweb.org/anthology/P/P14/P14-5003]// In Proceedings of 52nd Annual Meeting of the Association for Computational Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014. Association for Computational Linguistics.
+
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. //[Semi-Supervised Training for the Averaged Perceptron POS Tagger. http://aclweb.org/anthology//E/E09/E09-1087.pdf]// In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 
 
 == Bibtex for referencing ==
 
 ```
-@inproceedings{spoustova09,
-  author = {Spoustov{\'a}, Drahom{\'\i}ra ``johanka'' and Haji\v{c}, Jan and Raab, Jan and Spousta, Miroslav},
-  title = {Semi-{S}upervised {T}raining for the {A}veraged {P}erceptron {POS} {T}agger},
-  booktitle = {Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009)},
-  month = {March},
-  year = {2009},
-  address = {Athens, Greece},
+@InProceedings{strakova14,
+  author    = {Strakov\'{a}, Jana  and  Straka, Milan  and  Haji\v{c}, Jan},
+  title     = {Open-{S}ource {T}ools for {M}orphology, {L}emmatization, {POS} {T}agging and {N}amed {E}ntity {R}ecognition},
+  booktitle = {Proceedings of 52nd Annual Meeting of the Association for Computational Linguistics: System Demonstrations},
+  month     = {June},
+  year      = {2014},
+  address   = {Baltimore, Maryland},
   publisher = {Association for Computational Linguistics},
-  pages = {763--771},
-  url = {http://www.aclweb.org/anthology/E09-1087}
+  pages     = {13--18},
+  url       = {http://www.aclweb.org/anthology/P/P14/P14-5003}
 }
 ```
