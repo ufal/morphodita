@@ -6,6 +6,7 @@ ifdef WIN
 else
   PYTHON_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
 endif
+PYTHON_C_FLAGS+=-w
 
 TARGETS = $(call dynlib,ufal_morphodita)
 
@@ -20,7 +21,7 @@ $(call dynlib,ufal_morphodita): morphodita_python.cpp $(PYTHON_MORPHODITA_LIB)
 morphodita_python.cpp: morphodita_python.i ../common/morphodita.i
 	@$(call mkdir,ufal)
 	@$(call touch,ufal/__init__.py)
-	swig $(SWIG_FLAGS) -python -outdir ufal -o $@ -interface ufal_morphodita $<
+	swig $(SWIG_FLAGS) -python -outdir ufal -o $@ -interface ufal_morphodita -builtin $<
 
 .PHONY: clean
 clean:

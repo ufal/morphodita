@@ -1,6 +1,7 @@
 Version 1.2.1 [not yet released]
 --------------------------------
 - Use UniLib instead of MorphoDiTa specific utf8 class.
+- Use PyTypeObject in Python bindings instead of proxy classes.
 
 
 Version 1.2.0 [22 Apr 14]
