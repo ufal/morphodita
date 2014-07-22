@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <cerrno>
+
 #include "common.h"
 
 namespace ufal {
