@@ -35,10 +35,10 @@ int main(int argc, char* argv[]) {
 
   options_map options;
   bool show_usage = false;
-  show_usage = !parse_options({{"tokenizer", {"czech", "english", "generic"}},
-                              {"morphology", {""}},
-                              {"tagger", {""}},
-                              {"output",{"vertical","xml"}}}, argc, argv, options);
+  show_usage = !parse_options({{"tokenizer", option_values{"czech", "english", "generic"}},
+                              {"morphology", option_values::any},
+                              {"tagger", option_values::any},
+                              {"output", option_values{"vertical","xml"}}}, argc, argv, options);
   if (!show_usage && (options.count("tokenizer") + options.count("morphology") + options.count("tagger")) == 0) {
     eprintf("Missing one of --tokenizer, --morphology and --tagger options!\n");
     show_usage = true;

@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
   show_version_if_requested(argc, argv);
 
   options_map options;
-  if (!parse_options({{"convert_tagset",{""}},
-                      {"from_tagger",{}}}, argc, argv, options) ||
+  if (!parse_options({{"convert_tagset",option_values::any},
+                      {"from_tagger",option_values::none}}, argc, argv, options) ||
       argc < 3)
     runtime_errorf("Usage: %s [options] dict_file use_guesser [file[:output_file]]...\n"
                    "Options: --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"

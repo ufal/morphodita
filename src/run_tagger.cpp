@@ -36,9 +36,9 @@ int main(int argc, char* argv[]) {
   show_version_if_requested(argc, argv);
 
   options_map options;
-  if (!parse_options({{"input",{"untokenized", "vertical"}},
-                      {"convert_tagset",{""}},
-                      {"output",{"vertical","xml"}}}, argc, argv, options) ||
+  if (!parse_options({{"input",option_values{"untokenized", "vertical"}},
+                      {"convert_tagset",option_values::any},
+                      {"output",option_values{"vertical","xml"}}}, argc, argv, options) ||
       argc < 2)
     runtime_errorf("Usage: %s [options] tagger_file [file[:output_file]]...\n"
                    "Options: --input=untokenized|vertical\n"

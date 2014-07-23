@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <initializer_list>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -28,12 +29,25 @@ namespace morphodita {
 
 typedef unordered_map<string, string> options_map;
 
+struct option_values {
+  enum values_t { NONE, ANY, SET };
+  values_t values;
+  unordered_set<string> allowed;
+
+  option_values(initializer_list<string> allowed) : values(SET), allowed(allowed) {}
+  static const option_values none;
+  static const option_values any;
+
+ private:
+  option_values(values_t values) : values(values) {}
+};
+
 // Parse options according to allowed map. If successful, argv is reordered so
 // that non-option arguments are placed in argv[1] to argv[argc-1]. The '--'
 // indicates end of option arguments (as usual).  The allowed map contains
 // values allowed for every option. If empty, no value is allowed, if it
 // contains just an empty string, any value is allowed.
-bool parse_options(const unordered_map<string, unordered_set<string>>& allowed, int& argc, char**& argv, options_map& options);
+bool parse_options(const unordered_map<string, option_values>& allowed, int& argc, char**& argv, options_map& options);
 
 // If requested, show current MorphoDiTa version.
 void show_version_if_requested(int argc, char* argv[]);

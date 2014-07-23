@@ -36,10 +36,10 @@ int main(int argc, char* argv[]) {
   show_version_if_requested(argc, argv);
 
   options_map options;
-  if (!parse_options({{"input",{"untokenized", "vertical"}},
-                      {"convert_tagset",{""}},
-                      {"output",{"vertical","xml"}},
-                      {"from_tagger",{}}}, argc, argv, options) ||
+  if (!parse_options({{"input",option_values{"untokenized", "vertical"}},
+                      {"convert_tagset",option_values::any},
+                      {"output",option_values{"vertical","xml"}},
+                      {"from_tagger",option_values::none}}, argc, argv, options) ||
       argc < 3)
     runtime_errorf("Usage: %s [options] dict_file use_guesser [file[:output_file]]...\n"
                    "Options: --input=untokenized|vertical\n"

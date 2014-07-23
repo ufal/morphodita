@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
   show_version_if_requested(argc, argv);
 
   options_map options;
-  if (!parse_options({{"from_tagger",{}}}, argc, argv, options) ||
+  if (!parse_options({{"from_tagger",option_values::none}}, argc, argv, options) ||
       argc < 2)
     runtime_errorf("Usage: %s [options] dict_file\n"
                    "Options: --from_tagger", argv[0]);
