@@ -1,31 +1,23 @@
 // This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
-// Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
-// Mathematics and Physics, Charles University in Prague, Czech Republic.
+// Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty
+// of Mathematics and Physics, Charles University in Prague, Czech Republic.
+// All rights reserved.
 //
-// UniLib is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as
-// published by the Free Software Foundation, either version 3 of
-// the License, or (at your option) any later version.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted under 3-clause BSD licence.
 //
-// UniLib is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with UniLib.  If not, see <http://www.gnu.org/licenses/>.
+// UniLib version: 2.0
+// Unicode version: 7.0.0
 
-// UniLib version: 1.0
-// Unicode version: 6.3.0
-
-#pragma once
+#ifndef UFAL_UNILIB_UNICODE_H
+#define UFAL_UNILIB_UNICODE_H
 
 #include <cstddef>
 #include <string>
 
 namespace ufal {
-namespace unilib {
+namespace morphodita {
 
 class unicode {
   enum : uint8_t {
@@ -104,5 +96,7 @@ char32_t unicode::titlecase(char32_t chr) {
   return chr;
 }
 
-} // namespace unilib
+} // namespace morphodita
 } // namespace ufal
+
+#endif // UFAL_UNILIB_UNICODE_H

@@ -33,18 +33,11 @@ static_assert(sizeof(int) >= sizeof(int32_t), "Int must be at least 4B wide!");
 // Assert that we are on a little endian system
 static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, "Only little endian systems are supported!");
 
-// Declare ufal::unilib namespace.
-namespace ufal {
-namespace unilib {
-}
-}
-
 // Define namespace ufal::morphodita.
 namespace ufal {
 namespace morphodita {
 
 using namespace std;
-using namespace ufal::unilib;
 
 // Printf-like logging function.
 inline int eprintf(const char* fmt, ...) {
