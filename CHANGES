@@ -1,6 +1,7 @@
 Version 1.2.1 [not yet released]
 --------------------------------
 - Use UniLib instead of MorphoDiTa specific utf8 class.
+- Update Unicode in tokenizer from 6.3.0 to 7.0.0.
 - Use PyTypeObject in Python bindings instead of proxy classes.
 
 
