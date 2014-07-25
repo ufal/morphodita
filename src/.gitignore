@@ -13,6 +13,7 @@ run_morpho_cli
 run_morpho_generate
 run_tagger
 run_tokenizer
+strip_combining_marks
 test_dictionary
 tagger_accuracy
 train_tagger

@@ -1,6 +1,6 @@
 include Makefile.options
 
-EXECUTABLES = $(call exe,benchmark_dictionary csts encode_dictionary fill_lemmas morpho_accuracy remap_tags run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer test_dictionary tagger_accuracy train_tagger)
+EXECUTABLES = $(call exe,benchmark_dictionary csts encode_dictionary fill_lemmas morpho_accuracy remap_tags run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer strip_combining_marks test_dictionary tagger_accuracy train_tagger)
 LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn) $(call dynlib,libmorphodita)
 all: exe
 exe: $(EXECUTABLES)
@@ -35,6 +35,7 @@ $(call exe,run_morpho_cli): $(call obj,$(MORPHODITA_O) utils/input utils/parse_o
 $(call exe,run_morpho_generate): $(call obj,$(MORPHODITA_O) utils/input utils/parse_options)
 $(call exe,run_tagger): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
 $(call exe,run_tokenizer): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
+$(call exe,strip_combining_marks): $(call obj,unilib/utf8 unilib/unistrip utils/input utils/parse_options version/version)
 $(call exe,test_dictionary): $(call obj,$(MORPHO_O) morpho/raw_morpho_dictionary_reader utils/input)
 $(call exe,tagger_accuracy): $(call obj,$(MORPHODITA_O) utils/input utils/parse_options)
 $(call exe,train_tagger): $(call obj,$(LZMA_ENC_O) $(MORPHODITA_O) utils/input utils/parse_options)
