@@ -1,10 +1,12 @@
 include Makefile.options
 
-EXECUTABLES = $(call exe,benchmark_dictionary csts encode_dictionary fill_lemmas morpho_accuracy remap_tags run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer strip_combining_marks test_dictionary tagger_accuracy train_tagger)
+EXECUTABLES = $(call exe,encode_dictionary run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer tagger_accuracy train_tagger)
 LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn) $(call dynlib,libmorphodita)
+TOOLS = $(call exe,tools/benchmark_dictionary tools/csts tools/fill_lemmas tools/morpho_accuracy tools/remap_tags tools/strip_combining_marks tools/test_dictionary)
 all: exe
 exe: $(EXECUTABLES)
 lib: $(LIBRARIES)
+tools: $(TOOLS)
 
 # dependency and compilation rules
 include Makefile.rules
@@ -24,29 +26,29 @@ $(call dynlib,libmorphodita): $(call lib,libmorphodita.dyn)
 	$(CXX) -o $@ $(DYN_LD_FLAGS) -Wl,--whole-archive $< -Wl,-no-whole-archive -Wl,--version-script=libmorphodita.map $(call create_implib,libmorphodita)
 
 # executables
-$(call exe,benchmark_dictionary): $(call obj,$(MORPHO_O) utils/input)
-$(call exe,csts): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,encode_dictionary): $(call obj,$(LZMA_ENC_O) morpho/czech_morpho_encoder morpho/english_morpho_encoder morpho/english_morpho_guesser_encoder morpho/external_morpho_encoder morpho/generic_morpho_encoder morpho/morpho_prefix_guesser_encoder morpho/morpho_statistical_guesser_encoder morpho/raw_morpho_dictionary_reader utils/input utils/parse_options utils/persistent_unordered_map version/version)
-$(call exe,fill_lemmas): $(call obj,$(MORPHO_O) utils/input)
-$(call exe,morpho_accuracy): $(call obj,$(MORPHO_O) utils/input)
-$(call exe,remap_tags): $(call obj,$(MORPHO_O) utils/input)
 $(call exe,run_morpho_analyze): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
 $(call exe,run_morpho_cli): $(call obj,$(MORPHODITA_O) utils/input utils/parse_options)
 $(call exe,run_morpho_generate): $(call obj,$(MORPHODITA_O) utils/input utils/parse_options)
 $(call exe,run_tagger): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
 $(call exe,run_tokenizer): $(call obj,$(MORPHODITA_O) utils/input utils/output utils/parse_options)
-$(call exe,strip_combining_marks): $(call obj,unilib/utf8 unilib/unistrip utils/input utils/parse_options version/version)
-$(call exe,test_dictionary): $(call obj,$(MORPHO_O) morpho/raw_morpho_dictionary_reader utils/input)
 $(call exe,tagger_accuracy): $(call obj,$(MORPHODITA_O) utils/input utils/parse_options)
 $(call exe,train_tagger): $(call obj,$(LZMA_ENC_O) $(MORPHODITA_O) utils/input utils/parse_options)
-$(EXECUTABLES): $(call exe,%): $(call obj,%)
+$(call exe,tools/benchmark_dictionary): $(call obj,$(MORPHO_O) utils/input)
+$(call exe,tools/csts): $(call obj,$(MORPHO_O) utils/input)
+$(call exe,tools/fill_lemmas): $(call obj,$(MORPHO_O) utils/input)
+$(call exe,tools/morpho_accuracy): $(call obj,$(MORPHO_O) utils/input)
+$(call exe,tools/remap_tags): $(call obj,$(MORPHO_O) utils/input)
+$(call exe,tools/strip_combining_marks): $(call obj,unilib/utf8 unilib/unistrip utils/input utils/parse_options version/version)
+$(call exe,tools/test_dictionary): $(call obj,$(MORPHO_O) morpho/raw_morpho_dictionary_reader utils/input)
+$(EXECUTABLES) $(TOOLS): $(call exe,%): $(call obj,%)
 	$(CXX) $^ -o $@ $(LD_FLAGS)
 
 # cleaning
 .PHONY: clean
 
 clean:
-	@$(call rmdir,.objs) $(call rm,$(LIBRARIES) $(EXECUTABLES) $(call implib,libmorphodita))
+	@$(call rmdir,.objs) $(call rm,$(LIBRARIES) $(EXECUTABLES) $(TOOLS) $(call implib,libmorphodita))
 
 # dump library sources
 lib_sources:
