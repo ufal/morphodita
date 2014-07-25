@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <cstring>
+
 #include "common.h"
 
 namespace ufal {
