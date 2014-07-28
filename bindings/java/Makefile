@@ -19,7 +19,7 @@ include ../common/Makefile.rules
 
 $(JAVA_MODULE): morphodita_java.cpp $(JAVA_MORPHODITA_LIB)
 	@$(if $(JAVA_HOME),,$(error JAVA_HOME must be set))
-	$(CXX) -I../../src/include $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(JAVA_C_FLAGS) $(JAVA_LD_FLAGS) -fno-strict-aliasing -Wl,--version-script=morphodita_java.map $^ -o $@
+	$(CXX) -I../../src/include $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(JAVA_C_FLAGS) $(JAVA_LD_FLAGS) -fno-strict-aliasing $(call version_script,morphodita_java.map) $^ -o $@
 
 morphodita_java.cpp: morphodita_java.i ../common/morphodita.i
 	@$(call mkdir,cz/cuni/mff/ufal/morphodita)

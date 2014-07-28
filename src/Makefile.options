@@ -3,21 +3,6 @@ ifeq ($(OS),Windows_NT)
   WIN = 1
 endif
 
-# platform settings
-ifdef WIN
-  exe = $(foreach f,$(1),$(f).exe)
-  lib = $(foreach f,$(1),$(f).a)
-  dynlib = $(foreach f,$(1),$(f).dll)
-  implib = $(foreach f,$(1),$(f).dll.lib)
-  create_implib = -Wl,--out-implib,$(call implib,$(1))
-  DYN_C_FLAGS += -DBUILDING_DLL
-else
-  exe = $(foreach f,$(1),$(f))
-  lib = $(foreach f,$(1),$(f).a)
-  dynlib = $(foreach f,$(1),$(f).so)
-  DYN_C_FLAGS += -fPIC
-endif
-
 # shell settings
 ifdef WINCMD
   mkdir = for %%d in ($(subst /,\\,$(1))) do if not exist %%d md %%d &
@@ -31,7 +16,24 @@ else
   rmdir = rm -rf $(1) ;
 endif
 
-# switches
+# platform settings
+ifdef WIN
+  exe = $(foreach f,$(1),$(f).exe)
+  lib = $(foreach f,$(1),$(f).a)
+  dynlib = $(foreach f,$(1),$(f).dll)
+  version_script = -Wl,--version_script=$(1)
+  implib = $(foreach f,$(1),$(f).dll.lib)
+  create_implib = -Wl,--out-implib,$(call implib,$(1))
+else
+  exe = $(foreach f,$(1),$(f))
+  lib = $(foreach f,$(1),$(f).a)
+  dynlib = $(foreach f,$(1),$(f).so)
+  version_script = -Wl,--version-script=$(1)
+  implib =
+  create_implib =
+endif
+
+# generic switches
 C_FLAGS += -std=c++11 -W -Wall -mtune=generic -I. -fvisibility=hidden
 LD_FLAGS += -static-libgcc -static-libstdc++
 ifeq ($(BITS),32)
@@ -55,6 +57,12 @@ else
   C_FLAGS += -O3
   LD_FLAGS += -s
 endif
-
 DYN_C_FLAGS += $(C_FLAGS)
 DYN_LD_FLAGS += -shared $(LD_FLAGS)
+
+# platform specific switches
+ifdef WIN
+  DYN_C_FLAGS += -DBUILDING_DLL
+else
+  DYN_C_FLAGS += -fPIC
+endif

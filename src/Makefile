@@ -1,12 +1,15 @@
 include Makefile.options
 
 EXECUTABLES = $(call exe,encode_dictionary run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer tagger_accuracy train_tagger)
-LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn) $(call dynlib,libmorphodita)
+DYNAMIC_LIBRARIES = $(call dynlib,libmorphodita)
+STATIC_LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn)
 TOOLS = $(call exe,tools/benchmark_dictionary tools/csts tools/fill_lemmas tools/morpho_accuracy tools/remap_tags tools/strip_combining_marks tools/test_dictionary)
-all: exe
+default: exe
 exe: $(EXECUTABLES)
-lib: $(LIBRARIES)
+lib: $(DYNAMIC_LIBRARIES)
+a: $(STATIC_LIBRARIES)
 tools: $(TOOLS)
+all: exe lib a tools
 
 # dependency and compilation rules
 include Makefile.rules
@@ -22,8 +25,8 @@ $(call lib,libmorphodita): $(call obj,$(MORPHODITA_O))
 	ar -rcs $@ $^
 $(call lib,libmorphodita.dyn): $(call dynobj,$(MORPHODITA_O))
 	ar -rcs $@ $^
-$(call dynlib,libmorphodita): $(call lib,libmorphodita.dyn)
-	$(CXX) -o $@ $(DYN_LD_FLAGS) -Wl,--whole-archive $< -Wl,-no-whole-archive -Wl,--version-script=libmorphodita.map $(call create_implib,libmorphodita)
+$(call dynlib,libmorphodita): $(call dynobj,$(MORPHODITA_O))
+	$(CXX) -o $@ $(DYN_LD_FLAGS) $^ $(call version_script,libmorphodita.map) $(call create_implib,libmorphodita)
 
 # executables
 $(call exe,encode_dictionary): $(call obj,$(LZMA_ENC_O) morpho/czech_morpho_encoder morpho/english_morpho_encoder morpho/english_morpho_guesser_encoder morpho/external_morpho_encoder morpho/generic_morpho_encoder morpho/morpho_prefix_guesser_encoder morpho/morpho_statistical_guesser_encoder morpho/raw_morpho_dictionary_reader utils/input utils/parse_options utils/persistent_unordered_map version/version)
@@ -48,7 +51,7 @@ $(EXECUTABLES) $(TOOLS): $(call exe,%): $(call obj,%)
 .PHONY: clean
 
 clean:
-	@$(call rmdir,.objs) $(call rm,$(LIBRARIES) $(EXECUTABLES) $(TOOLS) $(call implib,libmorphodita))
+	@$(call rmdir,.objs) $(call rm,$(EXECUTABLES) $(DYNAMIC_LIBRARIES) $(STATIC_LIBRARIES) $(TOOLS) $(call implib,libmorphodita))
 
 # dump library sources
 lib_sources:

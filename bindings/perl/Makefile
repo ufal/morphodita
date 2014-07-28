@@ -18,7 +18,7 @@ $(call dynlib,auto/Ufal/MorphoDiTa/MorphoDiTa): morphodita_perl.cpp $(PERL_MORPH
 	@$(if $(PERL_INCLUDE),,$(error PERL_INCLUDE must be set to the directory containing perl.h))
 	@$(call mkdir,$(dir $@))
 	@$(call touch,$(dir $@)MorphoDiTa.bs)
-	$(CXX) -I../../src/include -I$(PERL_INCLUDE) $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(PERL_C_FLAGS) $(PERL_LD_FLAGS) -Wl,--version-script=morphodita_perl.map $^ -o $@
+	$(CXX) -I../../src/include -I$(PERL_INCLUDE) $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(PERL_C_FLAGS) $(PERL_LD_FLAGS) $(call version_script,morphodita_perl.map) $^ -o $@
 
 morphodita_perl.cpp: morphodita_perl.i ../common/morphodita.i
 	@$(call mkdir,Ufal)
