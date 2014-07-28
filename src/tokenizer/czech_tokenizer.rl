@@ -28,7 +28,7 @@ namespace morphodita {
 
 %%{
   machine czech_tokenizer;
-  write data;
+  write data noerror nofinal;
 }%%
 
 // The list of lower cased words that when preceding eos do not end sentence.

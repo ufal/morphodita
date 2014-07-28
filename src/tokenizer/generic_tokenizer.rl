@@ -28,7 +28,7 @@ namespace morphodita {
 
 %%{
   machine generic_tokenizer;
-  write data;
+  write data noerror nofinal;
 }%%
 
 bool generic_tokenizer::next_sentence(vector<string_piece>& forms) {

@@ -3796,10 +3796,7 @@ static const short _english_tokenizer_eof_trans[] = {
 };
 
 static const int english_tokenizer_start = 596;
-static const int english_tokenizer_first_final = 596;
-static const int english_tokenizer_error = 0;
 
-static const int english_tokenizer_en_main = 596;
 
 
 

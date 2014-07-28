@@ -170,10 +170,7 @@ static const char _tag_guesser_eof_actions[] = {
 };
 
 static const int tag_guesser_start = 0;
-static const int tag_guesser_first_final = 18;
-static const int tag_guesser_error = -1;
 
-static const int tag_guesser_en_main = 0;
 
 
 void english_morpho_guesser::analyze(string_piece form, string_piece form_lc, vector<tagged_lemma>& lemmas) const {
@@ -474,10 +471,7 @@ static const char _NNS_trans_actions[] = {
 };
 
 static const int NNS_start = 1;
-static const int NNS_first_final = 15;
-static const int NNS_error = 0;
 
-static const int NNS_en_main = 1;
 
 
 void english_morpho_guesser::add_NNS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const {
@@ -727,10 +721,7 @@ static const char _NNPS_trans_actions[] = {
 };
 
 static const int NNPS_start = 1;
-static const int NNPS_first_final = 22;
-static const int NNPS_error = 0;
 
-static const int NNPS_en_main = 1;
 
 
 void english_morpho_guesser::add_NNPS(const string& form, vector<tagged_lemma>& lemmas) const {
@@ -1163,10 +1154,7 @@ static const char _VBG_eof_actions[] = {
 };
 
 static const int VBG_start = 1;
-static const int VBG_first_final = 41;
-static const int VBG_error = 0;
 
-static const int VBG_en_main = 1;
 
 
 void english_morpho_guesser::add_VBG(const string& form, vector<tagged_lemma>& lemmas) const {
@@ -1624,10 +1612,7 @@ static const char _VBD_VBN_eof_actions[] = {
 };
 
 static const int VBD_VBN_start = 1;
-static const int VBD_VBN_first_final = 42;
-static const int VBD_VBN_error = 0;
 
-static const int VBD_VBN_en_main = 1;
 
 
 void english_morpho_guesser::add_VBD_VBN(const string& form, vector<tagged_lemma>& lemmas) const {
@@ -1858,10 +1843,7 @@ static const char _VBZ_trans_actions[] = {
 };
 
 static const int VBZ_start = 1;
-static const int VBZ_first_final = 11;
-static const int VBZ_error = 0;
 
-static const int VBZ_en_main = 1;
 
 
 void english_morpho_guesser::add_VBZ(const string& form, vector<tagged_lemma>& lemmas) const {
@@ -2096,10 +2078,7 @@ static const char _JJR_RBR_trans_actions[] = {
 };
 
 static const int JJR_RBR_start = 1;
-static const int JJR_RBR_first_final = 4;
-static const int JJR_RBR_error = 0;
 
-static const int JJR_RBR_en_main = 1;
 
 
 void english_morpho_guesser::add_JJR_RBR(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const {
@@ -2329,10 +2308,7 @@ static const char _JJS_RBS_trans_actions[] = {
 };
 
 static const int JJS_RBS_start = 1;
-static const int JJS_RBS_first_final = 28;
-static const int JJS_RBS_error = 0;
 
-static const int JJS_RBS_en_main = 1;
 
 
 void english_morpho_guesser::add_JJS_RBS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const {

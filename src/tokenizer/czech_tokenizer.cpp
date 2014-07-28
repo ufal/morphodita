@@ -6449,10 +6449,7 @@ static const short _czech_tokenizer_eof_trans[] = {
 };
 
 static const int czech_tokenizer_start = 776;
-static const int czech_tokenizer_first_final = 776;
-static const int czech_tokenizer_error = 0;
 
-static const int czech_tokenizer_en_main = 776;
 
 
 

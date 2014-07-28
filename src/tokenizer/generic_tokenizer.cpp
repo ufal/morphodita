@@ -2842,10 +2842,7 @@ static const short _generic_tokenizer_eof_trans[] = {
 };
 
 static const int generic_tokenizer_start = 505;
-static const int generic_tokenizer_first_final = 505;
-static const int generic_tokenizer_error = 0;
 
-static const int generic_tokenizer_en_main = 505;
 
 
 

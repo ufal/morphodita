@@ -44,7 +44,7 @@ void english_morpho_guesser::load(binary_decoder& data) {
   negations.load(data);
 }
 
-%% machine tag_guesser; write data;
+%% machine tag_guesser; write data noerror nofinal;
 void english_morpho_guesser::analyze(string_piece form, string_piece form_lc, vector<tagged_lemma>& lemmas) const {
   // Try exceptions list
   auto* exception = exceptions.at(form_lc.str, form_lc.len, [](pointer_decoder& data){
@@ -163,7 +163,7 @@ inline void english_morpho_guesser::add(const string& tag, const string& tag2, c
 %% PRE = ('eb' | 'xe' | 'ni' | 'sim' | 'erp' | 'orp' | 'er');
 %% PREO = ('be' | 'ex' | 'in' | 'mis' | 'pre' | 'pro' | 're');
 
-%% machine NNS; include common; write data;
+%% machine NNS; include common; write data noerror nofinal;
 void english_morpho_guesser::add_NNS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const {
   const char* p = form.c_str() + negation_len; int cs;
   char best = 'z'; unsigned remove = 0; const char* append = nullptr;
@@ -194,7 +194,7 @@ void english_morpho_guesser::add_NNS(const string& form, unsigned negation_len, 
   add(NNS, form.substr(0, form.size() - remove).append(append ? append : ""), negation_len, lemmas);
 }
 
-%% machine NNPS; include common; write data;
+%% machine NNPS; include common; write data noerror nofinal;
 void english_morpho_guesser::add_NNPS(const string& form, vector<tagged_lemma>& lemmas) const {
   const char* p = form.c_str(); int cs;
   char best = 'z'; unsigned remove = 0; const char* append = nullptr;
@@ -234,7 +234,7 @@ void english_morpho_guesser::add_NNPS(const string& form, vector<tagged_lemma>& 
   add(NNPS, form.substr(0, form.size() - remove).append(append ? append : ""), lemmas);
 }
 
-%% machine VBG; include common; write data;
+%% machine VBG; include common; write data noerror nofinal;
 void english_morpho_guesser::add_VBG(const string& form, vector<tagged_lemma>& lemmas) const {
   const char* p = form.c_str(); int cs;
   char best = 'z'; unsigned remove = 0; const char* append = nullptr;
@@ -269,7 +269,7 @@ void english_morpho_guesser::add_VBG(const string& form, vector<tagged_lemma>& l
   add(VBG, form.substr(0, form.size() - remove).append(append ? append : ""), lemmas);
 }
 
-%% machine VBD_VBN; include common; write data;
+%% machine VBD_VBN; include common; write data noerror nofinal;
 void english_morpho_guesser::add_VBD_VBN(const string& form, vector<tagged_lemma>& lemmas) const {
   const char* p = form.c_str(); int cs;
   char best = 'z'; unsigned remove = 0; const char* append = nullptr;
@@ -304,7 +304,7 @@ void english_morpho_guesser::add_VBD_VBN(const string& form, vector<tagged_lemma
   add(VBD, VBN, form.substr(0, form.size() - remove).append(append ? append : ""), lemmas);
 }
 
-%% machine VBZ; include common; write data;
+%% machine VBZ; include common; write data noerror nofinal;
 void english_morpho_guesser::add_VBZ(const string& form, vector<tagged_lemma>& lemmas) const {
   const char* p = form.c_str(); int cs;
   char best = 'z'; unsigned remove = 0; const char* append = nullptr;
@@ -330,7 +330,7 @@ void english_morpho_guesser::add_VBZ(const string& form, vector<tagged_lemma>& l
   add(VBZ, form.substr(0, form.size() - remove).append(append ? append : ""), lemmas);
 }
 
-%% machine JJR_RBR; include common; write data;
+%% machine JJR_RBR; include common; write data noerror nofinal;
 void english_morpho_guesser::add_JJR_RBR(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const {
   const char* p = form.c_str() + negation_len; int cs;
   char best = 'z'; unsigned remove = 0; const char* append = nullptr;
@@ -353,7 +353,7 @@ void english_morpho_guesser::add_JJR_RBR(const string& form, unsigned negation_l
   add(JJR, RBR, form.substr(0, form.size() - remove).append(append ? append : ""), negation_len, lemmas);
 }
 
-%% machine JJS_RBS; include common; write data;
+%% machine JJS_RBS; include common; write data noerror nofinal;
 void english_morpho_guesser::add_JJS_RBS(const string& form, unsigned negation_len, vector<tagged_lemma>& lemmas) const {
   const char* p = form.c_str() + negation_len; int cs;
   char best = 'z'; unsigned remove = 0; const char* append = nullptr;
