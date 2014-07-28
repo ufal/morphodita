@@ -1,14 +1,18 @@
 include ../common/Makefile.common
 
-ifdef WIN
+ifdef LINUX
+  JAVA_MODULE=$(call dynlib,libmorphodita_java)
+  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
+  JAVA_C_FLAGS=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+else ifdef WIN
+  JAVA_MODULE=$(call dynlib,morphodita_java)
   JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
   JAVA_C_FLAGS=-DMORPHODITA_STATIC -I"$(JAVA_HOME)"/include -I"$(JAVA_HOME)"/include/win32
   JAVA_LD_FLAGS=-Wl,--kill-at
-  JAVA_MODULE=$(call dynlib,morphodita_java)
-else
-  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
-  JAVA_C_FLAGS=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+else ifdef OSX
   JAVA_MODULE=$(call dynlib,libmorphodita_java)
+  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
+  JAVA_C_FLAGS=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/darwin $(patsubst %/Home,-I%/Headers,$(filter %/Home,$(JAVA_HOME)))
 endif
 
 TARGETS = $(JAVA_MODULE) morphodita.jar

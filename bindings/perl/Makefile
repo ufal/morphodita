@@ -1,10 +1,14 @@
 include ../common/Makefile.common
 
-ifdef WIN
+ifdef LINUX
+  PERL_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
+else ifdef WIN
   PERL_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
   PERL_C_FLAGS=-DMORPHODITA_STATIC
-else
-  PERL_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
+else ifdef OSX
+  PERL_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
+  PERL_C_FLAGS=-Wno-reserved-user-defined-literal
+  PERL_LD_FLAGS=-Wl,-undefined -Wl,dynamic_lookup
 endif
 PERL_C_FLAGS+=-w
 
