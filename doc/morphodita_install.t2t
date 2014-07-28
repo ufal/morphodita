@@ -32,7 +32,7 @@ To compile MorphoDiTa on Unix-like systems, run ``make`` in the ``src`` director
 
 Make targets and options:
 - ``exe``: compile the binaries (default)
-- ``lib``: compile the library
+- ``lib``: compile the shared (dynamically loaded) library
 - ``BITS=32`` or ``BITS=64``: compile for specified 32-bit or 64-bit architecture instead of the default one
 - ``RELEASE=1``: turn off assertions and use LTO
 - ``PROFILE=1``: turn on profiling
