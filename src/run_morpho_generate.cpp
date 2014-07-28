@@ -28,7 +28,7 @@
 
 using namespace ufal::morphodita;
 
-static void generate(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter);
+static void generate_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
   show_version_if_requested(argc, argv);
@@ -66,12 +66,12 @@ int main(int argc, char* argv[]) {
     if (!tagset_converter) runtime_errorf("Cannot create identity tag set converter!");
   }
 
-  process_args(3, argc, argv, generate, dictionary, use_guesser, *tagset_converter);
+  process_args(3, argc, argv, generate_vertical, dictionary, use_guesser, *tagset_converter);
 
   return 0;
 }
 
-void generate(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter) {
+void generate_vertical(FILE* in, FILE* out, const morpho& dictionary, bool use_guesser, const tagset_converter& tagset_converter) {
   string line;
   vector<tagged_lemma_forms> forms;
 
