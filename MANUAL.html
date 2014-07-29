@@ -191,9 +191,11 @@ Mathematics and Physics, Charles University in Prague, Czech Republic.
 
 <P>
 MorphoDiTa releases are available on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, either as
-a pre-compiled binary package, or source code only. The binary package contains Linux
-and Windows binaries and <CODE>C++</CODE> library, all language bindings (Java, Python, Perl)
-and source code (needed to compile the language bindings).
+a pre-compiled binary package, or source code only. The binary package contains Linux,
+Windows and OS X binaries, <CODE>C++</CODE> library binary, Java bindings binary, and source code of
+all language bindings (Java, Python, Perl) and MorphoDiTa. While the binary
+packages do not contain compiled Python or Perl bindings, packages for those
+languages are available in standard package repositories, i.e. on PyPI and CPAN.
 </P>
 
 <UL>
@@ -236,7 +238,7 @@ referencing <A HREF="http://ufal.mff.cuni.cz/morphodita">MorphoDiTa website</A> 
 <H2>2.3. Platforms and Requirements</H2>
 
 <P>
-MorphoDiTa is available as a standalone tool and as a library for Linux/Windows. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphological analysis. The models for the Czech language are available with the tool.
+MorphoDiTa is available as a standalone tool and as a library for Linux/Windows/OS X. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphological analysis. The models for the Czech language are available with the tool.
 </P>
 
 <A NAME="toc7"></A>
@@ -244,8 +246,8 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows.
 
 <P>
 MorphoDiTa releases are available on <A HREF="http://github.com/ufal/morphodita">GitHub</A>, either as
-a pre-compiled binary package, or source code only. The binary package contains Linux
-and Windows binaries, <CODE>C++</CODE> library binary, Java bindings binary, and source code of
+a pre-compiled binary package, or source code only. The binary package contains Linux,
+Windows and OS X binaries, <CODE>C++</CODE> library binary, Java bindings binary, and source code of
 all language bindings (Java, Python, Perl) and MorphoDiTa. While the binary
 packages do not contain compiled Python or Perl bindings, packages for those
 languages are available in standard package repositories, i.e. on PyPI and CPAN.
@@ -2659,8 +2661,8 @@ are accessible and modifiable using using <CODE>getField</CODE> and <CODE>setFie
 wrappers.
 </P>
 <P>
-The bindings require native C++ library <CODE>morphodita_java</CODE> (called
-<CODE>libmorphodita_java</CODE> on Linux). If the library is found in the current
+The bindings require native C++ library <CODE>libmorphodita_java</CODE> (called
+<CODE>morphodita_java</CODE> on Windows). If the library is found in the current
 directory, it is used, otherwise standard library search process is used.
 </P>
 

@@ -27,8 +27,8 @@ not have native Java interface, see cz.cuni.mff.ufal.morphodita.Forms class for
 reference. Also, class members are accessible and modifiable using using
 getField and setField wrappers.
 
-The bindings require native C++ library morphodita_java (called
-libmorphodita_java on Linux). If the library is found in the current directory,
+The bindings require native C++ library libmorphodita_java (called
+morphodita_java on Windows). If the library is found in the current directory,
 it is used, otherwise standard library search process is used.
 
 

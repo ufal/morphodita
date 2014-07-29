@@ -13,9 +13,11 @@ Version 1.2.1
 == Download ==
 
 MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
-a pre-compiled binary package, or source code only. The binary package contains Linux
-and Windows binaries and ``C++`` library, all language bindings (Java, Python, Perl)
-and source code (needed to compile the language bindings).
+a pre-compiled binary package, or source code only. The binary package contains Linux,
+Windows and OS X binaries, ``C++`` library binary, Java bindings binary, and source code of
+all language bindings (Java, Python, Perl) and MorphoDiTa. While the binary
+packages do not contain compiled Python or Perl bindings, packages for those
+languages are available in standard package repositories, i.e. on PyPI and CPAN.
 
 - [Latest release http://github.com/ufal/morphodita/releases/latest]
 - [All releases http://github.com/ufal/morphodita/releases], [Changelog https://github.com/ufal/morphodita/blob/master/CHANGES]
@@ -47,7 +49,7 @@ referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and
 
 == Platforms and Requirements ==
 
-MorphoDiTa is available as a standalone tool and as a library for Linux/Windows. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphological analysis. The models for the Czech language are available with the tool.
+MorphoDiTa is available as a standalone tool and as a library for Linux/Windows/OS X. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphological analysis. The models for the Czech language are available with the tool.
 
 
 = MorphoDiTa Installation =
