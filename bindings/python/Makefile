@@ -1,28 +1,19 @@
 include ../common/Makefile.common
 
-ifdef LINUX
-  PYTHON_MODULE=$(call dynlib,ufal_morphodita)
-  PYTHON_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
-else ifdef WIN
-  PYTHON_MODULE=$(call dynlib,ufal_morphodita)
-  PYTHON_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
-  PYTHON_C_FLAGS=-DMORPHODITA_STATIC
-else ifdef OSX
-  PYTHON_MODULE=ufal_morphodita.so
-  PYTHON_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
-  PYTHON_LD_FLAGS=-Wl,-undefined -Wl,dynamic_lookup
+ifdef OSX
+  BINDING_MODULE=ufal_morphodita.so
+else
+  BINDING_MODULE=$(call dynlib,ufal_morphodita)
 endif
-PYTHON_C_FLAGS+=-w
+BINDING_C_FLAGS+=-w
 
-TARGETS = $(PYTHON_MODULE)
-
-all: $(TARGETS)
+all: $(BINDING_MODULE)
 
 include ../common/Makefile.rules
 
-$(PYTHON_MODULE): morphodita_python.cpp $(PYTHON_MORPHODITA_LIB)
+$(BINDING_MODULE): morphodita_python.cpp $(BINDING_MORPHODITA_LIB)
 	@$(if $(PYTHON_INCLUDE),,$(error PYTHON_INCLUDE must be set to the directory containing Python.h))
-	$(CXX) -I../../src/include -I$(PYTHON_INCLUDE) $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(PYTHON_C_FLAGS) $(PYTHON_LD_FLAGS) $(call version_script,morphodita_python.map) $^ -o $@
+	$(CXX) -I../../src/include -I$(PYTHON_INCLUDE) $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(BINDING_C_FLAGS) $(BINDING_LD_FLAGS) $(call version_script,morphodita_python.map) $^ -o $@
 
 morphodita_python.cpp: morphodita_python.i ../common/morphodita.i
 	@$(call mkdir,ufal)
@@ -31,4 +22,4 @@ morphodita_python.cpp: morphodita_python.i ../common/morphodita.i
 
 .PHONY: clean
 clean:
-	@$(call rmdir,ufal) $(call rm,$(TARGETS) morphodita_python.cpp)
+	@$(call rmdir,ufal) $(call rm,$(BINDING_MODULE) morphodita_python.cpp)

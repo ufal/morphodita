@@ -1,28 +1,20 @@
 include ../common/Makefile.common
 
-ifdef LINUX
-  PERL_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
-else ifdef WIN
-  PERL_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
-  PERL_C_FLAGS=-DMORPHODITA_STATIC
-else ifdef OSX
-  PERL_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
-  PERL_C_FLAGS=-Wno-reserved-user-defined-literal
-  PERL_LD_FLAGS=-Wl,-undefined -Wl,dynamic_lookup
+ifdef OSX
+  BINDING_C_FLAGS+=-Wno-reserved-user-defined-literal
 endif
-PERL_C_FLAGS+=-w
+BINDING_C_FLAGS+=-w
+BINDING_MODULE=$(call dynlib,auto/Ufal/MorphoDiTa/MorphoDiTa)
 
-TARGETS = $(call dynlib,auto/Ufal/MorphoDiTa/MorphoDiTa)
-
-all: $(TARGETS)
+all: $(BINDING_MODULE)
 
 include ../common/Makefile.rules
 
-$(call dynlib,auto/Ufal/MorphoDiTa/MorphoDiTa): morphodita_perl.cpp $(PERL_MORPHODITA_LIB)
+$(BINDING_MODULE): morphodita_perl.cpp $(BINDING_MORPHODITA_LIB)
 	@$(if $(PERL_INCLUDE),,$(error PERL_INCLUDE must be set to the directory containing perl.h))
 	@$(call mkdir,$(dir $@))
 	@$(call touch,$(dir $@)MorphoDiTa.bs)
-	$(CXX) -I../../src/include -I$(PERL_INCLUDE) $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(PERL_C_FLAGS) $(PERL_LD_FLAGS) $(call version_script,morphodita_perl.map) $^ -o $@
+	$(CXX) -I../../src/include -I$(PERL_INCLUDE) $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(BINDING_C_FLAGS) $(BINDING_LD_FLAGS) $(call version_script,morphodita_perl.map) $^ -o $@
 
 morphodita_perl.cpp: morphodita_perl.i ../common/morphodita.i
 	@$(call mkdir,Ufal)

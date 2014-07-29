@@ -1,29 +1,25 @@
 include ../common/Makefile.common
 
 ifdef LINUX
-  JAVA_MODULE=$(call dynlib,libmorphodita_java)
-  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
-  JAVA_C_FLAGS=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+  BINDING_MODULE=$(call dynlib,libmorphodita_java)
+  BINDING_C_FLAGS+=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
 else ifdef WIN
-  JAVA_MODULE=$(call dynlib,morphodita_java)
-  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
-  JAVA_C_FLAGS=-DMORPHODITA_STATIC -I"$(JAVA_HOME)"/include -I"$(JAVA_HOME)"/include/win32
-  JAVA_LD_FLAGS=-Wl,--kill-at
+  BINDING_MODULE=$(call dynlib,morphodita_java)
+  BINDING_C_FLAGS+=-I"$(JAVA_HOME)"/include -I"$(JAVA_HOME)"/include/win32
+  BINDING_LD_FLAGS+=-Wl,--kill-at
 else ifdef OSX
-  JAVA_MODULE=$(call dynlib,libmorphodita_java)
-  JAVA_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
-  JAVA_C_FLAGS=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/darwin $(patsubst %/Home,-I%/Headers,$(filter %/Home,$(JAVA_HOME)))
+  BINDING_MODULE=$(call dynlib,libmorphodita_java)
+  BINDING_C_FLAGS+=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/darwin $(patsubst %/Home,-I%/Headers,$(filter %/Home,$(JAVA_HOME)))
 endif
+BINDING_C_FLAGS += -fno-strict-aliasing
 
-TARGETS = $(JAVA_MODULE) morphodita.jar
-
-all: $(TARGETS)
+all: $(BINDING_MODULE) morphodita.jar
 
 include ../common/Makefile.rules
 
-$(JAVA_MODULE): morphodita_java.cpp $(JAVA_MORPHODITA_LIB)
+$(BINDING_MODULE): morphodita_java.cpp $(BINDING_MORPHODITA_LIB)
 	@$(if $(JAVA_HOME),,$(error JAVA_HOME must be set))
-	$(CXX) -I../../src/include $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(JAVA_C_FLAGS) $(JAVA_LD_FLAGS) -fno-strict-aliasing $(call version_script,morphodita_java.map) $^ -o $@
+	$(CXX) -I../../src/include $(DYN_C_FLAGS) $(DYN_LD_FLAGS) $(BINDING_C_FLAGS) $(BINDING_LD_FLAGS) $(call version_script,morphodita_java.map) $^ -o $@
 
 morphodita_java.cpp: morphodita_java.i ../common/morphodita.i
 	@$(call mkdir,cz/cuni/mff/ufal/morphodita)
@@ -35,4 +31,4 @@ morphodita.jar: morphodita_java.cpp
 
 .PHONY: clean
 clean:
-	@$(call rmdir,cz) $(call rm,$(TARGETS) morphodita_java.cpp $(wildcard examples/*.class))
+	@$(call rmdir,cz) $(call rm,$(BINDING_MODULE) morphodita.jar morphodita_java.cpp $(wildcard examples/*.class))

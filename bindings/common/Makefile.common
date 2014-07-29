@@ -1,3 +1,12 @@
 include ../../src/Makefile.options
 
-SWIG_FLAGS=-O -c++ -outcurrentdir
+SWIG_FLAGS+=-O -c++ -outcurrentdir
+ifdef LINUX
+  BINDING_MORPHODITA_LIB=$(call lib,../../src/libmorphodita.dyn)
+else ifdef WIN
+  BINDING_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
+  BINDING_C_FLAGS+=-DMORPHODITA_STATIC
+else ifdef OSX
+  BINDING_MORPHODITA_LIB=$(call lib,../../src/libmorphodita)
+  BINDING_LD_FLAGS+=-Wl,-undefined -Wl,dynamic_lookup
+endif
