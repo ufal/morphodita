@@ -37,22 +37,17 @@ ifdef LINUX
   lib = $(foreach f,$(1),$(f).a)
   dynlib = $(foreach f,$(1),$(f).so)
   version_script = -Wl,--version-script=$(1)
-  implib =
-  create_implib =
 else ifdef WIN
   exe = $(foreach f,$(1),$(f).exe)
   lib = $(foreach f,$(1),$(f).a)
   dynlib = $(foreach f,$(1),$(f).dll)
-  version_script = -Wl,--version_script=$(1)
+  version_script = -Wl,--version-script=$(1)
   implib = $(foreach f,$(1),$(f).dll.lib)
   create_implib = -Wl,--out-implib,$(call implib,$(1))
 else ifdef OSX
   exe = $(foreach f,$(1),$(f))
   lib = $(foreach f,$(1),$(f).a)
   dynlib = $(foreach f,$(1),$(f).dylib)
-  version_script =
-  implib =
-  create_implib =
 endif
 
 # switches
