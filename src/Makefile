@@ -4,12 +4,12 @@ EXECUTABLES = $(call exe,encode_dictionary run_morpho_analyze run_morpho_cli run
 DYNAMIC_LIBRARIES = $(call dynlib,libmorphodita)
 STATIC_LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn)
 TOOLS = $(call exe,tools/benchmark_dictionary tools/csts tools/fill_lemmas tools/morpho_accuracy tools/remap_tags tools/strip_combining_marks tools/test_dictionary)
-default: exe
+all: exe
 exe: $(EXECUTABLES)
 lib: $(DYNAMIC_LIBRARIES)
 a: $(STATIC_LIBRARIES)
 tools: $(TOOLS)
-all: exe lib a tools
+full: exe lib a tools
 
 # dependency and compilation rules
 include Makefile.rules
