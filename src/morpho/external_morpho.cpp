@@ -19,6 +19,7 @@
 #include "external_morpho.h"
 #include "tag_filter.h"
 #include "tokenizer/generic_tokenizer.h"
+#include "utils/binary_decoder.h"
 #include "utils/compressor.h"
 
 namespace ufal {

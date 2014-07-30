@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "common.h"
 #include "tagger/czech_elementary_features.h"
 #include "tagger/feature_sequences.h"
 #include "tagger/generic_elementary_features.h"

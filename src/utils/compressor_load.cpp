@@ -17,8 +17,8 @@
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "compressor.h"
+#include "binary_decoder.h"
 #include "lzma/LzmaDec.h"
-#include "lzma/LzmaEnc.h"
 
 namespace ufal {
 namespace morphodita {

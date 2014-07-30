@@ -18,17 +18,19 @@
 
 #pragma once
 
+#include <cstring>
 #include <map>
 #include <unordered_map>
 
-#include "binary_decoder.h"
-#include "binary_encoder.h"
 #include "common.h"
+#include "binary_decoder.h"
 #include "small_stringops.h"
 #include "pointer_decoder.h"
 
 namespace ufal {
 namespace morphodita {
+
+class binary_encoder;
 
 // Declarations
 class persistent_unordered_map {
@@ -51,7 +53,7 @@ class persistent_unordered_map {
   inline const unsigned char* data_start(int len) const;
 
   // Creation functions
-  persistent_unordered_map();
+  persistent_unordered_map() {}
   template <class Entry, class EntryEncode>
   persistent_unordered_map(const unordered_map<string, Entry>& map, double load_factor, EntryEncode entry_encode);
   template <class Entry, class EntryEncode>
@@ -65,8 +67,8 @@ class persistent_unordered_map {
   inline void done_filling();
 
   // Serialization
-  void load(binary_decoder& data);
-  void save(binary_encoder& enc);
+  inline void load(binary_decoder& data);
+  inline void save(binary_encoder& enc);
 
  private:
   struct fnv_hash;
@@ -86,7 +88,16 @@ struct persistent_unordered_map::fnv_hash {
     hash.resize(mask + 1);
     mask--;
   }
-  fnv_hash(binary_decoder& data);
+  fnv_hash(binary_decoder& data) {
+    uint32_t size = data.next_4B();
+    mask = size - 2;
+    hash.resize(size);
+    memcpy(hash.data(), data.next<uint32_t>(size), size * sizeof(uint32_t));
+
+    size = data.next_4B();
+    this->data.resize(size);
+    memcpy(this->data.data(), data.next<char>(size), size);
+  }
 
   inline uint32_t index(const char* data, int len) const {
     if (len <= 0) return 0;
@@ -99,7 +110,7 @@ struct persistent_unordered_map::fnv_hash {
     return hash & mask;
   }
 
-  void save(binary_encoder& enc);
+  inline void save(binary_encoder& enc);
 
   unsigned mask;
   vector<uint32_t> hash;
@@ -185,31 +196,6 @@ const unsigned char* persistent_unordered_map::data_start(int len) const {
   return unsigned(len) < hashes.size() ? hashes[len].data.data() : nullptr;
 }
 
-template <class Entry, class EntryEncode>
-persistent_unordered_map::persistent_unordered_map(const unordered_map<string, Entry>& map, double load_factor, EntryEncode entry_encode) {
-  construct(std::map<string, Entry>(map.begin(), map.end()), load_factor, entry_encode);
-}
-
-template <class Entry, class EntryEncode>
-persistent_unordered_map::persistent_unordered_map(const unordered_map<string, Entry>& map, double load_factor, bool add_prefixes, bool add_suffixes, EntryEncode entry_encode) {
-  // Copy data, possibly including prefixes and suffixes
-  std::map<string, Entry> enlarged_map(map.begin(), map.end());
-
-  for (auto&& entry : map) {
-    const string& key = entry.first;
-
-    if (!key.empty() && add_prefixes)
-      for (unsigned i = key.size() - 1; i; i--)
-        enlarged_map[key.substr(0, i)];
-
-    if (!key.empty() && add_suffixes)
-      for (unsigned i = 1; i < key.size(); i++)
-        enlarged_map[key.substr(i)];
-  }
-
-  construct(enlarged_map, load_factor, entry_encode);
-}
-
 void persistent_unordered_map::resize(unsigned elems) {
   if (hashes.size() == 0) hashes.emplace_back(1);
   else if (hashes.size() == 1) hashes.emplace_back(1<<8);
@@ -247,37 +233,12 @@ void persistent_unordered_map::done_filling() {
       hash.hash[i] = i > 0 ? hash.hash[i-1] : 0;
 }
 
-// We could (and used to) use unordered_map as input parameter.
-// Nevertheless, as order is unspecified, the resulting persistent_unordered_map
-// has different collision chains when generated on 32-bit and 64-bit machines.
-// To guarantee uniform binary representation, we use map instead.
-template <class Entry, class EntryEncode>
-void persistent_unordered_map::construct(const map<string, Entry>& map, double load_factor, EntryEncode entry_encode) {
-  // 1) Count number of elements for each size
-  vector<int> sizes;
-  for (auto&& elem : map) {
-    unsigned len = elem.first.size();
-    if (len >= sizes.size()) sizes.resize(len + 1);
-    sizes[len]++;
-  }
-  for (auto&& size : sizes)
-    resize(unsigned(load_factor * size));
+void persistent_unordered_map::load(binary_decoder& data) {
+  unsigned sizes = data.next_1B();
 
-  // 2) Add sizes of element data
-  for (auto&& elem : map) {
-    binary_encoder enc;
-    entry_encode(enc, elem.second);
-    add(elem.first.c_str(), elem.first.size(), enc.data.size());
-  }
-  done_adding();
-
-  // 3) Fill in element data
-  for (auto&& elem : map) {
-    binary_encoder enc;
-    entry_encode(enc, elem.second);
-    small_memcpy(fill(elem.first.c_str(), elem.first.size(), enc.data.size()), enc.data.data(), enc.data.size());
-  }
-  done_filling();
+  hashes.clear();
+  for (unsigned i = 0; i < sizes; i++)
+    hashes.emplace_back(data);
 }
 
 } // namespace morphodita

@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "binary_encoder.h"
 #include "compressor.h"
-#include "lzma/LzmaDec.h"
 #include "lzma/LzmaEnc.h"
 
 namespace ufal {

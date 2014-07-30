@@ -30,7 +30,7 @@
 #include "utils/input.h"
 #include "utils/new_unique_ptr.h"
 #include "utils/parse_int.h"
-#include "utils/persistent_unordered_map.h"
+#include "utils/persistent_unordered_map_encoder.h"
 
 namespace ufal {
 namespace morphodita {

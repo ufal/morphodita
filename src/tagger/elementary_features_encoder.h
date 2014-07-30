@@ -19,18 +19,22 @@
 #pragma once
 
 #include "common.h"
+#include "elementary_features.h"
+#include "utils/binary_encoder.h"
 
 namespace ufal {
 namespace morphodita {
 
-class binary_decoder;
-class binary_encoder;
+template <class Map>
+inline bool elementary_features<Map>::save(FILE* f) {
+  binary_encoder enc;
 
-class compressor {
- public:
-  static bool load(FILE* f, binary_decoder& data);
-  static bool save(FILE* f, const binary_encoder& enc);
-};
+  enc.add_1B(maps.size());
+  for (auto&& map : maps)
+    map.save(enc);
+
+  return compressor::save(f, enc);
+}
 
 } // namespace morphodita
 } // namespace ufal

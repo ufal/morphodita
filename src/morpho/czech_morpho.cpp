@@ -29,6 +29,7 @@
 #include "tokenizer/czech_tokenizer.h"
 #include "unilib/unicode.h"
 #include "unilib/utf8.h"
+#include "utils/binary_decoder.h"
 #include "utils/compressor.h"
 
 namespace ufal {

@@ -21,6 +21,8 @@
 #include <unordered_map>
 
 #include "common.h"
+#include "elementary_features_encoder.h"
+#include "feature_sequences_encoder.h"
 #include "feature_sequences_optimizer.h"
 #include "morpho/morpho.h"
 #include "tagger_trainer.h"

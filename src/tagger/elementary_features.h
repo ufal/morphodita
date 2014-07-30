@@ -20,7 +20,7 @@
 
 #include "common.h"
 #include "tagger.h"
-#include "utils/binary_encoder.h"
+#include "utils/binary_decoder.h"
 #include "utils/compressor.h"
 #include "utils/persistent_unordered_map.h"
 
@@ -78,17 +78,6 @@ inline bool elementary_features<Map>::load(FILE* f) {
   }
 
   return data.is_end();
-}
-
-template <class Map>
-inline bool elementary_features<Map>::save(FILE* f) {
-  binary_encoder enc;
-
-  enc.add_1B(maps.size());
-  for (auto&& map : maps)
-    map.save(enc);
-
-  return compressor::save(f, enc);
 }
 
 } // namespace morphodita
