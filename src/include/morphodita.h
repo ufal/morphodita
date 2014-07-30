@@ -34,7 +34,7 @@
 namespace ufal {
 namespace morphodita {
 
-struct string_piece {
+struct MORPHODITA_IMPORT string_piece {
   const char* str;
   size_t len;
 
@@ -44,7 +44,7 @@ struct string_piece {
   string_piece(const std::string& str) : str(str.c_str()), len(str.size()) {}
 };
 
-struct tagged_form {
+struct MORPHODITA_IMPORT tagged_form {
   std::string form;
   std::string tag;
 
@@ -52,7 +52,7 @@ struct tagged_form {
   tagged_form(const std::string& form, const std::string& tag) : form(form), tag(tag) {}
 };
 
-struct tagged_lemma {
+struct MORPHODITA_IMPORT tagged_lemma {
   std::string lemma;
   std::string tag;
 
@@ -60,7 +60,7 @@ struct tagged_lemma {
   tagged_lemma(const std::string& lemma, const std::string& tag) : lemma(lemma), tag(tag) {}
 };
 
-struct tagged_lemma_forms {
+struct MORPHODITA_IMPORT tagged_lemma_forms {
   std::string lemma;
   std::vector<tagged_form> forms;
 
@@ -68,7 +68,7 @@ struct tagged_lemma_forms {
   tagged_lemma_forms(const std::string& lemma) : lemma(lemma) {}
 };
 
-struct token_range {
+struct MORPHODITA_IMPORT token_range {
   size_t start;
   size_t length;
 

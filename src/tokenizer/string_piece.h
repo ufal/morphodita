@@ -25,7 +25,7 @@
 namespace ufal {
 namespace morphodita {
 
-struct string_piece {
+struct EXPORT_ATTRIBUTES string_piece {
   const char* str;
   size_t len;
 
