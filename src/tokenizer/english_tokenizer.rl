@@ -55,6 +55,7 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
 
   const char* unary_text;
   const char* whitespace = nullptr; // Suppress "may be uninitialized" warning
+  unsigned split_len = 0; // Suppress "may be uninitialized" warning
   %%{
     variable p text;
     variable pe text_end;
@@ -66,7 +67,7 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     include url "ragel/url.rl";
 
     # Tokenization
-    apo = "'" | "’";
+    apo = "'" | "’"; apo1 = "'"; apo3 = "’";
     backapo = "`" | "‘";
 
     action unary_minus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N | unicode::Pd)) }
@@ -78,21 +79,24 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
 
     multiletter_punctuation = "--" | apo apo | backapo backapo | "...";
 
-    word_with_split2 =
-      (word apo ('s'i | 'm'i | 'd'i)) |
-      ('d'i apo 'ye'i) |
-      ('gimme'i) |
-      ('gonna'i) |
-      ('gotta'i) |
-      ('lemme'i) |
-      ('more'i apo 'n'i) |
-      (apo 'tis'i) |
-      ('wanna'i);
-    word_with_split3 =
-      (word apo ('ll'i | 're'i | 've'i)) |
-      (word 'n'i apo 't'i) |
-      ('cannot'i) |
-      (apo 'twas'i);
+    action split_2 { split_len = 2; }
+    action split_3 { split_len = 3; }
+    action split_4 { split_len = 4; }
+    action split_5 { split_len = 5; }
+    word_with_split =
+      (word apo1 ('s'i | 'm'i | 'd'i)) %split_2 | (word apo3 ('s'i | 'm'i | 'd'i)) %split_4 |
+      (word apo1 ('ll'i | 're'i | 've'i)) %split_3 | (word apo3 ('ll'i | 're'i | 've'i)) %split_5 |
+      (word 'n'i apo1 't'i) %split_3 | (word 'n'i apo3 't'i) %split_5 |
+      ('cannot'i) %split_3 |
+      ('d'i apo 'ye'i) %split_2 |
+      ('gimme'i) %split_2 |
+      ('gonna'i) %split_2 |
+      ('gotta'i) %split_2 |
+      ('lemme'i) %split_2 |
+      ('more'i apo1 'n'i) %split_2 | ('more'i apo3 'n'i) %split_4 |
+      (apo 'tis'i) %split_2 |
+      (apo 'twas'i) %split_3 |
+      ('wanna'i) %split_2;
 
     # Segmentation
     action mark_whitespace { whitespace = text; }
@@ -101,16 +105,9 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     opening = '"' | '`' | utf8_Ps | utf8_Pi;
 
     main := |*
-      word_with_split2
-        { forms.emplace_back(ts, te - 2 - ts);
-          forms.emplace_back(te - 2, 2);
-
-          if (emergency_sentence_split(forms)) fbreak;
-        };
-
-      word_with_split3
-        { forms.emplace_back(ts, te - 3 - ts);
-          forms.emplace_back(te - 3, 3);
+      word_with_split
+        { forms.emplace_back(ts, te - split_len - ts);
+          forms.emplace_back(te - split_len, split_len);
 
           if (emergency_sentence_split(forms)) fbreak;
         };
