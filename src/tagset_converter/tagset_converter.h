@@ -24,7 +24,7 @@
 namespace ufal {
 namespace morphodita {
 
-class EXPORT_ATTRIBUTES tagset_converter {
+class MORPHODITA_EXPORT tagset_converter {
  public:
   virtual ~tagset_converter() {}
 

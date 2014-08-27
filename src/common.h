@@ -61,12 +61,12 @@ inline void runtime_errorf(const char* fmt, ...) {
 // Export attributes
 #ifdef _WIN32
   #ifdef BUILDING_DLL
-    #define EXPORT_ATTRIBUTES __attribute__ ((dllexport))
+    #define MORPHODITA_EXPORT __attribute__ ((dllexport))
   #else
-    #define EXPORT_ATTRIBUTES
+    #define MORPHODITA_EXPORT
   #endif
 #else
-  #define EXPORT_ATTRIBUTES __attribute__ ((visibility ("default")))
+  #define MORPHODITA_EXPORT __attribute__ ((visibility ("default")))
 #endif
 
 } // namespace morphodita

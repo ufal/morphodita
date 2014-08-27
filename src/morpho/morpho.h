@@ -24,7 +24,7 @@
 namespace ufal {
 namespace morphodita {
 
-struct EXPORT_ATTRIBUTES tagged_form {
+struct MORPHODITA_EXPORT tagged_form {
   string form;
   string tag;
 
@@ -32,7 +32,7 @@ struct EXPORT_ATTRIBUTES tagged_form {
   tagged_form(const string& form, const string& tag) : form(form), tag(tag) {}
 };
 
-struct EXPORT_ATTRIBUTES tagged_lemma {
+struct MORPHODITA_EXPORT tagged_lemma {
   string lemma;
   string tag;
 
@@ -40,7 +40,7 @@ struct EXPORT_ATTRIBUTES tagged_lemma {
   tagged_lemma(const string& lemma, const string& tag) : lemma(lemma), tag(tag) {}
 };
 
-struct EXPORT_ATTRIBUTES tagged_lemma_forms {
+struct MORPHODITA_EXPORT tagged_lemma_forms {
   string lemma;
   vector<tagged_form> forms;
 
@@ -48,7 +48,7 @@ struct EXPORT_ATTRIBUTES tagged_lemma_forms {
   tagged_lemma_forms(const string& lemma) : lemma(lemma) {}
 };
 
-class EXPORT_ATTRIBUTES morpho {
+class MORPHODITA_EXPORT morpho {
  public:
   virtual ~morpho() {}
 
