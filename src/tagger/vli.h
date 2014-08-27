@@ -57,4 +57,4 @@ inline uint32_t vli<uint32_t>::decode(const unsigned char*& from) {
 }
 
 } // namespace morphodita
-}
+} // namespace ufal
