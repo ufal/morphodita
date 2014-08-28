@@ -25,7 +25,13 @@ namespace morphodita {
 
 class morpho_ids {
  public:
-  enum morpho_id { CZECH = 0, ENGLISH = 1, GENERIC = 2, EXTERNAL = 3 };
+  enum morpho_id {
+    CZECH = 0,
+    ENGLISH_V1 = 1,
+    GENERIC = 2,
+    EXTERNAL = 3,
+    ENGLISH_V2 = 4, ENGLISH = ENGLISH_V2,
+  };
 
   static bool parse(const string& str, morpho_id& id) {
     if (str == "czech") return id = CZECH, true;

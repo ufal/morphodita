@@ -131,7 +131,7 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
                  lemmas.emplace_back(string(form.str, form.len), pos_tag); return;
     }
 
-  // Try matching a number: [+-]? is_Pn* (, is_Pn{3})? (. is_Pn*)? ([Ee] [+-]? is_Pn+)? with at least one digi
+  // Try matching a number: [+-]? is_Pn* (, is_Pn{3})? (. is_Pn*)? (s | [Ee] [+-]? is_Pn+)? with at least one digit
   string_piece number = form;
   char32_t codepoint = utf8::decode(number.str, number.len);
   bool any_digit = false;
@@ -149,6 +149,11 @@ void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& le
   if (codepoint == '.' && number.len) {
     codepoint = utf8::decode(number.str, number.len);
     while (unicode::category(codepoint) & unicode::N) any_digit = true, codepoint = utf8::decode(number.str, number.len);
+  }
+  if (version >= 2 && any_digit && codepoint == 's' && !number.len) {
+    lemmas.emplace_back(string(form.str, form.len), number_tag);
+    lemmas.emplace_back(string(form.str, form.len - 1), nns_tag);
+    return;
   }
   if (any_digit && (codepoint == 'e' || codepoint == 'E')) {
     codepoint = utf8::decode(number.str, number.len);

@@ -29,16 +29,22 @@ namespace ufal {
 namespace morphodita {
 
 morpho* morpho::load(FILE* f) {
-  switch (fgetc(f)) {
+  switch (morpho_ids::morpho_id(fgetc(f))) {
     case morpho_ids::CZECH:
       {
         auto res = new_unique_ptr<czech_morpho>();
         if (res->load(f)) return res.release();
         break;
       }
-    case morpho_ids::ENGLISH:
+    case morpho_ids::ENGLISH_V1:
       {
-        auto res = new_unique_ptr<english_morpho>();
+        auto res = new_unique_ptr<english_morpho>(1);
+        if (res->load(f)) return res.release();
+        break;
+      }
+    case morpho_ids::ENGLISH_V2:
+      {
+        auto res = new_unique_ptr<english_morpho>(2);
         if (res->load(f)) return res.release();
         break;
       }
