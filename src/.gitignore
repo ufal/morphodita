@@ -1,6 +1,7 @@
 .objs/
 encode_dictionary
 libmorphodita.a
+libmorphodita.dylib
 libmorphodita.dyn.a
 libmorphodita.so
 run_morpho_analyze
