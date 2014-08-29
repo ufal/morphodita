@@ -102,7 +102,7 @@ else
     LD_FLAGS += -Wl,-x $(C_FLAGS) #Pass all C_FLAGS because of -flto
   else
     C_FLAGS += -O3
-    # The following has been removed because of linking errors of train_tagger.
+    # The following has been removed because of linking errors of executables.
     # It is a known unfixed problem of OSX clang. Note that strip -x works.
     # LD_FLAGS += -Wl,-x
   endif
