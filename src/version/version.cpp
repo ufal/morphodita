@@ -22,7 +22,7 @@ namespace ufal {
 namespace morphodita {
 
 version version::current() {
-  return {1, 3, 0};
+  return {1, 3, 1};
 }
 
 } // namespace morphodita
