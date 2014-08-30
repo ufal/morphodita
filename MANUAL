@@ -1519,6 +1519,10 @@ following semantics:
   same major.
 - If two versions differ in major, their API may differ in any way.
 
+Models created by MorphoDiTa have the same behaviour in all MorphoDiTa versions,
+apart from obvious bugfixes. On the other hand, models created from the same
+data by different major.minor MorphoDiTa versions may have different behaviour.
+
 
 Lemma Structure
 ---------------
