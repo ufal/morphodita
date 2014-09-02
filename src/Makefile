@@ -17,7 +17,7 @@ include Makefile.rules
 # object files groups
 LZMA_DEC_O = utils/compressor_load utils/lzma/LzmaDec
 LZMA_ENC_O = utils/compressor_save utils/lzma/LzmaEnc utils/lzma/LzFind
-MORPHO_O = $(LZMA_DEC_O) morpho/czech_morpho morpho/english_morpho morpho/english_morpho_guesser morpho/external_morpho morpho/generic_morpho morpho/morpho morpho/morpho_statistical_guesser morpho/tag_filter tagset_converter/identity_tagset_converter tagset_converter/pdt_to_conll2009_tagset_converter tagset_converter/strip_lemma_comment_tagset_converter tagset_converter/strip_lemma_id_tagset_converter tagset_converter/tagset_converter tokenizer/czech_tokenizer tokenizer/english_tokenizer tokenizer/generic_tokenizer tokenizer/tokenizer tokenizer/utf8_tokenizer tokenizer/vertical_tokenizer unilib/unicode unilib/utf8 version/version
+MORPHO_O = $(LZMA_DEC_O) morpho/czech_morpho morpho/english_morpho morpho/english_morpho_guesser morpho/external_morpho morpho/generic_morpho morpho/morpho morpho/morpho_statistical_guesser morpho/tag_filter tagset_converter/identity_tagset_converter tagset_converter/pdt_to_conll2009_tagset_converter tagset_converter/strip_lemma_comment_tagset_converter tagset_converter/strip_lemma_id_tagset_converter tagset_converter/tagset_converter tokenizer/czech_tokenizer tokenizer/english_tokenizer tokenizer/hyphenated_sequences_index tokenizer/generic_tokenizer tokenizer/tokenizer tokenizer/utf8_tokenizer tokenizer/vertical_tokenizer unilib/unicode unilib/utf8 version/version
 MORPHODITA_O = $(MORPHO_O) tagger/tagger
 
 # libraries

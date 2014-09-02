@@ -31,7 +31,7 @@ tokenizer* tokenizer::new_vertical_tokenizer() {
 }
 
 tokenizer* tokenizer::new_czech_tokenizer() {
-  return new czech_tokenizer(czech_tokenizer::CZECH);
+  return new czech_tokenizer(czech_tokenizer::CZECH_GENERIC);
 }
 
 tokenizer* tokenizer::new_english_tokenizer() {

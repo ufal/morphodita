@@ -31,8 +31,7 @@ namespace morphodita {
 }%%
 
 // The list of lower cased words that when preceding eos do not end sentence.
-// Czech version.
-static unordered_set<string> eos_word_exceptions_czech = {
+const unordered_set<string> czech_tokenizer::eos_word_exceptions_czech = {
   // Titles
   "prof", "csc", "drsc", "doc", "phd", "ph", "d",
   "judr", "mddr", "mudr", "mvdr", "paeddr", "paedr", "phdr", "rndr", "rsdr", "dr",
@@ -48,12 +47,42 @@ static unordered_set<string> eos_word_exceptions_czech = {
   "sv", "tel", "tj", "tzv", "ú", "u", "uh", "ul", "um", "zl", "zn",
 };
 
+// List of hyphenated sequences that should be tokenized as words. Additional letters
+// are allowed after the listed sequences. The uppercase letters must be uppercase to match,
+// but the lowercase letters might be uppercased (or titlecased).
+const hyphenated_sequences_index czech_tokenizer::hyphenated_sequences_czech_131112 = {
+  "CD-ROM", "Chang-čou", "Chuang-min", "Chuang-pchu", "Coca-Col", "Frýdecko-Místecka",
+  "Frýdecko-Místecko", "Frýdecko-Místecku", "Frýdek-Místek", "Frýdkem-Místkem",
+  "Frýdku-Místku", "Guth-Jarkovský", "Gutha-Jarkovského", "Guthem-Jarkovským",
+  "Guthovi-Jarkovskému", "Guthu-Jarkovském", "Harley-Davidson", "Hewlett-Packard",
+  "IP-adres", "KDU-ČSL", "Ki-mun", "Koh-i-noor", "Kuang-tun", "Kuang-čou", "Kuo-fen",
+  "Mercedes-Benz", "Mjong-ba", "Notre-Dame", "Orient-expres", "RM-Systém",
+  "Rakousko-Uherska", "Rakousko-Uherskem", "Rakousko-Uhersko", "Rakousko-Uhersku",
+  "Rolls-Royce", "Seton-Watson", "T-Mobil", "T-Mobile", "Tchaj-wan", "U-ramp",
+  "US-DEU", "al-Kajd", "al-Kajdá", "al-Káid", "beta-blokátor", "coca-col",
+  "duty-free", "e-business", "e-mail", "e-mailov", "fair-play", "fifty-fifty",
+  "hands-free", "hi-fi", "hi-tech", "high-tech", "know-how", "kung-fu", "make-up",
+  "marxismu-leninismu", "marxismus-leninismus", "on-line", "ping-pong", "ping-pongář",
+  "play-off", "pop-music", "propan-butan", "sci-fi", "sex-appeal", "show-business"
+};
+
 czech_tokenizer::czech_tokenizer(tokenizer_mode mode) {
   // Fill eos_word_exceptions.
   switch (mode) {
-    case CZECH:
+    case CZECH_GENERIC:
+    case CZECH_131112:
     default:
       eos_word_exceptions = &eos_word_exceptions_czech;
+      break;
+  }
+
+  // Fill hyphenated_sequences.
+  switch (mode) {
+    case CZECH_131112:
+      hyphenated_sequences = &hyphenated_sequences_czech_131112;
+      break;
+    default:
+      hyphenated_sequences = nullptr;
       break;
   }
 }
@@ -74,14 +103,13 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
 
     include utf8 "ragel/utf8.rl";
     include url "ragel/url.rl";
-    include czech_tokenizer_hyphen "czech_tokenizer_hyphen.rl";
 
     # Tokenization
     action unary_minus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N | unicode::Pd)) }
     action unary_plus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N) && *unary_text != '+') }
     whitespace = [\r\t\n] | utf8_Zs;
     eol = '\r' ('' >(eol,0) | '\n' >(eol,1)) | '\n' ('' >(eol,0) | '\r' >(eol,1));
-    word = (utf8_L | prefix_with_hyphen) (utf8_L | utf8_M)*;
+    word = utf8_L (utf8_L | utf8_M)*;
     number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? utf8_Nd+ ([.,] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
 
     # Segmentation
@@ -94,6 +122,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
       word | number | url | (utf8_any - whitespace)
         { forms.emplace_back(ts, te - ts);
 
+          if (hyphenated_sequences) hyphenated_sequences->join(forms, buffer);
           if (emergency_sentence_split(forms)) fbreak;
         };
 

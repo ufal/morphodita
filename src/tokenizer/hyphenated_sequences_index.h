@@ -1,6 +1,6 @@
 // This file is part of MorphoDiTa.
 //
-// Copyright 2013 by Institute of Formal and Applied Linguistics, Faculty of
+// Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
 // Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
 // MorphoDiTa is free software: you can redistribute it and/or modify
@@ -18,32 +18,25 @@
 
 #pragma once
 
+#include <initializer_list>
+#include <unordered_map>
+
 #include "common.h"
-#include "hyphenated_sequences_index.h"
-#include "utf8_tokenizer.h"
+#include "string_piece.h"
 
 namespace ufal {
 namespace morphodita {
 
-class czech_tokenizer : public utf8_tokenizer {
+class hyphenated_sequences_index {
  public:
-  enum tokenizer_mode {
-    CZECH_GENERIC = 0,
-    CZECH_131112 = 1,
-  };
-
-  czech_tokenizer(tokenizer_mode mode);
-
-  virtual bool next_sentence(vector<string_piece>& forms) override;
+  hyphenated_sequences_index(std::initializer_list<string> sequences);
+  bool join(vector<string_piece>& forms, string& buffer) const;
 
  private:
-  string buffer;
-  const unordered_set<string>* eos_word_exceptions;
-  const hyphenated_sequences_index* hyphenated_sequences;
-
-  static const unordered_set<string> eos_word_exceptions_czech;
-  static const hyphenated_sequences_index hyphenated_sequences_czech_131112;
+  unsigned max_hyphens;
+  unordered_map<string, string> sequences;
 };
 
 } // namespace morphodita
 } // namespace ufal
+
