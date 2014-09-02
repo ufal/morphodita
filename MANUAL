@@ -1695,6 +1695,12 @@ tokenizer::new_czech_tokenizer
 Returns a new instance of a Czech tokenizer. The user should delete it after
 use.
 
+If two MorphoDiTa versions have the same major.minor, this tokenizer should
+behave identically (apart from obvious bugfixes). Nevertheless, the behaviour of
+this tokenizer might change in different major.minor version. If you need a
+tokenizer whose behaviour does not change, use tokenizer embedded in a
+morphological dictionary.
+
 
 tokenizer::new_english_tokenizer
 --------------------------------
@@ -1704,6 +1710,12 @@ tokenizer::new_english_tokenizer
 Returns a new instance of a English tokenizer. The user should delete it after
 use.
 
+If two MorphoDiTa versions have the same major.minor, this tokenizer should
+behave identically (apart from obvious bugfixes). Nevertheless, the behaviour of
+this tokenizer might change in different major.minor version. If you need a
+tokenizer whose behaviour does not change, use tokenizer embedded in a
+morphological dictionary.
+
 
 tokenizer::new_generic_tokenizer
 --------------------------------
@@ -1712,6 +1724,12 @@ tokenizer::new_generic_tokenizer
 
 Returns a new instance of a generic tokenizer. The user should delete it after
 use.
+
+If two MorphoDiTa versions have the same major.minor, this tokenizer should
+behave identically (apart from obvious bugfixes). Nevertheless, the behaviour of
+this tokenizer might change in different major.minor version. If you need a
+tokenizer whose behaviour does not change, use tokenizer embedded in a
+morphological dictionary.
 
 
 Class morpho
