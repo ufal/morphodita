@@ -2884,7 +2884,7 @@ const unordered_set<string> czech_tokenizer::eos_word_exceptions_slovak = {
 // List of hyphenated sequences that should be tokenized as words. Additional letters
 // are allowed after the listed sequences. The uppercase letters must be uppercase to match,
 // but the lowercase letters might be uppercased (or titlecased).
-const hyphenated_sequences_index czech_tokenizer::hyphenated_sequences_czech_131112 = {
+const hyphenated_sequences_map czech_tokenizer::hyphenated_sequences_czech_131112 = {
   "CD-ROM", "Chang-čou", "Chuang-min", "Chuang-pchu", "Coca-Col", "Frýdecko-Místecka",
   "Frýdecko-Místecko", "Frýdecko-Místecku", "Frýdek-Místek", "Frýdkem-Místkem",
   "Frýdku-Místku", "Guth-Jarkovský", "Gutha-Jarkovského", "Guthem-Jarkovským",

@@ -19,7 +19,7 @@
 #pragma once
 
 #include "common.h"
-#include "hyphenated_sequences_index.h"
+#include "hyphenated_sequences_map.h"
 #include "utf8_tokenizer.h"
 
 namespace ufal {
@@ -40,11 +40,11 @@ class czech_tokenizer : public utf8_tokenizer {
  private:
   string buffer;
   const unordered_set<string>* eos_word_exceptions;
-  const hyphenated_sequences_index* hyphenated_sequences;
+  const hyphenated_sequences_map* hyphenated_sequences;
 
   static const unordered_set<string> eos_word_exceptions_czech;
   static const unordered_set<string> eos_word_exceptions_slovak;
-  static const hyphenated_sequences_index hyphenated_sequences_czech_131112;
+  static const hyphenated_sequences_map hyphenated_sequences_czech_131112;
 };
 
 } // namespace morphodita

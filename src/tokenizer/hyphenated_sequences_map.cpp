@@ -18,14 +18,14 @@
 
 #include <algorithm>
 
-#include "hyphenated_sequences_index.h"
+#include "hyphenated_sequences_map.h"
 #include "unilib/unicode.h"
 #include "unilib/utf8.h"
 
 namespace ufal {
 namespace morphodita {
 
-hyphenated_sequences_index::hyphenated_sequences_index(std::initializer_list<string> sequences) {
+hyphenated_sequences_map::hyphenated_sequences_map(std::initializer_list<string> sequences) {
   string buffer;
 
   max_hyphens = 0;
@@ -47,7 +47,7 @@ hyphenated_sequences_index::hyphenated_sequences_index(std::initializer_list<str
   }
 }
 
-bool hyphenated_sequences_index::join(vector<string_piece>& forms, string& buffer) const {
+bool hyphenated_sequences_map::join(vector<string_piece>& forms, string& buffer) const {
   unsigned matched_hyphens = 0;
   for (unsigned hyphens = 1; hyphens <= max_hyphens; hyphens++) {
     // Are the forms sequence of 'hyphens' hyphenated words?

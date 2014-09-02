@@ -27,9 +27,9 @@
 namespace ufal {
 namespace morphodita {
 
-class hyphenated_sequences_index {
+class hyphenated_sequences_map {
  public:
-  hyphenated_sequences_index(std::initializer_list<string> sequences);
+  hyphenated_sequences_map(std::initializer_list<string> sequences);
   bool join(vector<string_piece>& forms, string& buffer) const;
 
  private:
