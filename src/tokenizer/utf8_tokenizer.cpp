@@ -60,5 +60,23 @@ bool utf8_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ran
   return result;
 }
 
+bool utf8_tokenizer::is_eos_exception(const vector<string_piece>& forms, const unordered_set<string>* eos_word_exceptions, string& buffer) {
+  bool eos_word_exception = false;
+
+  if (!forms.empty()) {
+    // Is it single Lut?
+    string_piece form = forms.back();
+    eos_word_exception |= unicode::category(utf8::decode(form.str, form.len)) & unicode::Lut && !form.len;
+  }
+
+  if (!forms.empty() && eos_word_exceptions) {
+    // Is the lower case variant in eos_word_exceptions?
+    buffer.clear();
+    utf8::map(unicode::lowercase, forms.back().str, forms.back().len, buffer);
+    eos_word_exception |= eos_word_exceptions->count(buffer);
+  }
+  return eos_word_exception;
+}
+
 } // namespace morphodita
 } // namespace ufal

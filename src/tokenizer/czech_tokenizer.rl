@@ -17,7 +17,6 @@
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstring>
-#include <unordered_set>
 
 #include "czech_tokenizer.h"
 #include "unilib/unicode.h"
@@ -90,17 +89,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
       eos closing* whitespace+ >mark_whitespace opening* (utf8_Lu | utf8_Lt)
         {
           // Does this eos character marks end of sentence?
-          bool eos_word_exception = false;
-          if (!forms.empty()) {
-            // Is it single Lut?
-            string_piece form = forms.back();
-            eos_word_exception = unicode::category(utf8::decode(form.str, form.len)) & unicode::Lut && !form.len;
-
-            // Is the lower case variant in eos_word_exceptions?
-            buffer.clear();
-            utf8::map(unicode::lowercase, forms.back().str, forms.back().len, buffer);
-            eos_word_exception |= eos_word_exceptions.count(buffer);
-          }
+          bool eos_word_exception = is_eos_exception(forms, &eos_word_exceptions, buffer);
 
           // Add all characters until first space to forms and break if eos.
           for (text = ts; text < whitespace; forms.emplace_back(ts, text - ts), ts = text) utf8_advance(text, whitespace);

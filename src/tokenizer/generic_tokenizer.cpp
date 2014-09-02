@@ -17,7 +17,6 @@
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cstring>
-#include <unordered_set>
 
 #include "generic_tokenizer.h"
 #include "unilib/unicode.h"
@@ -2987,12 +2986,7 @@ _eof_trans:
 	case 4:
 	{te = ( text)+1;{
           // Does this eos character marks end of sentence?
-          bool eos_exception = false;
-          if (!forms.empty()) {
-            // Is it single Lut?
-            string_piece form = forms.back();
-            eos_exception = unicode::category(utf8::decode(form.str, form.len)) & unicode::Lut && !form.len;
-          }
+          bool eos_exception = is_eos_exception(forms, nullptr, buffer);
 
           // Add all characters until first space to forms and break if eos.
           for (text = ts; text < whitespace; forms.emplace_back(ts, text - ts), ts = text) utf8_advance(text, whitespace);

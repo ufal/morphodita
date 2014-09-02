@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <unordered_set>
+
 #include "common.h"
 #include "tokenizer.h"
 #include "unilib/unicode.h"
@@ -49,6 +51,7 @@ class utf8_tokenizer : public tokenizer {
            (forms.size() >= 450 && unicode::category(utf8::first(forms.back().str)) & unicode::P) ||
            (forms.size() >= 400 && unicode::category(utf8::first(forms.back().str)) & unicode::Po);
   }
+  bool is_eos_exception(const vector<string_piece>& forms, const unordered_set<string>* eos_word_exceptions, string& buffer);
 
   const char* text = nullptr;
   const char* text_end = nullptr;
