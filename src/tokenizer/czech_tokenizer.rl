@@ -47,6 +47,22 @@ const unordered_set<string> czech_tokenizer::eos_word_exceptions_czech = {
   "sv", "tel", "tj", "tzv", "ú", "u", "uh", "ul", "um", "zl", "zn",
 };
 
+const unordered_set<string> czech_tokenizer::eos_word_exceptions_slovak = {
+  // Titles
+  "prof", "csc", "drsc", "doc", "phd", "ph", "d",
+  "judr", "mddr", "mudr", "mvdr", "paeddr", "paedr", "phdr", "rndr", "rsdr", "dr",
+  "ing", "arch", "mgr", "bc", "mag", "mba", "bca", "mga",
+  "gen", "plk", "pplk", "npor", "por", "ppor", "kpt", "mjr", "sgt", "pls", "p", "s",
+  "p", "pí", "fa", "fy", "mr", "mrs", "ms", "miss", "tr", "sv",
+  // Geographic names
+  "angl", "fr", "čes", "ces", "čs", "cs", "slov", "nem", "it", "poľ", "pol", "maď", "mad",
+  "rus", "sev", "vých", "vych", "juž", "juz", "záp", "zap",
+  // Common abbrevs
+  "adr", "č", "c", "eg", "ev", "g", "hod", "j", "kr", "m", "max", "min", "mj", "napr",
+  "okr", "popr", "pozn", "r", "red", "rep", "resp", "srov", "st", "str",
+  "sv", "tel", "tj", "tzv", "ú", "u", "uh", "ul", "um", "zl", "zn",
+};
+
 // List of hyphenated sequences that should be tokenized as words. Additional letters
 // are allowed after the listed sequences. The uppercase letters must be uppercase to match,
 // but the lowercase letters might be uppercased (or titlecased).
@@ -73,6 +89,9 @@ czech_tokenizer::czech_tokenizer(tokenizer_mode mode) {
     case CZECH_131112:
     default:
       eos_word_exceptions = &eos_word_exceptions_czech;
+      break;
+    case SLOVAK_GENERIC:
+      eos_word_exception = &eos_word_exceptions_slovak;
       break;
   }
 

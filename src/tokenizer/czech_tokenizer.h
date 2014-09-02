@@ -30,6 +30,7 @@ class czech_tokenizer : public utf8_tokenizer {
   enum tokenizer_mode {
     CZECH_GENERIC = 0,
     CZECH_131112 = 1,
+    SLOVAK_GENERIC = 2,
   };
 
   czech_tokenizer(tokenizer_mode mode);
@@ -42,6 +43,7 @@ class czech_tokenizer : public utf8_tokenizer {
   const hyphenated_sequences_index* hyphenated_sequences;
 
   static const unordered_set<string> eos_word_exceptions_czech;
+  static const unordered_set<string> eos_word_exceptions_slovak;
   static const hyphenated_sequences_index hyphenated_sequences_czech_131112;
 };
 
