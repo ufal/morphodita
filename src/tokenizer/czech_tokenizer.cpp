@@ -6454,7 +6454,8 @@ static const int czech_tokenizer_start = 776;
 
 
 // The list of lower cased words that when preceding eos do not end sentence.
-static unordered_set<string> eos_word_exceptions = {
+// Czech version.
+static unordered_set<string> eos_word_exceptions_czech = {
   // Titles
   "prof", "csc", "drsc", "doc", "phd", "ph", "d",
   "judr", "mddr", "mudr", "mvdr", "paeddr", "paedr", "phdr", "rndr", "rsdr", "dr",
@@ -6469,6 +6470,16 @@ static unordered_set<string> eos_word_exceptions = {
   "okr", "popř", "popr", "pozn", "r", "ř", "red", "rep", "resp", "srov", "st", "stř", "str",
   "sv", "tel", "tj", "tzv", "ú", "u", "uh", "ul", "um", "zl", "zn",
 };
+
+czech_tokenizer::czech_tokenizer(tokenizer_mode mode) {
+  // Fill eos_word_exceptions.
+  switch (mode) {
+    case CZECH:
+    default:
+      eos_word_exceptions = &eos_word_exceptions_czech;
+      break;
+  }
+}
 
 bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
   int cs, act;
@@ -6610,7 +6621,7 @@ _eof_trans:
 	case 4:
 	{te = ( text)+1;{
           // Does this eos character marks end of sentence?
-          bool eos_word_exception = is_eos_exception(forms, &eos_word_exceptions, buffer);
+          bool eos_word_exception = is_eos_exception(forms, eos_word_exceptions, buffer);
 
           // Add all characters until first space to forms and break if eos.
           for (text = ts; text < whitespace; forms.emplace_back(ts, text - ts), ts = text) utf8_advance(text, whitespace);

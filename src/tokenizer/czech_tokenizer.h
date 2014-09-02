@@ -26,10 +26,14 @@ namespace morphodita {
 
 class czech_tokenizer : public utf8_tokenizer {
  public:
+  enum tokenizer_mode { CZECH };
+  czech_tokenizer(tokenizer_mode mode);
+
   virtual bool next_sentence(vector<string_piece>& forms) override;
 
  private:
   string buffer;
+  const unordered_set<string>* eos_word_exceptions;
 };
 
 } // namespace morphodita
