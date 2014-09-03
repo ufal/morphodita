@@ -30,7 +30,8 @@ class morpho_ids {
     ENGLISH_V1 = 1,
     GENERIC = 2,
     EXTERNAL = 3,
-    ENGLISH_V2 = 4, ENGLISH = ENGLISH_V2,
+    ENGLISH_V2 = 4,
+    ENGLISH_V3 = 5, ENGLISH = ENGLISH_V3,
   };
 
   static bool parse(const string& str, morpho_id& id) {

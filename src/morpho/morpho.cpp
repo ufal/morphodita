@@ -48,6 +48,12 @@ morpho* morpho::load(FILE* f) {
         if (res->load(f)) return res.release();
         break;
       }
+    case morpho_ids::ENGLISH_V3:
+      {
+        auto res = new_unique_ptr<english_morpho>(3);
+        if (res->load(f)) return res.release();
+        break;
+      }
     case morpho_ids::GENERIC:
       {
         auto res = new_unique_ptr<generic_morpho>();
