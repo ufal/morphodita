@@ -25,12 +25,7 @@
 namespace ufal {
 namespace morphodita {
 
-%%{
-  machine english_tokenizer;
-  write data noerror nofinal;
-}%%
-
-// The list of lower cased words that when preceding eos do not end sentence.
+// The list of lowercased words that when preceding eos do not end sentence.
 static unordered_set<string> eos_word_exceptions = {
   // Titles
   "adj", "adm", "adv", "assoc", "asst", "bart", "bldg", "brig", "bros", "capt",
@@ -47,6 +42,34 @@ static unordered_set<string> eos_word_exceptions = {
   "sgt", "sr", "tel", "un", "univ", "v", "va", "vs", "w", "yrs",
 };
 
+%% machine english_tokenizer_split_token; write data noerror nofinal;
+unsigned english_tokenizer::split_token(const char* begin, const char* end) {
+  const char* p = begin; int cs;
+  unsigned split_len = 0, split_mark = 0;
+  %%{
+    getkey begin[end - p - 1];
+    variable pe end;
+    variable eof end;
+
+    # For the split_mark to work, two marks must never appear in one file.
+    action split_now { split_len = p - begin + 1; fbreak; }
+    action mark { split_mark = p - begin + 1; }
+    action split_mark { split_len = split_mark; fbreak; }
+
+    apo = "'" | 0x99 0x80 0xe2; #"'" | "’";
+    main :=
+      (('s'i | 'm'i | 'd'i) apo | ('ll'i | 'er'i | 'ev'i) apo | 't'i apo 'n'i) @split_now |
+      ('ton'i @mark 'nac'i | 'ey'i @mark apo 'd'i | 'em'i @mark 'mig'i | 'an'i @mark 'nog'i |
+       'at'i @mark 'tog'i | 'em'i @mark 'mel'i | 'n'i apo @mark 'erom'i |
+       'si'i @mark 't'i apo | 'saw'i @mark 't'i apo | 'an'i @mark 'naw'i) %split_mark
+    ;
+    write init;
+    write exec;
+  }%%
+  return split_len == end - begin ? 0 : split_len;
+}
+
+%% machine english_tokenizer; write data noerror nofinal;
 bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
   int cs, act;
   const char* ts, *te;
@@ -54,7 +77,6 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
 
   const char* unary_text;
   const char* whitespace = nullptr; // Suppress "may be uninitialized" warning
-  unsigned split_len = 0; // Suppress "may be uninitialized" warning
   %%{
     variable p text;
     variable pe text_end;
@@ -66,7 +88,7 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     include url "ragel/url.rl";
 
     # Tokenization
-    apo = "'" | "’"; apo1 = "'"; apo3 = "’";
+    apo = "'" | "’";
     backapo = "`" | "‘";
 
     action unary_minus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N | unicode::Pd)) }
@@ -78,25 +100,6 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
 
     multiletter_punctuation = "--" | apo apo | backapo backapo | "...";
 
-    action split_2 { split_len = 2; }
-    action split_3 { split_len = 3; }
-    action split_4 { split_len = 4; }
-    action split_5 { split_len = 5; }
-    word_with_split =
-      (word apo1 ('s'i | 'm'i | 'd'i)) %split_2 | (word apo3 ('s'i | 'm'i | 'd'i)) %split_4 |
-      (word apo1 ('ll'i | 're'i | 've'i)) %split_3 | (word apo3 ('ll'i | 're'i | 've'i)) %split_5 |
-      (word 'n'i apo1 't'i) %split_3 | (word 'n'i apo3 't'i) %split_5 |
-      ('cannot'i) %split_3 |
-      ('d'i apo 'ye'i) %split_2 |
-      ('gimme'i) %split_2 |
-      ('gonna'i) %split_2 |
-      ('gotta'i) %split_2 |
-      ('lemme'i) %split_2 |
-      ('more'i apo1 'n'i) %split_2 | ('more'i apo3 'n'i) %split_4 |
-      (apo 'tis'i) %split_2 |
-      (apo 'twas'i) %split_3 |
-      ('wanna'i) %split_2;
-
     # Segmentation
     action mark_whitespace { whitespace = text; }
     eos = [.!?] | '…';
@@ -104,15 +107,18 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     opening = '"' | '`' | utf8_Ps | utf8_Pi;
 
     main := |*
-      word_with_split
-        { forms.emplace_back(ts, te - split_len - ts);
-          forms.emplace_back(te - split_len, split_len);
+      word
+        {
+          unsigned split_len = split_token(ts, te);
+          forms.emplace_back(ts, te - ts - split_len);
+          if (split_len) forms.emplace_back(te - split_len, split_len);
 
           if (emergency_sentence_split(forms)) fbreak;
         };
 
-      word | number | url | multiletter_punctuation | (utf8_any - whitespace)
-        { forms.emplace_back(ts, te - ts);
+      number | url | multiletter_punctuation | (utf8_any - whitespace)
+        {
+          forms.emplace_back(ts, te - ts);
 
           if (emergency_sentence_split(forms)) fbreak;
         };
