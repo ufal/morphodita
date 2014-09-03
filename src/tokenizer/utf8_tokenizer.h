@@ -45,12 +45,8 @@ class utf8_tokenizer : public tokenizer {
     if (text > start) text--;
     while (text > start && *(const unsigned char*)text >= 0x80 && *(const unsigned char*)text < 0xC0) text--;
   }
-  inline bool emergency_sentence_split(const vector<string_piece>& forms) {
-    // Implement emergency splitting for large sentences
-    return forms.size() >= 500 ||
-           (forms.size() >= 450 && unicode::category(utf8::first(forms.back().str)) & unicode::P) ||
-           (forms.size() >= 400 && unicode::category(utf8::first(forms.back().str)) & unicode::Po);
-  }
+
+  bool emergency_sentence_split(const vector<string_piece>& forms);
   bool is_eos_exception(const vector<string_piece>& forms, const unordered_set<string>* eos_word_exceptions, string& buffer);
 
   const char* text = nullptr;

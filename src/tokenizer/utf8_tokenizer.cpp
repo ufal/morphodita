@@ -60,6 +60,13 @@ bool utf8_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ran
   return result;
 }
 
+bool utf8_tokenizer::emergency_sentence_split(const vector<string_piece>& forms) {
+  // Implement emergency splitting for large sentences
+  return forms.size() >= 500 ||
+         (forms.size() >= 450 && unicode::category(utf8::first(forms.back().str)) & unicode::P) ||
+         (forms.size() >= 400 && unicode::category(utf8::first(forms.back().str)) & unicode::Po);
+}
+
 bool utf8_tokenizer::is_eos_exception(const vector<string_piece>& forms, const unordered_set<string>* eos_word_exceptions, string& buffer) {
   bool eos_word_exception = false;
 
