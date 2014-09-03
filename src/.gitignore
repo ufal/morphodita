@@ -1,4 +1,5 @@
 .objs/
+*.swp
 encode_dictionary
 libmorphodita.a
 libmorphodita.dylib
