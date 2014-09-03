@@ -32,7 +32,7 @@ class english_tokenizer : public utf8_tokenizer {
   virtual bool next_sentence(vector<string_piece>& forms) override;
 
  private:
-  static unsigned split_token(const char* begin, const char* end);
+  static bool split_token(vector<string_piece>& tokens);
 
   unsigned version;
   string buffer;

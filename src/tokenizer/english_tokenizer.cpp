@@ -149,7 +149,10 @@ static const int english_tokenizer_split_token_start = 1;
 
 
 
-unsigned english_tokenizer::split_token(const char* begin, const char* end) {
+bool english_tokenizer::split_token(vector<string_piece>& tokens) {
+  if (tokens.empty()) return false;
+
+  const char* begin = tokens.back().str, *end = begin + tokens.back().len;
   const char* p = begin; int cs;
   unsigned split_len = 0, split_mark = 0;
   
@@ -250,7 +253,13 @@ _again:
 	}
 
 
-  return split_len == end - begin ? 0 : split_len;
+
+  if (split_len && split_len < end - begin) {
+    tokens.back().len -= split_len;
+    tokens.emplace_back(end - split_len, split_len);
+    return true;
+  }
+  return false;
 }
 
 
@@ -3951,9 +3960,8 @@ _eof_trans:
 	break;
 	case 17:
 	{te = ( text);( text)--;{
-          unsigned split_len = split_token(ts, te);
-          forms.emplace_back(ts, te - ts - split_len);
-          if (split_len) forms.emplace_back(te - split_len, split_len);
+          forms.emplace_back(ts, te - ts);
+          split_token(forms);
 
           if (emergency_sentence_split(forms)) {( text)++; goto _out; }
         }}
@@ -3973,9 +3981,8 @@ _eof_trans:
 	break;
 	case 8:
 	{{( text) = ((te))-1;}{
-          unsigned split_len = split_token(ts, te);
-          forms.emplace_back(ts, te - ts - split_len);
-          if (split_len) forms.emplace_back(te - split_len, split_len);
+          forms.emplace_back(ts, te - ts);
+          split_token(forms);
 
           if (emergency_sentence_split(forms)) {( text)++; goto _out; }
         }}
@@ -3994,9 +4001,8 @@ _eof_trans:
 	{	switch( act ) {
 	case 1:
 	{{( text) = ((te))-1;}
-          unsigned split_len = split_token(ts, te);
-          forms.emplace_back(ts, te - ts - split_len);
-          if (split_len) forms.emplace_back(te - split_len, split_len);
+          forms.emplace_back(ts, te - ts);
+          split_token(forms);
 
           if (emergency_sentence_split(forms)) {( text)++; goto _out; }
         }

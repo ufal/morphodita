@@ -43,7 +43,10 @@ static unordered_set<string> eos_word_exceptions = {
 };
 
 %% machine english_tokenizer_split_token; write data noerror nofinal;
-unsigned english_tokenizer::split_token(const char* begin, const char* end) {
+bool english_tokenizer::split_token(vector<string_piece>& tokens) {
+  if (tokens.empty()) return false;
+
+  const char* begin = tokens.back().str, *end = begin + tokens.back().len;
   const char* p = begin; int cs;
   unsigned split_len = 0, split_mark = 0;
   %%{
@@ -66,7 +69,13 @@ unsigned english_tokenizer::split_token(const char* begin, const char* end) {
     write init;
     write exec;
   }%%
-  return split_len == end - begin ? 0 : split_len;
+
+  if (split_len && split_len < end - begin) {
+    tokens.back().len -= split_len;
+    tokens.emplace_back(end - split_len, split_len);
+    return true;
+  }
+  return false;
 }
 
 %% machine english_tokenizer; write data noerror nofinal;
@@ -111,9 +120,8 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     main := |*
       word
         {
-          unsigned split_len = split_token(ts, te);
-          forms.emplace_back(ts, te - ts - split_len);
-          if (split_len) forms.emplace_back(te - split_len, split_len);
+          forms.emplace_back(ts, te - ts);
+          split_token(forms);
 
           if (emergency_sentence_split(forms)) fbreak;
         };
