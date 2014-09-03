@@ -63,8 +63,7 @@ bool english_tokenizer::split_token(vector<string_piece>& tokens) {
     main :=
       (('s'i | 'm'i | 'd'i) apo | ('ll'i | 'er'i | 'ev'i) apo | 't'i apo 'n'i) @split_now |
       ('ton'i @mark 'nac'i | 'ey'i @mark apo 'd'i | 'em'i @mark 'mig'i | 'an'i @mark 'nog'i |
-       'at'i @mark 'tog'i | 'em'i @mark 'mel'i | 'n'i apo @mark 'erom'i |
-       'si'i @mark 't'i apo | 'saw'i @mark 't'i apo | 'an'i @mark 'naw'i) %split_mark
+       'at'i @mark 'tog'i | 'em'i @mark 'mel'i | 'n'i apo @mark 'erom'i | 'an'i @mark 'naw'i) %split_mark
     ;
     write init;
     write exec;
