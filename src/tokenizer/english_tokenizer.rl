@@ -87,6 +87,8 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     include utf8 "ragel/utf8.rl";
     include url "ragel/url.rl";
 
+    action version_3 { version >= 3 }
+
     # Tokenization
     apo = "'" | "’";
     backapo = "`" | "‘";
@@ -95,10 +97,10 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
     action unary_plus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N) && *unary_text != '+') }
     whitespace = [\r\t\n] | utf8_Zs;
     eol = '\r' ('' >(eol,0) | '\n' >(eol,1)) | '\n' ('' >(eol,0) | '\r' >(eol,1));
-    word = (utf8_L (utf8_L | utf8_M | '-' | apo)*) -- ('--' | apo apo);
-    number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? utf8_Nd+ (',' (utf8_Nd{3}))* ([.] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
+    word = (utf8_L (utf8_L | utf8_M | ('-' | apo) inwhen !version_3 | (('-' | '‐' | apo) utf8_L) inwhen version_3)*) -- ('--' | apo apo);
+    number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed | apo when version_3)? utf8_Nd+ (',' (utf8_Nd{3}))* ([.] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
 
-    multiletter_punctuation = "--" | apo apo | backapo backapo | "...";
+    multiletter_punctuation = "--" | "''" | "’’" inwhen !version_3 | "``" | "‘‘" inwhen !version_3 | "...";
 
     # Segmentation
     action mark_whitespace { whitespace = text; }

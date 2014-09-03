@@ -26,11 +26,15 @@ namespace morphodita {
 
 class english_tokenizer : public utf8_tokenizer {
  public:
+  enum { LATEST = 3 };
+  english_tokenizer(unsigned version) : version(version) {}
+
   virtual bool next_sentence(vector<string_piece>& forms) override;
 
  private:
   static unsigned split_token(const char* begin, const char* end);
 
+  unsigned version;
   string buffer;
 };
 
