@@ -32,6 +32,7 @@ class morpho_ids {
     EXTERNAL = 3,
     ENGLISH_V2 = 4,
     ENGLISH_V3 = 5, ENGLISH = ENGLISH_V3,
+    SLOVAK_PDT = 6,
   };
 
   static bool parse(const string& str, morpho_id& id) {
@@ -39,6 +40,7 @@ class morpho_ids {
     if (str == "english") return id = ENGLISH, true;
     if (str == "external") return id = EXTERNAL, true;
     if (str == "generic") return id = GENERIC, true;
+    if (str == "slovak_pdt") return id = SLOVAK_PDT, true;
     return false;
   }
 };

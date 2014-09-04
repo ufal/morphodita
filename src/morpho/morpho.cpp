@@ -66,6 +66,12 @@ morpho* morpho::load(FILE* f) {
         if (res->load(f)) return res.release();
         break;
       }
+    case morpho_ids::SLOVAK_PDT:
+      {
+        auto res = new_unique_ptr<czech_morpho>(czech_morpho::morpho_language::SLOVAK, 1);
+        if (res->load(f)) return res.release();
+        break;
+      }
   }
 
   return nullptr;

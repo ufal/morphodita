@@ -110,6 +110,22 @@ int main(int argc, char* argv[]) {
         generic_morpho_encoder::encode(stdin, max_suffix_len, tags, statistical_guesser, stdout);
         break;
       }
+    case morpho_ids::SLOVAK_PDT:
+      {
+        if (argc < 2) runtime_errorf("Usage: %s slovak_pdt max_suffix_len [statistical_guesser [tag_length]]\n", argv[0]);
+        int max_suffix_len = parse_int(argv[2], "max_suffix_len");
+
+        file_ptr statistical_guesser;
+        if (argc > 3 && strlen(argv[3])) {
+          statistical_guesser = fopen(argv[3], "r");
+          if (!statistical_guesser) runtime_errorf("Cannot open statistical guesser file '%s'!", argv[3]);
+        }
+
+        fputc(id, stdout);
+        czech_morpho_encoder::encode(stdin, max_suffix_len, nullptr, statistical_guesser, argc > 4 ? parse_int(argv[4], "tag_length") : 15, stdout);
+
+        break;
+      }
     default:
       runtime_errorf("Unimplemented morpho_identifier '%s'!\n", argv[1]);
   }
