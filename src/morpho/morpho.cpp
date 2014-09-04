@@ -54,15 +54,15 @@ morpho* morpho::load(FILE* f) {
         if (res->load(f)) return res.release();
         break;
       }
-    case morpho_ids::GENERIC:
-      {
-        auto res = new_unique_ptr<generic_morpho>();
-        if (res->load(f)) return res.release();
-        break;
-      }
     case morpho_ids::EXTERNAL:
       {
         auto res = new_unique_ptr<external_morpho>();
+        if (res->load(f)) return res.release();
+        break;
+      }
+    case morpho_ids::GENERIC:
+      {
+        auto res = new_unique_ptr<generic_morpho>();
         if (res->load(f)) return res.release();
         break;
       }

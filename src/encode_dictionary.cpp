@@ -82,6 +82,15 @@ int main(int argc, char* argv[]) {
         english_morpho_encoder::encode(stdin, max_suffix_len, guesser, negations, stdout);
         break;
       }
+    case morpho_ids::EXTERNAL:
+      {
+        if (argc < 3) runtime_errorf("Usage: %s external unknown_tag\n", argv[0]);
+        string unknown_tag = argv[2];
+
+        fputc(id, stdout);
+        external_morpho_encoder::encode(unknown_tag, stdout);
+        break;
+      }
     case morpho_ids::GENERIC:
       {
         if (argc < 7) runtime_errorf("Usage: %s generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag [statistical_guesser]\n", argv[0]);
@@ -99,15 +108,6 @@ int main(int argc, char* argv[]) {
 
         fputc(id, stdout);
         generic_morpho_encoder::encode(stdin, max_suffix_len, tags, statistical_guesser, stdout);
-        break;
-      }
-    case morpho_ids::EXTERNAL:
-      {
-        if (argc < 3) runtime_errorf("Usage: %s external unknown_tag\n", argv[0]);
-        string unknown_tag = argv[2];
-
-        fputc(id, stdout);
-        external_morpho_encoder::encode(unknown_tag, stdout);
         break;
       }
     default:
