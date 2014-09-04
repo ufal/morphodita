@@ -27,24 +27,21 @@ namespace morphodita {
 
 class czech_tokenizer : public utf8_tokenizer {
  public:
-  enum tokenizer_mode {
-    CZECH_GENERIC = 0,
-    CZECH_131112 = 1,
-    SLOVAK_GENERIC = 2,
-  };
-
-  czech_tokenizer(tokenizer_mode mode);
+  enum tokenizer_language { CZECH = 0, SLOVAK = 1 };
+  enum { LATEST = 1 };
+  czech_tokenizer(tokenizer_language language, unsigned version);
 
   virtual bool next_sentence(vector<string_piece>& forms) override;
 
  private:
+  unsigned version;
   string buffer;
   const unordered_set<string>* eos_word_exceptions;
   const hyphenated_sequences_map* hyphenated_sequences;
 
   static const unordered_set<string> eos_word_exceptions_czech;
   static const unordered_set<string> eos_word_exceptions_slovak;
-  static const hyphenated_sequences_map hyphenated_sequences_czech_131112;
+  static const hyphenated_sequences_map hyphenated_sequences_czech;
 };
 
 } // namespace morphodita

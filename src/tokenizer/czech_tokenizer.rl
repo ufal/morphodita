@@ -66,7 +66,7 @@ const unordered_set<string> czech_tokenizer::eos_word_exceptions_slovak = {
 // List of hyphenated sequences that should be tokenized as words. Additional letters
 // are allowed after the listed sequences. The uppercase letters must be uppercase to match,
 // but the lowercase letters might be uppercased (or titlecased).
-const hyphenated_sequences_map czech_tokenizer::hyphenated_sequences_czech_131112 = {
+const hyphenated_sequences_map czech_tokenizer::hyphenated_sequences_czech = {
   "CD-ROM", "Chang-čou", "Chuang-min", "Chuang-pchu", "Coca-Col", "Frýdecko-Místecka",
   "Frýdecko-Místecko", "Frýdecko-Místecku", "Frýdek-Místek", "Frýdkem-Místkem",
   "Frýdku-Místku", "Guth-Jarkovský", "Gutha-Jarkovského", "Guthem-Jarkovským",
@@ -82,25 +82,15 @@ const hyphenated_sequences_map czech_tokenizer::hyphenated_sequences_czech_13111
   "play-off", "pop-music", "propan-butan", "sci-fi", "sex-appeal", "show-business"
 };
 
-czech_tokenizer::czech_tokenizer(tokenizer_mode mode) {
-  // Fill eos_word_exceptions.
-  switch (mode) {
-    case CZECH_GENERIC:
-    case CZECH_131112:
-    default:
+czech_tokenizer::czech_tokenizer(tokenizer_language language, unsigned version) : version(version) {
+  // Fill eos_word_exceptions and hyphenated_sequences.
+  switch (language) {
+    case CZECH:
       eos_word_exceptions = &eos_word_exceptions_czech;
+      hyphenated_sequences = &hyphenated_sequences_czech;
       break;
-    case SLOVAK_GENERIC:
+    case SLOVAK:
       eos_word_exceptions = &eos_word_exceptions_slovak;
-      break;
-  }
-
-  // Fill hyphenated_sequences.
-  switch (mode) {
-    case CZECH_131112:
-      hyphenated_sequences = &hyphenated_sequences_czech_131112;
-      break;
-    default:
       hyphenated_sequences = nullptr;
       break;
   }

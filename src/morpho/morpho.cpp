@@ -32,7 +32,7 @@ morpho* morpho::load(FILE* f) {
   switch (morpho_ids::morpho_id(fgetc(f))) {
     case morpho_ids::CZECH:
       {
-        auto res = new_unique_ptr<czech_morpho>();
+        auto res = new_unique_ptr<czech_morpho>(czech_morpho::morpho_language::CZECH, 1);
         if (res->load(f)) return res.release();
         break;
       }
