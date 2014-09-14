@@ -242,7 +242,7 @@ _again:
 
 
 
-  if (split_len && split_len < end - begin) {
+  if (split_len && end - split_len > begin) {
     tokens.back().len -= split_len;
     tokens.emplace_back(end - split_len, split_len);
     return true;
