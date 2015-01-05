@@ -28,10 +28,10 @@ web_%.html: morphodita_%.t2t *.t2t
 	./txt2tags -t html -C web.conf -C strip_level.conf -o- $< | sed '/^<H2>=*<\/H2>$$/d' >$@
 
 morphodita.txt: morphodita.t2t *.t2t
-	./txt2tags -t txt -C not_web.conf --no-toc --no-enum-title -o- $< | sed '/^$$/{3d;$$d}' >$@
+	./txt2tags -t txt -C not_web.conf --no-toc --no-enum-title $<
 
 morphodita_%.txt: morphodita_%.t2t *.t2t
-	./txt2tags -t txt -C not_web.conf -C strip_level.conf --no-toc --no-enum-title -o- $< | sed '/^$$/{3d;$$d}' >$@
+	./txt2tags -t txt -C not_web.conf -C strip_level.conf --no-toc --no-enum-title $<
 
 morphodita.tex: morphodita.t2t *.t2t
 	./txt2tags -t tex -C not_web.conf $<
