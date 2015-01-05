@@ -19,13 +19,13 @@ morphodita.html: morphodita.t2t *.t2t
 	./txt2tags -t html -C not_web.conf $<
 
 morphodita_%.html: morphodita_%.t2t *.t2t
-	./txt2tags -t html -C not_web.conf -C strip_level.conf -o- $< | sed '/^<H2>=*<\/H2>$$/d' >$@
+	./txt2tags -t html -C not_web.conf -C strip_level.conf $<
 
 web.html: morphodita.t2t *.t2t
 	./txt2tags -t html -C web.conf -o $@ $<
 
 web_%.html: morphodita_%.t2t *.t2t
-	./txt2tags -t html -C web.conf -C strip_level.conf -o- $< | sed '/^<H2>=*<\/H2>$$/d' >$@
+	./txt2tags -t html -C web.conf -C strip_level.conf -o $@ $<
 
 morphodita.txt: morphodita.t2t *.t2t
 	./txt2tags -t txt -C not_web.conf --no-toc --no-enum-title $<
