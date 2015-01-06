@@ -4,7 +4,7 @@ all:
 html: morphodita.html
 txt: morphodita.txt morphodita_install.txt
 pdf: morphodita.pdf
-web: web.html web_install.html web_user.html web_api_tutorial.html web_api_reference.html web_about.html
+web: web.html web_install.html web_user.html web_api_tutorial.html web_api_reference.html web_about.html web_online.html
 manual: morphodita.html morphodita.txt morphodita_readme.txt morphodita_install.txt
 manual: morphodita_bindings_java_readme.txt morphodita_bindings_perl_readme.txt morphodita_bindings_python_readme.txt
 	cp morphodita.txt ../MANUAL
