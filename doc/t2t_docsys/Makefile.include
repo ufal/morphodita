@@ -1,0 +1,19 @@
+t2t_docsys_version := 2.6.0
+
+t2t_docsys_root := $(dir $(lastword $(MAKEFILE_LIST)))
+
+define t2t_docsys_txt
+  $(t2t_docsys_root)txt2tags.py -t txt --no-toc --no-enum-title -o $1 ${3:%=-C $(t2t_docsys_root)t2t_docsys_%.conf} $2
+endef
+
+define t2t_docsys_html
+  $(t2t_docsys_root)txt2tags.py -t html --toc --enum-title -o $1 ${3:%=-C $(t2t_docsys_root)t2t_docsys_%.conf} $2
+endef
+
+define t2t_docsys_pdf
+  $(t2t_docsys_root)txt2tags.py -t tex --toc --enum-title -o ${1:.pdf=}.tex --style=$(t2t_docsys_root)t2t_docsys ${3:%=-C $(t2t_docsys_root)t2t_docsys_%.conf} $2
+  pdflatex -interaction=nonstopmode -file-line-error -halt-on-error ${1:.pdf=}.tex
+  pdflatex -interaction=nonstopmode -file-line-error -halt-on-error ${1:.pdf=}.tex
+endef
+
+t2t_docsys_output_wildcards = *.aux *.dvi *.html *.log *.pdf *.out *.tex *.toc *.txt

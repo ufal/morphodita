@@ -1,8 +1,10 @@
+include t2t_docsys/Makefile.include
+
 all:
 	@echo "make [html | txt | pdf | web | manual]"
 
 html: morphodita.html
-txt: morphodita.txt morphodita_install.txt
+txt: morphodita.txt
 pdf: morphodita.pdf
 web: web.html web_install.html web_user.html web_api_tutorial.html web_api_reference.html web_about.html web_online.html
 manual: morphodita.html morphodita.txt morphodita_readme.txt morphodita_install.txt
@@ -15,31 +17,30 @@ manual: morphodita_bindings_java_readme.txt morphodita_bindings_perl_readme.txt 
 	cp morphodita_bindings_perl_readme.txt ../bindings/README.PERL
 	cp morphodita_bindings_python_readme.txt ../bindings/README.PYTHON
 
-morphodita.html: morphodita.t2t *.t2t
-	./txt2tags -t html -C not_web.conf $<
+morphodita.html: morphodita.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_html,$@,$<,manual)
 
-morphodita_%.html: morphodita_%.t2t *.t2t
-	./txt2tags -t html -C not_web.conf -C strip_level.conf $<
+morphodita_%.html: morphodita_%.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_html,$@,$<,manual striplevel)
 
-web.html: morphodita.t2t *.t2t
-	./txt2tags -t html -C web.conf -o $@ $<
+web.html: morphodita.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_html,$@,$<,web html_addlevel)
 
-web_%.html: morphodita_%.t2t *.t2t
-	./txt2tags -t html -C web.conf -C strip_level.conf -o $@ $<
+web_%.html: morphodita_%.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_html,$@,$<,web html_addlevel striplevel)
 
-morphodita.txt: morphodita.t2t *.t2t
-	./txt2tags -t txt -C not_web.conf --no-toc --no-enum-title $<
+morphodita.txt: morphodita.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_txt,$@,$<,manual)
 
-morphodita_%.txt: morphodita_%.t2t *.t2t
-	./txt2tags -t txt -C not_web.conf -C strip_level.conf --no-toc --no-enum-title $<
+morphodita_%.txt: morphodita_%.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_txt,$@,$<,manual striplevel)
 
-morphodita.tex: morphodita.t2t *.t2t
-	./txt2tags -t tex -C not_web.conf $<
+morphodita.pdf: morphodita.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_pdf,$@,$<,manual)
 
-morphodita.pdf: morphodita.tex *.sty
-	pdflatex $<
-	pdflatex $<
+morphodita_%.pdf: morphodita_%.t2t $(wildcard *.t2t)
+	$(call t2t_docsys_pdf,$@,$<,manual striplevel)
 
 .PHONY: clean
 clean:
-	rm -f *.aux *.dvi *.html *.log *.pdf *.out *.tex *.toc *.txt
+	@rm -f $(wildcard $(t2t_docsys_output_wildcards))

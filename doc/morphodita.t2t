@@ -32,7 +32,10 @@ languages are available in standard package repositories, i.e. on PyPI and CPAN.
 
 To use MorphoDiTa, a language model is needed. The language models are available
 from [LINDAT/CLARIN http://www.lindat.cz] infrastructure and described further
-in the User's Manual. Currently the following language models are available:
+in the
+%web% [MorphoDiTa User's Manual morphodita/users-manual].
+%manual% [MorphoDiTa User's Manual #users_manual].
+Currently the following language models are available:
 
 - Czech: [czech-morfflex-pdt-131112 http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1] ([documentation http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt])
 - English: [english-morphium-wsj-140407 http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0] ([documentation http://ufal.mff.cuni.cz/morphodita/users-manual#english-morphium-wsj])
@@ -60,25 +63,25 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows/
 = MorphoDiTa Installation =
 
 %web% [MorphoDiTa Installation on separate page. morphodita/install]
-%not_web% %!include: morphodita_install.t2t
+%manual% %!include: morphodita_install.t2t
 
 
-= MorphoDiTa User's Manual =
+= MorphoDiTa User's Manual =[users_manual]
 
 %web% [MorphoDiTa User's Manual on separate page. morphodita/users-manual]
-%not_web% %!include: morphodita_user.t2t
+%manual% %!include: morphodita_user.t2t
 
 
 = MorphoDiTa API Tutorial =
 
 %web% [MorphoDiTa API Tutorial on separate page. morphodita/api-tutorial]
-%not_web% %!include: morphodita_api_tutorial.t2t
+%manual% %!include: morphodita_api_tutorial.t2t
 
 
 = MorphoDiTa API Reference =
 
 %web% [MorphoDiTa API Reference on separate page. morphodita/api-reference]
-%not_web% %!include: morphodita_api_reference.t2t
+%manual% %!include: morphodita_api_reference.t2t
 
 
 = Contact =
@@ -98,7 +101,7 @@ Authors:
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT/CLARIN project of the Ministry of Education of the Czech Republic (project //LM2010013//).
 
 %web% Acknowledgements for individual language models are listed in [MorphoDiTa User's Manual page morphodita/users-manual].
-%not_web% Acknowledgements for individual language models are listed in MorphoDiTa User's Manual.
+%manual% Acknowledgements for individual language models are listed in [MorphoDiTa User's Manual #users_manual].
 
 
 == Publications ==

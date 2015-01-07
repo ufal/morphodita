@@ -74,8 +74,8 @@
 # It is necessary to parse the full document in this order:
 #  DONE  1st scan: HEAD: get all settings, including %!includeconf
 #  DONE  2nd scan: BODY: expand includes & apply %!preproc
-#        3rd scan: BODY: read titles and compose TOC info
-#        4th scan: BODY: full parsing, expanding [#anchor] 1st
+#	 3rd scan: BODY: read titles and compose TOC info
+#	 4th scan: BODY: full parsing, expanding [#anchor] 1st
 # Steps 2 and 3 can be made together, with no tag adding.
 # Two complete body scans will be *slow*, don't know if it worths.
 # One solution may be add the titles as postproc rules
@@ -85,8 +85,8 @@
 
 # User config (1=ON, 0=OFF)
 
-USE_I18N    = 1   # use gettext for i18ned messages?        (default is 1)
-COLOR_DEBUG = 1   # show debug messages in colors?          (default is 1)
+USE_I18N    = 1   # use gettext for i18ned messages?	    (default is 1)
+COLOR_DEBUG = 1   # show debug messages in colors?	    (default is 1)
 BG_LIGHT    = 0   # your terminal background color is light (default is 0)
 HTML_LOWER  = 0   # use lowercased HTML tags instead upper? (default is 0)
 
@@ -140,26 +140,26 @@ else:
 TARGETS  = 'html xhtml sgml dbk tex lout man mgp wiki gwiki doku pmw moin pm6 txt art adoc creole'.split()
 TARGETS.sort()
 
-FLAGS    = {'headers'    :1 , 'enum-title' :0 , 'mask-email' :0 ,
-            'toc-only'   :0 , 'toc'        :0 , 'rc'         :1 ,
-            'css-sugar'  :0 , 'css-suggar' :0 , 'css-inside' :0 ,
-            'quiet'      :0 , 'slides'     :0 }
-OPTIONS  = {'target'     :'', 'toc-level'  :3 , 'style'      :'',
-            'infile'     :'', 'outfile'    :'', 'encoding'   :'',
-            'config-file':'', 'split'      :0 , 'lang'       :'',
-            'width'      :0 , 'height'     :0 , 'art-chars'  :'',
-            'show-config-value':''}
-ACTIONS  = {'help'       :0 , 'version'    :0 , 'gui'        :0 ,
-            'verbose'    :0 , 'debug'      :0 , 'dump-config':0 ,
-            'dump-source':0 , 'targets'    :0}
-MACROS   = {'date' : '%Y%m%d',  'infile': '%f',
-            'mtime': '%Y%m%d', 'outfile': '%f'}
-SETTINGS = {}         # for future use
+FLAGS	 = {'headers'	 :1 , 'enum-title' :0 , 'mask-email' :0 ,
+	    'toc-only'	 :0 , 'toc'	   :0 , 'rc'	     :1 ,
+	    'css-sugar'  :0 , 'css-suggar' :0 , 'css-inside' :0 ,
+	    'quiet'	 :0 , 'slides'	   :0 }
+OPTIONS  = {'target'	 :'', 'toc-level'  :3 , 'style'      :'',
+	    'infile'	 :'', 'outfile'    :'', 'encoding'   :'',
+	    'config-file':'', 'split'	   :0 , 'lang'	     :'',
+	    'width'	 :0 , 'height'	   :0 , 'art-chars'  :'',
+	    'show-config-value':''}
+ACTIONS  = {'help'	 :0 , 'version'    :0 , 'gui'	     :0 ,
+	    'verbose'	 :0 , 'debug'	   :0 , 'dump-config':0 ,
+	    'dump-source':0 , 'targets'    :0}
+MACROS	 = {'date' : '%Y%m%d',	'infile': '%f',
+	    'mtime': '%Y%m%d', 'outfile': '%f'}
+SETTINGS = {}	      # for future use
 NO_TARGET = ['help', 'version', 'gui', 'toc-only', 'dump-config', 'dump-source', 'targets']
 NO_MULTI_INPUT = ['gui','dump-config','dump-source']
 CONFIG_KEYWORDS = [
-            'target', 'encoding', 'style', 'options', 'preproc','postproc',
-            'guicolors']
+	    'target', 'encoding', 'style', 'options', 'preproc','postproc',
+	    'guicolors']
 
 TARGET_NAMES = {
   'html'   : _('HTML page'),
@@ -188,7 +188,7 @@ QUIET = 0     # do not edit here, please use --quiet
 GUI = 0       # do not edit here, please use --gui
 AUTOTOC = 1   # do not edit here, please use --no-toc or %%toc
 
-DFT_TEXT_WIDTH   = 72 # do not edit here, please use --width
+DFT_TEXT_WIDTH	 = 72 # do not edit here, please use --width
 DFT_SLIDE_WIDTH  = 80 # do not edit here, please use --width
 DFT_SLIDE_HEIGHT = 25 # do not edit here, please use --height
 
@@ -233,33 +233,33 @@ USAGE =  '\n'.join([
 '',
 _("Usage: %s [OPTIONS] [infile.t2t ...]") % my_name,
 '',
-_("      --targets       print a list of all the available targets and exit"),
-_("  -t, --target=TYPE   set target document type. currently supported:"),
-  '                      %s,' % ', '.join(TARGETS[:9]),
-  '                      %s'  % ', '.join(TARGETS[9:]),
-_("  -i, --infile=FILE   set FILE as the input file name ('-' for STDIN)"),
+_("	 --targets	 print a list of all the available targets and exit"),
+_("  -t, --target=TYPE	 set target document type. currently supported:"),
+  '			 %s,' % ', '.join(TARGETS[:9]),
+  '			 %s'  % ', '.join(TARGETS[9:]),
+_("  -i, --infile=FILE	 set FILE as the input file name ('-' for STDIN)"),
 _("  -o, --outfile=FILE  set FILE as the output file name ('-' for STDOUT)"),
-_("      --encoding=ENC  set target file encoding (utf-8, iso-8859-1, etc)"),
-_("      --toc           add an automatic Table of Contents to the output"),
-_("      --toc-level=N   set maximum TOC level (depth) to N"),
-_("      --toc-only      print the Table of Contents and exit"),
-_("  -n, --enum-title    enumerate all titles as 1, 1.1, 1.1.1, etc"),
-_("      --style=FILE    use FILE as the document style (like HTML CSS)"),
-_("      --css-sugar     insert CSS-friendly tags for HTML/XHTML"),
-_("      --css-inside    insert CSS file contents inside HTML/XHTML headers"),
-_("  -H, --no-headers    suppress header and footer from the output"),
-_("      --mask-email    hide email from spam robots. x@y.z turns <x (a) y z>"),
-_("      --slides        format output as presentation slides (used by -t art)"),
-_("      --width=N       set the output's width to N columns (used by -t art)"),
-_("      --height=N      set the output's height to N rows (used by -t art)"),
+_("	 --encoding=ENC  set target file encoding (utf-8, iso-8859-1, etc)"),
+_("	 --toc		 add an automatic Table of Contents to the output"),
+_("	 --toc-level=N	 set maximum TOC level (depth) to N"),
+_("	 --toc-only	 print the Table of Contents and exit"),
+_("  -n, --enum-title	 enumerate all titles as 1, 1.1, 1.1.1, etc"),
+_("	 --style=FILE	 use FILE as the document style (like HTML CSS)"),
+_("	 --css-sugar	 insert CSS-friendly tags for HTML/XHTML"),
+_("	 --css-inside	 insert CSS file contents inside HTML/XHTML headers"),
+_("  -H, --no-headers	 suppress header and footer from the output"),
+_("	 --mask-email	 hide email from spam robots. x@y.z turns <x (a) y z>"),
+_("	 --slides	 format output as presentation slides (used by -t art)"),
+_("	 --width=N	 set the output's width to N columns (used by -t art)"),
+_("	 --height=N	 set the output's height to N rows (used by -t art)"),
 _("  -C, --config-file=F read configuration from file F"),
-_("      --gui           invoke Graphical Tk Interface"),
-_("  -q, --quiet         quiet mode, suppress all output (except errors)"),
-_("  -v, --verbose       print informative messages during conversion"),
-_("  -h, --help          print this help information and exit"),
-_("  -V, --version       print program version and exit"),
-_("      --dump-config   print all the configuration found and exit"),
-_("      --dump-source   print the document source, with includes expanded"),
+_("	 --gui		 invoke Graphical Tk Interface"),
+_("  -q, --quiet	 quiet mode, suppress all output (except errors)"),
+_("  -v, --verbose	 print informative messages during conversion"),
+_("  -h, --help		 print this help information and exit"),
+_("  -V, --version	 print program version and exit"),
+_("	 --dump-config	 print all the configuration found and exit"),
+_("	 --dump-source	 print the document source, with includes expanded"),
 '',
 _("Turn OFF options:"),
 "     --no-css-inside, --no-css-sugar, --no-dump-config, --no-dump-source,",
@@ -443,10 +443,10 @@ Fake template to respect the general process.
 %%default 2 size 8, fore "yellow", font "normal-b", center
 %%default 3 size 5, fore "white",  font "normal", left, prefix "  "
 %%tab 1 size 4, vgap 30, prefix "     ", icon arc "red" 40, leftfill
-%%tab 2 prefix "            ", icon arc "orange" 40, leftfill
-%%tab 3 prefix "                   ", icon arc "brown" 40, leftfill
-%%tab 4 prefix "                          ", icon arc "darkmagenta" 40, leftfill
-%%tab 5 prefix "                                ", icon arc "magenta" 40, leftfill
+%%tab 2 prefix "	    ", icon arc "orange" 40, leftfill
+%%tab 3 prefix "		   ", icon arc "brown" 40, leftfill
+%%tab 4 prefix "			  ", icon arc "darkmagenta" 40, leftfill
+%%tab 5 prefix "				", icon arc "magenta" 40, leftfill
 %%%%------------------------- end of headers -----------------------------
 %%page
 
@@ -517,7 +517,7 @@ r"""\documentclass{article}
 \usepackage[normalem]{ulem} %% needed by strike
 \usepackage[urlcolor=blue,colorlinks=true]{hyperref}
 \usepackage[%(ENCODING)s]{inputenc}  %% char encoding
-\usepackage{%(STYLE)s}  %% user defined
+\usepackage{%(STYLE)s}	%% user defined
 
 \title{%(HEADER1)s}
 \author{%(HEADER2)s}
@@ -532,25 +532,25 @@ r"""\documentclass{article}
 @Document
   @InitialFont { Times Base 12p }  # Times, Courier, Helvetica, ...
   @PageOrientation { Portrait }    # Portrait, Landscape
-  @ColumnNumber { 1 }              # Number of columns (2, 3, ...)
-  @PageHeaders { Simple }          # None, Simple, Titles, NoTitles
-  @InitialLanguage { English }     # German, French, Portuguese, ...
-  @OptimizePages { Yes }           # Yes/No smart page break feature
+  @ColumnNumber { 1 }		   # Number of columns (2, 3, ...)
+  @PageHeaders { Simple }	   # None, Simple, Titles, NoTitles
+  @InitialLanguage { English }	   # German, French, Portuguese, ...
+  @OptimizePages { Yes }	   # Yes/No smart page break feature
 //
 @Text @Begin
 @Display @Heading { %(HEADER1)s }
 @Display @I { %(HEADER2)s }
 @Display { %(HEADER3)s }
-#@NP                               # Break page after Headers
+#@NP				   # Break page after Headers
 """,
 	'creole': """\
 %(HEADER1)s
 %(HEADER2)s
 %(HEADER3)s
 """
-# @SysInclude { tbl }                   # Tables support
-# setup: @MakeContents { Yes }          # show TOC
-# setup: @SectionGap                    # break page at each section
+# @SysInclude { tbl }			# Tables support
+# setup: @MakeContents { Yes }		# show TOC
+# setup: @SectionGap			# break page at each section
 }
 
 
@@ -559,55 +559,55 @@ r"""\documentclass{article}
 
 def getTags(config):
 	"Returns all the known tags for the specified target"
-	
+
 	keys = """
-	title1              numtitle1
-	title2              numtitle2
-	title3              numtitle3
-	title4              numtitle4
-	title5              numtitle5
-	title1Open          title1Close
-	title2Open          title2Close
-	title3Open          title3Close
-	title4Open          title4Close
-	title5Open          title5Close
+	title1		    numtitle1
+	title2		    numtitle2
+	title3		    numtitle3
+	title4		    numtitle4
+	title5		    numtitle5
+	title1Open	    title1Close
+	title2Open	    title2Close
+	title3Open	    title3Close
+	title4Open	    title4Close
+	title5Open	    title5Close
 	blocktitle1Open     blocktitle1Close
 	blocktitle2Open     blocktitle2Close
 	blocktitle3Open     blocktitle3Close
 
-	paragraphOpen       paragraphClose
-	blockVerbOpen       blockVerbClose
-	blockQuoteOpen      blockQuoteClose blockQuoteLine
+	paragraphOpen	    paragraphClose
+	blockVerbOpen	    blockVerbClose
+	blockQuoteOpen	    blockQuoteClose blockQuoteLine
 	blockCommentOpen    blockCommentClose
 
-	fontMonoOpen        fontMonoClose
-	fontBoldOpen        fontBoldClose
-	fontItalicOpen      fontItalicClose
+	fontMonoOpen	    fontMonoClose
+	fontBoldOpen	    fontBoldClose
+	fontItalicOpen	    fontItalicClose
 	fontUnderlineOpen   fontUnderlineClose
-	fontStrikeOpen      fontStrikeClose
+	fontStrikeOpen	    fontStrikeClose
 
-	listOpen            listClose
+	listOpen	    listClose
 	listOpenCompact     listCloseCompact
-	listItemOpen        listItemClose     listItemLine
-	numlistOpen         numlistClose
+	listItemOpen	    listItemClose     listItemLine
+	numlistOpen	    numlistClose
 	numlistOpenCompact  numlistCloseCompact
 	numlistItemOpen     numlistItemClose  numlistItemLine
-	deflistOpen         deflistClose
+	deflistOpen	    deflistClose
 	deflistOpenCompact  deflistCloseCompact
 	deflistItem1Open    deflistItem1Close
 	deflistItem2Open    deflistItem2Close deflistItem2LinePrefix
 
-	bar1                bar2
-	url                 urlMark
-	email               emailMark
-	img                 imgAlignLeft  imgAlignRight  imgAlignCenter
-	                   _imgAlignLeft _imgAlignRight _imgAlignCenter
+	bar1		    bar2
+	url		    urlMark
+	email		    emailMark
+	img		    imgAlignLeft  imgAlignRight  imgAlignCenter
+			   _imgAlignLeft _imgAlignRight _imgAlignCenter
 
-	tableOpen           tableClose
-	_tableBorder        _tableAlignLeft      _tableAlignCenter
-	tableRowOpen        tableRowClose        tableRowSep
+	tableOpen	    tableClose
+	_tableBorder	    _tableAlignLeft	 _tableAlignCenter
+	tableRowOpen	    tableRowClose	 tableRowSep
 	tableTitleRowOpen   tableTitleRowClose
-	tableCellOpen       tableCellClose       tableCellSep
+	tableCellOpen	    tableCellClose	 tableCellSep
 	tableTitleCellOpen  tableTitleCellClose  tableTitleCellSep
 	_tableColAlignLeft  _tableColAlignRight  _tableColAlignCenter
 	_tableCellAlignLeft _tableCellAlignRight _tableCellAlignCenter
@@ -615,791 +615,791 @@ def getTags(config):
 	_tableCellMulticolOpen
 	_tableCellMulticolClose
 
-	bodyOpen            bodyClose
-	cssOpen             cssClose
-	tocOpen             tocClose             TOC
+	bodyOpen	    bodyClose
+	cssOpen		    cssClose
+	tocOpen		    tocClose		 TOC
 	anchor
 	comment
 	pageBreak
 	EOD
 	""".split()
-	
+
 	# TIP: \a represents the current text inside the mark
 	# TIP: ~A~, ~B~ and ~C~ are expanded to other tags parts
-	
+
 	alltags = {
-	
+
 	'art': {
-		'title1'               : '\a'                     ,
-		'title2'               : '\a'                     ,
-		'title3'               : '\a'                     ,
-		'title4'               : '\a'                     ,
-		'title5'               : '\a'                     ,
-		'blockQuoteLine'       : '\t'                     ,
-		'listItemOpen'         : '- '                     ,
-		'numlistItemOpen'      : '\a. '                   ,
-		'bar1'                 : aa_line(AA['bar1'], config['width']),
-		'bar2'                 : aa_line(AA['bar2'], config['width']),
-		'url'                  : '\a'                     ,
-		'urlMark'              : '\a (\a)'                ,
-		'email'                : '\a'                     ,
-		'emailMark'            : '\a (\a)'                ,
-		'img'                  : '[\a]'                   ,
+		'title1'	       : '\a'			  ,
+		'title2'	       : '\a'			  ,
+		'title3'	       : '\a'			  ,
+		'title4'	       : '\a'			  ,
+		'title5'	       : '\a'			  ,
+		'blockQuoteLine'       : '\t'			  ,
+		'listItemOpen'	       : '- '			  ,
+		'numlistItemOpen'      : '\a. '			  ,
+		'bar1'		       : aa_line(AA['bar1'], config['width']),
+		'bar2'		       : aa_line(AA['bar2'], config['width']),
+		'url'		       : '\a'			  ,
+		'urlMark'	       : '\a (\a)'		  ,
+		'email'		       : '\a'			  ,
+		'emailMark'	       : '\a (\a)'		  ,
+		'img'		       : '[\a]'			  ,
 	},
-	
+
 	'txt': {
-		'title1'               : '\a'        ,
-		'title2'               : '\a'        ,
-		'title3'               : '\a'        ,
-		'title4'               : '\a'        ,
-		'title5'               : '\a'        ,
-		'blockQuoteLine'       : '\t'        ,
-		'listItemOpen'         : '- '        ,
+		'title1'	       : '\a'	     ,
+		'title2'	       : '\a'	     ,
+		'title3'	       : '\a'	     ,
+		'title4'	       : '\a'	     ,
+		'title5'	       : '\a'	     ,
+		'blockQuoteLine'       : '\t'	     ,
+		'listItemOpen'	       : '- '	     ,
 		'numlistItemOpen'      : '\a. '      ,
-		'bar1'                 : '\a'        ,
-		'url'                  : '\a'        ,
-		'urlMark'              : '\a (\a)'   ,
-		'email'                : '\a'        ,
-		'emailMark'            : '\a (\a)'   ,
-		'img'                  : '[\a]'      ,
+		'bar1'		       : '\a'	     ,
+		'url'		       : '\a'	     ,
+		'urlMark'	       : '\a (\a)'   ,
+		'email'		       : '\a'	     ,
+		'emailMark'	       : '\a (\a)'   ,
+		'img'		       : '[\a]'      ,
 	},
-	
+
 	'html': {
-		'paragraphOpen'        : '<P>'            ,
-		'paragraphClose'       : '</P>'           ,
-		'title1'               : '~A~<H1>\a</H1>' ,
-		'title2'               : '~A~<H2>\a</H2>' ,
-		'title3'               : '~A~<H3>\a</H3>' ,
-		'title4'               : '~A~<H4>\a</H4>' ,
-		'title5'               : '~A~<H5>\a</H5>' ,
-		'anchor'               : '<A NAME="\a"></A>\n',
-		'blockVerbOpen'        : '<PRE>'          ,
-		'blockVerbClose'       : '</PRE>'         ,
+		'paragraphOpen'        : '<P>'		  ,
+		'paragraphClose'       : '</P>'		  ,
+		'title1'	       : '~A~<H1>\a</H1>' ,
+		'title2'	       : '~A~<H2>\a</H2>' ,
+		'title3'	       : '~A~<H3>\a</H3>' ,
+		'title4'	       : '~A~<H4>\a</H4>' ,
+		'title5'	       : '~A~<H5>\a</H5>' ,
+		'anchor'	       : '<A NAME="\a"></A>\n',
+		'blockVerbOpen'        : '<PRE>'	  ,
+		'blockVerbClose'       : '</PRE>'	  ,
 		'blockQuoteOpen'       : '<BLOCKQUOTE>'   ,
 		'blockQuoteClose'      : '</BLOCKQUOTE>'  ,
-		'fontMonoOpen'         : '<CODE>'         ,
-		'fontMonoClose'        : '</CODE>'        ,
-		'fontBoldOpen'         : '<B>'            ,
-		'fontBoldClose'        : '</B>'           ,
-		'fontItalicOpen'       : '<I>'            ,
-		'fontItalicClose'      : '</I>'           ,
-		'fontUnderlineOpen'    : '<U>'            ,
-		'fontUnderlineClose'   : '</U>'           ,
-		'fontStrikeOpen'       : '<S>'            ,
-		'fontStrikeClose'      : '</S>'           ,
-		'listOpen'             : '<UL>'           ,
-		'listClose'            : '</UL>'          ,
-		'listItemOpen'         : '<LI>'           ,
-		'numlistOpen'          : '<OL>'           ,
-		'numlistClose'         : '</OL>'          ,
-		'numlistItemOpen'      : '<LI>'           ,
-		'deflistOpen'          : '<DL>'           ,
-		'deflistClose'         : '</DL>'          ,
-		'deflistItem1Open'     : '<DT>'           ,
-		'deflistItem1Close'    : '</DT>'          ,
-		'deflistItem2Open'     : '<DD>'           ,
-		'bar1'                 : '<HR NOSHADE SIZE=1>'        ,
-		'bar2'                 : '<HR NOSHADE SIZE=5>'        ,
-		'url'                  : '<A HREF="\a">\a</A>'        ,
-		'urlMark'              : '<A HREF="\a">\a</A>'        ,
-		'email'                : '<A HREF="mailto:\a">\a</A>' ,
-		'emailMark'            : '<A HREF="mailto:\a">\a</A>' ,
-		'img'                  : '<IMG~A~ SRC="\a" BORDER="0" ALT="">',
+		'fontMonoOpen'	       : '<CODE>'	  ,
+		'fontMonoClose'        : '</CODE>'	  ,
+		'fontBoldOpen'	       : '<B>'		  ,
+		'fontBoldClose'        : '</B>'		  ,
+		'fontItalicOpen'       : '<I>'		  ,
+		'fontItalicClose'      : '</I>'		  ,
+		'fontUnderlineOpen'    : '<U>'		  ,
+		'fontUnderlineClose'   : '</U>'		  ,
+		'fontStrikeOpen'       : '<S>'		  ,
+		'fontStrikeClose'      : '</S>'		  ,
+		'listOpen'	       : '<UL>'		  ,
+		'listClose'	       : '</UL>'	  ,
+		'listItemOpen'	       : '<LI>'		  ,
+		'numlistOpen'	       : '<OL>'		  ,
+		'numlistClose'	       : '</OL>'	  ,
+		'numlistItemOpen'      : '<LI>'		  ,
+		'deflistOpen'	       : '<DL>'		  ,
+		'deflistClose'	       : '</DL>'	  ,
+		'deflistItem1Open'     : '<DT>'		  ,
+		'deflistItem1Close'    : '</DT>'	  ,
+		'deflistItem2Open'     : '<DD>'		  ,
+		'bar1'		       : '<HR NOSHADE SIZE=1>'	      ,
+		'bar2'		       : '<HR NOSHADE SIZE=5>'	      ,
+		'url'		       : '<A HREF="\a">\a</A>'	      ,
+		'urlMark'	       : '<A HREF="\a">\a</A>'	      ,
+		'email'		       : '<A HREF="mailto:\a">\a</A>' ,
+		'emailMark'	       : '<A HREF="mailto:\a">\a</A>' ,
+		'img'		       : '<IMG~A~ SRC="\a" BORDER="0" ALT="">',
 		'_imgAlignLeft'        : ' ALIGN="left"'  ,
 		'_imgAlignCenter'      : ' ALIGN="middle"',
 		'_imgAlignRight'       : ' ALIGN="right"' ,
-		'tableOpen'            : '<TABLE~A~~B~ CELLPADDING="4">',
-		'tableClose'           : '</TABLE>'       ,
-		'tableRowOpen'         : '<TR>'           ,
-		'tableRowClose'        : '</TR>'          ,
-		'tableCellOpen'        : '<TD~A~~S~>'     ,
-		'tableCellClose'       : '</TD>'          ,
-		'tableTitleCellOpen'   : '<TH~S~>'        ,
-		'tableTitleCellClose'  : '</TH>'          ,
-		'_tableBorder'         : ' BORDER="1"'    ,
+		'tableOpen'	       : '<TABLE~A~~B~ CELLPADDING="4">',
+		'tableClose'	       : '</TABLE>'	  ,
+		'tableRowOpen'	       : '<TR>'		  ,
+		'tableRowClose'        : '</TR>'	  ,
+		'tableCellOpen'        : '<TD~A~~S~>'	  ,
+		'tableCellClose'       : '</TD>'	  ,
+		'tableTitleCellOpen'   : '<TH~S~>'	  ,
+		'tableTitleCellClose'  : '</TH>'	  ,
+		'_tableBorder'	       : ' BORDER="1"'	  ,
 		'_tableAlignCenter'    : ' ALIGN="center"',
 		'_tableCellAlignRight' : ' ALIGN="right"' ,
 		'_tableCellAlignCenter': ' ALIGN="center"',
 		'_tableCellColSpan'    : ' COLSPAN="\a"'  ,
-		'cssOpen'              : '<STYLE TYPE="text/css">',
-		'cssClose'             : '</STYLE>'       ,
-		'comment'              : '<!-- \a -->'    ,
-		'EOD'                  : '</BODY></HTML>'
+		'cssOpen'	       : '<STYLE TYPE="text/css">',
+		'cssClose'	       : '</STYLE>'	  ,
+		'comment'	       : '<!-- \a -->'	  ,
+		'EOD'		       : '</BODY></HTML>'
 	},
-	
+
 	#TIP xhtml inherits all HTML definitions (lowercased)
 	#TIP http://www.w3.org/TR/xhtml1/#guidelines
 	#TIP http://www.htmlref.com/samples/Chapt17/17_08.htm
 	'xhtml': {
-		'listItemClose'        : '</li>'          ,
-		'numlistItemClose'     : '</li>'          ,
-		'deflistItem2Close'    : '</dd>'          ,
-		'bar1'                 : '<hr class="light" />',
-		'bar2'                 : '<hr class="heavy" />',
-		'anchor'               : '<a id="\a" name="\a"></a>\n',
-		'img'                  : '<img~A~ src="\a" border="0" alt=""/>',
+		'listItemClose'        : '</li>'	  ,
+		'numlistItemClose'     : '</li>'	  ,
+		'deflistItem2Close'    : '</dd>'	  ,
+		'bar1'		       : '<hr class="light" />',
+		'bar2'		       : '<hr class="heavy" />',
+		'anchor'	       : '<a id="\a" name="\a"></a>\n',
+		'img'		       : '<img~A~ src="\a" border="0" alt=""/>',
 	},
-	
+
 	'sgml': {
-		'paragraphOpen'        : '<p>'                ,
-		'title1'               : '<sect>\a~A~<p>'     ,
-		'title2'               : '<sect1>\a~A~<p>'    ,
-		'title3'               : '<sect2>\a~A~<p>'    ,
-		'title4'               : '<sect3>\a~A~<p>'    ,
-		'title5'               : '<sect4>\a~A~<p>'    ,
-		'anchor'               : '<label id="\a">'    ,
+		'paragraphOpen'        : '<p>'		      ,
+		'title1'	       : '<sect>\a~A~<p>'     ,
+		'title2'	       : '<sect1>\a~A~<p>'    ,
+		'title3'	       : '<sect2>\a~A~<p>'    ,
+		'title4'	       : '<sect3>\a~A~<p>'    ,
+		'title5'	       : '<sect4>\a~A~<p>'    ,
+		'anchor'	       : '<label id="\a">'    ,
 		'blockVerbOpen'        : '<tscreen><verb>'    ,
 		'blockVerbClose'       : '</verb></tscreen>'  ,
-		'blockQuoteOpen'       : '<quote>'            ,
-		'blockQuoteClose'      : '</quote>'           ,
-		'fontMonoOpen'         : '<tt>'               ,
-		'fontMonoClose'        : '</tt>'              ,
-		'fontBoldOpen'         : '<bf>'               ,
-		'fontBoldClose'        : '</bf>'              ,
-		'fontItalicOpen'       : '<em>'               ,
-		'fontItalicClose'      : '</em>'              ,
-		'fontUnderlineOpen'    : '<bf><em>'           ,
-		'fontUnderlineClose'   : '</em></bf>'         ,
-		'listOpen'             : '<itemize>'          ,
-		'listClose'            : '</itemize>'         ,
-		'listItemOpen'         : '<item>'             ,
-		'numlistOpen'          : '<enum>'             ,
-		'numlistClose'         : '</enum>'            ,
-		'numlistItemOpen'      : '<item>'             ,
-		'deflistOpen'          : '<descrip>'          ,
-		'deflistClose'         : '</descrip>'         ,
-		'deflistItem1Open'     : '<tag>'              ,
-		'deflistItem1Close'    : '</tag>'             ,
-		'bar1'                 : '<!-- \a -->'        ,
-		'url'                  : '<htmlurl url="\a" name="\a">'        ,
-		'urlMark'              : '<htmlurl url="\a" name="\a">'        ,
-		'email'                : '<htmlurl url="mailto:\a" name="\a">' ,
-		'emailMark'            : '<htmlurl url="mailto:\a" name="\a">' ,
-		'img'                  : '<figure><ph vspace=""><img src="\a"></figure>',
-		'tableOpen'            : '<table><tabular ca="~C~">'           ,
-		'tableClose'           : '</tabular></table>' ,
-		'tableRowSep'          : '<rowsep>'           ,
-		'tableCellSep'         : '<colsep>'           ,
-		'_tableColAlignLeft'   : 'l'                  ,
-		'_tableColAlignRight'  : 'r'                  ,
-		'_tableColAlignCenter' : 'c'                  ,
-		'comment'              : '<!-- \a -->'        ,
-		'TOC'                  : '<toc>'              ,
-		'EOD'                  : '</article>'
+		'blockQuoteOpen'       : '<quote>'	      ,
+		'blockQuoteClose'      : '</quote>'	      ,
+		'fontMonoOpen'	       : '<tt>'		      ,
+		'fontMonoClose'        : '</tt>'	      ,
+		'fontBoldOpen'	       : '<bf>'		      ,
+		'fontBoldClose'        : '</bf>'	      ,
+		'fontItalicOpen'       : '<em>'		      ,
+		'fontItalicClose'      : '</em>'	      ,
+		'fontUnderlineOpen'    : '<bf><em>'	      ,
+		'fontUnderlineClose'   : '</em></bf>'	      ,
+		'listOpen'	       : '<itemize>'	      ,
+		'listClose'	       : '</itemize>'	      ,
+		'listItemOpen'	       : '<item>'	      ,
+		'numlistOpen'	       : '<enum>'	      ,
+		'numlistClose'	       : '</enum>'	      ,
+		'numlistItemOpen'      : '<item>'	      ,
+		'deflistOpen'	       : '<descrip>'	      ,
+		'deflistClose'	       : '</descrip>'	      ,
+		'deflistItem1Open'     : '<tag>'	      ,
+		'deflistItem1Close'    : '</tag>'	      ,
+		'bar1'		       : '<!-- \a -->'	      ,
+		'url'		       : '<htmlurl url="\a" name="\a">'        ,
+		'urlMark'	       : '<htmlurl url="\a" name="\a">'        ,
+		'email'		       : '<htmlurl url="mailto:\a" name="\a">' ,
+		'emailMark'	       : '<htmlurl url="mailto:\a" name="\a">' ,
+		'img'		       : '<figure><ph vspace=""><img src="\a"></figure>',
+		'tableOpen'	       : '<table><tabular ca="~C~">'	       ,
+		'tableClose'	       : '</tabular></table>' ,
+		'tableRowSep'	       : '<rowsep>'	      ,
+		'tableCellSep'	       : '<colsep>'	      ,
+		'_tableColAlignLeft'   : 'l'		      ,
+		'_tableColAlignRight'  : 'r'		      ,
+		'_tableColAlignCenter' : 'c'		      ,
+		'comment'	       : '<!-- \a -->'	      ,
+		'TOC'		       : '<toc>'	      ,
+		'EOD'		       : '</article>'
 	},
-	
+
 	'dbk': {
-		'paragraphOpen'        : '<para>'                            ,
-		'paragraphClose'       : '</para>'                           ,
-		'title1Open'           : '~A~<sect1><title>\a</title>'       ,
-		'title1Close'          : '</sect1>'                          ,
-		'title2Open'           : '~A~  <sect2><title>\a</title>'     ,
-		'title2Close'          : '  </sect2>'                        ,
-		'title3Open'           : '~A~    <sect3><title>\a</title>'   ,
-		'title3Close'          : '    </sect3>'                      ,
-		'title4Open'           : '~A~      <sect4><title>\a</title>' ,
-		'title4Close'          : '      </sect4>'                    ,
-		'title5Open'           : '~A~        <sect5><title>\a</title>',
-		'title5Close'          : '        </sect5>'                  ,
-		'anchor'               : '<anchor id="\a"/>\n'               ,
-		'blockVerbOpen'        : '<programlisting>'                  ,
-		'blockVerbClose'       : '</programlisting>'                 ,
-		'blockQuoteOpen'       : '<blockquote><para>'                ,
-		'blockQuoteClose'      : '</para></blockquote>'              ,
-		'fontMonoOpen'         : '<code>'                            ,
-		'fontMonoClose'        : '</code>'                           ,
-		'fontBoldOpen'         : '<emphasis role="bold">'            ,
-		'fontBoldClose'        : '</emphasis>'                       ,
-		'fontItalicOpen'       : '<emphasis>'                        ,
-		'fontItalicClose'      : '</emphasis>'                       ,
-		'fontUnderlineOpen'    : '<emphasis role="underline">'       ,
-		'fontUnderlineClose'   : '</emphasis>'                       ,
-		# 'fontStrikeOpen'       : '<emphasis role="strikethrough">'   , # Don't know
-		# 'fontStrikeClose'      : '</emphasis>'                       ,
-		'listOpen'             : '<itemizedlist>'                    ,
-		'listClose'            : '</itemizedlist>'                   ,
-		'listItemOpen'         : '<listitem><para>'                  ,
-		'listItemClose'        : '</para></listitem>'                ,
-		'numlistOpen'          : '<orderedlist numeration="arabic">' ,
-		'numlistClose'         : '</orderedlist>'                    ,
-		'numlistItemOpen'      : '<listitem><para>'                  ,
-		'numlistItemClose'     : '</para></listitem>'                ,
-		'deflistOpen'          : '<variablelist>'                    ,
-		'deflistClose'         : '</variablelist>'                   ,
-		'deflistItem1Open'     : '<varlistentry><term>'              ,
-		'deflistItem1Close'    : '</term>'                           ,
-		'deflistItem2Open'     : '<listitem><para>'                  ,
+		'paragraphOpen'        : '<para>'			     ,
+		'paragraphClose'       : '</para>'			     ,
+		'title1Open'	       : '~A~<sect1><title>\a</title>'	     ,
+		'title1Close'	       : '</sect1>'			     ,
+		'title2Open'	       : '~A~  <sect2><title>\a</title>'     ,
+		'title2Close'	       : '  </sect2>'			     ,
+		'title3Open'	       : '~A~	 <sect3><title>\a</title>'   ,
+		'title3Close'	       : '    </sect3>'			     ,
+		'title4Open'	       : '~A~	   <sect4><title>\a</title>' ,
+		'title4Close'	       : '	</sect4>'		     ,
+		'title5Open'	       : '~A~	     <sect5><title>\a</title>',
+		'title5Close'	       : '	  </sect5>'		     ,
+		'anchor'	       : '<anchor id="\a"/>\n'		     ,
+		'blockVerbOpen'        : '<programlisting>'		     ,
+		'blockVerbClose'       : '</programlisting>'		     ,
+		'blockQuoteOpen'       : '<blockquote><para>'		     ,
+		'blockQuoteClose'      : '</para></blockquote>'		     ,
+		'fontMonoOpen'	       : '<code>'			     ,
+		'fontMonoClose'        : '</code>'			     ,
+		'fontBoldOpen'	       : '<emphasis role="bold">'	     ,
+		'fontBoldClose'        : '</emphasis>'			     ,
+		'fontItalicOpen'       : '<emphasis>'			     ,
+		'fontItalicClose'      : '</emphasis>'			     ,
+		'fontUnderlineOpen'    : '<emphasis role="underline">'	     ,
+		'fontUnderlineClose'   : '</emphasis>'			     ,
+		# 'fontStrikeOpen'	 : '<emphasis role="strikethrough">'   , # Don't know
+		# 'fontStrikeClose'	 : '</emphasis>'		       ,
+		'listOpen'	       : '<itemizedlist>'		     ,
+		'listClose'	       : '</itemizedlist>'		     ,
+		'listItemOpen'	       : '<listitem><para>'		     ,
+		'listItemClose'        : '</para></listitem>'		     ,
+		'numlistOpen'	       : '<orderedlist numeration="arabic">' ,
+		'numlistClose'	       : '</orderedlist>'		     ,
+		'numlistItemOpen'      : '<listitem><para>'		     ,
+		'numlistItemClose'     : '</para></listitem>'		     ,
+		'deflistOpen'	       : '<variablelist>'		     ,
+		'deflistClose'	       : '</variablelist>'		     ,
+		'deflistItem1Open'     : '<varlistentry><term>'		     ,
+		'deflistItem1Close'    : '</term>'			     ,
+		'deflistItem2Open'     : '<listitem><para>'		     ,
 		'deflistItem2Close'    : '</para></listitem></varlistentry>' ,
-		# 'bar1'                 : '<>'                                , # Don't know
-		# 'bar2'                 : '<>'                                , # Don't know
-		'url'                  : '<ulink url="\a">\a</ulink>'        ,
-		'urlMark'              : '<ulink url="\a">\a</ulink>'        ,
-		'email'                : '<email>\a</email>'                 ,
-		'emailMark'            : '<email>\a</email>'                 ,
-		'img'                  : '<mediaobject><imageobject><imagedata fileref="\a"/></imageobject></mediaobject>',
-		# '_imgAlignLeft'        : ''                                 , # Don't know
-		# '_imgAlignCenter'      : ''                                 , # Don't know
-		# '_imgAlignRight'       : ''                                 , # Don't know
-		# 'tableOpen'            : '<informaltable><tgroup cols=""><tbody>', # Don't work, need to know number of cols
-		# 'tableClose'           : '</tbody></tgroup></informaltable>' ,
-		# 'tableRowOpen'         : '<row>'                             ,
-		# 'tableRowClose'        : '</row>'                            ,
-		# 'tableCellOpen'        : '<entry>'                           ,
-		# 'tableCellClose'       : '</entry>'                          ,
-		# 'tableTitleRowOpen'    : '<thead>'                           ,
-		# 'tableTitleRowClose'   : '</thead>'                          ,
-		# '_tableBorder'         : ' frame="all"'                      ,
-		# '_tableAlignCenter'    : ' align="center"'                   ,
-		# '_tableCellAlignRight' : ' align="right"'                    ,
-		# '_tableCellAlignCenter': ' align="center"'                   ,
-		# '_tableCellColSpan'    : ' COLSPAN="\a"'                     ,
-		'TOC'                  : '<index/>'                          ,
-		'comment'              : '<!-- \a -->'                       ,
-		'EOD'                  : '</article>'
+		# 'bar1'		 : '<>'				       , # Don't know
+		# 'bar2'		 : '<>'				       , # Don't know
+		'url'		       : '<ulink url="\a">\a</ulink>'	     ,
+		'urlMark'	       : '<ulink url="\a">\a</ulink>'	     ,
+		'email'		       : '<email>\a</email>'		     ,
+		'emailMark'	       : '<email>\a</email>'		     ,
+		'img'		       : '<mediaobject><imageobject><imagedata fileref="\a"/></imageobject></mediaobject>',
+		# '_imgAlignLeft'	 : ''				      , # Don't know
+		# '_imgAlignCenter'	 : ''				      , # Don't know
+		# '_imgAlignRight'	 : ''				      , # Don't know
+		# 'tableOpen'		 : '<informaltable><tgroup cols=""><tbody>', # Don't work, need to know number of cols
+		# 'tableClose'		 : '</tbody></tgroup></informaltable>' ,
+		# 'tableRowOpen'	 : '<row>'			       ,
+		# 'tableRowClose'	 : '</row>'			       ,
+		# 'tableCellOpen'	 : '<entry>'			       ,
+		# 'tableCellClose'	 : '</entry>'			       ,
+		# 'tableTitleRowOpen'	 : '<thead>'			       ,
+		# 'tableTitleRowClose'	 : '</thead>'			       ,
+		# '_tableBorder'	 : ' frame="all"'		       ,
+		# '_tableAlignCenter'	 : ' align="center"'		       ,
+		# '_tableCellAlignRight' : ' align="right"'		       ,
+		# '_tableCellAlignCenter': ' align="center"'		       ,
+		# '_tableCellColSpan'	 : ' COLSPAN="\a"'		       ,
+		'TOC'		       : '<index/>'			     ,
+		'comment'	       : '<!-- \a -->'			     ,
+		'EOD'		       : '</article>'
 	},
-	
+
 	'tex': {
-		'title1'               : '~A~\section*{\a}'     ,
-		'title2'               : '~A~\\subsection*{\a}'   ,
-		'title3'               : '~A~\\subsubsection*{\a}',
+		'title1'	       : '~A~\section*{\a}'	,
+		'title2'	       : '~A~\\subsection*{\a}'   ,
+		'title3'	       : '~A~\\subsubsection*{\a}',
 		# title 4/5: DIRTY: para+BF+\\+\n
-		'title4'               : '~A~\\paragraph{}\\textbf{\a}\\\\\n',
-		'title5'               : '~A~\\paragraph{}\\textbf{\a}\\\\\n',
-		'numtitle1'            : '\n~A~\section{\a}'      ,
-		'numtitle2'            : '~A~\\subsection{\a}'    ,
-		'numtitle3'            : '~A~\\subsubsection{\a}' ,
-		'anchor'               : '\\hypertarget{\a}{}\n'  ,
+		'title4'	       : '~A~\\paragraph{}\\textbf{\a}\\\\\n',
+		'title5'	       : '~A~\\paragraph{}\\textbf{\a}\\\\\n',
+		'numtitle1'	       : '\n~A~\section{\a}'	  ,
+		'numtitle2'	       : '~A~\\subsection{\a}'	  ,
+		'numtitle3'	       : '~A~\\subsubsection{\a}' ,
+		'anchor'	       : '\\hypertarget{\a}{}\n'  ,
 		'blockVerbOpen'        : '\\begin{lstlisting}' ,
 		'blockVerbClose'       : '\\end{lstlisting}'   ,
 		'blockQuoteOpen'       : '\\begin{quotation}'  ,
 		'blockQuoteClose'      : '\\end{quotation}'    ,
-		'fontMonoOpen'         : '\\texttt{'           ,
-		'fontMonoClose'        : '}'                   ,
-		'fontBoldOpen'         : '\\textbf{'           ,
-		'fontBoldClose'        : '}'                   ,
-		'fontItalicOpen'       : '\\textit{'           ,
-		'fontItalicClose'      : '}'                   ,
+		'fontMonoOpen'	       : '\\texttt{'	       ,
+		'fontMonoClose'        : '}'		       ,
+		'fontBoldOpen'	       : '\\textbf{'	       ,
+		'fontBoldClose'        : '}'		       ,
+		'fontItalicOpen'       : '\\textit{'	       ,
+		'fontItalicClose'      : '}'		       ,
 		'fontUnderlineOpen'    : '\\underline{'        ,
-		'fontUnderlineClose'   : '}'                   ,
-		'fontStrikeOpen'       : '\\sout{'             ,
-		'fontStrikeClose'      : '}'                   ,
-		'listOpen'             : '\\begin{itemize}'    ,
-		'listClose'            : '\\end{itemize}'      ,
+		'fontUnderlineClose'   : '}'		       ,
+		'fontStrikeOpen'       : '\\sout{'	       ,
+		'fontStrikeClose'      : '}'		       ,
+		'listOpen'	       : '\\begin{itemize}'    ,
+		'listClose'	       : '\\end{itemize}'      ,
 		'listOpenCompact'      : '\\begin{compactitem}',
 		'listCloseCompact'     : '\\end{compactitem}'  ,
-		'listItemOpen'         : '\\item '             ,
-		'numlistOpen'          : '\\begin{enumerate}'  ,
-		'numlistClose'         : '\\end{enumerate}'    ,
+		'listItemOpen'	       : '\\item '	       ,
+		'numlistOpen'	       : '\\begin{enumerate}'  ,
+		'numlistClose'	       : '\\end{enumerate}'    ,
 		'numlistOpenCompact'   : '\\begin{compactenum}',
 		'numlistCloseCompact'  : '\\end{compactenum}'  ,
-		'numlistItemOpen'      : '\\item '             ,
-		'deflistOpen'          : '\\begin{description}',
-		'deflistClose'         : '\\end{description}'  ,
+		'numlistItemOpen'      : '\\item '	       ,
+		'deflistOpen'	       : '\\begin{description}',
+		'deflistClose'	       : '\\end{description}'  ,
 		'deflistOpenCompact'   : '\\begin{compactdesc}',
 		'deflistCloseCompact'  : '\\end{compactdesc}'  ,
-		'deflistItem1Open'     : '\\item['             ,
-		'deflistItem1Close'    : ']~\\\\'              ,
-		'bar1'                 : '\\hrulefill{}'       ,
-		'bar2'                 : '\\rule{\linewidth}{1mm}',
-		'url'                  : '\\htmladdnormallink{\a}{\a}',
-		'urlMark'              : '\\htmladdnormallink{\a}{\a}',
-		'email'                : '\\htmladdnormallink{\a}{mailto:\a}',
-		'emailMark'            : '\\htmladdnormallink{\a}{mailto:\a}',
-		'img'                  : '\\includegraphics{\a}',
-		'tableOpen'            : '\\begin{center}\\begin{tabular}{|~C~|}',
-		'tableClose'           : '\\end{tabular}\\end{center}',
-		'tableRowOpen'         : '\\hline ' ,
+		'deflistItem1Open'     : '\\item['	       ,
+		'deflistItem1Close'    : ']~\\\\'	       ,
+		'bar1'		       : '\\hrulefill{}'       ,
+		'bar2'		       : '\\rule{\linewidth}{1mm}',
+		'url'		       : '\\htmladdnormallink{\a}{\a}',
+		'urlMark'	       : '\\htmladdnormallink{\a}{\a}',
+		'email'		       : '\\htmladdnormallink{\a}{mailto:\a}',
+		'emailMark'	       : '\\htmladdnormallink{\a}{mailto:\a}',
+		'img'		       : '\\includegraphics{\a}',
+		'tableOpen'	       : '\\begin{center}\\begin{tabular}{|~C~|}',
+		'tableClose'	       : '\\end{tabular}\\end{center}',
+		'tableRowOpen'	       : '\\hline ' ,
 		'tableRowClose'        : ' \\\\'    ,
-		'tableCellSep'         : ' & '      ,
-		'_tableColAlignLeft'   : 'l'        ,
-		'_tableColAlignRight'  : 'r'        ,
-		'_tableColAlignCenter' : 'c'        ,
-		'_tableCellAlignLeft'  : 'l'        ,
-		'_tableCellAlignRight' : 'r'        ,
-		'_tableCellAlignCenter': 'c'        ,
-		'_tableCellColSpan'    : '\a'       ,
+		'tableCellSep'	       : ' & '	    ,
+		'_tableColAlignLeft'   : 'l'	    ,
+		'_tableColAlignRight'  : 'r'	    ,
+		'_tableColAlignCenter' : 'c'	    ,
+		'_tableCellAlignLeft'  : 'l'	    ,
+		'_tableCellAlignRight' : 'r'	    ,
+		'_tableCellAlignCenter': 'c'	    ,
+		'_tableCellColSpan'    : '\a'	    ,
 		'_tableCellMulticolOpen'  : '\\multicolumn{\a}{|~C~|}{',
 		'_tableCellMulticolClose' : '}',
-		'tableColAlignSep'     : '|'        ,
-		'comment'              : '% \a'     ,
-		'TOC'                  : '\\tableofcontents',
-		'pageBreak'            : '\\clearpage',
-		'EOD'                  : '\\end{document}'
+		'tableColAlignSep'     : '|'	    ,
+		'comment'	       : '% \a'     ,
+		'TOC'		       : '\\tableofcontents',
+		'pageBreak'	       : '\\clearpage',
+		'EOD'		       : '\\end{document}'
 	},
-	
+
 	'lout': {
-		'paragraphOpen'        : '@LP'                     ,
-		'blockTitle1Open'      : '@BeginSections'          ,
-		'blockTitle1Close'     : '@EndSections'            ,
-		'blockTitle2Open'      : ' @BeginSubSections'      ,
-		'blockTitle2Close'     : ' @EndSubSections'        ,
+		'paragraphOpen'        : '@LP'			   ,
+		'blockTitle1Open'      : '@BeginSections'	   ,
+		'blockTitle1Close'     : '@EndSections'		   ,
+		'blockTitle2Open'      : ' @BeginSubSections'	   ,
+		'blockTitle2Close'     : ' @EndSubSections'	   ,
 		'blockTitle3Open'      : '  @BeginSubSubSections'  ,
 		'blockTitle3Close'     : '  @EndSubSubSections'    ,
-		'title1Open'           : '~A~@Section @Title { \a } @Begin',
-		'title1Close'          : '@End @Section'           ,
-		'title2Open'           : '~A~ @SubSection @Title { \a } @Begin',
-		'title2Close'          : ' @End @SubSection'       ,
-		'title3Open'           : '~A~  @SubSubSection @Title { \a } @Begin',
-		'title3Close'          : '  @End @SubSubSection'   ,
-		'title4Open'           : '~A~@LP @LeftDisplay @B { \a }',
-		'title5Open'           : '~A~@LP @LeftDisplay @B { \a }',
-		'anchor'               : '@Tag { \a }\n'       ,
+		'title1Open'	       : '~A~@Section @Title { \a } @Begin',
+		'title1Close'	       : '@End @Section'	   ,
+		'title2Open'	       : '~A~ @SubSection @Title { \a } @Begin',
+		'title2Close'	       : ' @End @SubSection'	   ,
+		'title3Open'	       : '~A~  @SubSubSection @Title { \a } @Begin',
+		'title3Close'	       : '  @End @SubSubSection'   ,
+		'title4Open'	       : '~A~@LP @LeftDisplay @B { \a }',
+		'title5Open'	       : '~A~@LP @LeftDisplay @B { \a }',
+		'anchor'	       : '@Tag { \a }\n'       ,
 		'blockVerbOpen'        : '@LP @ID @F @RawVerbatim @Begin',
 		'blockVerbClose'       : '@End @RawVerbatim'   ,
-		'blockQuoteOpen'       : '@QD {'               ,
-		'blockQuoteClose'      : '}'                   ,
+		'blockQuoteOpen'       : '@QD {'	       ,
+		'blockQuoteClose'      : '}'		       ,
 		# enclosed inside {} to deal with joined**words**
-		'fontMonoOpen'         : '{@F {'               ,
-		'fontMonoClose'        : '}}'                  ,
-		'fontBoldOpen'         : '{@B {'               ,
-		'fontBoldClose'        : '}}'                  ,
-		'fontItalicOpen'       : '{@II {'              ,
-		'fontItalicClose'      : '}}'                  ,
+		'fontMonoOpen'	       : '{@F {'	       ,
+		'fontMonoClose'        : '}}'		       ,
+		'fontBoldOpen'	       : '{@B {'	       ,
+		'fontBoldClose'        : '}}'		       ,
+		'fontItalicOpen'       : '{@II {'	       ,
+		'fontItalicClose'      : '}}'		       ,
 		'fontUnderlineOpen'    : '{@Underline{'        ,
-		'fontUnderlineClose'   : '}}'                  ,
+		'fontUnderlineClose'   : '}}'		       ,
 		# the full form is more readable, but could be BL EL LI NL TL DTI
-		'listOpen'             : '@BulletList'         ,
-		'listClose'            : '@EndList'            ,
-		'listItemOpen'         : '@ListItem{'          ,
-		'listItemClose'        : '}'                   ,
-		'numlistOpen'          : '@NumberedList'       ,
-		'numlistClose'         : '@EndList'            ,
-		'numlistItemOpen'      : '@ListItem{'          ,
-		'numlistItemClose'     : '}'                   ,
-		'deflistOpen'          : '@TaggedList'         ,
-		'deflistClose'         : '@EndList'            ,
+		'listOpen'	       : '@BulletList'	       ,
+		'listClose'	       : '@EndList'	       ,
+		'listItemOpen'	       : '@ListItem{'	       ,
+		'listItemClose'        : '}'		       ,
+		'numlistOpen'	       : '@NumberedList'       ,
+		'numlistClose'	       : '@EndList'	       ,
+		'numlistItemOpen'      : '@ListItem{'	       ,
+		'numlistItemClose'     : '}'		       ,
+		'deflistOpen'	       : '@TaggedList'	       ,
+		'deflistClose'	       : '@EndList'	       ,
 		'deflistItem1Open'     : '@DropTagItem {'      ,
-		'deflistItem1Close'    : '}'                   ,
-		'deflistItem2Open'     : '{'                   ,
-		'deflistItem2Close'    : '}'                   ,
-		'bar1'                 : '@DP @FullWidthRule'  ,
-		'url'                  : '{blue @Colour { \a }}'      ,
-		'urlMark'              : '\a ({blue @Colour { \a }})' ,
-		'email'                : '{blue @Colour { \a }}'      ,
-		'emailMark'            : '\a ({blue Colour{ \a }})'   ,
-		'img'                  : '~A~@IncludeGraphic { \a }'  ,	# eps only!
-		'_imgAlignLeft'        : '@LeftDisplay '              ,
-		'_imgAlignRight'       : '@RightDisplay '             ,
-		'_imgAlignCenter'      : '@CentredDisplay '           ,
+		'deflistItem1Close'    : '}'		       ,
+		'deflistItem2Open'     : '{'		       ,
+		'deflistItem2Close'    : '}'		       ,
+		'bar1'		       : '@DP @FullWidthRule'  ,
+		'url'		       : '{blue @Colour { \a }}'      ,
+		'urlMark'	       : '\a ({blue @Colour { \a }})' ,
+		'email'		       : '{blue @Colour { \a }}'      ,
+		'emailMark'	       : '\a ({blue Colour{ \a }})'   ,
+		'img'		       : '~A~@IncludeGraphic { \a }'  ,	# eps only!
+		'_imgAlignLeft'        : '@LeftDisplay '	      ,
+		'_imgAlignRight'       : '@RightDisplay '	      ,
+		'_imgAlignCenter'      : '@CentredDisplay '	      ,
 		# lout tables are *way* complicated, no support for now
-		#'tableOpen'            : '~A~@Tbl~B~\naformat{ @Cell A | @Cell B } {',
-		#'tableClose'           : '}'     ,
-		#'tableRowOpen'         : '@Rowa\n'       ,
-		#'tableTitleRowOpen'    : '@HeaderRowa'       ,
-		#'tableCenterAlign'     : '@CentredDisplay '         ,
-		#'tableCellOpen'        : '\a {'                     ,	# A, B, ...
-		#'tableCellClose'       : '}'                        ,
-		#'_tableBorder'         : '\nrule {yes}'             ,
-		'comment'              : '# \a'                     ,
+		#'tableOpen'		: '~A~@Tbl~B~\naformat{ @Cell A | @Cell B } {',
+		#'tableClose'		: '}'	  ,
+		#'tableRowOpen'		: '@Rowa\n'	  ,
+		#'tableTitleRowOpen'	: '@HeaderRowa'       ,
+		#'tableCenterAlign'	: '@CentredDisplay '	     ,
+		#'tableCellOpen'	: '\a {'		     ,	# A, B, ...
+		#'tableCellClose'	: '}'			     ,
+		#'_tableBorder'		: '\nrule {yes}'	     ,
+		'comment'	       : '# \a'			    ,
 		# @MakeContents must be on the config file
-		'TOC'                  : '@DP @ContentsGoesHere @DP',
-		'pageBreak'            : '@NP'                      ,
-		'EOD'                  : '@End @Text'
+		'TOC'		       : '@DP @ContentsGoesHere @DP',
+		'pageBreak'	       : '@NP'			    ,
+		'EOD'		       : '@End @Text'
 	},
-	
+
 	# http://moinmo.in/SyntaxReference
 	'moin': {
-		'title1'                : '= \a ='        ,
-		'title2'                : '== \a =='      ,
-		'title3'                : '=== \a ==='    ,
-		'title4'                : '==== \a ===='  ,
-		'title5'                : '===== \a =====',
-		'blockVerbOpen'         : '{{{'           ,
-		'blockVerbClose'        : '}}}'           ,
-		'blockQuoteLine'        : '  '            ,
-		'fontMonoOpen'          : '{{{'           ,
-		'fontMonoClose'         : '}}}'           ,
-		'fontBoldOpen'          : "'''"           ,
-		'fontBoldClose'         : "'''"           ,
-		'fontItalicOpen'        : "''"            ,
-		'fontItalicClose'       : "''"            ,
-		'fontUnderlineOpen'     : '__'            ,
-		'fontUnderlineClose'    : '__'            ,
-		'fontStrikeOpen'        : '--('           ,
-		'fontStrikeClose'       : ')--'           ,
-		'listItemOpen'          : ' * '           ,
-		'numlistItemOpen'       : ' \a. '         ,
-		'deflistItem1Open'      : ' '             ,
-		'deflistItem1Close'     : '::'            ,
-		'deflistItem2LinePrefix': ' :: '          ,
-		'bar1'                  : '----'          ,
-		'bar2'                  : '--------'      ,
-		'url'                   : '[\a]'          ,
-		'urlMark'               : '[\a \a]'       ,
-		'email'                 : '[\a]'          ,
-		'emailMark'             : '[\a \a]'       ,
-		'img'                   : '[\a]'          ,
-		'tableRowOpen'          : '||'            ,
-		'tableCellOpen'         : '~A~'           ,
-		'tableCellClose'        : '||'            ,
-		'tableTitleCellClose'   : '||'            ,
-		'_tableCellAlignRight'  : '<)>'           ,
-		'_tableCellAlignCenter' : '<:>'           ,
-		'comment'               : '/* \a */'      ,
-		'TOC'                   : '[[TableOfContents]]'
+		'title1'		: '= \a ='	  ,
+		'title2'		: '== \a =='	  ,
+		'title3'		: '=== \a ==='	  ,
+		'title4'		: '==== \a ===='  ,
+		'title5'		: '===== \a =====',
+		'blockVerbOpen'		: '{{{'		  ,
+		'blockVerbClose'	: '}}}'		  ,
+		'blockQuoteLine'	: '  '		  ,
+		'fontMonoOpen'		: '{{{'		  ,
+		'fontMonoClose'		: '}}}'		  ,
+		'fontBoldOpen'		: "'''"		  ,
+		'fontBoldClose'		: "'''"		  ,
+		'fontItalicOpen'	: "''"		  ,
+		'fontItalicClose'	: "''"		  ,
+		'fontUnderlineOpen'	: '__'		  ,
+		'fontUnderlineClose'	: '__'		  ,
+		'fontStrikeOpen'	: '--('		  ,
+		'fontStrikeClose'	: ')--'		  ,
+		'listItemOpen'		: ' * '		  ,
+		'numlistItemOpen'	: ' \a. '	  ,
+		'deflistItem1Open'	: ' '		  ,
+		'deflistItem1Close'	: '::'		  ,
+		'deflistItem2LinePrefix': ' :: '	  ,
+		'bar1'			: '----'	  ,
+		'bar2'			: '--------'	  ,
+		'url'			: '[\a]'	  ,
+		'urlMark'		: '[\a \a]'	  ,
+		'email'			: '[\a]'	  ,
+		'emailMark'		: '[\a \a]'	  ,
+		'img'			: '[\a]'	  ,
+		'tableRowOpen'		: '||'		  ,
+		'tableCellOpen'		: '~A~'		  ,
+		'tableCellClose'	: '||'		  ,
+		'tableTitleCellClose'	: '||'		  ,
+		'_tableCellAlignRight'	: '<)>'		  ,
+		'_tableCellAlignCenter' : '<:>'		  ,
+		'comment'		: '/* \a */'	  ,
+		'TOC'			: '[[TableOfContents]]'
 	},
 
 	# http://code.google.com/p/support/wiki/WikiSyntax
 	'gwiki': {
-		'title1'               : '= \a ='        ,
-		'title2'               : '== \a =='      ,
-		'title3'               : '=== \a ==='    ,
-		'title4'               : '==== \a ===='  ,
-		'title5'               : '===== \a =====',
-		'blockVerbOpen'        : '{{{'           ,
-		'blockVerbClose'       : '}}}'           ,
-		'blockQuoteLine'       : '  '            ,
-		'fontMonoOpen'         : '{{{'           ,
-		'fontMonoClose'        : '}}}'           ,
-		'fontBoldOpen'         : '*'             ,
-		'fontBoldClose'        : '*'             ,
-		'fontItalicOpen'       : '_'             , # underline == italic
-		'fontItalicClose'      : '_'             ,
-		'fontStrikeOpen'       : '~~'            ,
-		'fontStrikeClose'      : '~~'            ,
-		'listItemOpen'         : ' * '           ,
-		'numlistItemOpen'      : ' # '           ,
-		'url'                  : '\a'            ,
-		'urlMark'              : '[\a \a]'       ,
-		'email'                : 'mailto:\a'     ,
-		'emailMark'            : '[mailto:\a \a]',
-		'img'                  : '[\a]'          ,
-		'tableRowOpen'         : '|| '           ,
-		'tableRowClose'        : ' ||'           ,
-		'tableCellSep'         : ' || '          ,
+		'title1'	       : '= \a ='	 ,
+		'title2'	       : '== \a =='	 ,
+		'title3'	       : '=== \a ==='	 ,
+		'title4'	       : '==== \a ===='  ,
+		'title5'	       : '===== \a =====',
+		'blockVerbOpen'        : '{{{'		 ,
+		'blockVerbClose'       : '}}}'		 ,
+		'blockQuoteLine'       : '  '		 ,
+		'fontMonoOpen'	       : '{{{'		 ,
+		'fontMonoClose'        : '}}}'		 ,
+		'fontBoldOpen'	       : '*'		 ,
+		'fontBoldClose'        : '*'		 ,
+		'fontItalicOpen'       : '_'		 , # underline == italic
+		'fontItalicClose'      : '_'		 ,
+		'fontStrikeOpen'       : '~~'		 ,
+		'fontStrikeClose'      : '~~'		 ,
+		'listItemOpen'	       : ' * '		 ,
+		'numlistItemOpen'      : ' # '		 ,
+		'url'		       : '\a'		 ,
+		'urlMark'	       : '[\a \a]'	 ,
+		'email'		       : 'mailto:\a'	 ,
+		'emailMark'	       : '[mailto:\a \a]',
+		'img'		       : '[\a]'		 ,
+		'tableRowOpen'	       : '|| '		 ,
+		'tableRowClose'        : ' ||'		 ,
+		'tableCellSep'	       : ' || '		 ,
 	},
 
 	# http://powerman.name/doc/asciidoc
 	'adoc': {
-		'title1'               : '== \a'         ,
-		'title2'               : '=== \a'        ,
-		'title3'               : '==== \a'       ,
-		'title4'               : '===== \a'      ,
-		'title5'               : '===== \a'      ,
-		'blockVerbOpen'        : '----'          ,
-		'blockVerbClose'       : '----'          ,
-		'fontMonoOpen'         : '+'             ,
-		'fontMonoClose'        : '+'             ,
-		'fontBoldOpen'         : '*'             ,
-		'fontBoldClose'        : '*'             ,
-		'fontItalicOpen'       : '_'             ,
-		'fontItalicClose'      : '_'             ,
-		'listItemOpen'         : '- '            ,
-		'listItemLine'         : '\t'            ,
-		'numlistItemOpen'      : '. '            ,
-		'url'                  : '\a'            ,
-		'urlMark'              : '\a[\a]'        ,
-		'email'                : 'mailto:\a'     ,
-		'emailMark'            : 'mailto:\a[\a]' ,
-		'img'                  : 'image::\a[]'   ,
+		'title1'	       : '== \a'	 ,
+		'title2'	       : '=== \a'	 ,
+		'title3'	       : '==== \a'	 ,
+		'title4'	       : '===== \a'	 ,
+		'title5'	       : '===== \a'	 ,
+		'blockVerbOpen'        : '----'		 ,
+		'blockVerbClose'       : '----'		 ,
+		'fontMonoOpen'	       : '+'		 ,
+		'fontMonoClose'        : '+'		 ,
+		'fontBoldOpen'	       : '*'		 ,
+		'fontBoldClose'        : '*'		 ,
+		'fontItalicOpen'       : '_'		 ,
+		'fontItalicClose'      : '_'		 ,
+		'listItemOpen'	       : '- '		 ,
+		'listItemLine'	       : '\t'		 ,
+		'numlistItemOpen'      : '. '		 ,
+		'url'		       : '\a'		 ,
+		'urlMark'	       : '\a[\a]'	 ,
+		'email'		       : 'mailto:\a'	 ,
+		'emailMark'	       : 'mailto:\a[\a]' ,
+		'img'		       : 'image::\a[]'	 ,
 	},
 
 	# http://wiki.splitbrain.org/wiki:syntax
 	# Hint: <br> is \\ $
 	# Hint: You can add footnotes ((This is a footnote))
 	'doku': {
-		'title1'               : '===== \a =====',
-		'title2'               : '==== \a ===='  ,
-		'title3'               : '=== \a ==='    ,
-		'title4'               : '== \a =='      ,
-		'title5'               : '= \a ='        ,
+		'title1'	       : '===== \a =====',
+		'title2'	       : '==== \a ===='  ,
+		'title3'	       : '=== \a ==='	 ,
+		'title4'	       : '== \a =='	 ,
+		'title5'	       : '= \a ='	 ,
 		# DokuWiki uses '  ' identation to mark verb blocks (see indentverbblock)
-		'blockQuoteLine'       : '>'             ,
-		'fontMonoOpen'         : "''"            ,
-		'fontMonoClose'        : "''"            ,
-		'fontBoldOpen'         : "**"            ,
-		'fontBoldClose'        : "**"            ,
-		'fontItalicOpen'       : "//"            ,
-		'fontItalicClose'      : "//"            ,
-		'fontUnderlineOpen'    : "__"            ,
-		'fontUnderlineClose'   : "__"            ,
-		'fontStrikeOpen'       : '<del>'         ,
-		'fontStrikeClose'      : '</del>'        ,
-		'listItemOpen'         : '  * '          ,
-		'numlistItemOpen'      : '  - '          ,
-		'bar1'                 : '----'          ,
-		'url'                  : '[[\a]]'        ,
-		'urlMark'              : '[[\a|\a]]'     ,
-		'email'                : '[[\a]]'        ,
-		'emailMark'            : '[[\a|\a]]'     ,
-		'img'                  : '{{\a}}'        ,
-		'imgAlignLeft'         : '{{\a }}'       ,
-		'imgAlignRight'        : '{{ \a}}'       ,
-		'imgAlignCenter'       : '{{ \a }}'      ,
-		'tableTitleRowOpen'    : '^ '            ,
-		'tableTitleRowClose'   : ' ^'            ,
-		'tableTitleCellSep'    : ' ^ '           ,
-		'tableRowOpen'         : '| '            ,
-		'tableRowClose'        : ' |'            ,
-		'tableCellSep'         : ' | '           ,
+		'blockQuoteLine'       : '>'		 ,
+		'fontMonoOpen'	       : "''"		 ,
+		'fontMonoClose'        : "''"		 ,
+		'fontBoldOpen'	       : "**"		 ,
+		'fontBoldClose'        : "**"		 ,
+		'fontItalicOpen'       : "//"		 ,
+		'fontItalicClose'      : "//"		 ,
+		'fontUnderlineOpen'    : "__"		 ,
+		'fontUnderlineClose'   : "__"		 ,
+		'fontStrikeOpen'       : '<del>'	 ,
+		'fontStrikeClose'      : '</del>'	 ,
+		'listItemOpen'	       : '  * '		 ,
+		'numlistItemOpen'      : '  - '		 ,
+		'bar1'		       : '----'		 ,
+		'url'		       : '[[\a]]'	 ,
+		'urlMark'	       : '[[\a|\a]]'	 ,
+		'email'		       : '[[\a]]'	 ,
+		'emailMark'	       : '[[\a|\a]]'	 ,
+		'img'		       : '{{\a}}'	 ,
+		'imgAlignLeft'	       : '{{\a }}'	 ,
+		'imgAlignRight'        : '{{ \a}}'	 ,
+		'imgAlignCenter'       : '{{ \a }}'	 ,
+		'tableTitleRowOpen'    : '^ '		 ,
+		'tableTitleRowClose'   : ' ^'		 ,
+		'tableTitleCellSep'    : ' ^ '		 ,
+		'tableRowOpen'	       : '| '		 ,
+		'tableRowClose'        : ' |'		 ,
+		'tableCellSep'	       : ' | '		 ,
 		# DokuWiki has no attributes. The content must be aligned!
-		# '_tableCellAlignRight' : '<)>'           , # ??
-		# '_tableCellAlignCenter': '<:>'           , # ??
+		# '_tableCellAlignRight' : '<)>'	   , # ??
+		# '_tableCellAlignCenter': '<:>'	   , # ??
 		# DokuWiki colspan is the same as txt2tags' with multiple |||
-		# 'comment'             : '## \a'         , # ??
+		# 'comment'		: '## \a'	  , # ??
 		# TOC is automatic
 	},
-	
+
 	# http://www.pmwiki.org/wiki/PmWiki/TextFormattingRules
 	'pmw': {
-		'title1'               : '~A~! \a '      ,
-		'title2'               : '~A~!! \a '     ,
-		'title3'               : '~A~!!! \a '    ,
-		'title4'               : '~A~!!!! \a '   ,
-		'title5'               : '~A~!!!!! \a '  ,
-		'blockQuoteOpen'       : '->'            ,
-		'blockQuoteClose'      : '\n'            ,
+		'title1'	       : '~A~! \a '	 ,
+		'title2'	       : '~A~!! \a '	 ,
+		'title3'	       : '~A~!!! \a '	 ,
+		'title4'	       : '~A~!!!! \a '	 ,
+		'title5'	       : '~A~!!!!! \a '  ,
+		'blockQuoteOpen'       : '->'		 ,
+		'blockQuoteClose'      : '\n'		 ,
 		# In-text font
-		'fontLargeOpen'        : "[+"            ,
-		'fontLargeClose'       : "+]"            ,
-		'fontLargerOpen'       : "[++"           ,
-		'fontLargerClose'      : "++]"           ,
-		'fontSmallOpen'        : "[-"            ,
-		'fontSmallClose'       : "-]"            ,
-		'fontLargerOpen'       : "[--"           ,
-		'fontLargerClose'      : "--]"           ,
-		'fontMonoOpen'         : "@@"            ,
-		'fontMonoClose'        : "@@"            ,
-		'fontBoldOpen'         : "'''"           ,
-		'fontBoldClose'        : "'''"           ,
-		'fontItalicOpen'       : "''"            ,
-		'fontItalicClose'      : "''"            ,
-		'fontUnderlineOpen'    : "{+"            ,
-		'fontUnderlineClose'   : "+}"            ,
-		'fontStrikeOpen'       : '{-'            ,
-		'fontStrikeClose'      : '-}'            ,
+		'fontLargeOpen'        : "[+"		 ,
+		'fontLargeClose'       : "+]"		 ,
+		'fontLargerOpen'       : "[++"		 ,
+		'fontLargerClose'      : "++]"		 ,
+		'fontSmallOpen'        : "[-"		 ,
+		'fontSmallClose'       : "-]"		 ,
+		'fontLargerOpen'       : "[--"		 ,
+		'fontLargerClose'      : "--]"		 ,
+		'fontMonoOpen'	       : "@@"		 ,
+		'fontMonoClose'        : "@@"		 ,
+		'fontBoldOpen'	       : "'''"		 ,
+		'fontBoldClose'        : "'''"		 ,
+		'fontItalicOpen'       : "''"		 ,
+		'fontItalicClose'      : "''"		 ,
+		'fontUnderlineOpen'    : "{+"		 ,
+		'fontUnderlineClose'   : "+}"		 ,
+		'fontStrikeOpen'       : '{-'		 ,
+		'fontStrikeClose'      : '-}'		 ,
 		# Lists
-		'listItemLine'          : '*'            ,
-		'numlistItemLine'       : '#'            ,
-		'deflistItem1Open'      : ': '           ,
-		'deflistItem1Close'     : ':'            ,
-		'deflistItem2LineOpen'  : '::'           ,
-		'deflistItem2LineClose' : ':'            ,
+		'listItemLine'		: '*'		 ,
+		'numlistItemLine'	: '#'		 ,
+		'deflistItem1Open'	: ': '		 ,
+		'deflistItem1Close'	: ':'		 ,
+		'deflistItem2LineOpen'	: '::'		 ,
+		'deflistItem2LineClose' : ':'		 ,
 		# Verbatim block
-		'blockVerbOpen'        : '[@'            ,
-		'blockVerbClose'       : '@]'            ,
-		'bar1'                 : '----'          ,
+		'blockVerbOpen'        : '[@'		 ,
+		'blockVerbClose'       : '@]'		 ,
+		'bar1'		       : '----'		 ,
 		# URL, email and anchor
-		'url'                   : '\a'           ,
-		'urlMark'               : '[[\a -> \a]]' ,
-		'email'                 : '\a'           ,
-		'emailMark'             : '[[\a -> mailto:\a]]',
-		'anchor'                : '[[#\a]]\n'    ,
+		'url'			: '\a'		 ,
+		'urlMark'		: '[[\a -> \a]]' ,
+		'email'			: '\a'		 ,
+		'emailMark'		: '[[\a -> mailto:\a]]',
+		'anchor'		: '[[#\a]]\n'	 ,
 		# Image markup
-		'img'                   : '\a'           ,
-		#'imgAlignLeft'         : '{{\a }}'       ,
-		#'imgAlignRight'        : '{{ \a}}'       ,
-		#'imgAlignCenter'       : '{{ \a }}'      ,
+		'img'			: '\a'		 ,
+		#'imgAlignLeft'		: '{{\a }}'	  ,
+		#'imgAlignRight'	: '{{ \a}}'	  ,
+		#'imgAlignCenter'	: '{{ \a }}'	  ,
 		# Table attributes
-		'tableTitleRowOpen'    : '||! '          ,
-		'tableTitleRowClose'   : '||'            ,
-		'tableTitleCellSep'    : ' ||!'          ,
-		'tableRowOpen'         : '||'            ,
-		'tableRowClose'        : '||'            ,
-		'tableCellSep'         : ' ||'           ,
+		'tableTitleRowOpen'    : '||! '		 ,
+		'tableTitleRowClose'   : '||'		 ,
+		'tableTitleCellSep'    : ' ||!'		 ,
+		'tableRowOpen'	       : '||'		 ,
+		'tableRowClose'        : '||'		 ,
+		'tableCellSep'	       : ' ||'		 ,
 	},
-	
+
 	# http://en.wikipedia.org/wiki/Help:Editing
 	'wiki': {
-		'title1'                : '== \a =='        ,
-		'title2'                : '=== \a ==='      ,
-		'title3'                : '==== \a ===='    ,
-		'title4'                : '===== \a ====='  ,
-		'title5'                : '====== \a ======',
-		'blockVerbOpen'         : '<pre>'           ,
-		'blockVerbClose'        : '</pre>'          ,
-		'blockQuoteOpen'        : '<blockquote>'    ,
-		'blockQuoteClose'       : '</blockquote>'   ,
-		'fontMonoOpen'          : '<tt>'            ,
-		'fontMonoClose'         : '</tt>'           ,
-		'fontBoldOpen'          : "'''"             ,
-		'fontBoldClose'         : "'''"             ,
-		'fontItalicOpen'        : "''"              ,
-		'fontItalicClose'       : "''"              ,
-		'fontUnderlineOpen'     : '<u>'             ,
-		'fontUnderlineClose'    : '</u>'            ,
-		'fontStrikeOpen'        : '<s>'             ,
-		'fontStrikeClose'       : '</s>'            ,
+		'title1'		: '== \a =='	    ,
+		'title2'		: '=== \a ==='	    ,
+		'title3'		: '==== \a ===='    ,
+		'title4'		: '===== \a ====='  ,
+		'title5'		: '====== \a ======',
+		'blockVerbOpen'		: '<pre>'	    ,
+		'blockVerbClose'	: '</pre>'	    ,
+		'blockQuoteOpen'	: '<blockquote>'    ,
+		'blockQuoteClose'	: '</blockquote>'   ,
+		'fontMonoOpen'		: '<tt>'	    ,
+		'fontMonoClose'		: '</tt>'	    ,
+		'fontBoldOpen'		: "'''"		    ,
+		'fontBoldClose'		: "'''"		    ,
+		'fontItalicOpen'	: "''"		    ,
+		'fontItalicClose'	: "''"		    ,
+		'fontUnderlineOpen'	: '<u>'		    ,
+		'fontUnderlineClose'	: '</u>'	    ,
+		'fontStrikeOpen'	: '<s>'		    ,
+		'fontStrikeClose'	: '</s>'	    ,
 		#XXX Mixed lists not working: *#* list inside numlist inside list
-		'listItemLine'          : '*'               ,
-		'numlistItemLine'       : '#'               ,
-		'deflistItem1Open'      : '; '              ,
-		'deflistItem2LinePrefix': ': '            ,
-		'bar1'                  : '----'            ,
-		'url'                   : '[\a]'            ,
-		'urlMark'               : '[\a \a]'         ,
-		'email'                 : 'mailto:\a'       ,
-		'emailMark'             : '[mailto:\a \a]'  ,
+		'listItemLine'		: '*'		    ,
+		'numlistItemLine'	: '#'		    ,
+		'deflistItem1Open'	: '; '		    ,
+		'deflistItem2LinePrefix': ': '		  ,
+		'bar1'			: '----'	    ,
+		'url'			: '[\a]'	    ,
+		'urlMark'		: '[\a \a]'	    ,
+		'email'			: 'mailto:\a'	    ,
+		'emailMark'		: '[mailto:\a \a]'  ,
 		# [[Image:foo.png|right|Optional alt/caption text]] (right, left, center, none)
-		'img'                   : '[[Image:\a~A~]]' ,
-		'_imgAlignLeft'         : '|left'           ,
-		'_imgAlignCenter'       : '|center'         ,
-		'_imgAlignRight'        : '|right'          ,
+		'img'			: '[[Image:\a~A~]]' ,
+		'_imgAlignLeft'		: '|left'	    ,
+		'_imgAlignCenter'	: '|center'	    ,
+		'_imgAlignRight'	: '|right'	    ,
 		# {| border="1" cellspacing="0" cellpadding="4" align="center"
-		'tableOpen'             : '{|~A~~B~ cellpadding="4"',
-		'tableClose'            : '|}'              ,
-		'tableRowOpen'          : '|-\n| '          ,
-		'tableTitleRowOpen'     : '|-\n! '          ,
-		'tableCellSep'          : ' || '            ,
-		'tableTitleCellSep'     : ' !! '            ,
-		'_tableBorder'          : ' border="1"'     ,
-		'_tableAlignCenter'     : ' align="center"' ,
-		'comment'               : '<!-- \a -->'     ,
-		'TOC'                   : '__TOC__'         ,
+		'tableOpen'		: '{|~A~~B~ cellpadding="4"',
+		'tableClose'		: '|}'		    ,
+		'tableRowOpen'		: '|-\n| '	    ,
+		'tableTitleRowOpen'	: '|-\n! '	    ,
+		'tableCellSep'		: ' || '	    ,
+		'tableTitleCellSep'	: ' !! '	    ,
+		'_tableBorder'		: ' border="1"'     ,
+		'_tableAlignCenter'	: ' align="center"' ,
+		'comment'		: '<!-- \a -->'     ,
+		'TOC'			: '__TOC__'	    ,
 	},
-	
+
 	# http://www.inference.phy.cam.ac.uk/mackay/mgp/SYNTAX
 	# http://en.wikipedia.org/wiki/MagicPoint
 	'mgp': {
-		'paragraphOpen'         : '%font "normal", size 5'     ,
-		'title1'                : '%page\n\n\a\n'              ,
-		'title2'                : '%page\n\n\a\n'              ,
-		'title3'                : '%page\n\n\a\n'              ,
-		'title4'                : '%page\n\n\a\n'              ,
-		'title5'                : '%page\n\n\a\n'              ,
-		'blockVerbOpen'         : '%font "mono"'               ,
-		'blockVerbClose'        : '%font "normal"'             ,
-		'blockQuoteOpen'        : '%prefix "       "'          ,
-		'blockQuoteClose'       : '%prefix "  "'               ,
-		'fontMonoOpen'          : '\n%cont, font "mono"\n'     ,
-		'fontMonoClose'         : '\n%cont, font "normal"\n'   ,
-		'fontBoldOpen'          : '\n%cont, font "normal-b"\n' ,
-		'fontBoldClose'         : '\n%cont, font "normal"\n'   ,
-		'fontItalicOpen'        : '\n%cont, font "normal-i"\n' ,
-		'fontItalicClose'       : '\n%cont, font "normal"\n'   ,
-		'fontUnderlineOpen'     : '\n%cont, fore "cyan"\n'     ,
-		'fontUnderlineClose'    : '\n%cont, fore "white"\n'    ,
-		'listItemLine'          : '\t'                         ,
-		'numlistItemLine'       : '\t'                         ,
-		'numlistItemOpen'       : '\a. '                       ,
-		'deflistItem1Open'      : '\t\n%cont, font "normal-b"\n',
-		'deflistItem1Close'     : '\n%cont, font "normal"\n'   ,
-		'bar1'                  : '%bar "white" 5'             ,
-		'bar2'                  : '%pause'                     ,
-		'url'                   : '\n%cont, fore "cyan"\n\a'   +\
-		                          '\n%cont, fore "white"\n'    ,
-		'urlMark'               : '\a \n%cont, fore "cyan"\n\a'+\
-		                          '\n%cont, fore "white"\n'    ,
-		'email'                 : '\n%cont, fore "cyan"\n\a'   +\
-		                          '\n%cont, fore "white"\n'    ,
-		'emailMark'             : '\a \n%cont, fore "cyan"\n\a'+\
-		                          '\n%cont, fore "white"\n'    ,
-		'img'                   : '~A~\n%newimage "\a"\n%left\n',
-		'_imgAlignLeft'         : '\n%left'                    ,
-		'_imgAlignRight'        : '\n%right'                   ,
-		'_imgAlignCenter'       : '\n%center'                  ,
-		'comment'               : '%% \a'                      ,
-		'pageBreak'             : '%page\n\n\n'                ,
-		'EOD'                   : '%%EOD'
+		'paragraphOpen'		: '%font "normal", size 5'     ,
+		'title1'		: '%page\n\n\a\n'	       ,
+		'title2'		: '%page\n\n\a\n'	       ,
+		'title3'		: '%page\n\n\a\n'	       ,
+		'title4'		: '%page\n\n\a\n'	       ,
+		'title5'		: '%page\n\n\a\n'	       ,
+		'blockVerbOpen'		: '%font "mono"'	       ,
+		'blockVerbClose'	: '%font "normal"'	       ,
+		'blockQuoteOpen'	: '%prefix "	   "'	       ,
+		'blockQuoteClose'	: '%prefix "  "'	       ,
+		'fontMonoOpen'		: '\n%cont, font "mono"\n'     ,
+		'fontMonoClose'		: '\n%cont, font "normal"\n'   ,
+		'fontBoldOpen'		: '\n%cont, font "normal-b"\n' ,
+		'fontBoldClose'		: '\n%cont, font "normal"\n'   ,
+		'fontItalicOpen'	: '\n%cont, font "normal-i"\n' ,
+		'fontItalicClose'	: '\n%cont, font "normal"\n'   ,
+		'fontUnderlineOpen'	: '\n%cont, fore "cyan"\n'     ,
+		'fontUnderlineClose'	: '\n%cont, fore "white"\n'    ,
+		'listItemLine'		: '\t'			       ,
+		'numlistItemLine'	: '\t'			       ,
+		'numlistItemOpen'	: '\a. '		       ,
+		'deflistItem1Open'	: '\t\n%cont, font "normal-b"\n',
+		'deflistItem1Close'	: '\n%cont, font "normal"\n'   ,
+		'bar1'			: '%bar "white" 5'	       ,
+		'bar2'			: '%pause'		       ,
+		'url'			: '\n%cont, fore "cyan"\n\a'   +\
+					  '\n%cont, fore "white"\n'    ,
+		'urlMark'		: '\a \n%cont, fore "cyan"\n\a'+\
+					  '\n%cont, fore "white"\n'    ,
+		'email'			: '\n%cont, fore "cyan"\n\a'   +\
+					  '\n%cont, fore "white"\n'    ,
+		'emailMark'		: '\a \n%cont, fore "cyan"\n\a'+\
+					  '\n%cont, fore "white"\n'    ,
+		'img'			: '~A~\n%newimage "\a"\n%left\n',
+		'_imgAlignLeft'		: '\n%left'		       ,
+		'_imgAlignRight'	: '\n%right'		       ,
+		'_imgAlignCenter'	: '\n%center'		       ,
+		'comment'		: '%% \a'		       ,
+		'pageBreak'		: '%page\n\n\n'		       ,
+		'EOD'			: '%%EOD'
 	},
-	
+
 	# man groff_man ; man 7 groff
 	'man': {
-		'paragraphOpen'         : '.P'     ,
-		'title1'                : '.SH \a' ,
-		'title2'                : '.SS \a' ,
-		'title3'                : '.SS \a' ,
-		'title4'                : '.SS \a' ,
-		'title5'                : '.SS \a' ,
-		'blockVerbOpen'         : '.nf'    ,
-		'blockVerbClose'        : '.fi\n'  ,
-		'blockQuoteOpen'        : '.RS'    ,
-		'blockQuoteClose'       : '.RE'    ,
-		'fontBoldOpen'          : '\\fB'   ,
-		'fontBoldClose'         : '\\fR'   ,
-		'fontItalicOpen'        : '\\fI'   ,
-		'fontItalicClose'       : '\\fR'   ,
-		'listOpen'              : '.RS'    ,
-		'listItemOpen'          : '.IP \(bu 3\n',
-		'listClose'             : '.RE'    ,
-		'numlistOpen'           : '.RS'    ,
-		'numlistItemOpen'       : '.IP \a. 3\n',
-		'numlistClose'          : '.RE'    ,
-		'deflistItem1Open'      : '.TP\n'  ,
-		'bar1'                  : '\n\n'   ,
-		'url'                   : '\a'     ,
-		'urlMark'               : '\a (\a)',
-		'email'                 : '\a'     ,
-		'emailMark'             : '\a (\a)',
-		'img'                   : '\a'     ,
-		'tableOpen'             : '.TS\n~A~~B~tab(^); ~C~.',
-		'tableClose'            : '.TE'     ,
-		'tableRowOpen'          : ' '       ,
-		'tableCellSep'          : '^'       ,
-		'_tableAlignCenter'     : 'center, ',
-		'_tableBorder'          : 'allbox, ',
-		'_tableColAlignLeft'    : 'l'       ,
-		'_tableColAlignRight'   : 'r'       ,
-		'_tableColAlignCenter'  : 'c'       ,
-		'comment'               : '.\\" \a'
+		'paragraphOpen'		: '.P'	   ,
+		'title1'		: '.SH \a' ,
+		'title2'		: '.SS \a' ,
+		'title3'		: '.SS \a' ,
+		'title4'		: '.SS \a' ,
+		'title5'		: '.SS \a' ,
+		'blockVerbOpen'		: '.nf'    ,
+		'blockVerbClose'	: '.fi\n'  ,
+		'blockQuoteOpen'	: '.RS'    ,
+		'blockQuoteClose'	: '.RE'    ,
+		'fontBoldOpen'		: '\\fB'   ,
+		'fontBoldClose'		: '\\fR'   ,
+		'fontItalicOpen'	: '\\fI'   ,
+		'fontItalicClose'	: '\\fR'   ,
+		'listOpen'		: '.RS'    ,
+		'listItemOpen'		: '.IP \(bu 3\n',
+		'listClose'		: '.RE'    ,
+		'numlistOpen'		: '.RS'    ,
+		'numlistItemOpen'	: '.IP \a. 3\n',
+		'numlistClose'		: '.RE'    ,
+		'deflistItem1Open'	: '.TP\n'  ,
+		'bar1'			: '\n\n'   ,
+		'url'			: '\a'	   ,
+		'urlMark'		: '\a (\a)',
+		'email'			: '\a'	   ,
+		'emailMark'		: '\a (\a)',
+		'img'			: '\a'	   ,
+		'tableOpen'		: '.TS\n~A~~B~tab(^); ~C~.',
+		'tableClose'		: '.TE'     ,
+		'tableRowOpen'		: ' '	    ,
+		'tableCellSep'		: '^'	    ,
+		'_tableAlignCenter'	: 'center, ',
+		'_tableBorder'		: 'allbox, ',
+		'_tableColAlignLeft'	: 'l'	    ,
+		'_tableColAlignRight'	: 'r'	    ,
+		'_tableColAlignCenter'	: 'c'	    ,
+		'comment'		: '.\\" \a'
 	},
-	
+
 	'pm6': {
-		'paragraphOpen'         : '<@Normal:>'    ,
-		'title1'                : '<@Title1:>\a',
-		'title2'                : '<@Title2:>\a',
-		'title3'                : '<@Title3:>\a',
-		'title4'                : '<@Title4:>\a',
-		'title5'                : '<@Title5:>\a',
-		'blockVerbOpen'         : '<@PreFormat:>' ,
-		'blockQuoteLine'        : '<@Quote:>'     ,
-		'fontMonoOpen'          : '<FONT "Lucida Console"><SIZE 9>' ,
-		'fontMonoClose'         : '<SIZE$><FONT$>',
-		'fontBoldOpen'          : '<B>'           ,
-		'fontBoldClose'         : '<P>'           ,
-		'fontItalicOpen'        : '<I>'           ,
-		'fontItalicClose'       : '<P>'           ,
-		'fontUnderlineOpen'     : '<U>'           ,
-		'fontUnderlineClose'    : '<P>'           ,
-		'listOpen'              : '<@Bullet:>'    ,
-		'listItemOpen'          : '\x95\t'        ,  # \x95 == ~U
-		'numlistOpen'           : '<@Bullet:>'    ,
-		'numlistItemOpen'       : '\x95\t'        ,
-		'bar1'                  : '\a'            ,
-		'url'                   : '<U>\a<P>'      ,  # underline
-		'urlMark'               : '\a <U>\a<P>'   ,
-		'email'                 : '\a'            ,
-		'emailMark'             : '\a \a'         ,
-		'img'                   : '\a'
+		'paragraphOpen'		: '<@Normal:>'	  ,
+		'title1'		: '<@Title1:>\a',
+		'title2'		: '<@Title2:>\a',
+		'title3'		: '<@Title3:>\a',
+		'title4'		: '<@Title4:>\a',
+		'title5'		: '<@Title5:>\a',
+		'blockVerbOpen'		: '<@PreFormat:>' ,
+		'blockQuoteLine'	: '<@Quote:>'	  ,
+		'fontMonoOpen'		: '<FONT "Lucida Console"><SIZE 9>' ,
+		'fontMonoClose'		: '<SIZE$><FONT$>',
+		'fontBoldOpen'		: '<B>'		  ,
+		'fontBoldClose'		: '<P>'		  ,
+		'fontItalicOpen'	: '<I>'		  ,
+		'fontItalicClose'	: '<P>'		  ,
+		'fontUnderlineOpen'	: '<U>'		  ,
+		'fontUnderlineClose'	: '<P>'		  ,
+		'listOpen'		: '<@Bullet:>'	  ,
+		'listItemOpen'		: '\x95\t'	  ,  # \x95 == ~U
+		'numlistOpen'		: '<@Bullet:>'	  ,
+		'numlistItemOpen'	: '\x95\t'	  ,
+		'bar1'			: '\a'		  ,
+		'url'			: '<U>\a<P>'	  ,  # underline
+		'urlMark'		: '\a <U>\a<P>'   ,
+		'email'			: '\a'		  ,
+		'emailMark'		: '\a \a'	  ,
+		'img'			: '\a'
 	},
 	# http://www.wikicreole.org/wiki/AllMarkup
 	'creole': {
-		'title1'               : '= \a ='        ,
-		'title2'               : '== \a =='      ,
-		'title3'               : '=== \a ==='    ,
-		'title4'               : '==== \a ===='  ,
-		'title5'               : '===== \a =====',
-		'blockVerbOpen'        : '{{{'           ,
-		'blockVerbClose'       : '}}}'           ,
-		'blockQuoteLine'       : '  '            ,
-	#	'fontMonoOpen'         : '##'            ,  # planned for 2.0,
-	#	'fontMonoClose'        : '##'            ,  # meanwhile we disable it
-		'fontBoldOpen'         : '**'            ,
-		'fontBoldClose'        : '**'            ,
-		'fontItalicOpen'       : '//'            ,
-		'fontItalicClose'      : '//'            ,
-		'fontUnderlineOpen'    : '//'            ,  # no underline in 1.0, planned for 2.0,
-		'fontUnderlineClose'   : '//'            ,  # meanwhile we can use italic (emphasized)
-	#	'fontStrikeOpen'       : '--'            ,  # planned for 2.0,
-	#	'fontStrikeClose'      : '--'            ,  # meanwhile we disable it
-		'listItemLine'          : '*'            ,
-		'numlistItemLine'       : '#'            ,
-		'deflistItem2LinePrefix': ':'            ,
-		'bar1'                  : '----'         ,
-		'url'                  : '[[\a]]'        ,
-		'urlMark'              : '[[\a|\a]]'     ,
-		'img'                  : '{{\a}}'        ,
-		'tableTitleRowOpen'    : '|= '           ,
-		'tableTitleRowClose'   : '|'             ,
-		'tableTitleCellSep'    : ' |= '          ,
-		'tableRowOpen'         : '| '            ,
-		'tableRowClose'        : ' |'            ,
-		'tableCellSep'         : ' | '           ,
+		'title1'	       : '= \a ='	 ,
+		'title2'	       : '== \a =='	 ,
+		'title3'	       : '=== \a ==='	 ,
+		'title4'	       : '==== \a ===='  ,
+		'title5'	       : '===== \a =====',
+		'blockVerbOpen'        : '{{{'		 ,
+		'blockVerbClose'       : '}}}'		 ,
+		'blockQuoteLine'       : '  '		 ,
+	#	'fontMonoOpen'	       : '##'		 ,  # planned for 2.0,
+	#	'fontMonoClose'        : '##'		 ,  # meanwhile we disable it
+		'fontBoldOpen'	       : '**'		 ,
+		'fontBoldClose'        : '**'		 ,
+		'fontItalicOpen'       : '//'		 ,
+		'fontItalicClose'      : '//'		 ,
+		'fontUnderlineOpen'    : '//'		 ,  # no underline in 1.0, planned for 2.0,
+		'fontUnderlineClose'   : '//'		 ,  # meanwhile we can use italic (emphasized)
+	#	'fontStrikeOpen'       : '--'		 ,  # planned for 2.0,
+	#	'fontStrikeClose'      : '--'		 ,  # meanwhile we disable it
+		'listItemLine'		: '*'		 ,
+		'numlistItemLine'	: '#'		 ,
+		'deflistItem2LinePrefix': ':'		 ,
+		'bar1'			: '----'	 ,
+		'url'		       : '[[\a]]'	 ,
+		'urlMark'	       : '[[\a|\a]]'	 ,
+		'img'		       : '{{\a}}'	 ,
+		'tableTitleRowOpen'    : '|= '		 ,
+		'tableTitleRowClose'   : '|'		 ,
+		'tableTitleCellSep'    : ' |= '		 ,
+		'tableRowOpen'	       : '| '		 ,
+		'tableRowClose'        : ' |'		 ,
+		'tableCellSep'	       : ' | '		 ,
 		# TODO: placeholder (mark for unknown syntax)
 		# if possible: http://www.wikicreole.org/wiki/Placeholder
 	}
 	}
-	
+
 	# Exceptions for --css-sugar
 	if config['css-sugar'] and config['target'] in ('html','xhtml'):
 		# Change just HTML because XHTML inherits it
@@ -1411,7 +1411,7 @@ def getTags(config):
 		htmltags['tocClose'] = '</DIV>'
 		htmltags['bodyOpen'] = '<DIV CLASS="body" ID="body">'
 		htmltags['bodyClose']= '</DIV>'
-	
+
 	# Make the HTML -> XHTML inheritance
 	xhtml = alltags['html'].copy()
 	for key in xhtml.keys(): xhtml[key] = xhtml[key].lower()
@@ -1423,7 +1423,7 @@ def getTags(config):
 	# Compose the target tags dictionary
 	tags = {}
 	target_tags = alltags[config['target']].copy()
-	
+
 	for key in keys: tags[key] = '' # create empty keys
 	for key in target_tags.keys():
 		tags[key] = maskEscapeChar(target_tags[key]) # populate
@@ -1444,70 +1444,70 @@ def getTags(config):
 
 def getRules(config):
 	"Returns all the target-specific syntax rules"
-	
+
 	ret = {}
 	allrules = [
-	
+
 		# target rules (ON/OFF)
-		'linkable',             # target supports external links
-		'tableable',            # target supports tables
-		'imglinkable',          # target supports images as links
-		'imgalignable',         # target supports image alignment
-		'imgasdefterm',         # target supports image as definition term
-		'autonumberlist',       # target supports numbered lists natively
-		'autonumbertitle',      # target supports numbered titles natively
-		'stylable',             # target supports external style files
-		'parainsidelist',       # lists items supports paragraph
-		'compactlist',          # separate enclosing tags for compact lists
-		'spacedlistitem',       # lists support blank lines between items
-		'listnotnested',        # lists cannot be nested
-		'quotenotnested',       # quotes cannot be nested
-		'verbblocknotescaped',  # don't escape specials in verb block
+		'linkable',		# target supports external links
+		'tableable',		# target supports tables
+		'imglinkable',		# target supports images as links
+		'imgalignable',		# target supports image alignment
+		'imgasdefterm',		# target supports image as definition term
+		'autonumberlist',	# target supports numbered lists natively
+		'autonumbertitle',	# target supports numbered titles natively
+		'stylable',		# target supports external style files
+		'parainsidelist',	# lists items supports paragraph
+		'compactlist',		# separate enclosing tags for compact lists
+		'spacedlistitem',	# lists support blank lines between items
+		'listnotnested',	# lists cannot be nested
+		'quotenotnested',	# quotes cannot be nested
+		'verbblocknotescaped',	# don't escape specials in verb block
 		'verbblockfinalescape', # do final escapes in verb block
-		'escapeurl',            # escape special in link URL
-		'labelbeforelink',      # label comes before the link on the tag
-		'onelinepara',          # dump paragraph as a single long line
-		'tabletitlerowinbold',  # manually bold any cell on table titles
-		'tablecellstrip',       # strip extra spaces from each table cell
-		'tablecellspannable',   # the table cells can have span attribute
-		'tablecellmulticol',    # separate open+close tags for multicol cells
-		'barinsidequote',       # bars are allowed inside quote blocks
-		'finalescapetitle',     # perform final escapes on title lines
+		'escapeurl',		# escape special in link URL
+		'labelbeforelink',	# label comes before the link on the tag
+		'onelinepara',		# dump paragraph as a single long line
+		'tabletitlerowinbold',	# manually bold any cell on table titles
+		'tablecellstrip',	# strip extra spaces from each table cell
+		'tablecellspannable',	# the table cells can have span attribute
+		'tablecellmulticol',	# separate open+close tags for multicol cells
+		'barinsidequote',	# bars are allowed inside quote blocks
+		'finalescapetitle',	# perform final escapes on title lines
 		'autotocnewpagebefore', # break page before automatic TOC
-		'autotocnewpageafter',  # break page after automatic TOC
-		'autotocwithbars',      # automatic TOC surrounded by bars
-		'mapbar2pagebreak',     # map the strong bar to a page break
-		'titleblocks',          # titles must be on open/close section blocks
-	
+		'autotocnewpageafter',	# break page after automatic TOC
+		'autotocwithbars',	# automatic TOC surrounded by bars
+		'mapbar2pagebreak',	# map the strong bar to a page break
+		'titleblocks',		# titles must be on open/close section blocks
+
 		# Target code beautify (ON/OFF)
-		'indentverbblock',      # add leading spaces to verb block lines
-		'breaktablecell',       # break lines after any table cell
-		'breaktablelineopen',   # break line after opening table line
-		'notbreaklistopen',     # don't break line after opening a new list
-		'keepquoteindent',      # don't remove the leading TABs on quotes
-		'keeplistindent',       # don't remove the leading spaces on lists
-		'blankendautotoc',      # append a blank line at the auto TOC end
-		'tagnotindentable',     # tags must be placed at the line beginning
-		'spacedlistitemopen',   # append a space after the list item open tag
+		'indentverbblock',	# add leading spaces to verb block lines
+		'breaktablecell',	# break lines after any table cell
+		'breaktablelineopen',	# break line after opening table line
+		'notbreaklistopen',	# don't break line after opening a new list
+		'keepquoteindent',	# don't remove the leading TABs on quotes
+		'keeplistindent',	# don't remove the leading spaces on lists
+		'blankendautotoc',	# append a blank line at the auto TOC end
+		'tagnotindentable',	# tags must be placed at the line beginning
+		'spacedlistitemopen',	# append a space after the list item open tag
 		'spacednumlistitemopen',# append a space after the numlist item open tag
-		'deflisttextstrip',     # strip the contents of the deflist text
-		'blanksaroundpara',     # put a blank line before and after paragraphs
-		'blanksaroundverb',     # put a blank line before and after verb blocks
-		'blanksaroundquote',    # put a blank line before and after quotes
-		'blanksaroundlist',     # put a blank line before and after lists
-		'blanksaroundnumlist',  # put a blank line before and after numlists
-		'blanksarounddeflist',  # put a blank line before and after deflists
-		'blanksaroundtable',    # put a blank line before and after tables
-		'blanksaroundbar',      # put a blank line before and after bars
-		'blanksaroundtitle',    # put a blank line before and after titles
+		'deflisttextstrip',	# strip the contents of the deflist text
+		'blanksaroundpara',	# put a blank line before and after paragraphs
+		'blanksaroundverb',	# put a blank line before and after verb blocks
+		'blanksaroundquote',	# put a blank line before and after quotes
+		'blanksaroundlist',	# put a blank line before and after lists
+		'blanksaroundnumlist',	# put a blank line before and after numlists
+		'blanksarounddeflist',	# put a blank line before and after deflists
+		'blanksaroundtable',	# put a blank line before and after tables
+		'blanksaroundbar',	# put a blank line before and after bars
+		'blanksaroundtitle',	# put a blank line before and after titles
 		'blanksaroundnumtitle', # put a blank line before and after numtitles
-	
+
 		# Value settings
-		'listmaxdepth',         # maximum depth for lists
-		'quotemaxdepth',        # maximum depth for quotes
-		'tablecellaligntype',   # type of table cell align: cell, column
+		'listmaxdepth',		# maximum depth for lists
+		'quotemaxdepth',	# maximum depth for quotes
+		'tablecellaligntype',	# type of table cell align: cell, column
 	]
-	
+
 	rules_bank = {
 		'txt': {
 			'indentverbblock':1,
@@ -1737,7 +1737,7 @@ def getRules(config):
 			'blanksaroundnumtitle':1,
 		},
 		'doku': {
-			'indentverbblock':1, # DokuWiki uses '  ' to mark verb blocks
+			'indentverbblock':1, # DokuWiki uses '	' to mark verb blocks
 			'spacedlistitem':1,
 			'linkable':1,
 			'keeplistindent':1,
@@ -1873,12 +1873,12 @@ def getRules(config):
 			'blanksaroundtitle':1,
 		},
 	}
-	
+
 	# Exceptions for --css-sugar
 	if config['css-sugar'] and config['target'] in ('html','xhtml'):
 		rules_bank['html']['indentverbblock'] = 0
 		rules_bank['html']['autotocwithbars'] = 0
-	
+
 	# Get the target specific rules
 	if config['target'] == 'xhtml':
 		myrules = rules_bank['html'].copy()   # inheritance
@@ -1890,11 +1890,11 @@ def getRules(config):
 			myrules['blanksaroundnumtitle'] = 0
 	else:
 		myrules = rules_bank[config['target']].copy()
-	
+
 	# Populate return dictionary
-	for key in allrules: ret[key] = 0        # reset all
-	ret.update(myrules)                      # get rules
-	
+	for key in allrules: ret[key] = 0	 # reset all
+	ret.update(myrules)			 # get rules
+
 	return ret
 
 
@@ -1903,7 +1903,7 @@ def getRules(config):
 
 def getRegexes():
 	"Returns all the regexes used to find the t2t marks"
-	
+
 	bank = {
 	'blockVerbOpen':
 		re.compile(r'^```\s*$'),
@@ -1962,97 +1962,97 @@ def getRegexes():
 		re.compile(r'^\s*$'),
 	'comment':
 		re.compile(r'^%'),
-	
+
 	# Auxiliary tag regexes
-	'_imgAlign'        : re.compile(r'~A~', re.I),
-	'_tableAlign'      : re.compile(r'~A~', re.I),
-	'_anchor'          : re.compile(r'~A~', re.I),
-	'_tableBorder'     : re.compile(r'~B~', re.I),
+	'_imgAlign'	   : re.compile(r'~A~', re.I),
+	'_tableAlign'	   : re.compile(r'~A~', re.I),
+	'_anchor'	   : re.compile(r'~A~', re.I),
+	'_tableBorder'	   : re.compile(r'~B~', re.I),
 	'_tableColAlign'   : re.compile(r'~C~', re.I),
 	'_tableCellColSpan': re.compile(r'~S~', re.I),
 	'_tableCellAlign'  : re.compile(r'~A~', re.I),
 	}
-	
+
 	# Special char to place data on TAGs contents  (\a == bell)
 	bank['x'] = re.compile('\a')
-	
+
 	# %%macroname [ (formatting) ]
 	bank['macros'] = re.compile(r'%%%%(?P<name>%s)\b(\((?P<fmt>.*?)\))?' % (
 		'|'.join(MACROS.keys())), re.I)
-	
+
 	# %%TOC special macro for TOC positioning
 	bank['toc'] = re.compile(r'^ *%%toc\s*$', re.I)
-	
+
 	# Almost complicated title regexes ;)
 	titskel = r'^ *(?P<id>%s)(?P<txt>%s)\1(\[(?P<label>[\w-]*)\])?\s*$'
-	bank[   'title'] = re.compile(titskel%('[=]{1,5}','[^=](|.*[^=])'))
+	bank[	'title'] = re.compile(titskel%('[=]{1,5}','[^=](|.*[^=])'))
 	bank['numtitle'] = re.compile(titskel%('[+]{1,5}','[^+](|.*[^+])'))
-	
+
 	### Complicated regexes begin here ;)
 	#
 	# Textual descriptions on --help's style: [...] is optional, | is OR
-	
-	
+
+
 	### First, some auxiliary variables
 	#
-	
+
 	# [image.EXT]
 	patt_img = r'\[([\w_,.+%$#@!?+~/-]+\.(png|jpe?g|gif|eps|bmp))\]'
-	
+
 	# Link things
 	# http://www.gbiv.com/protocols/uri/rfc/rfc3986.html
 	# pchar: A-Za-z._~- / %FF / !$&'()*+,;= / :@
 	# Recomended order: scheme://user:pass@domain/path?query=foo#anchor
-	# Also works      : scheme://user:pass@domain/path#anchor?query=foo
+	# Also works	  : scheme://user:pass@domain/path#anchor?query=foo
 	# TODO form: !'():
 	urlskel = {
 		'proto' : r'(https?|ftp|news|telnet|gopher|wais)://',
-		'guess' : r'(www[23]?|ftp)\.',         # w/out proto, try to guess
-		'login' : r'A-Za-z0-9_.-',             # for ftp://login@domain.com
-		'pass'  : r'[^ @]*',                   # for ftp://login:pass@dom.com
+		'guess' : r'(www[23]?|ftp)\.',	       # w/out proto, try to guess
+		'login' : r'A-Za-z0-9_.-',	       # for ftp://login@domain.com
+		'pass'	: r'[^ @]*',		       # for ftp://login:pass@dom.com
 		'chars' : r'A-Za-z0-9%._/~:,=$@&+-',   # %20(space), :80(port), D&D
-		'anchor': r'A-Za-z0-9%._-',            # %nn(encoded)
-		'form'  : r'A-Za-z0-9/%&=+:;.,$@*_-',  # .,@*_-(as is)
+		'anchor': r'A-Za-z0-9%._-',	       # %nn(encoded)
+		'form'	: r'A-Za-z0-9/%&=+:;.,$@*_-',  # .,@*_-(as is)
 		'punct' : r'.,;:!?'
 	}
-	
+
 	# username [ :password ] @
 	patt_url_login = r'([%s]+(:%s)?@)?'%(urlskel['login'],urlskel['pass'])
-	
+
 	# [ http:// ] [ username:password@ ] domain.com [ / ]
 	#     [ #anchor | ?form=data ]
 	retxt_url = r'\b(%s%s|%s)[%s]+\b/*(\?[%s]+)?(#[%s]*)?'%(
 		urlskel['proto'],patt_url_login, urlskel['guess'],
 		urlskel['chars'],urlskel['form'],urlskel['anchor'])
-	
+
 	# filename | [ filename ] #anchor
 	retxt_url_local = r'[%s]+|[%s]*(#[%s]*)'%(
 		urlskel['chars'],urlskel['chars'],urlskel['anchor'])
-	
+
 	# user@domain [ ?form=data ]
 	patt_email = r'\b[%s]+@([A-Za-z0-9_-]+\.)+[A-Za-z]{2,4}\b(\?[%s]+)?'%(
 		urlskel['login'],urlskel['form'])
-	
+
 	# Saving for future use
 	bank['_urlskel'] = urlskel
-	
+
 	### And now the real regexes
 	#
-	
+
 	bank['email'] = re.compile(patt_email,re.I)
-	
+
 	# email | url
 	bank['link'] = re.compile(r'%s|%s'%(retxt_url,patt_email), re.I)
-	
-	# \[ label | imagetag    url | email | filename \]
+
+	# \[ label | imagetag	 url | email | filename \]
 	bank['linkmark'] = re.compile(
 		r'\[(?P<label>%s|[^]]+) (?P<link>%s|%s|%s)\]'%(
 			patt_img, retxt_url, patt_email, retxt_url_local),
 		re.L+re.I)
-	
+
 	# Image
 	bank['img'] = re.compile(patt_img, re.L+re.I)
-	
+
 	# Special things
 	bank['special'] = re.compile(r'^%!\s*')
 	return bank
@@ -2068,8 +2068,8 @@ def aa_box(txt, length):
 	nspace = (length - len_txt - 4) / 2
 	line_box = " " * nspace + AA['corner'] + AA['border'] * (len_txt + 2) + AA['corner']
 	# <----- nspace " " -----> "+" <----- len_txt+2 "-" -----> "+"
-	#                           +-------------------------------+
-	#                           | all theeeeeeeeeeeeeeeeee text |
+	#			    +-------------------------------+
+	#			    | all theeeeeeeeeeeeeeeeee text |
 	# <----- nspace " " -----> "| " <--------- txt ---------> " |"
 	line_txt = " " * nspace + AA['side'] + ' ' + txt + ' ' + AA['side']
 	return [line_box, line_txt, line_box]
@@ -2099,18 +2099,18 @@ def aa_table(table):
     data = [line + (n - len(line)) * [''] for line in data]
     tab = []
     for i in range(n):
-        tab.append([line[i] for line in data])
+	tab.append([line[i] for line in data])
     length = [max([len(el) for el in line]) for line in tab]
     res = "+"
     for i in range(n):
-        res = res + (length[i] + 2) * "-" + '+'
+	res = res + (length[i] + 2) * "-" + '+'
     ret = []
     for line in data:
-        aff = "|"
-        ret.append(res)
-        for j,el in enumerate(line):
-            aff = aff + " " + el + (length[j] - len(el) + 1) * " " + "|"
-        ret.append(aff)
+	aff = "|"
+	ret.append(res)
+	for j,el in enumerate(line):
+	    aff = aff + " " + el + (length[j] - len(el) + 1) * " " + "|"
+	ret.append(aff)
     ret.append(res)
     return ret
 
@@ -2118,7 +2118,7 @@ def aa_table(table):
 
 class error(Exception):
 	pass
-def echo(msg):   # for quick debug
+def echo(msg):	 # for quick debug
 	print '\033[32;1m%s\033[m'%msg
 def Quit(msg=''):
 	if msg: print msg
@@ -2147,13 +2147,13 @@ def Debug(msg,id_=0,linenr=None):
 	if QUIET or not DEBUG: return
 	if int(id_) not in range(8): id_ = 0
 	# 0:black 1:red 2:green 3:yellow 4:blue 5:pink 6:cyan 7:white ;1:light
-	ids            = ['INI','CFG','SRC','BLK','HLD','GUI','OUT','DET']
+	ids	       = ['INI','CFG','SRC','BLK','HLD','GUI','OUT','DET']
 	colors_bgdark  = ['7;1','1;1','3;1','6;1','4;1','5;1','2;1','7;1']
 	colors_bglight = ['0'  ,'1'  ,'3'  ,'6'  ,'4'  ,'5'  ,'2'  ,'0'  ]
 	if linenr is not None: msg = "LINE %04d: %s"%(linenr,msg)
 	if COLOR_DEBUG:
 		if BG_LIGHT: color = colors_bglight[id_]
-		else       : color = colors_bgdark[id_]
+		else	   : color = colors_bgdark[id_]
 		msg = '\033[3%sm%s\033[m'%(color,msg)
 	print "++ %s: %s"%(ids[id_],msg)
 
@@ -2256,17 +2256,17 @@ class CommandLine:
 		dictionary, generated from RAW by ConfigMaster(). Use
 		this to compose an optimal command line for a group of
 		options.
-	
+
 	The get_raw_config() calls parse(), so the typical use of this
 	class is:
-	
-            raw = CommandLine().get_raw_config(sys.argv[1:])
+
+	    raw = CommandLine().get_raw_config(sys.argv[1:])
 	"""
 	def __init__(self):
 		self.all_options = OPTIONS.keys()
-		self.all_flags   = FLAGS.keys()
+		self.all_flags	 = FLAGS.keys()
 		self.all_actions = ACTIONS.keys()
-		
+
 		# short:long options equivalence
 		self.short_long = {
 			'C':'config-file',
@@ -2280,40 +2280,40 @@ class CommandLine:
 			'v':'verbose',
 			'V':'version',
 		}
-		
+
 		# Compose valid short and long options data for getopt
 		self.short_opts = self._compose_short_opts()
-		self.long_opts  = self._compose_long_opts()
-	
+		self.long_opts	= self._compose_long_opts()
+
 	def _compose_short_opts(self):
 		"Returns a string like 'hVt:o' with all short options/flags"
 		ret = []
 		for opt in self.short_long.keys():
 			long_ = self.short_long[opt]
 			if long_ in self.all_options: # is flag or option?
-				opt = opt+':'        # option: have param
+				opt = opt+':'	     # option: have param
 			ret.append(opt)
 		#Debug('Valid SHORT options: %s'%ret)
 		return ''.join(ret)
-	
+
 	def _compose_long_opts(self):
 		"Returns a list with all the valid long options/flags"
-		ret = map(lambda x:x+'=', self.all_options)          # add =
-		ret.extend(self.all_flags)                           # flag ON
-		ret.extend(self.all_actions)                         # actions
+		ret = map(lambda x:x+'=', self.all_options)	     # add =
+		ret.extend(self.all_flags)			     # flag ON
+		ret.extend(self.all_actions)			     # actions
 		ret.extend(map(lambda x:'no-'+x, self.all_flags))    # add no-*
-		ret.extend(['no-style','no-encoding'])               # turn OFF
-		ret.extend(['no-outfile','no-infile'])               # turn OFF
+		ret.extend(['no-style','no-encoding'])		     # turn OFF
+		ret.extend(['no-outfile','no-infile'])		     # turn OFF
 		ret.extend(['no-dump-config', 'no-dump-source'])     # turn OFF
-		ret.extend(['no-targets'])                           # turn OFF
+		ret.extend(['no-targets'])			     # turn OFF
 		#Debug('Valid LONG options: %s'%ret)
 		return ret
-	
+
 	def _tokenize(self, cmd_string=''):
 		"Convert a command line string to a list"
 		#TODO protect quotes contents -- Don't use it, pass cmdline as list
 		return cmd_string.split()
-	
+
 	def parse(self, cmdline=[]):
 		"Check/Parse a command line list     TIP: no program name!"
 		# Get the valid options
@@ -2324,13 +2324,13 @@ class CommandLine:
 		except getopt.error, errmsg:
 			Error(_("%s (try --help)")%errmsg)
 		return (opts, args)
-	
+
 	def get_raw_config(self, cmdline=[], ignore=[], filter_=[], relative=0):
 		"Returns the options/arguments found as RAW config"
-		
+
 		if not cmdline: return []
 		ret = []
-		
+
 		# We need lists, not strings (such as from %!options)
 		if type(cmdline) in (type(''), type(u'')):
 			cmdline = self._tokenize(cmdline)
@@ -2340,7 +2340,7 @@ class CommandLine:
 
 		# Some cleanup on the raw config
 		for name, value in options:
-			
+
 			# Remove leading - and --
 			name = re.sub('^--?', '', name)
 
@@ -2359,17 +2359,17 @@ class CommandLine:
 			if name == 'config-file':
 				ret.extend(ConfigLines().include_config_file(value))
 				continue
-			
+
 			# Save this config
 			ret.append(['all', name, value])
-		
+
 		# All configuration was read and saved
-		
+
 		# Get infile, if any
 		while arguments:
 			infile = arguments.pop(0)
 			ret.append(['all', 'infile', infile])
-		
+
 		# Apply 'ignore' and 'filter_' rules (filter_ is stronger)
 		if (ignore or filter_):
 			filtered = []
@@ -2378,12 +2378,12 @@ class CommandLine:
 				   (ignore and name not in ignore):
 					filtered.append([target, name, value])
 			ret = filtered[:]
-		
+
 		# Add the original command line string as 'realcmdline'
 		ret.append( ['all', 'realcmdline', cmdline] )
-		
+
 		return ret
-	
+
 	def compose_cmdline(self, conf={}, no_check=0):
 		"compose a full (and diet) command line from CONF dict"
 		if not conf: return []
@@ -2397,9 +2397,9 @@ class CommandLine:
 			if cfg.has_key('no-headers'):
 				del cfg['no-headers']
 			if cfg.has_key('outfile'):
-				del cfg['outfile']      # defaults to STDOUT
+				del cfg['outfile']	# defaults to STDOUT
 			if cfg.get('target') == 'txt':
-				del cfg['target']       # already default
+				del cfg['target']	# already default
 			args.append('--toc-only')  # must be the first
 			del cfg['toc-only']
 		# Add target type
@@ -2421,7 +2421,7 @@ class CommandLine:
 			# --long format
 			if key in self.all_flags: # add --option
 				args.append('--'+key)
-			else:                     # add --option=value
+			else:			  # add --option=value
 				args.append('--%s=%s'%(key,val))
 		# The outfile using -o
 		if cfg.has_key('outfile') and \
@@ -2439,12 +2439,12 @@ class CommandLine:
 class SourceDocument:
 	"""
 	SourceDocument class - scan document structure, extract data
-	
+
 	It knows about full files. It reads a file and identify all
 	the areas beginning (Head,Conf,Body). With this info it can
 	extract each area contents.
 	Note: the original line break is removed.
-	
+
 	DATA:
 	  self.arearef - Save Head, Conf, Body init line number
 	  self.areas   - Store the area names which are not empty
@@ -2452,17 +2452,17 @@ class SourceDocument:
 
 	METHODS:
 	  get()   - Access the contents of an Area. Example:
-	            config = SourceDocument(file).get('conf')
-	
+		    config = SourceDocument(file).get('conf')
+
 	  split() - Get all the document Areas at once. Example:
-	            head, conf, body = SourceDocument(file).split()
-	
+		    head, conf, body = SourceDocument(file).split()
+
 	RULES:
 	    * The document parts are sequential: Head, Conf and Body.
 	    * One ends when the next begins.
 	    * The Conf Area is optional, so a document can have just
 	      Head and Body Areas.
-	
+
 	    These are the Areas limits:
 	      - Head Area: the first three lines
 	      - Body Area: from the first valid text line to the end
@@ -2481,16 +2481,16 @@ class SourceDocument:
 			self.scan_file(filename)
 		elif contents:
 			self.scan(contents)
-	
+
 	def split(self):
 		"Returns all document parts, splitted into lists."
 		return self.get('head'), self.get('conf'), self.get('body')
-	
+
 	def get(self, areaname):
 		"Returns head|conf|body contents from self.buffer"
 		# Sanity
 		if areaname not in self.areas: return []
-		if not self.buffer           : return []
+		if not self.buffer	     : return []
 		# Go get it
 		bufini = 1
 		bufend = len(self.buffer)
@@ -2510,26 +2510,26 @@ class SourceDocument:
 		while areaname == 'head' and len(lines) < 3:
 			lines.append('')
 		return lines
-	
+
 	def scan_file(self, filename):
 		Debug("source file: %s"%filename)
 		Message(_("Loading source document"),1)
 		buf = Readfile(filename, remove_linebreaks=1)
 		self.scan(buf)
-	
+
 	def scan(self, lines):
 		"Run through source file and identify head/conf/body areas"
 		buf = lines
 		if len(buf) == 0:
 			Error(_('The input file is empty: %s')%self.filename)
 		cfg_parser = ConfigLines().parse_line
-		buf.insert(0, '')                         # text start at pos 1
+		buf.insert(0, '')			  # text start at pos 1
 		ref = [1,4,0]
-		if not buf[1].strip():                    # no header
+		if not buf[1].strip():			  # no header
 			ref[0] = 0 ; ref[1] = 2
 		rgx = getRegexes()
 		on_comment_block = 0
-		for i in xrange(ref[1],len(buf)):         # find body init:
+		for i in xrange(ref[1],len(buf)):	  # find body init:
 			# Handle comment blocks inside config area
 			if not on_comment_block \
 			   and rgx['blockCommentOpen'].search(buf[i]):
@@ -2540,28 +2540,28 @@ class SourceDocument:
 				on_comment_block = 0
 				continue
 			if on_comment_block: continue
-			
-			if buf[i].strip() and (           # ... not blank and
-			   buf[i][0] != '%' or            # ... not comment or
+
+			if buf[i].strip() and (		  # ... not blank and
+			   buf[i][0] != '%' or		  # ... not comment or
 			   rgx['macros'].match(buf[i]) or # ... %%macro
 			   rgx['toc'].match(buf[i])    or # ... %%toc
 			   cfg_parser(buf[i],'include')[1] or # ... %!include
-			   cfg_parser(buf[i],'csv')[1]        # ... %!csv
+			   cfg_parser(buf[i],'csv')[1]	      # ... %!csv
 			):
 				ref[2] = i ; break
-		if ref[1] == ref[2]: ref[1] = 0           # no conf area
-		for i in 0,1,2:                           # del !existent
+		if ref[1] == ref[2]: ref[1] = 0		  # no conf area
+		for i in 0,1,2:				  # del !existent
 			if ref[i] >= len(buf): ref[i] = 0 # title-only
 			if not ref[i]: self.areas[i] = ''
 		Debug('Head,Conf,Body start line: %s'%ref)
-		self.arearef = ref                        # save results
+		self.arearef = ref			  # save results
 		self.buffer  = buf
 		# Fancyness sample: head conf body (1 4 8)
 		self.areas_fancy = "%s (%s)"%(
 			' '.join(self.areas),
 			' '.join(map(str, map(lambda x:x or '', ref))))
 		Message(_("Areas found: %s")%self.areas_fancy, 2)
-	
+
 	def get_raw_config(self):
 		"Handy method to get the CONF area RAW config (if any)"
 		if not self.areas.count('conf'): return []
@@ -2577,21 +2577,21 @@ class SourceDocument:
 class ConfigMaster:
 	"""
 	ConfigMaster class - the configuration wizard
-	
+
 	This class is the configuration master. It knows how to handle
 	the RAW and PARSED config format. It also performs the sanity
 	checking for a given configuration.
-	
+
 	DATA:
-	  self.raw         - Stores the config on the RAW format
-	  self.parsed      - Stores the config on the PARSED format
+	  self.raw	   - Stores the config on the RAW format
+	  self.parsed	   - Stores the config on the PARSED format
 	  self.defaults    - Stores the default values for all keys
-	  self.off         - Stores the OFF values for all keys
-	  self.multi       - List of keys which can have multiple values
-	  self.numeric     - List of keys which value must be a number
+	  self.off	   - Stores the OFF values for all keys
+	  self.multi	   - List of keys which can have multiple values
+	  self.numeric	   - List of keys which value must be a number
 	  self.incremental - List of keys which are incremental
-	
-        RAW FORMAT:
+
+	RAW FORMAT:
 	  The RAW format is a list of lists, being each mother list item
 	  a full configuration entry. Any entry is a 3 item list, on
 	  the following format: [ TARGET, KEY, VALUE ]
@@ -2600,18 +2600,18 @@ class ConfigMaster:
 	  respecting the precedence.
 	  The special target 'all' is used when no specific target was
 	  defined on the original config.
-	
+
 	PARSED FORMAT:
 	  The PARSED format is a dictionary, with all the 'key : value'
 	  found by reading the RAW config. The self.target contents
 	  matters, so this dictionary only contains the target's
 	  config. The configs of other targets are ignored.
-	
+
 	The CommandLine and ConfigLines classes have the get_raw_config()
 	method which convert the configuration found to the RAW format.
 	Just feed it to parse() and get a brand-new ready-to-use config
 	dictionary. Example:
-	
+
 	    >>> raw = CommandLine().get_raw_config(['-n', '-H'])
 	    >>> print raw
 	    [['all', 'enum-title', ''], ['all', 'no-headers', '']]
@@ -2620,19 +2620,19 @@ class ConfigMaster:
 	    {'enum-title': 1, 'headers': 0}
 	"""
 	def __init__(self, raw=[], target=''):
-		self.raw          = raw
-		self.target       = target
-		self.parsed       = {}
+		self.raw	  = raw
+		self.target	  = target
+		self.parsed	  = {}
 		self.dft_options  = OPTIONS.copy()
-		self.dft_flags    = FLAGS.copy()
+		self.dft_flags	  = FLAGS.copy()
 		self.dft_actions  = ACTIONS.copy()
 		self.dft_settings = SETTINGS.copy()
-		self.defaults     = self._get_defaults()
-		self.off          = self._get_off()
+		self.defaults	  = self._get_defaults()
+		self.off	  = self._get_off()
 		self.incremental  = ['verbose']
-		self.numeric      = ['toc-level', 'split', 'width', 'height']
-		self.multi        = ['infile', 'preproc', 'postproc', 'options', 'style']
-	
+		self.numeric	  = ['toc-level', 'split', 'width', 'height']
+		self.multi	  = ['infile', 'preproc', 'postproc', 'options', 'style']
+
 	def _get_defaults(self):
 		"Get the default values for all config/options/flags"
 		empty = {}
@@ -2644,7 +2644,7 @@ class ConfigMaster:
 		empty['realcmdline'] = ''  # internal use only
 		empty['sourcefile']  = ''  # internal use only
 		return empty
-	
+
 	def _get_off(self):
 		"Turns OFF all the config/options/flags"
 		off = {}
@@ -2659,12 +2659,12 @@ class ConfigMaster:
 			else:
 				Error('ConfigMaster: %s: Unknown type' % key)
 		return off
-	
+
 	def _check_target(self):
 		"Checks if the target is already defined. If not, do it"
 		if not self.target:
 			self.target = self.find_value('target')
-	
+
 	def get_target_raw(self):
 		"Returns the raw config for self.target or 'all'"
 		ret = []
@@ -2673,7 +2673,7 @@ class ConfigMaster:
 			if entry[0] == self.target or entry[0] == 'all':
 				ret.append(entry)
 		return ret
-	
+
 	def add(self, key, val):
 		"Adds the key:value pair to the config dictionary (if needed)"
 		# %!options
@@ -2689,7 +2689,7 @@ class ConfigMaster:
 			return
 		# The no- prefix turns OFF this key
 		if key.startswith('no-'):
-			key = key[3:]              # remove prefix
+			key = key[3:]		   # remove prefix
 			val = self.off.get(key)    # turn key OFF
 		# Is this key valid?
 		if key not in self.defaults.keys():
@@ -2720,7 +2720,7 @@ class ConfigMaster:
 			self.parsed[key] = val
 		fancykey = dotted_spaces("%12s"%key)
 		Message(_("Added config %s : %s")%(fancykey,val),3)
-	
+
 	def get_outfile_name(self, config={}):
 		"Dirname is the same for {in,out}file"
 		infile, outfile = config['sourcefile'], config['outfile']
@@ -2735,7 +2735,7 @@ class ConfigMaster:
 		Debug(" infile: '%s'"%infile , 1)
 		Debug("outfile: '%s'"%outfile, 1)
 		return outfile
-	
+
 	def sanity(self, config, gui=0):
 		"Basic config sanity checking"
 		global AA
@@ -2795,9 +2795,9 @@ class ConfigMaster:
 		# --toc-only is stronger than others
 		if config['toc-only']:
 			config['headers'] = 0
-			config['toc']     = 0
+			config['toc']	  = 0
 			config['split']   = 0
-			config['gui']     = 0
+			config['gui']	  = 0
 			config['outfile'] = config['outfile'] or STDOUT
 		# Splitting is disable for now (future: HTML only, no STDOUT)
 		config['split'] = 0
@@ -2810,7 +2810,7 @@ class ConfigMaster:
 		   config['outfile'] not in [STDOUT,MODULEOUT] and not gui:
 			Error(_("Input and Output files are the same: %s") % config['outfile'])
 		return config
-	
+
 	def parse(self):
 		"Returns the parsed config for the current target"
 		raw = self.get_target_raw()
@@ -2818,7 +2818,7 @@ class ConfigMaster:
 			self.add(key, value)
 		Message(_("Added the following keys: %s") % ', '.join(self.parsed.keys()), 2)
 		return self.parsed.copy()
-	
+
 	def find_value(self, key='', target=''):
 		"Scans ALL raw config to find the desired key"
 		ret = []
@@ -2829,14 +2829,14 @@ class ConfigMaster:
 		if not ret: return ''
 		# If not multi value, return only the last found
 		if key in self.multi: return ret
-		else                : return ret[-1]
+		else		    : return ret[-1]
 
 ########################################################################
 
 class ConfigLines:
 	"""
 	ConfigLines class - the config file data extractor
-	
+
 	This class reads and parse the config lines on the %!key:val
 	format, converting it to RAW config. It deals with user
 	config file (RC file), source document CONF area and
@@ -2854,21 +2854,21 @@ class ConfigLines:
 	to identify and tokenize a single config line. For example,
 	to get the %!include command components, on the source
 	document BODY:
-	
+
 		target, key, value = ConfigLines().parse_line(body_line)
 	"""
 	def __init__(self, file_='', lines=[], first_line=1):
 		self.file = file_ or 'NOFILE'
 		self.lines = lines
 		self.first_line = first_line
-	
+
 	def load_lines(self):
 		"Make sure we've loaded the file contents into buffer"
 		if not self.lines and not self.file:
 			Error("ConfigLines: No file or lines provided")
 		if not self.lines:
 			self.lines = self.read_config_file(self.file)
-	
+
 	def read_config_file(self, filename=''):
 		"Read a Config File contents, aborting on invalid line"
 		if not filename: return []
@@ -2880,7 +2880,7 @@ class ConfigLines:
 			if not line: continue  # empty
 			if line[0] != '%': Error(errormsg%(filename,i+1,line))
 		return lines
-	
+
 	def include_config_file(self, file_=''):
 		"Perform the %!includeconf action, returning RAW config"
 		if not file_: return []
@@ -2890,7 +2890,7 @@ class ConfigLines:
 		# Read and parse included config file contents
 		lines = self.read_config_file(file_)
 		return ConfigLines(file_=file_, lines=lines).get_raw_config()
-	
+
 	def get_raw_config(self):
 		"Scan buffer and extract all config as RAW (including includes)"
 		ret = []
@@ -2900,7 +2900,7 @@ class ConfigLines:
 			line = self.lines[i]
 			Message(_("Processing line %03d: %s")%(first+i,line),2)
 			target, key, val = self.parse_line(line)
-			if not key: continue    # no config on this line
+			if not key: continue	# no config on this line
 			if key == 'includeconf':
 				err = _('A file cannot include itself (loop!)')
 				if val == self.file:
@@ -2912,7 +2912,7 @@ class ConfigLines:
 				ret.append([target, key, val])
 				Message(_("Added %s")%key,3)
 		return ret
-	
+
 	def parse_line(self, line='', keyname='', target=''):
 		"Detects %!key:val config lines and extract data from it"
 		empty = ['', '', '']
@@ -2922,55 +2922,55 @@ class ConfigLines:
 		re_target = target  or '[a-z]*'
 		# XXX TODO <value>\S.+?  requires TWO chars, breaks %!include:a
 		cfgregex  = re.compile("""
-			^%%!\s*               # leading id with opt spaces
+			^%%!\s*		      # leading id with opt spaces
 			(?P<name>%s)\s*       # config name
 			(\((?P<target>%s)\))? # optional target spec inside ()
-			\s*:\s*               # key:value delimiter with opt spaces
+			\s*:\s*		      # key:value delimiter with opt spaces
 			(?P<value>\S.+?)      # config value
-			\s*$                  # rstrip() spaces and hit EOL
+			\s*$		      # rstrip() spaces and hit EOL
 			"""%(re_name, re_target), re.I+re.VERBOSE)
 		prepostregex = re.compile("""
-		                              # ---[ PATTERN ]---
-			^( "([^"]*)"          # "double quoted" or
-			| '([^']*)'           # 'single quoted' or
-			| ([^\s]+)            # single_word
+					      # ---[ PATTERN ]---
+			^( "([^"]*)"	      # "double quoted" or
+			| '([^']*)'	      # 'single quoted' or
+			| ([^\s]+)	      # single_word
 			)
-			\s+                   # separated by spaces
-		
-		                              # ---[ REPLACE ]---
-			( "([^"]*)"           # "double quoted" or
-			| '([^']*)'           # 'single quoted' or
-			| (.*)                # anything
+			\s+		      # separated by spaces
+
+					      # ---[ REPLACE ]---
+			( "([^"]*)"	      # "double quoted" or
+			| '([^']*)'	      # 'single quoted' or
+			| (.*)		      # anything
 			)
 			\s*$
 			""", re.VERBOSE)
 		guicolors = re.compile("^([^\s]+\s+){3}[^\s]+") # 4 tokens
-		
+
 		# Give me a match or get out
 		match = cfgregex.match(line)
 		if not match: return empty
-		
+
 		# Save information about this config
 		name   = (match.group('name') or '').lower()
 		target = (match.group('target') or 'all').lower()
 		value  = match.group('value')
-		
+
 		# %!keyword(target) not allowed for these
 		if name in no_target and match.group('target'):
 			Error(
 				_("You can't use (target) with %s") % ('%!' + name)
 				+ "\n%s" % line)
-		
+
 		# Force no_target keywords to be valid for all targets
 		if name in no_target:
 			target = 'all'
-		
+
 		# Special config for GUI colors
 		if name == 'guicolors':
 			valmatch = guicolors.search(value)
 			if not valmatch: return empty
 			value = re.split('\s+', value)
-		
+
 		# Special config with two quoted values (%!preproc: "foo" 'bar')
 		if name == 'preproc' or name == 'postproc':
 			valmatch = prepostregex.search(value)
@@ -2994,14 +2994,14 @@ class MaskMaster:
 		self.tocmask   = 'vvvTOCvvv'
 		self.macroman  = MacroMaster()
 		self.reset()
-	
+
 	def reset(self):
 		self.linkbank = []
 		self.monobank = []
 		self.macrobank = []
 		self.rawbank = []
 		self.taggedbank = []
-	
+
 	def mask(self, line=''):
 		global AUTOTOC
 
@@ -3016,7 +3016,7 @@ class MaskMaster:
 		# If none is found (else), we get out of the loop.
 		#
 		while True:
-			
+
 			# Try to match the line for the three marks
 			# Note: 'z' > 999999
 			#
@@ -3049,26 +3049,26 @@ class MaskMaster:
 				line = regex['fontMono'].sub(self.monomask,line,1)
 			else:
 				break
-			
+
 		# Protect macros
 		while regex['macros'].search(line):
 			txt = regex['macros'].search(line).group()
 			self.macrobank.append(txt)
 			line = regex['macros'].sub(self.macromask,line,1)
-		
+
 		# Protect TOC location
 		while regex['toc'].search(line):
 			line = regex['toc'].sub(self.tocmask,line)
 			AUTOTOC = 0
-		
+
 		# Protect URLs and emails
 		while regex['linkmark'].search(line) or \
 		      regex['link'    ].search(line):
-			
+
 			# Try to match plain or named links
 			match_link  = regex['link'].search(line)
 			match_named = regex['linkmark'].search(line)
-			
+
 			# Define the current match
 			if match_link and match_named:
 				# Both types found, which is the first?
@@ -3078,39 +3078,39 @@ class MaskMaster:
 			else:
 				# Just one type found, we're fine
 				m = match_link or match_named
-			
+
 			# Extract link data and apply mask
-			if m == match_link:              # plain link
+			if m == match_link:		 # plain link
 				link = m.group()
 				label = ''
 				link_re = regex['link']
-			else:                            # named link
+			else:				 # named link
 				link = m.group('link')
 				label = m.group('label').rstrip()
 				link_re = regex['linkmark']
 			line = link_re.sub(self.linkmask,line,1)
-			
+
 			# Save link data to the link bank
 			self.linkbank.append((label, link))
 		return line
-	
+
 	def undo(self, line):
-		
+
 		# url & email
 		for label,url in self.linkbank:
 			link = get_tagged_link(label, url)
 			line = line.replace(self.linkmask, link, 1)
-		
+
 		# Expand macros
 		for macro in self.macrobank:
 			macro = self.macroman.expand(macro)
 			line = line.replace(self.macromask, macro, 1)
-		
+
 		# Expand verb
 		for mono in self.monobank:
 			open_,close = TAGS['fontMonoOpen'],TAGS['fontMonoClose']
 			line = line.replace(self.monomask, open_+mono+close, 1)
-		
+
 		# Expand raw
 		for raw in self.rawbank:
 			line = line.replace(self.rawmask, raw, 1)
@@ -3118,7 +3118,7 @@ class MaskMaster:
 		# Expand tagged
 		for tagged in self.taggedbank:
 			line = line.replace(self.taggedmask, tagged, 1)
-		
+
 		return line
 
 
@@ -3141,52 +3141,52 @@ class TitleMaster:
 		self.user_labels = {}
 		self.anchor_count = 0
 		self.anchor_prefix = 'toc'
-	
+
 	def _open_close_blocks(self):
 		"Open new title blocks, closing the previous (if any)"
 		if not rules['titleblocks']: return
 		tag = ''
 		last = self.last_level
 		curr = self.level
-		
+
 		# Same level, just close the previous
 		if curr == last:
 			tag = TAGS.get('title%dClose'%last)
 			if tag: self.tag_hold.append(tag)
-		
+
 		# Section -> subsection, more depth
 		while curr > last:
 			last += 1
-			
+
 			# Open the new block of subsections
 			tag = TAGS.get('blockTitle%dOpen'%last)
 			if tag: self.tag_hold.append(tag)
-			
+
 			# Jump from title1 to title3 or more
 			# Fill the gap with an empty section
 			if curr - last > 0:
 				tag = TAGS.get('title%dOpen'%last)
-				tag = regex['x'].sub('', tag)      # del \a
+				tag = regex['x'].sub('', tag)	   # del \a
 				if tag: self.tag_hold.append(tag)
-		
+
 		# Section <- subsection, less depth
 		while curr < last:
 			# Close the current opened subsection
 			tag = TAGS.get('title%dClose'%last)
 			if tag: self.tag_hold.append(tag)
-			
+
 			# Close the current opened block of subsections
 			tag = TAGS.get('blockTitle%dClose'%last)
 			if tag: self.tag_hold.append(tag)
-			
+
 			last -= 1
-			
+
 			# Close the previous section of the same level
 			# The subsections were under it
 			if curr == last:
 				tag = TAGS.get('title%dClose'%last)
 				if tag: self.tag_hold.append(tag)
-	
+
 	def add(self, line):
 		"Parses a new title line."
 		if not line: return
@@ -3195,7 +3195,7 @@ class TitleMaster:
 		self._set_count_id()
 		self._set_label()
 		self._save_toc_info()
-	
+
 	def close_all(self):
 		"Closes all opened title blocks"
 		ret = []
@@ -3207,11 +3207,11 @@ class TitleMaster:
 			if tag: ret.append(tag)
 			self.level -= 1
 		return ret
-	
+
 	def _save_toc_info(self):
 		"Save TOC info, used by self.dump_marked_toc()"
 		self.toc.append((self.level, self.count_id, self.txt, self.label))
-	
+
 	def _set_prop(self, line=''):
 		"Extract info from original line and set data holders."
 		# Detect title type (numbered or not)
@@ -3228,16 +3228,16 @@ class TitleMaster:
 		if CONF['enum-title']: kind = 'numtitle'  # force
 		if rules['titleblocks']:
 			self.tag = TAGS.get('%s%dOpen'%(kind,level)) or \
-			           TAGS.get('title%dOpen'%level)
+				   TAGS.get('title%dOpen'%level)
 		else:
 			self.tag = TAGS.get(kind+`level`) or \
-			           TAGS.get('title'+`level`)
+				   TAGS.get('title'+`level`)
 		self.last_level = self.level
 		self.kind  = kind
 		self.level = level
 		self.txt   = txt
 		self.label = label
-	
+
 	def _set_count_id(self):
 		"Compose and save the title count identifier (if needed)."
 		count_id = ''
@@ -3253,7 +3253,7 @@ class TitleMaster:
 			for i in xrange(self.level):
 				count_id= "%s%d."%(count_id, self.count[i+1])
 		self.count_id = count_id
-	
+
 	def _set_label(self):
 		"Compose and save title label, used by anchors."
 		# Remove invalid chars from label set by user
@@ -3263,7 +3263,7 @@ class TitleMaster:
 		#self.label = re.sub('[^A-Za-z0-9]', '', self.txt)[:15]
 		# 'tocN' label - sequential count, ignoring 'toc-level'
 		#self.label = self.anchor_prefix + str(len(self.toc)+1)
-	
+
 	def _get_tagged_anchor(self):
 		"Return anchor if user defined a label, or TOC is on."
 		ret = ''
@@ -3278,7 +3278,7 @@ class TitleMaster:
 		if label and TAGS['anchor']:
 			ret = regex['x'].sub(label,TAGS['anchor'])
 		return ret
-	
+
 	def _get_full_title_text(self):
 		"Returns the full title contents, already escaped."
 		ret = self.txt
@@ -3292,23 +3292,23 @@ class TitleMaster:
 		if rules['finalescapetitle']:
 			ret = doFinalEscape(TARGET, ret)
 		return ret
-	
+
 	def get(self):
 		"Returns the tagged title as a list."
 		global AA_TITLE
 		ret = []
-		
+
 		# Maybe some anchoring before?
 		anchor = self._get_tagged_anchor()
 		self.tag = regex['_anchor'].sub(anchor, self.tag)
-		
+
 		### Compose & escape title text (TOC uses unescaped)
 		full_title = self._get_full_title_text()
-		
+
 		# Close previous section area
 		ret.extend(self.tag_hold)
 		self.tag_hold = []
-		
+
 		tagged = regex['x'].sub(full_title, self.tag)
 
 		# Adds "underline" on TXT target
@@ -3335,18 +3335,18 @@ class TitleMaster:
 		else:
 			ret.append(tagged)
 		return ret
-	
+
 	def dump_marked_toc(self, max_level=99):
 		"Dumps all toc itens as a valid t2t-marked list"
 		ret = []
 		toc_count = 1
 		for level, count_id, txt, label in self.toc:
-			if level > max_level: continue   # ignore
+			if level > max_level: continue	 # ignore
 			indent = '  '*level
 			id_txt = ('%s %s'%(count_id, txt)).lstrip()
 			label = label or self.anchor_prefix+`toc_count`
 			toc_count += 1
-			
+
 			# TOC will have crosslinks to anchors
 			if TAGS['anchor']:
 				if CONF['enum-title'] and level == 1:
@@ -3397,12 +3397,12 @@ class TableMaster:
 		return colalign
 
 	def _get_open_tag(self):
-		topen     = TAGS['tableOpen']
+		topen	  = TAGS['tableOpen']
 		tborder   = TAGS['_tableBorder']
-		talign    = TAGS['_tableAlign'+self.align]
+		talign	  = TAGS['_tableAlign'+self.align]
 		calignsep = TAGS['tableColAlignSep']
-		calign    = ''
-		
+		calign	  = ''
+
 		# The first line defines if table has border or not
 		if not self.border: tborder = ''
 		# Set the columns alignment
@@ -3418,7 +3418,7 @@ class TableMaster:
 			# Remove cell align separator
 			topen = topen.replace(calignsep, '')
 		return topen
-	
+
 	def _get_cell_align(self, cells):
 		ret = []
 		for cell in cells:
@@ -3430,7 +3430,7 @@ class TableMaster:
 					align = 'Right'
 			ret.append(align)
 		return ret
-	
+
 	def _get_cell_span(self, cells):
 		ret = []
 		for cell in cells:
@@ -3439,14 +3439,14 @@ class TableMaster:
 			if m: span = len(m.group(1))+1
 			ret.append(span)
 		return ret
-	
+
 	def _tag_cells(self, rowdata):
 		row = []
 		cells  = rowdata['cells']
-		open_   = TAGS['tableCellOpen']
+		open_	= TAGS['tableCellOpen']
 		close  = TAGS['tableCellClose']
 		sep    = TAGS['tableCellSep']
-		calign    = map(lambda x: TAGS['_tableCellAlign'+x], rowdata['cellalign'])
+		calign	  = map(lambda x: TAGS['_tableCellAlign'+x], rowdata['cellalign'])
 		calignsep = TAGS['tableColAlignSep']
 		ncolumns = len(self.colalign)
 
@@ -3455,7 +3455,7 @@ class TableMaster:
 		multicol = []
 		colindex = 0
 		for cellindex in range(0,len(rowdata['cellspan'])):
-		
+
 			span = rowdata['cellspan'][cellindex]
 			align = rowdata['cellalign'][cellindex]
 
@@ -3478,22 +3478,22 @@ class TableMaster:
 				multicol[-1] = multicol[-1].replace(calignsep, '')
 
 			colindex += span
-		
+
 		# Maybe is it a title row?
 		if rowdata['title']:
 			open_ = TAGS['tableTitleCellOpen']  or open_
 			close = TAGS['tableTitleCellClose'] or close
 			sep   = TAGS['tableTitleCellSep']   or sep
-		
+
 		# Should we break the line on *each* table cell?
 		if rules['breaktablecell']: close = close+'\n'
-		
+
 		# Cells pre processing
 		if rules['tablecellstrip']:
 			cells = map(lambda x: x.strip(), cells)
 		if rowdata['title'] and rules['tabletitlerowinbold']:
 			cells = map(lambda x: enclose_me('fontBold',x), cells)
-	
+
 		# Add cell BEGIN/END tags
 		for cell in cells:
 			copen = open_
@@ -3523,13 +3523,13 @@ class TableMaster:
 					cclose = TAGS['_tableCellMulticolClose']
 
 			row.append(copen + cell + cclose)
-		
+
 		# Maybe there are cell separators?
 		return sep.join(row)
-	
+
 	def add_row(self, cells):
 		self.rows.append(cells)
-	
+
 	def parse_row(self, line):
 		# Default table properties
 		ret = {
@@ -3560,34 +3560,34 @@ class TableMaster:
 		# Hooray!
 		Debug('Table Prop: %s' % ret, 7)
 		return ret
-	
+
 	def dump(self):
 		open_ = self._get_open_tag()
 		rows  = self.rows
 		close = TAGS['tableClose']
-		
+
 		rowopen     = TAGS['tableRowOpen']
 		rowclose    = TAGS['tableRowClose']
-		rowsep      = TAGS['tableRowSep']
+		rowsep	    = TAGS['tableRowSep']
 		titrowopen  = TAGS['tableTitleRowOpen']  or rowopen
 		titrowclose = TAGS['tableTitleRowClose'] or rowclose
-		
+
 		if rules['breaktablelineopen']:
 			rowopen = rowopen + '\n'
 			titrowopen = titrowopen + '\n'
-		
+
 		# Tex gotchas
 		if TARGET == 'tex':
 			if not self.border:
 				rowopen = titrowopen = ''
 			else:
 				close = rowopen + close
-		
+
 		# Now we tag all the table cells on each row
 		#tagged_cells = map(lambda x: self._tag_cells(x), rows) #!py15
 		tagged_cells = []
 		for cell in rows: tagged_cells.append(self._tag_cells(cell))
-		
+
 		# Add row separator tags between lines
 		tagged_rows = []
 		if rowsep:
@@ -3606,7 +3606,7 @@ class TableMaster:
 					o,c = rowopen, rowclose
 				row = tagged_cells.pop(0)
 				tagged_rows.append(o + row + c)
-		
+
 		# Join the pieces together
 		fulltable = []
 		if open_: fulltable.append(open_)
@@ -3630,17 +3630,17 @@ class BlockMaster:
 		self.last = ''
 		self.tableparser = None
 		self.contains = {
-			'para'    :['comment','raw','tagged'],
-			'verb'    :[],
+			'para'	  :['comment','raw','tagged'],
+			'verb'	  :[],
 			'table'   :['comment'],
-			'raw'     :[],
+			'raw'	  :[],
 			'tagged'  :[],
 			'comment' :[],
 			'quote'   :['quote','comment','raw','tagged'],
-			'list'    :['list','numlist','deflist','para','verb','comment','raw','tagged'],
+			'list'	  :['list','numlist','deflist','para','verb','comment','raw','tagged'],
 			'numlist' :['list','numlist','deflist','para','verb','comment','raw','tagged'],
 			'deflist' :['list','numlist','deflist','para','verb','comment','raw','tagged'],
-			'bar'     :[],
+			'bar'	  :[],
 			'title'   :[],
 			'numtitle':[],
 		}
@@ -3648,48 +3648,48 @@ class BlockMaster:
 
 		# If one is found inside another, ignore the marks
 		self.exclusive = ['comment','verb','raw','tagged']
-		
+
 		# May we include bars inside quotes?
 		if rules['barinsidequote']:
 			self.contains['quote'].append('bar')
-	
+
 	def block(self):
 		if not self.BLK: return ''
 		return self.BLK[-1]
-	
+
 	def isblock(self, name=''):
 		return self.block() == name
-	
+
 	def prop(self, key):
 		if not self.PRP: return ''
 		return self.PRP[-1].get(key) or ''
-	
+
 	def propset(self, key, val):
 		self.PRP[-1][key] = val
 		#Debug('BLOCK prop ++: %s->%s'%(key,repr(val)), 1)
 		#Debug('BLOCK props: %s'%(repr(self.PRP)), 1)
-	
+
 	def hold(self):
 		if not self.HLD: return []
 		return self.HLD[-1]
-	
+
 	def holdadd(self, line):
 		if self.block().endswith('list'): line = [line]
 		self.HLD[-1].append(line)
 		Debug('HOLD add: %s'%repr(line), 4)
 		Debug('FULL HOLD: %s'%self.HLD, 4)
-	
+
 	def holdaddsub(self, line):
 		self.HLD[-1][-1].append(line)
 		Debug('HOLD addsub: %s'%repr(line), 4)
 		Debug('FULL HOLD: %s'%self.HLD, 4)
-	
+
 	def holdextend(self, lines):
 		if self.block().endswith('list'): lines = [lines]
 		self.HLD[-1].extend(lines)
 		Debug('HOLD extend: %s'%repr(lines), 4)
 		Debug('FULL HOLD: %s'%self.HLD, 4)
-	
+
 	def blockin(self, block):
 		ret = []
 		if block not in self.allblocks:
@@ -3709,10 +3709,10 @@ class BlockMaster:
 		self.depth = len(self.BLK)
 		Debug('block ++ (%s): %s' % (block,self.BLK), 3)
 		return ret
-	
+
 	def blockout(self):
 		global AA_COUNT
-                
+
 		if not self.BLK: Error('No block to pop')
 		blockname = self.BLK.pop()
 		result = getattr(self, blockname)()
@@ -3739,24 +3739,24 @@ class BlockMaster:
 		if result:
 			self.last = blockname
 			Debug('BLOCK: %s'%result, 6)
-		
+
 		# ASCII Art processing
-                if TARGET == 'art' and CONF['slides'] and not CONF['toc-only'] and not CONF.get('art-no-title'):
-                        n = (CONF['height'] - 1) - (AA_COUNT % (CONF['height'] - 1) + 1)
-                        if n < len(result) and not (TITLE.level == 1 and blockname in ["title", "numtitle"]):
-                                result = ([''] * n) + [aa_line(AA['bar1'], CONF['width'])] + aa_slide(AA_TITLE, CONF['width']) + [''] + result
-                        if blockname in ["title", "numtitle"] and TITLE.level == 1:
-                                aa_title = aa_slide(AA_TITLE, CONF['width']) + ['']
-                                if AA_COUNT:
+		if TARGET == 'art' and CONF['slides'] and not CONF['toc-only'] and not CONF.get('art-no-title'):
+			n = (CONF['height'] - 1) - (AA_COUNT % (CONF['height'] - 1) + 1)
+			if n < len(result) and not (TITLE.level == 1 and blockname in ["title", "numtitle"]):
+				result = ([''] * n) + [aa_line(AA['bar1'], CONF['width'])] + aa_slide(AA_TITLE, CONF['width']) + [''] + result
+			if blockname in ["title", "numtitle"] and TITLE.level == 1:
+				aa_title = aa_slide(AA_TITLE, CONF['width']) + ['']
+				if AA_COUNT:
 					aa_title = ([''] * n) + [aa_line(AA['bar2'], CONF['width'])] + aa_title
-                                result = aa_title + result
-                        AA_COUNT += len(result)
+				result = aa_title + result
+			AA_COUNT += len(result)
 
 		return result
-	
+
 	def _last_escapes(self, line):
 		return doFinalEscape(TARGET, line)
-	
+
 	def _get_escaped_hold(self):
 		ret = []
 		for line in self.hold():
@@ -3769,45 +3769,44 @@ class BlockMaster:
 				Error("BlockMaster: Unknown HOLD item type: %s" % linetype)
 		return ret
 
-        # Milan Straka: Perform text reflow for txt TARGET
-        # Lines using this are marked with #MSR
-        def _reflow(self, what, indent = 0):
-                if TARGET != 'txt':
-                        return what
+	# Milan Straka: Perform text reflow for txt TARGET to 80 columns.
+	def _reflow(self, what, indent = 0):
+		if TARGET != 'txt':
+			return what
 
-                tmp = []
-                for line in what:
-                        linetype = type(line)
-                        if linetype == type('') or linetype == type(u''):
-                                if not line or not tmp or type(tmp[-1]) == type([]) or not tmp[-1]:
-                                        tmp.append(self._last_escapes(line).strip())
-                                else:
-                                        tmp[-1] += " " + self._last_escapes(line).strip()
-                        else:
-                                tmp.append(line)
-                ret = []
-                for line in tmp:
-                        if type(line) == type('') or type(line) == type(u''):
-                                while len(line) > 80 - indent:
-                                          pos = line.rfind(" ", 0, 81 - indent)
-                                          if pos == -1: pos = line.find(" ", 80 - indent)
-                                          if pos == -1: pos = len(line)
-                                          ret.append(line[0:pos].rstrip())
-                                          line = line[pos+1:].lstrip()
-                                ret.append(line)
-                        else:
-                                ret.append(line)
-                return ret
+		tmp = []
+		for line in what:
+			linetype = type(line)
+			if linetype == type('') or linetype == type(u''):
+				if not line or not tmp or type(tmp[-1]) == type([]) or not tmp[-1]:
+					tmp.append(self._last_escapes(line).strip())
+				else:
+					tmp[-1] += " " + self._last_escapes(line).strip()
+			else:
+				tmp.append(line)
+		ret = []
+		for line in tmp:
+			if type(line) == type('') or type(line) == type(u''):
+				while len(line) > 80 - indent:
+					pos = line.rfind(" ", 0, 81 - indent)
+					if pos == -1: pos = line.find(" ", 80 - indent)
+					if pos == -1: pos = len(line)
+					ret.append(line[0:pos].rstrip())
+					line = line[pos+1:].lstrip()
+				ret.append(line)
+			else:
+				ret.append(line)
+		return ret
 
-        def _reflow_hold(self, indent = 0):
-              if self.HLD:
-                      self.HLD[-1] = self._reflow(self.HLD[-1], indent)
+	def _reflow_hold(self, indent = 0):
+		if self.HLD:
+			self.HLD[-1] = self._reflow(self.HLD[-1], indent)
 
 	def _remove_twoblanks(self, lastitem):
 		if len(lastitem) > 1 and lastitem[-2:] == ['','']:
 			return lastitem[:-2]
 		return lastitem
-	
+
 	def _should_add_blank_line(self, where, blockname):
 		"Validates the blanksaround* rules"
 
@@ -3822,13 +3821,13 @@ class BlockMaster:
 
 		# # No blank before if it's the first block of the body
 		# elif where == 'before' \
-		# 	and BLOCK.count == 1:
-		# 	return False
+		#	and BLOCK.count == 1:
+		#	return False
 
 		# # No blank before if it's the first block of this level (nested)
 		# elif where == 'before' \
-		# 	and self.count == 1:
-		# 	return False
+		#	and self.count == 1:
+		#	return False
 
 		# The blank line before the block is only added if
 		# the previous block haven't added a blank line
@@ -3850,19 +3849,19 @@ class BlockMaster:
 
 	def comment(self):
 		return ''
-	
+
 	def raw(self):
 		lines = self.hold()
 		return map(lambda x: doEscape(TARGET, x), lines)
 
 	def tagged(self):
 		return self.hold()
-	
+
 	def para(self):
 		result = []
 		open_ = TAGS['paragraphOpen']
 		close = TAGS['paragraphClose']
-                self._reflow_hold() #MSR
+		self._reflow_hold()
 		lines = self._get_escaped_hold()
 
 		# Blank line before?
@@ -3883,7 +3882,7 @@ class BlockMaster:
 
 		# Blank line after?
 		if self._should_add_blank_line('after', 'para'): result.append('')
-	
+
 		# Very very very very very very very very very UGLY fix
 		# Needed because <center> can't appear inside <p>
 		try:
@@ -3892,9 +3891,9 @@ class BlockMaster:
 			   re.match('^\s*<center>.*</center>\s*$', lines[0]):
 				result = [lines[0]]
 		except: pass
-		
+
 		return result
-	
+
 	def verb(self):
 		"Verbatim lines are not masked, so there's no need to unmask"
 		result = []
@@ -3962,26 +3961,26 @@ class BlockMaster:
 
 	def quote(self):
 		result = []
-		open_  = TAGS['blockQuoteOpen']            # block based
+		open_  = TAGS['blockQuoteOpen']		   # block based
 		close  = TAGS['blockQuoteClose']
-		qline  = TAGS['blockQuoteLine']            # line based
+		qline  = TAGS['blockQuoteLine']		   # line based
 		indent = tagindent = '\t'*self.depth
-		
+
 		# Apply rules
 		if rules['tagnotindentable']: tagindent = ''
 		if not rules['keepquoteindent']: indent = ''
-		
+
 		# Blank line before?
 		if self._should_add_blank_line('before', 'quote'): result.append('')
 
 		# Open tag
 		if open_: result.append(tagindent+open_)
-		
+
 		# Get contents
-                self._reflow_hold(8 * self.depth) #MSR
+		self._reflow_hold(8 * self.depth)
 		for item in self.hold():
 			if type(item) == type([]):
-				result.extend(item)        # subquotes
+				result.extend(item)	   # subquotes
 			else:
 				item = regex['quote'].sub('', item)  # del TABs
 				item = self._last_escapes(item)
@@ -3993,9 +3992,9 @@ class BlockMaster:
 
 		# Blank line after?
 		if self._should_add_blank_line('after', 'quote'): result.append('')
-		
+
 		return result
-	
+
 	def bar(self):
 		result = []
 		bar_tag = ''
@@ -4008,7 +4007,7 @@ class BlockMaster:
 
 		# Set bar type
 		if bar_chars.startswith('='): bar_tag = TAGS['bar2']
-		else                        : bar_tag = TAGS['bar1']
+		else			    : bar_tag = TAGS['bar1']
 
 		# To avoid comment tag confusion like <!-- ------ --> (sgml)
 		if TAGS['comment'].count('--'):
@@ -4025,9 +4024,9 @@ class BlockMaster:
 	def deflist(self): return self.list('deflist')
 	def numlist(self): return self.list('numlist')
 	def list(self, name='list'):
-		result    = []
-		items     = self.hold()
-		indent    = self.prop('indent')
+		result	  = []
+		items	  = self.hold()
+		indent	  = self.prop('indent')
 		tagindent = indent
 		listline  = TAGS.get(name+'ItemLine')
 		itemcount = 0
@@ -4036,12 +4035,12 @@ class BlockMaster:
 			itemopen  = TAGS[name+'Item1Open']
 			itemclose = TAGS[name+'Item2Close']
 			itemsep   = TAGS[name+'Item1Close']+\
-			            TAGS[name+'Item2Open']
+				    TAGS[name+'Item2Open']
 		else:
 			itemopen  = TAGS[name+'ItemOpen']
 			itemclose = TAGS[name+'ItemClose']
 			itemsep   = ''
-		
+
 		# Apply rules
 		if rules['tagnotindentable']: tagindent = ''
 		if not rules['keeplistindent']: indent = tagindent = ''
@@ -4049,12 +4048,12 @@ class BlockMaster:
 		# ItemLine: number of leading chars identifies list depth
 		if listline:
 			itemopen  = listline*self.depth + itemopen
-		
+
 		# Adds trailing space on opening tags
 		if (name == 'list'    and rules['spacedlistitemopen']) or \
 		   (name == 'numlist' and rules['spacednumlistitemopen']):
 			itemopen = itemopen + ' '
-			
+
 		# Remove two-blanks from list ending mark, to avoid <p>
 		items[-1] = self._remove_twoblanks(items[-1])
 
@@ -4066,7 +4065,7 @@ class BlockMaster:
 		listbody = []
 		widelist = 0
 		for item in items:
-			
+
 			# Add "manual" item count for noautonum targets
 			itemcount += 1
 			if name == 'numlist' and not rules['autonumberlist']:
@@ -4074,37 +4073,37 @@ class BlockMaster:
 				itemopen = regex['x'].sub(n, itemopenorig)
 				del n
 
-                        subindent = self.prop('indent') + ' ' * (2 if name == 'deflist' else len(itemopen)) #MSR
-                        if name == 'deflist': #MSR
-                                item[1:] = self._reflow(item[1:], len(subindent)) #MSR
-                        else: #MSR
-                                item = self._reflow(item, len(subindent)) #MSR
+			subindent = self.prop('indent') + ' ' * (2 if name == 'deflist' else len(itemopen))
+			if name == 'deflist':
+				item[1:] = self._reflow(item[1:], len(subindent))
+			else:
+				item = self._reflow(item, len(subindent))
 			# Tag it
 			item[0] = self._last_escapes(item[0])
 			if name == 'deflist':
 				z,term,rest = item[0].split(SEPARATOR, 2)
 				item[0] = rest
-				if not item[0]: del item[0]      # to avoid <p>
+				if not item[0]: del item[0]	 # to avoid <p>
 				listbody.append(tagindent+itemopen+term+itemsep)
 			else:
 				fullitem = tagindent+itemopen
 				listbody.append(item[0].replace(SEPARATOR, fullitem))
 				del item[0]
-			
+
 			# Process next lines for this item (if any)
 			for line in item:
 				if type(line) == type([]): # sublist inside
 					listbody.extend(line)
 				else:
 					line = self._last_escapes(line)
-                                        if TARGET == 'txt': line = subindent + line #MSR
-					
+					if TARGET == 'txt': line = subindent + line
+
 					# Blank lines turns to <p>
 					if not line and rules['parainsidelist']:
 						line = indent + TAGS['paragraphOpen'] + TAGS['paragraphClose']
 						line = line.rstrip()
 						widelist = 1
-						
+
 					# Some targets don't like identation here (wiki)
 					if not rules['keeplistindent'] or (name == 'deflist' and rules['deflisttextstrip']):
 						line = line.lstrip()
@@ -4112,12 +4111,12 @@ class BlockMaster:
 					# Maybe we have a line prefix to add? (wiki)
 					if name == 'deflist' and TAGS['deflistItem2LinePrefix']:
 						line = TAGS['deflistItem2LinePrefix'] + line
-						
+
 					listbody.append(line)
-			
+
 			# Close item (if needed)
 			if itemclose: listbody.append(tagindent+itemclose)
-		
+
 		if not widelist and rules['compactlist']:
 			listopen = TAGS.get(name+'OpenCompact')
 			listclose = TAGS.get(name+'CloseCompact')
@@ -4131,7 +4130,7 @@ class BlockMaster:
 			result.append(tagindent+listopen)
 
 		result.extend(listbody)
-		
+
 		# Close list (not nestable lists are only closed at mother)
 		if listclose and not \
 		   (rules['listnotnested'] and self.depth != 1):
@@ -4156,28 +4155,28 @@ class MacroMaster:
 		self.rgx      = regex.get('macros') or getRegexes()['macros']
 		self.fileinfo = { 'infile': None, 'outfile': None }
 		self.dft_fmt  = MACROS
-	
+
 	def walk_file_format(self, fmt):
 		"Walks the %%{in/out}file format string, expanding the % flags"
-		i = 0; ret = ''                                 # counter/hold
-		while i < len(fmt):                             # char by char
+		i = 0; ret = ''					# counter/hold
+		while i < len(fmt):				# char by char
 			c = fmt[i]; i += 1
-			if c == '%':                            # hot char!
-				if i == len(fmt):               # % at the end
+			if c == '%':				# hot char!
+				if i == len(fmt):		# % at the end
 					ret = ret + c
 					break
-				c = fmt[i]; i += 1              # read next
+				c = fmt[i]; i += 1		# read next
 				ret = ret + self.expand_file_flag(c)
 			else:
-				ret = ret +c                    # common char
+				ret = ret +c			# common char
 		return ret
-	
+
 	def expand_file_flag(self, flag):
-		"%f: filename          %F: filename (w/o extension)"
-		"%d: dirname           %D: dirname (only parent dir)"
-		"%p: file path         %e: extension"
-		info = self.fileinfo[self.name]           # get dict
-		if   flag == '%': x = '%'                 # %% -> %
+		"%f: filename	       %F: filename (w/o extension)"
+		"%d: dirname	       %D: dirname (only parent dir)"
+		"%p: file path	       %e: extension"
+		info = self.fileinfo[self.name]		  # get dict
+		if   flag == '%': x = '%'		  # %% -> %
 		elif flag == 'f': x = info['name']
 		elif flag == 'F': x = re.sub('\.[^.]*$','',info['name'])
 		elif flag == 'd': x = info['dir']
@@ -4185,12 +4184,12 @@ class MacroMaster:
 		elif flag == 'p': x = info['path']
 		elif flag == 'e': x = re.search('.(\.([^.]+))?$', info['name']).group(2) or ''
 		#TODO simpler way for %e ?
-		else            : x = '%'+flag            # false alarm
+		else		: x = '%'+flag		  # false alarm
 		return x
-	
+
 	def set_file_info(self, macroname):
 		if self.fileinfo.get(macroname): return   # already done
-		file_ = getattr(self, self.name)           # self.infile
+		file_ = getattr(self, self.name)	   # self.infile
 		if file_ == STDOUT or file_ == MODULEOUT:
 			dir_ = ''
 			path = name = file_
@@ -4199,7 +4198,7 @@ class MacroMaster:
 			dir_ = os.path.dirname(path)
 			name = os.path.basename(path)
 		self.fileinfo[macroname] = {'path':path,'dir':dir_,'name':name}
-	
+
 	def expand(self, line=''):
 		"Expand all macros found on the line"
 		while self.rgx.search(line):
@@ -4237,7 +4236,7 @@ def listTargets():
 def dumpConfig(source_raw, parsed_config):
 	onoff = {1:_('ON'), 0:_('OFF')}
 	data = [
-		(_('RC file')        , RC_RAW     ),
+		(_('RC file')	     , RC_RAW	  ),
 		(_('source document'), source_raw ),
 		(_('command line')   , CMDLINE_RAW)
 	]
@@ -4264,7 +4263,7 @@ def dumpConfig(source_raw, parsed_config):
 		# List beautifier
 		if type(val) == type([]):
 			if key == 'options': sep = ' '
-			else               : sep = ', '
+			else		   : sep = ', '
 			val = sep.join(val)
 		print "%25s: %s"%(dotted_spaces("%-14s"%key),val)
 	print
@@ -4285,7 +4284,7 @@ def finish_him(outlist, config):
 	outfile = config['outfile']
 	outlist = unmaskEscapeChar(outlist)
 	outlist = expandLineBreaks(outlist)
-	
+
 	# Apply PostProc filters
 	if config['postproc']:
 		filters = compile_filters(config['postproc'],
@@ -4298,7 +4297,7 @@ def finish_him(outlist, config):
 				except: Error("%s: '%s'"%(errmsg, repl))
 			postoutlist.append(line)
 		outlist = postoutlist[:]
-	
+
 	if outfile == MODULEOUT:
 		return outlist
 	elif outfile == STDOUT:
@@ -4310,7 +4309,7 @@ def finish_him(outlist, config):
 		Savefile(outfile, addLineBreaks(outlist))
 		if not GUI and not QUIET:
 			print _('%s wrote %s')%(my_name,outfile)
-	
+
 	if config['split']:
 		if not QUIET: print "--- html..."
 		sgml2html = 'sgml2html -s %s -l %s %s' % (
@@ -4321,17 +4320,17 @@ def finish_him(outlist, config):
 
 def toc_inside_body(body, toc, config):
 	ret = []
-	if AUTOTOC: return body                     # nothing to expand
+	if AUTOTOC: return body			    # nothing to expand
 	toc_mark = MaskMaster().tocmask
 	# Expand toc mark with TOC contents
 	for line in body:
-		if line.count(toc_mark):            # toc mark found
+		if line.count(toc_mark):	    # toc mark found
 			if config['toc']:
 				ret.extend(toc)     # include if --toc
 			else:
-				pass                # or remove %%toc line
+				pass		    # or remove %%toc line
 		else:
-			ret.append(line)            # common line
+			ret.append(line)	    # common line
 	return ret
 
 def toc_tagger(toc, config):
@@ -4357,8 +4356,8 @@ def toc_tagger(toc, config):
 def toc_formatter(toc, config):
 	"Formats TOC for automatic placement between headers and body"
 
-	if config['toc-only']: return toc              # no formatting needed
-	if not config['toc'] : return []               # TOC disabled
+	if config['toc-only']: return toc	       # no formatting needed
+	if not config['toc'] : return []	       # TOC disabled
 	ret = toc
 
 	# Art: An automatic "Table of Contents" header is added to the TOC slide
@@ -4374,7 +4373,7 @@ def toc_formatter(toc, config):
 
 	# Autotoc specific formatting
 	if AUTOTOC:
-		if rules['autotocwithbars']:           # TOC between bars
+		if rules['autotocwithbars']:	       # TOC between bars
 			para = TAGS['paragraphOpen']+TAGS['paragraphClose']
 			bar  = regex['x'].sub('-' * DFT_TEXT_WIDTH, TAGS['bar1'])
 			tocbar = [para, bar, para] if config['target'] != 'txt' else [bar]
@@ -4383,7 +4382,7 @@ def toc_formatter(toc, config):
 				ret = [para] + ret + tocbar
 			else:
 				ret = tocbar + ret + tocbar
-		if rules['blankendautotoc']:           # blank line after TOC
+		if rules['blankendautotoc']:	       # blank line after TOC
 			ret.append('')
 		if rules['autotocnewpagebefore']:      # page break before TOC
 			ret.insert(0,TAGS['pageBreak'])
@@ -4398,12 +4397,12 @@ def doHeader(headers, config):
 	target = config['target']
 	if not HEADER_TEMPLATE.has_key(target):
 		Error("doHeader: Unknown target '%s'"%target)
-	
+
 	if target in ('html','xhtml') and config.get('css-sugar'):
 		template = HEADER_TEMPLATE[target+'css'].split('\n')
 	else:
 		template = HEADER_TEMPLATE[target].split('\n')
-	
+
 	head_data = {'STYLE':[], 'ENCODING':''}
 	for key in head_data.keys():
 		val = config.get(key.lower())
@@ -4424,7 +4423,7 @@ def doHeader(headers, config):
 			contents = doEscape(target, contents)
 		if target == 'lout':
 			contents = doFinalEscape(target, contents)
-		
+
 		head_data['HEADER%d'%(i+1)] = contents
 
 	# css-inside removes STYLE line
@@ -4437,18 +4436,18 @@ def doHeader(headers, config):
 
 	# ASCII Art does not use a header template, aa_header() formats the header
 	if target == 'art':
-                n_h = len([v for v in head_data if v.startswith("HEADER") and head_data[v]])
-                if not n_h :
-                        return []
-                if config['slides']:
-                        x = config['height'] - 3 - (n_h * 3)
-                        n = x / (n_h + 1)
-                        end = x % (n_h + 1)
-                        template = aa_header(head_data, config['width'], n, end)
-                else:
-                        template = [''] + aa_header(head_data, config['width'], 2, 0)
+		n_h = len([v for v in head_data if v.startswith("HEADER") and head_data[v]])
+		if not n_h :
+			return []
+		if config['slides']:
+			x = config['height'] - 3 - (n_h * 3)
+			n = x / (n_h + 1)
+			end = x % (n_h + 1)
+			template = aa_header(head_data, config['width'], n, end)
+		else:
+			template = [''] + aa_header(head_data, config['width'], 2, 0)
 		# Header done, let's get out
-                return template
+		return template
 
 	# Scan for empty dictionary keys
 	# If found, scan template lines for that key reference
@@ -4456,7 +4455,7 @@ def doHeader(headers, config):
 	# If there isn't any other key reference on the same line, remove it
 	#TODO loop by template line > key
 	for key in head_data.keys():
-		if head_data.get(key) and (target == 'txt' or not re.search('^=*$', head_data.get(key))): continue #MS
+		if head_data.get(key) and (target == 'txt' or key == 'STYLE' or not re.search('^=*$', head_data.get(key))): continue
 		for line in template:
 			if line.count('%%(%s)s'%key):
 				sline = line.replace('%%(%s)s'%key, '')
@@ -4478,7 +4477,7 @@ def doHeader(headers, config):
 				break
 	# Populate template with data (dict expansion)
 	template = '\n'.join(template) % head_data
-	
+
 	# Adding CSS contents into template (for --css-inside)
 	# This code sux. Dirty++
 	if target in ('html','xhtml') and config.get('css-inside') and \
@@ -4506,10 +4505,10 @@ def doHeader(headers, config):
 			template = re.sub('(?i)(</HEAD>)', css+r'\1', template)
 			# template = re.sub(r'(?i)(\\begin{document})',
 			#		css+'\n'+r'\1', template) # tex
-		
+
 		# The last blank line to keep everything separated
 		template = re.sub('(?i)(</HEAD>)', '\n'+r'\1', template)
-	
+
 	return template.split('\n')
 
 def doCommentLine(txt):
@@ -4517,7 +4516,7 @@ def doCommentLine(txt):
 	txt = maskEscapeChar(txt)
 	if TAGS['comment'].count('--') and txt.count('--'):
 		txt = re.sub('-(?=-)', r'-\\', txt)
-	
+
 	if TAGS['comment']:
 		return regex['x'].sub(txt, TAGS['comment'])
 	return ''
@@ -4528,11 +4527,11 @@ def doFooter(config):
 	# No footer. The --no-headers option hides header AND footer
 	if not config['headers']:
 		return []
-	
+
 	# Only add blank line before footer if last block doesn't added by itself
 	if not rules.get('blanksaround'+BLOCK.last):
 		ret.append('')
-	
+
 	# Add txt2tags info at footer, if target supports comments
 	if TAGS['comment']:
 
@@ -4541,7 +4540,7 @@ def doFooter(config):
 		target = config['target']
 		if config['target'] == 'tex':
 			target = 'LaTeX2e'
-		
+
 		t2t_version = '%s code generated by %s %s (%s)' % (target, my_name, my_version, my_url)
 		cmdline = 'cmdline: %s %s' % (my_name, ' '.join(config['realcmdline']))
 
@@ -4568,21 +4567,21 @@ def doEscape(target,txt):
 	elif target == 'mgp':
 		txt = re.sub('^%',' %',txt)  # add leading blank to avoid parse
 	elif target == 'man':
-		txt = re.sub("^([.'])", '\\&\\1',txt)           # command ID
-		txt = txt.replace(ESCCHAR, ESCCHAR+'e')         # \e
+		txt = re.sub("^([.'])", '\\&\\1',txt)		# command ID
+		txt = txt.replace(ESCCHAR, ESCCHAR+'e')		# \e
 	elif target == 'lout':
 		# TIP: / moved to FinalEscape to avoid //italic//
 		# TIP: these are also converted by lout:  ...  ---  --
-		txt = txt.replace(ESCCHAR, tmpmask)             # \
-		txt = txt.replace('"', '"%s""'%ESCCHAR)         # "\""
-		txt = re.sub('([|&{}@#^~])', '"\\1"', txt)      # "@"
-		txt = txt.replace(tmpmask, '"%s"'%(ESCCHAR*2))  # "\\"
+		txt = txt.replace(ESCCHAR, tmpmask)		# \
+		txt = txt.replace('"', '"%s""'%ESCCHAR)		# "\""
+		txt = re.sub('([|&{}@#^~])', '"\\1"', txt)	# "@"
+		txt = txt.replace(tmpmask, '"%s"'%(ESCCHAR*2))	# "\\"
 	elif target == 'tex':
 		# Mark literal \ to be changed to $\backslash$ later
 		txt = txt.replace(ESCCHAR, tmpmask)
 		txt = re.sub('([#$&%{}])', ESCCHAR+r'\1'  , txt)  # \%
-		txt = re.sub('([~^])'    , ESCCHAR+r'\1{}', txt)  # \~{}
-		txt = re.sub('([<|>])'   ,         r'$\1$', txt)  # $>$
+		txt = re.sub('([~^])'	 , ESCCHAR+r'\1{}', txt)  # \~{}
+		txt = re.sub('([<|>])'	 ,	   r'$\1$', txt)  # $>$
 		txt = txt.replace(tmpmask, maskEscapeChar(r'$\backslash$'))
 		# TIP the _ is escaped at the end
 	return txt
@@ -4605,7 +4604,7 @@ def EscapeCharHandler(action, data):
 	if action not in ('mask','unmask'):
 		Error("EscapeCharHandler: Invalid action '%s'"%action)
 	if action == 'mask': return data.replace('\\', ESCCHAR)
-	else:                return data.replace(ESCCHAR, '\\')
+	else:		     return data.replace(ESCCHAR, '\\')
 
 def maskEscapeChar(data):
 	"Replace any Escape Char \ with a text mask (Input: str or list)"
@@ -4623,8 +4622,8 @@ def addLineBreaks(mylist):
 	"use LB to respect sys.platform"
 	ret = []
 	for line in mylist:
-		line = line.replace('\n', LB)        # embedded \n's
-		ret.append(line+LB)                  # add final line break
+		line = line.replace('\n', LB)	     # embedded \n's
+		ret.append(line+LB)		     # add final line break
 	return ret
 
 # Convert ['foo\nbar'] to ['foo', 'bar']
@@ -4651,7 +4650,7 @@ def beautify_me(name, line):
 
 	# Exception: Doesn't parse an horizontal bar as strike
 	if name == 'strike' and regex['bar'].search(line): return line
-	
+
 	name  = 'font%s' % name.capitalize()
 	open_ = TAGS['%sOpen'%name]
 	close = TAGS['%sClose'%name]
@@ -4663,30 +4662,30 @@ def get_tagged_link(label, url):
 	ret = ''
 	target = CONF['target']
 	image_re = regex['img']
-	
+
 	# Set link type
 	if regex['email'].match(url):
 		linktype = 'email'
 	else:
 		linktype = 'url';
-	
+
 	# Escape specials from TEXT parts
 	label = doEscape(target,label)
-	
+
 	# Escape specials from link URL
 	if not rules['linkable'] or rules['escapeurl']:
 		url = doEscape(target, url)
-	
+
 	# Adding protocol to guessed link
 	guessurl = ''
 	if linktype == 'url' and \
 	   re.match('(?i)'+regex['_urlskel']['guess'], url):
 		if url[0] in 'Ww': guessurl = 'http://' +url
-		else             : guessurl =  'ftp://' +url
-		
+		else		 : guessurl =  'ftp://' +url
+
 		# Not link aware targets -> protocol is useless
 		if not rules['linkable']: guessurl = ''
-	
+
 	# Simple link (not guessed)
 	if not label and not guessurl:
 		if CONF['mask-email'] and linktype == 'email':
@@ -4700,31 +4699,31 @@ def get_tagged_link(label, url):
 			# Just add link data to tag
 			tag = TAGS[linktype]
 			ret = regex['x'].sub(url,tag)
-	
+
 	# Named link or guessed simple link
 	else:
 		# Adjusts for guessed link
-		if not label: label = url         # no   protocol
-		if guessurl : url   = guessurl    # with protocol
-		
+		if not label: label = url	  # no	 protocol
+		if guessurl : url   = guessurl	  # with protocol
+
 		# Image inside link!
 		if image_re.match(label):
 			if rules['imglinkable']:  # get image tag
 				label = parse_images(label)
-			else:                     #  img@link !supported
+			else:			  #  img@link !supported
 				label = "(%s)"%image_re.match(label).group(1)
-		
+
 		# Putting data on the right appearance order
 		if rules['labelbeforelink'] or not rules['linkable']:
 			urlorder = [label, url]   # label before link
 		else:
 			urlorder = [url, label]   # link before label
-		
+
 		# Add link data to tag (replace \a's)
 		ret = TAGS["%sMark"%linktype]
 		for data in urlorder:
 			ret = regex['x'].sub(data,ret,1)
-	
+
 	return ret
 
 
@@ -4732,39 +4731,39 @@ def parse_deflist_term(line):
 	"Extract and parse definition list term contents"
 	img_re = regex['img']
 	term   = regex['deflist'].search(line).group(3)
-	
+
 	# Mask image inside term as (image.jpg), where not supported
 	if not rules['imgasdefterm'] and img_re.search(term):
 		while img_re.search(term):
 			imgfile = img_re.search(term).group(1)
 			term = img_re.sub('(%s)'%imgfile, term, 1)
-	
+
 	#TODO tex: escape ] on term. \], \rbrack{} and \verb!]! don't work :(
 	return term
 
 
 def get_image_align(line):
 	"Return the image (first found) align for the given line"
-	
+
 	# First clear marks that can mess align detection
-	line = re.sub(SEPARATOR+'$', '', line)  # remove deflist sep
-	line = re.sub('^'+SEPARATOR, '', line)  # remove list sep
-	line = re.sub('^[\t]+'     , '', line)  # remove quote mark
-	
+	line = re.sub(SEPARATOR+'$', '', line)	# remove deflist sep
+	line = re.sub('^'+SEPARATOR, '', line)	# remove list sep
+	line = re.sub('^[\t]+'	   , '', line)	# remove quote mark
+
 	# Get image position on the line
 	m = regex['img'].search(line)
 	ini = m.start() ; head = 0
-	end = m.end()   ; tail = len(line)
-	
+	end = m.end()	; tail = len(line)
+
 	# The align detection algorithm
 	if   ini == head and end != tail: align = 'left'   # ^img + text$
 	elif ini != head and end == tail: align = 'right'  # ^text + img$
-	else                            : align = 'center' # default align
-	
+	else				: align = 'center' # default align
+
 	# Some special cases
 	if BLOCK.isblock('table'): align = 'center'    # ignore when table
 #	if TARGET == 'mgp' and align == 'center': align = 'center'
-	
+
 	return align
 
 
@@ -4793,9 +4792,9 @@ def get_encoding_string(enc, target):
 	}
 	# Normalization
 	enc = re.sub('(?i)(us[-_]?)?ascii|us|ibm367','us-ascii'  , enc)
-	enc = re.sub('(?i)(ibm|cp)?85([02])'        ,'ibm85\\2'  , enc)
+	enc = re.sub('(?i)(ibm|cp)?85([02])'	    ,'ibm85\\2'  , enc)
 	enc = re.sub('(?i)(iso[_-]?)?8859[_-]?'     ,'iso-8859-' , enc)
-	enc = re.sub('iso-8859-($|[^1-9]).*'        ,'iso-8859-1', enc)
+	enc = re.sub('iso-8859-($|[^1-9]).*'	    ,'iso-8859-1', enc)
 	# Apply translation table
 	try: enc = translate[target][enc.lower()]
 	except: pass
@@ -4812,7 +4811,7 @@ def process_source_file(file_='', noconf=0, contents=[]):
 	Find and Join all the configuration available for a source file.
 	No sanity checking is done on this step.
 	It also extracts the source document parts into separate holders.
-	
+
 	The config scan order is:
 		1. The user configuration file (i.e. $HOME/.txt2tagsrc)
 		2. The source document's CONF area
@@ -4821,7 +4820,7 @@ def process_source_file(file_='', noconf=0, contents=[]):
 	The return data is a tuple of two items:
 		1. The parsed config dictionary
 		2. The document's parts, as a (head, conf, body) tuple
-	
+
 	All the conversion process will be based on the data and
 	configuration returned by this function.
 	The source files is read on this step only.
@@ -4876,7 +4875,7 @@ def get_infiles_config(infiles):
 
 def convert_this_files(configs):
 	global CONF
-	for myconf,doc in configs:                 # multifile support
+	for myconf,doc in configs:		   # multifile support
 		target_head = []
 		target_toc  = []
 		target_body = []
@@ -4892,8 +4891,8 @@ def convert_this_files(configs):
 		first_body_line = (len(source_head) or 1)+ len(source_conf) + 1
 		Message(_("Composing target Body"),1)
 		target_body, marked_toc = convert(source_body, myconf, firstlinenr=first_body_line)
-                while len(target_body) and not target_body[0].strip(): target_body.pop(0) #MS
-                while len(target_body) and not target_body[-1].strip(): target_body.pop() #MS
+		while len(target_body) and not target_body[0].strip(): target_body.pop(0)
+		while len(target_body) and not target_body[-1].strip(): target_body.pop()
 		# If dump-source, we're done
 		if myconf['dump-source']:
 			for line in source_head+source_conf+target_body:
@@ -4934,33 +4933,33 @@ def parse_images(line):
 	while regex['img'].search(line) and TAGS['img'] != '[\a]':
 		txt = regex['img'].search(line).group(1)
 		tag = TAGS['img']
-		
+
 		# If target supports image alignment, here we go
 		if rules['imgalignable']:
-			
-			align = get_image_align(line)         # right
+
+			align = get_image_align(line)	      # right
 			align_name = align.capitalize()       # Right
-			
+
 			# The align is a full tag, or part of the image tag (~A~)
 			if TAGS['imgAlign'+align_name]:
 				tag = TAGS['imgAlign'+align_name]
 			else:
 				align_tag = TAGS['_imgAlign'+align_name]
 				tag = regex['_imgAlign'].sub(align_tag, tag, 1)
-				
+
 			# Dirty fix to allow centered solo images
 			if align == 'center' and TARGET in ('html','xhtml'):
 				rest = regex['img'].sub('',line,1)
 				if re.match('^\s+$', rest):
 					tag = "<center>%s</center>" %tag
-		
+
 		if TARGET == 'tex':
 			tag = re.sub(r'\\b',r'\\\\b',tag)
 			txt = txt.replace('_', 'vvvvTexUndervvvv')
-		
+
 		# Ugly hack to avoid infinite loop when target's image tag contains []
 		tag = tag.replace('[', 'vvvvEscapeSquareBracketvvvv')
-		
+
 		line = regex['img'].sub(tag,line,1)
 		line = regex['x'].sub(txt,line,1)
 	return line.replace('vvvvEscapeSquareBracketvvvv','[')
@@ -4971,7 +4970,7 @@ def add_inline_tags(line):
 	for beauti in ('bold', 'italic', 'underline', 'strike'):
 		if regex['font%s'%beauti.capitalize()].search(line):
 			line = beautify_me(beauti, line)
-	
+
 	line = parse_images(line)
 	return line
 
@@ -5012,22 +5011,22 @@ def set_global_config(config):
 
 def convert(bodylines, config, firstlinenr=1):
 	global BLOCK, TITLE
-	
+
 	set_global_config(config)
-	
+
 	target = config['target']
 	BLOCK = BlockMaster()
 	MASK  =  MaskMaster()
 	TITLE = TitleMaster()
-	
+
 	ret = []
 	dump_source = []
 	f_lastwasblank = 0
-	
+
 	# Compiling all PreProc regexes
 	pre_filter = compile_filters(
 		CONF['preproc'], _('Invalid PreProc filter regex'))
-	
+
 	# Let's mark it up!
 	linenr = firstlinenr-1
 	lineref = 0
@@ -5035,38 +5034,38 @@ def convert(bodylines, config, firstlinenr=1):
 		# Defaults
 		MASK.reset()
 		results_box = ''
-		
+
 		untouchedline = bodylines[lineref]
 		dump_source.append(untouchedline)
-		
+
 		line = re.sub('[\n\r]+$','',untouchedline)   # del line break
-		
+
 		# Apply PreProc filters
 		if pre_filter:
 			errmsg = _('Invalid PreProc filter replacement')
 			for rgx,repl in pre_filter:
 				try: line = rgx.sub(repl, line)
 				except: Error("%s: '%s'"%(errmsg, repl))
-		
-		line = maskEscapeChar(line)                  # protect \ char
-		linenr  += 1
+
+		line = maskEscapeChar(line)		     # protect \ char
+		linenr	+= 1
 		lineref += 1
-		
+
 		Debug(repr(line), 2, linenr)  # heavy debug: show each line
-		
+
 		#------------------[ Comment Block ]------------------------
-		
+
 		# We're already on a comment block
 		if BLOCK.block() == 'comment':
-		
+
 			# Closing comment
 			if regex['blockCommentClose'].search(line):
 				ret.extend(BLOCK.blockout() or [])
 				continue
-			
+
 			# Normal comment-inside line. Ignore it.
 			continue
-		
+
 		# Detecting comment block init
 		if regex['blockCommentOpen'].search(line) \
 		   and BLOCK.block() not in BLOCK.exclusive:
@@ -5077,22 +5076,22 @@ def convert(bodylines, config, firstlinenr=1):
 
 		# We're already on a tagged block
 		if BLOCK.block() == 'tagged':
-		
+
 			# Closing tagged
 			if regex['blockTaggedClose'].search(line):
 				ret.extend(BLOCK.blockout())
 				continue
-			
+
 			# Normal tagged-inside line
 			BLOCK.holdadd(line)
 			continue
-		
+
 		# Detecting tagged block init
 		if regex['blockTaggedOpen'].search(line) \
 		   and BLOCK.block() not in BLOCK.exclusive:
 			ret.extend(BLOCK.blockin('tagged'))
 			continue
-		
+
 		# One line tagged text
 		if regex['1lineTagged'].search(line) \
 		   and BLOCK.block() not in BLOCK.exclusive:
@@ -5101,27 +5100,27 @@ def convert(bodylines, config, firstlinenr=1):
 			BLOCK.holdadd(line)
 			ret.extend(BLOCK.blockout())
 			continue
-		
+
 		#-------------------------[ Raw Text ]----------------------
-		
+
 		# We're already on a raw block
 		if BLOCK.block() == 'raw':
-		
+
 			# Closing raw
 			if regex['blockRawClose'].search(line):
 				ret.extend(BLOCK.blockout())
 				continue
-			
+
 			# Normal raw-inside line
 			BLOCK.holdadd(line)
 			continue
-		
+
 		# Detecting raw block init
 		if regex['blockRawOpen'].search(line) \
 		   and BLOCK.block() not in BLOCK.exclusive:
 			ret.extend(BLOCK.blockin('raw'))
 			continue
-		
+
 		# One line raw text
 		if regex['1lineRaw'].search(line) \
 		   and BLOCK.block() not in BLOCK.exclusive:
@@ -5130,36 +5129,36 @@ def convert(bodylines, config, firstlinenr=1):
 			BLOCK.holdadd(line)
 			ret.extend(BLOCK.blockout())
 			continue
-		
+
 		#------------------------[ Verbatim  ]----------------------
-		
+
 		#TIP We'll never support beautifiers inside verbatim
-		
+
 		# Closing table mapped to verb
 		if BLOCK.block() == 'verb' \
 		   and BLOCK.prop('mapped') == 'table' \
 		   and not regex['table'].search(line):
 			ret.extend(BLOCK.blockout())
-		
+
 		# We're already on a verb block
 		if BLOCK.block() == 'verb':
-			
+
 			# Closing verb
 			if regex['blockVerbClose'].search(line):
 				ret.extend(BLOCK.blockout())
 				continue
-			
+
 			# Normal verb-inside line
 			BLOCK.holdadd(line)
 			continue
-		
+
 		# Detecting verb block init
 		if regex['blockVerbOpen'].search(line) \
 		   and BLOCK.block() not in BLOCK.exclusive:
 			ret.extend(BLOCK.blockin('verb'))
 			f_lastwasblank = 0
 			continue
-		
+
 		# One line verb-formatted text
 		if regex['1lineVerb'].search(line) \
 		   and BLOCK.block() not in BLOCK.exclusive:
@@ -5169,7 +5168,7 @@ def convert(bodylines, config, firstlinenr=1):
 			ret.extend(BLOCK.blockout())
 			f_lastwasblank = 0
 			continue
-		
+
 		# Tables are mapped to verb when target is not table-aware
 		if not rules['tableable'] and regex['table'].search(line):
 			if not BLOCK.isblock('verb'):
@@ -5177,64 +5176,64 @@ def convert(bodylines, config, firstlinenr=1):
 				BLOCK.propset('mapped', 'table')
 				BLOCK.holdadd(line)
 				continue
-		
+
 		#---------------------[ blank lines ]-----------------------
-		
+
 		if regex['blankline'].search(line):
-			
+
 			# Close open paragraph
 			if BLOCK.isblock('para'):
 				ret.extend(BLOCK.blockout())
 				f_lastwasblank = 1
 				continue
-			
+
 			# Close all open tables
 			if BLOCK.isblock('table'):
 				ret.extend(BLOCK.blockout())
 				f_lastwasblank = 1
 				continue
-			
+
 			# Close all open quotes
 			while BLOCK.isblock('quote'):
 				ret.extend(BLOCK.blockout())
-			
+
 			# Closing all open lists
-			if f_lastwasblank:          # 2nd consecutive blank
+			if f_lastwasblank:	    # 2nd consecutive blank
 				if BLOCK.block().endswith('list'):
 					BLOCK.holdaddsub('')   # helps parser
 				while BLOCK.depth:  # closes list (if any)
 					ret.extend(BLOCK.blockout())
-				continue            # ignore consecutive blanks
-			
+				continue	    # ignore consecutive blanks
+
 			# Paragraph (if any) is wanted inside lists also
 			if BLOCK.block().endswith('list'):
 				BLOCK.holdaddsub('')
-			
+
 			f_lastwasblank = 1
 			continue
-		
-		
+
+
 		#---------------------[ special ]---------------------------
-		
+
 		if regex['special'].search(line):
-			
+
 			targ, key, val = ConfigLines().parse_line(line, None, target)
-			
+
 			if key:
 				Debug("Found config '%s', value '%s'" % (key, val), 1, linenr)
 			else:
 				Debug('Bogus Special Line', 1, linenr)
-				
+
 			# %!include command
 			if key == 'include':
-						
+
 				incpath = os.path.dirname(CONF['sourcefile'])
 				incfile = val
 				err = _('A file cannot include itself (loop!)')
 				if CONF['sourcefile'] == incfile:
 					Error("%s: %s"%(err,incfile))
 				inctype, inclines = get_include_contents(incfile, incpath)
-				
+
 				# Verb, raw and tagged are easy
 				if inctype != 't2t':
 					ret.extend(BLOCK.blockin(inctype))
@@ -5248,10 +5247,10 @@ def convert(bodylines, config, firstlinenr=1):
 					# Remove %!include call
 					if CONF['dump-source']:
 						dump_source.pop()
-				
+
 				# This line is done, go to next
 				continue
-				
+
 			# %!csv command
 			elif key == 'csv':
 
@@ -5261,7 +5260,7 @@ def convert(bodylines, config, firstlinenr=1):
 				table = []
 				filename = val
 				reader = csv.reader(Readfile(filename))
-				
+
 				# Convert each CSV line to a txt2tags' table line
 				# foo,bar,baz -> | foo | bar | baz |
 				try:
@@ -5279,7 +5278,7 @@ def convert(bodylines, config, firstlinenr=1):
 						for row in table:
 							tablerow = TableMaster().parse_row(row)
 							BLOCK.tableparser.add_row(tablerow)
-							
+
 							# Very ugly, but necessary for escapes
 							line = SEPARATOR.join(tablerow['cells'])
 							BLOCK.holdadd(doEscape(target, line))
@@ -5294,39 +5293,39 @@ def convert(bodylines, config, firstlinenr=1):
 					for row in table:
 						BLOCK.holdadd(row)
 					ret.extend(BLOCK.blockout())
-					
+
 				# This line is done, go to next
 				continue
-					
+
 		#---------------------[ dump-source ]-----------------------
-		
+
 		# We don't need to go any further
 		if CONF['dump-source']:
 			continue
-		
+
 		#---------------------[ Comments ]--------------------------
-		
+
 		# Just skip them (if not macro)
 		if regex['comment'].search(line) and not \
 		   regex['macros'].match(line) and not \
 		   regex['toc'].match(line):
 			continue
-		
+
 		#---------------------[ Triggers ]--------------------------
-		
+
 		# Valid line, reset blank status
 		f_lastwasblank = 0
-		
+
 		# Any NOT quote line closes all open quotes
 		if BLOCK.isblock('quote') and not regex['quote'].search(line):
 			while BLOCK.isblock('quote'):
 				ret.extend(BLOCK.blockout())
-		
+
 		# Any NOT table line closes an open table
 		if BLOCK.isblock('table') and not regex['table'].search(line):
 			ret.extend(BLOCK.blockout())
-		
-		
+
+
 		#---------------------[ Horizontal Bar ]--------------------
 
 		if regex['bar'].search(line):
@@ -5354,7 +5353,7 @@ def convert(bodylines, config, firstlinenr=1):
 
 
 		#---------------------[ Title ]-----------------------------
-		
+
 		if (regex['title'].search(line) or regex['numtitle'].search(line)) \
 			and not BLOCK.block().endswith('list'):
 
@@ -5362,56 +5361,56 @@ def convert(bodylines, config, firstlinenr=1):
 				name = 'title'
 			else:
 				name = 'numtitle'
-			
+
 			# Close all the opened blocks
 			ret.extend(BLOCK.blockin(name))
-			
+
 			# Process title
 			TITLE.add(line)
 			ret.extend(BLOCK.blockout())
-			
+
 			# We're done, nothing more to process
 			continue
-		
+
 		#---------------------[ %%toc ]-----------------------
-		
+
 		# %%toc line closes paragraph
 		if BLOCK.block() == 'para' and regex['toc'].search(line):
 			ret.extend(BLOCK.blockout())
-		
+
 		#---------------------[ apply masks ]-----------------------
-		
+
 		line = MASK.mask(line)
-		
+
 		#XXX from here, only block-inside lines will pass
-		
+
 		#---------------------[ Quote ]-----------------------------
-		
+
 		if regex['quote'].search(line):
-			
+
 			# Store number of leading TABS
 			quotedepth = len(regex['quote'].search(line).group(0))
-			
+
 			# SGML doesn't support nested quotes
 			if rules['quotenotnested']: quotedepth = 1
-			
+
 			# Don't cross depth limit
 			maxdepth = rules['quotemaxdepth']
 			if maxdepth and quotedepth > maxdepth:
 				quotedepth = maxdepth
-			
+
 			# New quote
 			if not BLOCK.isblock('quote'):
 				ret.extend(BLOCK.blockin('quote'))
-			
+
 			# New subquotes
 			while BLOCK.depth < quotedepth:
 				BLOCK.blockin('quote')
-			
+
 			# Closing quotes
 			while quotedepth < BLOCK.depth:
 				ret.extend(BLOCK.blockout())
-			
+
 			# Bar inside quote
 			if regex['bar'].search(line) and rules['barinsidequote']:
 				tempBlock = BlockMaster()
@@ -5423,7 +5422,7 @@ def convert(bodylines, config, firstlinenr=1):
 				continue
 
 		#---------------------[ Lists ]-----------------------------
-		
+
 		# An empty item also closes the current list
 		if BLOCK.block().endswith('list'):
 			m = regex['listclose'].match(line)
@@ -5436,11 +5435,11 @@ def convert(bodylines, config, firstlinenr=1):
 				   listtype == currlisttype:
 					ret.extend(BLOCK.blockout())
 					continue
-		
+
 		if   regex['list'].search(line) or \
 		  regex['numlist'].search(line) or \
 		  regex['deflist'].search(line):
-			
+
 			listindent = BLOCK.prop('indent')
 			listids = ''.join(LISTNAMES.keys())
 			m = re.match('^( *)([%s]) '%listids, line)
@@ -5448,7 +5447,7 @@ def convert(bodylines, config, firstlinenr=1):
 			listtype = m.group(2)
 			listname = LISTNAMES[listtype]
 			results_box = BLOCK.holdadd
-			
+
 			# Del list ID (and separate term from definition)
 			if listname == 'deflist':
 				term = parse_deflist_term(line)
@@ -5456,13 +5455,13 @@ def convert(bodylines, config, firstlinenr=1):
 					SEPARATOR+term+SEPARATOR,line)
 			else:
 				line = regex[listname].sub(SEPARATOR,line)
-			
+
 			# Don't cross depth limit
 			maxdepth = rules['listmaxdepth']
 			if maxdepth and BLOCK.depth == maxdepth:
 				if len(listitemindent) > len(listindent):
 					listitemindent = listindent
-			
+
 			# List bumping (same indent, diff mark)
 			# Close the currently open list to clear the mess
 			if BLOCK.block().endswith('list') \
@@ -5470,66 +5469,66 @@ def convert(bodylines, config, firstlinenr=1):
 			   and len(listitemindent) == len(listindent):
 				ret.extend(BLOCK.blockout())
 				listindent = BLOCK.prop('indent')
-			
+
 			# Open mother list or sublist
 			if not BLOCK.block().endswith('list') or \
 			   len(listitemindent) > len(listindent):
 				ret.extend(BLOCK.blockin(listname))
 				BLOCK.propset('indent',listitemindent)
 				BLOCK.propset('type',listtype)
-			
+
 			# Closing sublists
 			while len(listitemindent) < len(BLOCK.prop('indent')):
 				ret.extend(BLOCK.blockout())
-			
+
 			# O-oh, sublist before list ("\n\n  - foo\n- foo")
 			# Fix: close sublist (as mother), open another list
 			if not BLOCK.block().endswith('list'):
 				ret.extend(BLOCK.blockin(listname))
 				BLOCK.propset('indent',listitemindent)
 				BLOCK.propset('type',listtype)
-		
+
 		#---------------------[ Table ]-----------------------------
-		
+
 		#TODO escape undesired format inside table
 		#TODO add pm6 target
 		if regex['table'].search(line):
-			
-			if not BLOCK.isblock('table'):   # first table line!
+
+			if not BLOCK.isblock('table'):	 # first table line!
 				ret.extend(BLOCK.blockin('table'))
 				BLOCK.tableparser.__init__(line)
-			
+
 			tablerow = TableMaster().parse_row(line)
-			BLOCK.tableparser.add_row(tablerow)     # save config
-			
+			BLOCK.tableparser.add_row(tablerow)	# save config
+
 			# Maintain line to unmask and inlines
 			# XXX Bug: | **bo | ld** | turns **bo\x01ld** and gets converted :(
 			# TODO isolate unmask+inlines parsing to use here
 			line = SEPARATOR.join(tablerow['cells'])
-		
+
 		#---------------------[ Paragraph ]-------------------------
-		
+
 		if not BLOCK.block() and \
 		   not line.count(MASK.tocmask): # new para!
 			ret.extend(BLOCK.blockin('para'))
-		
-		
+
+
 		############################################################
 		############################################################
 		############################################################
-		
-		
+
+
 		#---------------------[ Final Parses ]----------------------
-		
+
 		# The target-specific special char escapes for body lines
 		line = doEscape(target,line)
-		
+
 		line = add_inline_tags(line)
 		line = MASK.undo(line)
-		
-		
+
+
 		#---------------------[ Hold or Return? ]-------------------
-		
+
 		### Now we must choose where to put the parsed line
 		#
 		if not results_box:
@@ -5543,28 +5542,28 @@ def convert(bodylines, config, firstlinenr=1):
 			else:
 				line = doFinalEscape(target, line)
 				results_box = ret.append
-		
+
 		results_box(line)
-	
+
 	# EOF: close any open para/verb/lists/table/quotes
 	Debug('EOF',7)
 	while BLOCK.block():
 		ret.extend(BLOCK.blockout())
-	
+
 	# Maybe close some opened title area?
 	if rules['titleblocks']:
 		ret.extend(TITLE.close_all())
-	
+
 	# Maybe a major tag to enclose body? (like DIV for CSS)
 	if TAGS['bodyOpen' ]: ret.insert(0, TAGS['bodyOpen'])
 	if TAGS['bodyClose']: ret.append(TAGS['bodyClose'])
-	
+
 	if CONF['toc-only']: ret = []
 	marked_toc = TITLE.dump_marked_toc(CONF['toc-level'])
-	
+
 	# If dump-source, all parsing is ignored
 	if CONF['dump-source']: ret = dump_source[:]
-	
+
 	return ret, marked_toc
 
 
@@ -5575,7 +5574,7 @@ def convert(bodylines, config, firstlinenr=1):
 #
 # Tk help: http://python.org/topics/tkinter/
 #    Tuto: http://ibiblio.org/obp/py4fun/gui/tkPhone.html
-#          /usr/lib/python*/lib-tk/Tkinter.py
+#	   /usr/lib/python*/lib-tk/Tkinter.py
 #
 # grid table : row=0, column=0, columnspan=2, rowspan=2
 # grid align : sticky='n,s,e,w' (North, South, East, West)
@@ -5599,41 +5598,41 @@ class Gui:
 		self.root = Tkinter.Tk()    # mother window, come to butthead
 		self.root.title(my_name)    # window title bar text
 		self.window = self.root     # variable "focus" for inclusion
-		self.row = 0                # row count for grid()
-		
+		self.row = 0		    # row count for grid()
+
 		self.action_length = 150    # left column length (pixel)
 		self.frame_margin  = 10     # frame margin size  (pixel)
-		self.frame_border  = 6      # frame border size  (pixel)
-		
+		self.frame_border  = 6	    # frame border size  (pixel)
+
 		# The default Gui colors, can be changed by %!guicolors
 		self.dft_gui_colors = ['#6c6','white','#cf9','#030']
 		self.gui_colors = []
 		self.bg1 = self.fg1 = self.bg2 = self.fg2 = ''
-		
+
 		# On Tk, vars need to be set/get using setvar()/get()
 		self.infile  = self.setvar('')
 		self.target  = self.setvar('')
 		self.target_name = self.setvar('')
-		
+
 		# The checks appearance order
 		self.checks = [
 			'headers', 'enum-title', 'toc', 'mask-email', 'toc-only', 'stdout'
 		]
-		
+
 		# Creating variables for all checks
 		for check in self.checks:
 			setattr(self, 'f_'+check, self.setvar(''))
-		
+
 		# Load RC config
 		self.conf = {}
 		if conf: self.load_config(conf)
-	
+
 	def load_config(self, conf):
 		self.conf = conf
 		self.gui_colors = conf.get('guicolors') or self.dft_gui_colors
 		self.bg1, self.fg1, self.bg2, self.fg2 = self.gui_colors
 		self.root.config(bd=15,bg=self.bg1)
-	
+
 	### Config as dic for python 1.5 compat (**opts don't work :( )
 	def entry(self, **opts): return Tkinter.Entry(self.window, opts)
 	def label(self, txt='', bg=None, **opts):
@@ -5660,7 +5659,7 @@ class Gui:
 		chk.grid(columnspan=2, sticky='w', padx=0)
 	def menu(self,sel,items):
 		return apply(Tkinter.OptionMenu,(self.window,sel)+tuple(items))
-	
+
 	# Handy auxiliary functions
 	def action(self, txt):
 		self.label(
@@ -5681,7 +5680,7 @@ class Gui:
 			padx=self.frame_margin)
 		self.window = self.root
 		self.label('').grid()
-		self.row += 2   # update row count
+		self.row += 2	# update row count
 	def target_name2key(self):
 		name = self.target_name.get()
 		target = filter(lambda x: TARGET_NAMES[x] == name, TARGETS)
@@ -5692,10 +5691,10 @@ class Gui:
 		key = self.target.get()
 		name = TARGET_NAMES.get(key) or key
 		self.target_name = self.setvar(name)
-	
+
 	def exit(self): self.root.destroy()
 	def setvar(self, val): z = Tkinter.StringVar() ; z.set(val) ; return z
-	
+
 	def askfile(self):
 		ftypes= [(_('txt2tags files'), ('*.t2t','*.txt')), (_('All files'),'*')]
 		newfile = askopenfilename(filetypes=ftypes)
@@ -5708,7 +5707,7 @@ class Gui:
 			self.root.destroy()
 			self.__init__(newconf)
 			self.mainwindow()
-	
+
 	def scrollwindow(self, txt='no text!', title=''):
 		# Create components
 		win    = Tkinter.Toplevel() ; win.title(title)
@@ -5726,7 +5725,7 @@ class Gui:
 		scroll.pack(side='right', fill='y')
 		frame.pack(fill='both', expand=1)
 		button.pack(ipadx=30)
-	
+
 	def runprogram(self):
 		global CMDLINE_RAW
 		# Prepare
@@ -5801,24 +5800,24 @@ class Gui:
 					_('FROM:'), infile,
 					_('TO:'), config['outfile'])
 				showinfo(my_name, msg)
-		except error:         # common error (windowed), not quit
+		except error:	      # common error (windowed), not quit
 			pass
-		except:               # fatal error (windowed and printed)
+		except:		      # fatal error (windowed and printed)
 			errormsg = getUnknownErrorMessage()
 			print errormsg
 			showerror(_('%s FATAL ERROR!')%my_name,errormsg)
 			self.exit()
 		CMDLINE_RAW = cmdline_raw_orig
-	
+
 	def mainwindow(self):
 		self.infile.set(self.conf.get('sourcefile') or '')
 		self.target.set(self.conf.get('target') or _('-- select one --'))
 		outfile = self.conf.get('outfile')
-		if outfile == STDOUT:                  # map -o-
+		if outfile == STDOUT:		       # map -o-
 			self.conf['stdout'] = 1
 		if self.conf.get('headers') == None:
 			self.conf['headers'] = 1       # map default
-		
+
 		action1 = _("Enter the source file location:")
 		action2 = _("Choose the target document type:")
 		action3 = _("Some options you may check:")
@@ -5826,14 +5825,14 @@ class Gui:
 		checks_txt = {
 			'headers'   : _("Include headers on output"),
 			'enum-title': _("Number titles (1, 1.1, 1.1.1, etc)"),
-			'toc'       : _("Do TOC also (Table of Contents)"),
+			'toc'	    : _("Do TOC also (Table of Contents)"),
 			'mask-email': _("Hide e-mails from SPAM robots"),
-		
+
 			'toc-only'  : _("Just do TOC, nothing more"),
 			'stdout'    : _("Dump to screen (Don't save target file)")
 		}
 		targets_menu = map(lambda x: TARGET_NAMES[x], TARGETS)
-		
+
 		# Header
 		self.label("%s %s"%(my_name.upper(), my_version),
 			bg=self.bg2, fg=self.fg2).grid(columnspan=2, ipadx=10)
@@ -5890,13 +5889,13 @@ class Gui:
 		b_conv.grid(row=self.row, column=1, sticky='e', padx=30)
 		if self.target.get() and self.infile.get():
 			b_conv.focus_set()
-		
+
 		# As documentation told me
 		if sys.platform.startswith('win'):
 			self.root.iconify()
 			self.root.update()
 			self.root.deiconify()
-		
+
 		self.root.mainloop()
 
 
@@ -5905,19 +5904,19 @@ class Gui:
 
 def exec_command_line(user_cmdline=[]):
 	global CMDLINE_RAW, RC_RAW, DEBUG, VERBOSE, QUIET, GUI, Error
-	
+
 	# Extract command line data
 	cmdline_data = user_cmdline or sys.argv[1:]
 	CMDLINE_RAW = CommandLine().get_raw_config(cmdline_data, relative=1)
 	cmdline_parsed = ConfigMaster(CMDLINE_RAW).parse()
-	DEBUG   = cmdline_parsed.get('debug'  ) or 0
+	DEBUG	= cmdline_parsed.get('debug'  ) or 0
 	VERBOSE = cmdline_parsed.get('verbose') or 0
-	QUIET   = cmdline_parsed.get('quiet'  ) or 0
-	GUI     = cmdline_parsed.get('gui'    ) or 0
+	QUIET	= cmdline_parsed.get('quiet'  ) or 0
+	GUI	= cmdline_parsed.get('gui'    ) or 0
 	infiles = cmdline_parsed.get('infile' ) or []
-	
+
 	Message(_("Txt2tags %s processing begins")%my_version,1)
-	
+
 	# The easy ones
 	if cmdline_parsed.get('help'   ): Quit(USAGE)
 	if cmdline_parsed.get('version'): Quit(VERSIONSTR)
@@ -5931,13 +5930,13 @@ def exec_command_line(user_cmdline=[]):
 		for option in NO_MULTI_INPUT:
 			if cmdline_parsed.get(option):
 				Error(errmsg%option)
-	
+
 	Debug("system platform: %s"%sys.platform)
 	Debug("python version: %s"%(sys.version.split('(')[0]))
 	Debug("line break char: %s"%repr(LB))
 	Debug("command line: %s"%sys.argv)
 	Debug("command line raw config: %s"%CMDLINE_RAW,1)
-	
+
 	# Extract RC file config
 	if cmdline_parsed.get('rc') == 0:
 		Message(_("Ignoring user configuration file"),1)
@@ -5946,13 +5945,13 @@ def exec_command_line(user_cmdline=[]):
 		if os.path.isfile(rc_file):
 			Message(_("Loading user configuration file"),1)
 			RC_RAW = ConfigLines(file_=rc_file).get_raw_config()
-		
+
 		Debug("rc file: %s"%rc_file)
 		Debug("rc file raw config: %s"%RC_RAW,1)
-	
+
 	# Get all infiles config (if any)
 	infiles_config = get_infiles_config(infiles)
-	
+
 	# Is GUI available?
 	# Try to load and start GUI interface for --gui
 	if GUI:
@@ -5965,7 +5964,7 @@ def exec_command_line(user_cmdline=[]):
 		except:
 			Debug("GUI Error: no Tk module or no DISPLAY")
 			GUI = 0
-	
+
 	# User forced --gui, but it's not available
 	if cmdline_parsed.get('gui') and not GUI:
 		print getTraceback(); print
@@ -5973,44 +5972,44 @@ def exec_command_line(user_cmdline=[]):
 			"Sorry, I can't run my Graphical Interface - GUI\n"
 			"- Check if Python Tcl/Tk module is installed (Tkinter)\n"
 			"- Make sure you are in a graphical environment (like X)")
-	
+
 	# Okay, we will use GUI
 	if GUI:
 		Message(_("We are on GUI interface"),1)
-		
+
 		# Redefine Error function to raise exception instead sys.exit()
 		def Error(msg):
 			showerror(_('txt2tags ERROR!'), msg)
 			raise error
-		
+
 		# If no input file, get RC+cmdline config, else full config
 		if not infiles:
 			gui_conf = ConfigMaster(RC_RAW+CMDLINE_RAW).parse()
 		else:
 			try   : gui_conf = infiles_config[0][0]
 			except: gui_conf = {}
-		
+
 		# Sanity is needed to set outfile and other things
 		gui_conf = ConfigMaster().sanity(gui_conf, gui=1)
 		Debug("GUI config: %s"%gui_conf,5)
-		
+
 		# Insert config and populate the nice window!
 		winbox.load_config(gui_conf)
 		winbox.mainwindow()
-	
+
 	# Console mode rocks forever!
 	else:
 		Message(_("We are on Command Line interface"),1)
-		
+
 		# Called with no arguments, show error
 		# TODO#1: this checking should be only in ConfigMaster.sanity()
 		if not infiles:
 			Error(_('Missing input file (try --help)') + '\n\n' +
 			_('Please inform an input file (.t2t) at the end of the command.') + '\n' +
 			_('Example:') + ' %s -t html %s' % (my_name, _('file.t2t')))
-		
+
 		convert_this_files(infiles_config)
-	
+
 	Message(_("Txt2tags finished successfully"),1)
 
 if __name__ == '__main__':

@@ -1,0 +1,12 @@
+Version 2.6.0 [7 Jan 2015]
+--------------------------
+- Initial public release.
+- Differences against txt2tags version 2.6:
+  - txt: Reflow paragraphs to 80 columns.
+  - txt: Do not use tabs to indicate heading level.
+  - txt: Use = for top-level headings and - otherwise.
+  - txt: Remove superfluous empty lines.
+  - pdf: Use lstlisting instead of verbatim, which allows
+         automatic line breaking and hyperlinks in verbatim.
+  - pdf: Add linebreak after a definition item.
+  - html,pdf: Ignore =* in headings.
