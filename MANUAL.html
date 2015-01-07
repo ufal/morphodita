@@ -2239,8 +2239,7 @@ class morpho {
   enum <A HREF="#morpho_guesser_mode">guesser_mode</A> { NO_GUESSER = 0, GUESSER = 1 };
 
   virtual int <A HREF="#morpho_analyze">analyze</A>(<A HREF="#string_piece">string_piece</A> form, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; lemmas) const = 0;
-  virtual int <A HREF="#morpho_generate">generate</A>(<A HREF="#string_piece">string_piece</A> lemma, const char* tag_wildcard, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser,
-                       std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
+  virtual int <A HREF="#morpho_generate">generate</A>(<A HREF="#string_piece">string_piece</A> lemma, const char* tag_wildcard, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
 
   virtual int <A HREF="#morpho_raw_lemma_len">raw_lemma_len</A>(<A HREF="#string_piece">string_piece</A> lemma) const = 0;
   virtual int <A HREF="#morpho_lemma_id_len">lemma_id_len</A>(<A HREF="#string_piece">string_piece</A> lemma) const = 0;
@@ -2319,8 +2318,7 @@ analysis containing given form as lemma and a tag for unknown word.
 <H3>7.10.5. morpho::generate()</H3>
 
 <PRE>
-virtual int generate(<A HREF="#string_piece">string_piece</A> lemmma, const char* tag_wildcard, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser,
-                     std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
+virtual int generate(<A HREF="#string_piece">string_piece</A> lemmma, const char* tag_wildcard, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
 </PRE>
 
 <P>
@@ -2497,10 +2495,10 @@ class tagset_converter {
   virtual void <A HREF="#tagset_converter_convert_analyzed">convert_analyzed</A>(std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tagged_lemmas) const = 0;
   virtual void <A HREF="#tagset_converter_convert_generated">convert_generated</A>(std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
 
-  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_identity_converter">new_identity_converter</A>();
-  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_pdt_to_conll2009_converter">new_pdt_to_conll2009_converter</A>();
-  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_strip_lemma_comment_converter">new_strip_lemma_comment_converter</A>(const <A HREF="#morpho">morpho</A>&amp; dictionary);
-  static <A HREF="#tagset_converter">tagset_converter*</A> <A HREF="#tagset_converter_new_strip_lemma_id_converter">new_strip_lemma_id_converter</A>(const <A HREF="#morpho">morpho</A>&amp; dictionary);
+  static <A HREF="#tagset_converter">tagset_converter</A>* <A HREF="#tagset_converter_new_identity_converter">new_identity_converter</A>();
+  static <A HREF="#tagset_converter">tagset_converter</A>* <A HREF="#tagset_converter_new_pdt_to_conll2009_converter">new_pdt_to_conll2009_converter</A>();
+  static <A HREF="#tagset_converter">tagset_converter</A>* <A HREF="#tagset_converter_new_strip_lemma_comment_converter">new_strip_lemma_comment_converter</A>(const <A HREF="#morpho">morpho</A>&amp; dictionary);
+  static <A HREF="#tagset_converter">tagset_converter</A>* <A HREF="#tagset_converter_new_strip_lemma_id_converter">new_strip_lemma_id_converter</A>(const <A HREF="#morpho">morpho</A>&amp; dictionary);
 };
 </PRE>
 
@@ -2543,7 +2541,7 @@ Convert the given results of <A HREF="#morpho_generate">morpho::generate</A>. Ap
 <H3>7.12.4. tagset_converter::new_identity_converter()</H3>
 
 <PRE>
-static <A HREF="#tagset_converter">tagset_converter*</A> new_identity_converter();
+static <A HREF="#tagset_converter">tagset_converter</A>* new_identity_converter();
 </PRE>
 
 <P>
@@ -2555,7 +2553,7 @@ identity converter do nothing. The user should delete the instance after use.
 <H3>7.12.5. tagset_converter::new_pdt_to_conll2009_converter()</H3>
 
 <PRE>
-static <A HREF="#tagset_converter">tagset_converter*</A> new_pdt_to_conll2009_converter();
+static <A HREF="#tagset_converter">tagset_converter</A>* new_pdt_to_conll2009_converter();
 </PRE>
 
 <P>
@@ -2572,7 +2570,7 @@ together by using <CODE>Pos=?|FEAT</CODE>, i.e., the POS is stored as a first FE
 <H3>7.12.6. tagset_converter::new_strip_lemma_comment_converter()</H3>
 
 <PRE>
-static <A HREF="#tagset_converter">tagset_converter*</A> new_strip_lemma_comment_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
+static <A HREF="#tagset_converter">tagset_converter</A>* new_strip_lemma_comment_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
 </PRE>
 
 <P>
@@ -2586,7 +2584,7 @@ should delete the tag set converter instance after use.
 <H3>7.12.7. tagset_converter::new_strip_lemma_id_converter()</H3>
 
 <PRE>
-static <A HREF="#tagset_converter">tagset_converter*</A> new_strip_lemma_id_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
+static <A HREF="#tagset_converter">tagset_converter</A>* new_strip_lemma_id_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
 </PRE>
 
 <P>

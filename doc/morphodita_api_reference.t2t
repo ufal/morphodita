@@ -232,8 +232,7 @@ class morpho {
   enum [guesser_mode #morpho_guesser_mode] { NO_GUESSER = 0, GUESSER = 1 };
 
   virtual int [analyze #morpho_analyze]([string_piece #string_piece] form, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma #tagged_lemma]>& lemmas) const = 0;
-  virtual int [generate #morpho_generate]([string_piece #string_piece] lemma, const char* tag_wildcard, [guesser_mode #morpho_guesser_mode] guesser,
-                       std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
+  virtual int [generate #morpho_generate]([string_piece #string_piece] lemma, const char* tag_wildcard, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
 
   virtual int [raw_lemma_len #morpho_raw_lemma_len]([string_piece #string_piece] lemma) const = 0;
   virtual int [lemma_id_len #morpho_lemma_id_len]([string_piece #string_piece] lemma) const = 0;
@@ -283,8 +282,7 @@ analysis containing given form as lemma and a tag for unknown word.
 
 === morpho::generate() ===[morpho_generate]
 ```
-virtual int generate([string_piece #string_piece] lemmma, const char* tag_wildcard, [guesser_mode #morpho_guesser_mode] guesser,
-                     std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
+virtual int generate([string_piece #string_piece] lemmma, const char* tag_wildcard, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
 ```
 
 Perform morphological generation of a lemma. Optionally a tag_wildcard can be
@@ -400,10 +398,10 @@ class tagset_converter {
   virtual void [convert_analyzed #tagset_converter_convert_analyzed](std::vector<[tagged_lemma #tagged_lemma]>& tagged_lemmas) const = 0;
   virtual void [convert_generated #tagset_converter_convert_generated](std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
 
-  static [tagset_converter* #tagset_converter] [new_identity_converter #tagset_converter_new_identity_converter]();
-  static [tagset_converter* #tagset_converter] [new_pdt_to_conll2009_converter #tagset_converter_new_pdt_to_conll2009_converter]();
-  static [tagset_converter* #tagset_converter] [new_strip_lemma_comment_converter #tagset_converter_new_strip_lemma_comment_converter](const [morpho #morpho]& dictionary);
-  static [tagset_converter* #tagset_converter] [new_strip_lemma_id_converter #tagset_converter_new_strip_lemma_id_converter](const [morpho #morpho]& dictionary);
+  static [tagset_converter #tagset_converter]* [new_identity_converter #tagset_converter_new_identity_converter]();
+  static [tagset_converter #tagset_converter]* [new_pdt_to_conll2009_converter #tagset_converter_new_pdt_to_conll2009_converter]();
+  static [tagset_converter #tagset_converter]* [new_strip_lemma_comment_converter #tagset_converter_new_strip_lemma_comment_converter](const [morpho #morpho]& dictionary);
+  static [tagset_converter #tagset_converter]* [new_strip_lemma_id_converter #tagset_converter_new_strip_lemma_id_converter](const [morpho #morpho]& dictionary);
 };
 ```
 
@@ -425,13 +423,13 @@ Convert the given results of [morpho::generate #morpho_generate]. Apart from cal
 [convert #tagset_converter_convert], any repeated entries are removed.
 
 === tagset_converter::new_identity_converter() ===[tagset_converter_new_identity_converter]
-``` static [tagset_converter* #tagset_converter] new_identity_converter();
+``` static [tagset_converter #tagset_converter]* new_identity_converter();
 
 Returns a new instance of an identity converter. All convert methods of an
 identity converter do nothing. The user should delete the instance after use.
 
 === tagset_converter::new_pdt_to_conll2009_converter() ===[tagset_converter_new_pdt_to_conll2009_converter]
-``` static [tagset_converter* #tagset_converter] new_pdt_to_conll2009_converter();
+``` static [tagset_converter #tagset_converter]* new_pdt_to_conll2009_converter();
 
 Returns a new instance of a Czech PDT tag set to CoNLL2009 tag set converter.
 The user should delete the instance after use.
@@ -441,7 +439,7 @@ are additional FEATs. Because we have only one tag field, we merge these fields
 together by using ``Pos=?|FEAT``, i.e., the POS is stored as a first FEAT.
 
 === tagset_converter::new_strip_lemma_comment_converter() ===[tagset_converter_new_strip_lemma_comment_converter]
-``` static [tagset_converter* #tagset_converter] new_strip_lemma_comment_converter(const [morpho #morpho]& dictionary);
+``` static [tagset_converter #tagset_converter]* new_strip_lemma_comment_converter(const [morpho #morpho]& dictionary);
 
 Returns a new instance of a tag set converter stripping
 [lemma comment #lemma_structure] using the given [``morpho`` #morpho] instance,
@@ -449,7 +447,7 @@ which must remain valid during existence of the tag set converter. The user
 should delete the tag set converter instance after use.
 
 === tagset_converter::new_strip_lemma_id_converter() ===[tagset_converter_new_strip_lemma_id_converter]
-``` static [tagset_converter* #tagset_converter] new_strip_lemma_id_converter(const [morpho #morpho]& dictionary);
+``` static [tagset_converter #tagset_converter]* new_strip_lemma_id_converter(const [morpho #morpho]& dictionary);
 
 Returns a new instance of a tag set converter stripping
 [lemma id #lemma_structure] using the given [``morpho`` #morpho] instance,

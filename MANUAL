@@ -1765,8 +1765,7 @@ Class morpho
     enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
   
     virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
-    virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
-                         std::vector<tagged_lemma_forms>& forms) const = 0;
+    virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
   
     virtual int raw_lemma_len(string_piece lemma) const = 0;
     virtual int lemma_id_len(string_piece lemma) const = 0;
@@ -1829,8 +1828,7 @@ and a tag for unknown word.
 morpho::generate()
 ------------------
 
-  virtual int generate(string_piece lemmma, const char* tag_wildcard, guesser_mode guesser,
-                       std::vector<tagged_lemma_forms>& forms) const = 0;
+  virtual int generate(string_piece lemmma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
 
 Perform morphological generation of a lemma. Optionally a tag_wildcard can be
 specified (or be NULL) and if so, results are filtered using this wildcard. The
