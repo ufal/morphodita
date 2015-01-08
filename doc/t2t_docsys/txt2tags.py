@@ -311,36 +311,36 @@ Fake template to respect the general process.
 
 	'html': """\
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-<META NAME="generator" CONTENT="http://txt2tags.org">
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=%(ENCODING)s">
-<LINK REL="stylesheet" TYPE="text/css" HREF="%(STYLE)s">
-<TITLE>%(HEADER1)s</TITLE>
-</HEAD><BODY BGCOLOR="white" TEXT="black">
-<CENTER>
-<H1>%(HEADER1)s</H1>
-<FONT SIZE="4"><I>%(HEADER2)s</I></FONT><BR>
-<FONT SIZE="4">%(HEADER3)s</FONT>
-</CENTER>
+<html>
+<head>
+<meta name="generator" content="http://txt2tags.org">
+<meta http-equiv="Content-Type" content="text/html; charset=%(ENCODING)s">
+<link rel="stylesheet" type="text/css" href="%(STYLE)s">
+<title>%(HEADER1)s</title>
+</head><body bgcolor="white" text="black">
+<center>
+<h1>%(HEADER1)s</h1>
+<font size="4"><i>%(HEADER2)s</i></font><br>
+<font size="4">%(HEADER3)s</font>
+</center>
 """,
 
 	'htmlcss': """\
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-<META NAME="generator" CONTENT="http://txt2tags.org">
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=%(ENCODING)s">
-<LINK REL="stylesheet" TYPE="text/css" HREF="%(STYLE)s">
-<TITLE>%(HEADER1)s</TITLE>
-</HEAD>
-<BODY>
+<html>
+<head>
+<meta name="generator" content="http://txt2tags.org">
+<meta http-equiv="Content-Type" content="text/html; charset=%(ENCODING)s">
+<link rel="stylesheet" type="text/css" href="%(STYLE)s">
+<title>%(HEADER1)s</title>
+</head>
+<body>
 
-<DIV CLASS="header" ID="header">
-<H1>%(HEADER1)s</H1>
-<H2>%(HEADER2)s</H2>
-<H3>%(HEADER3)s</H3>
-</DIV>
+<div class="header" id="header">
+<h1>%(HEADER1)s</h1>
+<h2>%(HEADER2)s</h2>
+<h3>%(HEADER3)s</h3>
+</div>
 """,
 
 	'xhtml': """\
@@ -665,66 +665,73 @@ def getTags(config):
 	},
 
 	'html': {
-		'paragraphOpen'        : '<P>'		  ,
-		'paragraphClose'       : '</P>'		  ,
-		'title1'	       : '~A~<H1>\a</H1>' ,
-		'title2'	       : '~A~<H2>\a</H2>' ,
-		'title3'	       : '~A~<H3>\a</H3>' ,
-		'title4'	       : '~A~<H4>\a</H4>' ,
-		'title5'	       : '~A~<H5>\a</H5>' ,
-		'anchor'	       : '<A NAME="\a"></A>\n',
-		'blockVerbOpen'        : '<PRE>'	  ,
-		'blockVerbClose'       : '</PRE>'	  ,
-		'blockQuoteOpen'       : '<BLOCKQUOTE>'   ,
-		'blockQuoteClose'      : '</BLOCKQUOTE>'  ,
-		'fontMonoOpen'	       : '<CODE>'	  ,
-		'fontMonoClose'        : '</CODE>'	  ,
-		'fontBoldOpen'	       : '<B>'		  ,
-		'fontBoldClose'        : '</B>'		  ,
-		'fontItalicOpen'       : '<I>'		  ,
-		'fontItalicClose'      : '</I>'		  ,
-		'fontUnderlineOpen'    : '<U>'		  ,
-		'fontUnderlineClose'   : '</U>'		  ,
-		'fontStrikeOpen'       : '<S>'		  ,
-		'fontStrikeClose'      : '</S>'		  ,
-		'listOpen'	       : '<UL>'		  ,
-		'listClose'	       : '</UL>'	  ,
-		'listItemOpen'	       : '<LI>'		  ,
-		'numlistOpen'	       : '<OL>'		  ,
-		'numlistClose'	       : '</OL>'	  ,
-		'numlistItemOpen'      : '<LI>'		  ,
-		'deflistOpen'	       : '<DL>'		  ,
-		'deflistClose'	       : '</DL>'	  ,
-		'deflistItem1Open'     : '<DT>'		  ,
-		'deflistItem1Close'    : '</DT>'	  ,
-		'deflistItem2Open'     : '<DD>'		  ,
-		'bar1'		       : '<HR NOSHADE SIZE=1>'	      ,
-		'bar2'		       : '<HR NOSHADE SIZE=5>'	      ,
-		'url'		       : '<A HREF="\a">\a</A>'	      ,
-		'urlMark'	       : '<A HREF="\a">\a</A>'	      ,
-		'email'		       : '<A HREF="mailto:\a">\a</A>' ,
-		'emailMark'	       : '<A HREF="mailto:\a">\a</A>' ,
-		'img'		       : '<IMG~A~ SRC="\a" BORDER="0" ALT="">',
-		'_imgAlignLeft'        : ' ALIGN="left"'  ,
-		'_imgAlignCenter'      : ' ALIGN="middle"',
-		'_imgAlignRight'       : ' ALIGN="right"' ,
-		'tableOpen'	       : '<TABLE~A~~B~ CELLPADDING="4">',
-		'tableClose'	       : '</TABLE>'	  ,
-		'tableRowOpen'	       : '<TR>'		  ,
-		'tableRowClose'        : '</TR>'	  ,
-		'tableCellOpen'        : '<TD~A~~S~>'	  ,
-		'tableCellClose'       : '</TD>'	  ,
-		'tableTitleCellOpen'   : '<TH~S~>'	  ,
-		'tableTitleCellClose'  : '</TH>'	  ,
-		'_tableBorder'	       : ' BORDER="1"'	  ,
-		'_tableAlignCenter'    : ' ALIGN="center"',
-		'_tableCellAlignRight' : ' ALIGN="right"' ,
-		'_tableCellAlignCenter': ' ALIGN="center"',
-		'_tableCellColSpan'    : ' COLSPAN="\a"'  ,
-		'cssOpen'	       : '<STYLE TYPE="text/css">',
-		'cssClose'	       : '</STYLE>'	  ,
+		'paragraphOpen'        : '<p>'		  ,
+		'paragraphOpenAttachedAfter' : '<p style="margin-bottom:0">' ,
+		'paragraphClose'       : '</p>'		  ,
+		'title1'	       : '~A~<h1>\a</h1>' ,
+		'title2'	       : '~A~<h2>\a</h2>' ,
+		'title3'	       : '~A~<h3>\a</h3>' ,
+		'title4'	       : '~A~<h4>\a</h4>' ,
+		'title5'	       : '~A~<h5>\a</h5>' ,
+		'anchor'	       : '<a id="\a" name="\a"></a>\n',
+		'blockVerbOpen'        : '<pre>'	  ,
+		'blockVerbOpenAttachedBefore' : '<pre style="margin-top:0">' ,
+		'blockVerbClose'       : '</pre>'	  ,
+		'blockQuoteOpen'       : '<blockquote>'   ,
+		'blockQuoteClose'      : '</blockquote>'  ,
+		'fontMonoOpen'	       : '<code>'	  ,
+		'fontMonoClose'        : '</code>'	  ,
+		'fontBoldOpen'	       : '<b>'		  ,
+		'fontBoldClose'        : '</b>'		  ,
+		'fontItalicOpen'       : '<i>'		  ,
+		'fontItalicClose'      : '</i>'		  ,
+		'fontUnderlineOpen'    : '<u>'		  ,
+		'fontUnderlineClose'   : '</u>'		  ,
+		'fontStrikeOpen'       : '<s>'		  ,
+		'fontStrikeClose'      : '</s>'		  ,
+		'listOpen'	       : '<ul>'		  ,
+		'listOpenAttachedBefore' : '<ul style="margin-top:0">' ,
+		'listClose'	       : '</ul>'	  ,
+		'listItemOpen'	       : '<li>'		  ,
+		'listItemClose'        : '</li>'	  ,
+		'numlistOpen'	       : '<ol>'		  ,
+		'numlistOpenAttachedBefore' : '<ol style="margin-top:0">' ,
+		'numlistClose'	       : '</ol>'	  ,
+		'numlistItemOpen'      : '<li>'		  ,
+		'numlistItemClose'     : '</li>'	  ,
+		'deflistOpen'	       : '<dl>'		  ,
+		'deflistClose'	       : '</dl>'	  ,
+		'deflistItem1Open'     : '<dt>'		  ,
+		'deflistItem1Close'    : '</dt>'	  ,
+		'deflistItem2Open'     : '<dd>'		  ,
+		'deflistItem2Close'    : '</dd>'	  ,
+		'bar1'		       : '<hr>'           ,
+		'bar2'		       : '<hr>'           ,
+		'url'		       : '<a href="\a">\a</a>'	      ,
+		'urlMark'	       : '<a href="\a">\a</a>'	      ,
+		'email'		       : '<a href="mailto:\a">\a</a>' ,
+		'emailMark'	       : '<a href="mailto:\a">\a</a>' ,
+		'img'		       : '<img~A~ src="\a" border="0" alt="">',
+		'_imgAlignLeft'        : ' align="left"'  ,
+		'_imgAlignCenter'      : ' align="middle"',
+		'_imgAlignRight'       : ' align="right"' ,
+		'tableOpen'	       : '<table~A~~B~ cellpadding="4">',
+		'tableClose'	       : '</table>'	  ,
+		'tableRowOpen'	       : '<tr>'		  ,
+		'tableRowClose'        : '</tr>'	  ,
+		'tableCellOpen'        : '<td~A~~S~>'	  ,
+		'tableCellClose'       : '</td>'	  ,
+		'tableTitleCellOpen'   : '<th~S~>'	  ,
+		'tableTitleCellClose'  : '</th>'	  ,
+		'_tableBorder'	       : ' border="1"'	  ,
+		'_tableAlignCenter'    : ' align="center"',
+		'_tableCellAlignRight' : ' align="right"' ,
+		'_tableCellAlignCenter': ' align="center"',
+		'_tableCellColSpan'    : ' colspan="\a"'  ,
+		'cssOpen'	       : '<style type="text/css">',
+		'cssClose'	       : '</style>'	  ,
 		'comment'	       : '<!-- \a -->'	  ,
-		'EOD'		       : '</BODY></HTML>'
+		'EOD'		       : '</body></html>'
 	},
 
 	#TIP xhtml inherits all HTML definitions (lowercased)
@@ -870,6 +877,7 @@ def getTags(config):
 		'numtitle3'	       : '~A~\\subsubsection{\a}' ,
 		'anchor'	       : '\\hypertarget{\a}{}\n'  ,
 		'blockVerbOpen'        : '\\begin{lstlisting}' ,
+		'blockVerbOpenAttachedBefore' : '\\vspace{-\\medskipamount}\\begin{lstlisting}' ,
 		'blockVerbClose'       : '\\end{lstlisting}'   ,
 		'blockQuoteOpen'       : '\\begin{quotation}'  ,
 		'blockQuoteClose'      : '\\end{quotation}'    ,
@@ -884,13 +892,17 @@ def getTags(config):
 		'fontStrikeOpen'       : '\\sout{'	       ,
 		'fontStrikeClose'      : '}'		       ,
 		'listOpen'	       : '\\begin{itemize}'    ,
+		'listOpenAttachedBefore' : '\\vspace{-2\\topsep}\\begin{itemize}' ,
 		'listClose'	       : '\\end{itemize}'      ,
 		'listOpenCompact'      : '\\begin{compactitem}',
+		'listOpenCompactAttachedBefore' : '\\vspace{-\parskip}\\begin{compactitem}' ,
 		'listCloseCompact'     : '\\end{compactitem}'  ,
 		'listItemOpen'	       : '\\item '	       ,
 		'numlistOpen'	       : '\\begin{enumerate}'  ,
+		'numlistOpenAttachedBefore' : '\\vspace{-2\\topsep}\\begin{enumerate}' ,
 		'numlistClose'	       : '\\end{enumerate}'    ,
 		'numlistOpenCompact'   : '\\begin{compactenum}',
+		'numlistOpenCompactAttachedBefore' : '\\vspace{-\parskip}\\begin{compactenum}' ,
 		'numlistCloseCompact'  : '\\end{compactenum}'  ,
 		'numlistItemOpen'      : '\\item '	       ,
 		'deflistOpen'	       : '\\begin{description}',
@@ -1405,12 +1417,12 @@ def getTags(config):
 		# Change just HTML because XHTML inherits it
 		htmltags = alltags['html']
 		# Table with no cellpadding
-		htmltags['tableOpen'] = htmltags['tableOpen'].replace(' CELLPADDING="4"', '')
+		htmltags['tableOpen'] = htmltags['tableOpen'].replace(' cellpadding="4"', '')
 		# DIVs
-		htmltags['tocOpen' ] = '<DIV CLASS="toc">'
-		htmltags['tocClose'] = '</DIV>'
-		htmltags['bodyOpen'] = '<DIV CLASS="body" ID="body">'
-		htmltags['bodyClose']= '</DIV>'
+		htmltags['tocOpen' ] = '<div class="toc">'
+		htmltags['tocClose'] = '</div>'
+		htmltags['bodyOpen'] = '<div class="body" ID="body">'
+		htmltags['bodyClose']= '</div>'
 
 	# Make the HTML -> XHTML inheritance
 	xhtml = alltags['html'].copy()
@@ -3695,14 +3707,18 @@ class BlockMaster:
 		if block not in self.allblocks:
 			Error("Invalid block '%s'"%block)
 
+                props = {}
 		# First, let's close other possible open blocks
 		while self.block() and block not in self.contains[self.block()]:
+			if self.block() == 'para' and (block.endswith('list') or block == 'verb'):
+				props['attached_before'] = True
+				self.propset('attached_after', True)
 			ret.extend(self.blockout())
 
 		# Now we can gladly add this new one
 		self.BLK.append(block)
 		self.HLD.append([])
-		self.PRP.append({})
+		self.PRP.append(props)
 		self.count += 1
 		if block == 'table': self.tableparser = TableMaster()
 		# Deeper and deeper
@@ -3810,6 +3826,9 @@ class BlockMaster:
 	def _should_add_blank_line(self, where, blockname):
 		"Validates the blanksaround* rules"
 
+                # Use attached_* props
+		if self.prop('attached_' + where): return False
+
 		# Nestable blocks: only mother blocks (level 1) are spaced
 		if blockname.endswith('list') and self.depth > 1:
 			return False
@@ -3860,6 +3879,7 @@ class BlockMaster:
 	def para(self):
 		result = []
 		open_ = TAGS['paragraphOpen']
+		if self.prop('attached_after') and TAGS.has_key('paragraphOpenAttachedAfter'): open_ = TAGS['paragraphOpenAttachedAfter']
 		close = TAGS['paragraphClose']
 		self._reflow_hold()
 		lines = self._get_escaped_hold()
@@ -3898,6 +3918,7 @@ class BlockMaster:
 		"Verbatim lines are not masked, so there's no need to unmask"
 		result = []
 		open_ = TAGS['blockVerbOpen']
+		if self.prop('attached_before') and TAGS.has_key('blockVerbOpenAttachedBefore'): open_ = TAGS['blockVerbOpenAttachedBefore']
 		close = TAGS['blockVerbClose']
 
 		# Blank line before?
@@ -4119,9 +4140,11 @@ class BlockMaster:
 
 		if not widelist and rules['compactlist']:
 			listopen = TAGS.get(name+'OpenCompact')
+			if self.prop('attached_before') and TAGS.has_key(name+'OpenCompactAttachedBefore'): listopen = TAGS.get(name+'OpenCompactAttachedBefore')
 			listclose = TAGS.get(name+'CloseCompact')
 		else:
 			listopen  = TAGS.get(name+'Open')
+			if self.prop('attached_before') and TAGS.has_key(name+'OpenAttachedBefore'): listopen = TAGS.get(name+'OpenAttachedBefore')
 			listclose = TAGS.get(name+'Close')
 
 		# Open list (not nestable lists are only opened at mother)

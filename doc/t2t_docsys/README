@@ -42,3 +42,4 @@ several additions:
 - Paragraphs are reflowed in plain text output.
 - There can be local links in [link #anchor] format in verbatim code, but they
   are retained only in HTML and PDF output.
+- The empty/nonempty line between para/list and para/verb is taken into account.

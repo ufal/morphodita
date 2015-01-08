@@ -12,7 +12,6 @@ newer is supported.
 
 The Java installation specified in the environment variable JAVA_HOME is used.
 If the environment variable does not exist, the JAVA_HOME can be specified using
-
   make JAVA_HOME=path_to_Java_installation
 
 
@@ -40,25 +39,25 @@ Helper Structures
 -----------------
 
   typedef vector<string> Forms;
-  
+
   struct TaggedForm {
     string form;
     string tag;
   };
   typedef vector<TaggedForm> TaggedForms;
-  
+
   struct TaggedLemma {
     string lemma;
     string tag;
   };
   typedef vector<TaggedLemma> TaggedLemmas;
-  
+
   struct TaggedLemmaForms {
     string lemma;
     TaggedForms forms;
   };
   typedef vector<TaggedLemmaForms> TaggedLemmasForms;
-  
+
   struct TokenRange {
     size_t start;
     size_t length;
@@ -74,54 +73,54 @@ Main Classes
     unsigned major;
     unsigned minor;
     unsigned patch;
-  
+
     static Version current();
   };
-  
+
   class Tokenizer {
    public:
     virtual void setText(const char* text);
     virtual bool nextSentence(Forms* forms, TokenRanges* tokens);
-  
+
     static Tokenizer* newVerticalTokenizer();
     static Tokenizer* newCzechTokenizer();
     static Tokenizer* newEnglishTokenizer();
     static Tokenizer* newGenericTokenizer();
   };
-  
+
   class Morpho {
    public:
     static Morpho* load(const char* fname);
-  
+
     enum { NO_GUESSER = 0, GUESSER = 1 };
-  
+
     virtual int analyze(const char* form, int guesser, TaggedLemmas& lemmas) const;
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
     virtual string rawLemma(const char* lemma) const;
     virtual string lemmaId(const char* lemma) const;
     virtual string rawForm(const char* form) const;
-  
+
     virtual Tokenizer* newTokenizer() const;
   };
-  
+
   class Tagger {
    public:
     static Tagger* load(const char* fname);
-  
+
     virtual const Morpho* getMorpho() const;
-  
+
     virtual void tag(Forms& forms, TaggedLemmas& tags) const;
-  
+
     Tokenizer* newTokenizer() const;
   };
-  
+
   class TagsetConverter {
    public:
     static TagsetConverter* newIdentityConverter();
     static TagsetConverter* newPdtToConll2009Converter();
     static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
     static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
-  
+
     virtual void convert(TaggedLemma& lemma) const;
     virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
     virtual void convertGenerated(TaggedLemmasForms& forms) const;

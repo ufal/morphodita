@@ -32,7 +32,6 @@ Compilation
 To compile MorphoDiTa on Unix-like systems, run make in the src directory.
 
 Make targets and options:
-
 - exe: compile the binaries (default)
 - lib: compile the shared (dynamically loaded) library
 - BITS=32 or BITS=64: compile for specified 32-bit or 64-bit architecture
@@ -52,7 +51,6 @@ compilers (most notably, Visual Studio), let us know.
 
 By default, Unix-like shell is required (i.e., Cygwin or MSYS). If you use
 standard Windows Cmd.exe (i.e., TDM-GCC or plain MinGW), use
-
   make WINCMD=1
 
 Note that make in MinGW is usually distributed as mingw32-make.
@@ -73,7 +71,6 @@ newer is supported.
 
 The Java installation specified in the environment variable JAVA_HOME is used.
 If the environment variable does not exist, the JAVA_HOME can be specified using
-
   make JAVA_HOME=path_to_Java_installation
 
 
@@ -88,7 +85,6 @@ later is supported.
 
 Path to the include headers of the required Perl version must be specified in
 the PERL_INCLUDE variable using
-
   make PERL_INCLUDE=path_to_Perl_includes
 
 
@@ -103,5 +99,4 @@ and Python 3+ are supported.
 
 Path to the include headers of the required Python version must be specified in
 the PYTHON_INCLUDE variable using
-
   make PYTHON_INCLUDE=path_to_Python_includes

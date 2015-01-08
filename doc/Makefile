@@ -17,29 +17,17 @@ manual: morphodita_bindings_java_readme.txt morphodita_bindings_perl_readme.txt 
 	cp morphodita_bindings_perl_readme.txt ../bindings/README.PERL
 	cp morphodita_bindings_python_readme.txt ../bindings/README.PYTHON
 
-morphodita.html: morphodita.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_html,$@,$<,manual)
+morphodita%html: morphodita%t2t $(wildcard *.t2t)
+	$(call t2t_docsys_html,$@,$<,manual $(if $(filter-out .,$*),striplevel))
 
-morphodita_%.html: morphodita_%.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_html,$@,$<,manual striplevel)
+web%html: morphodita%t2t $(wildcard *.t2t)
+	$(call t2t_docsys_html,$@,$<,web html_addlevel $(if $(filter-out .,$*),striplevel))
 
-web.html: morphodita.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_html,$@,$<,web html_addlevel)
+morphodita%txt: morphodita%t2t $(wildcard *.t2t)
+	$(call t2t_docsys_txt,$@,$<,manual $(if $(filter-out .,$*),striplevel))
 
-web_%.html: morphodita_%.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_html,$@,$<,web html_addlevel striplevel)
-
-morphodita.txt: morphodita.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_txt,$@,$<,manual)
-
-morphodita_%.txt: morphodita_%.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_txt,$@,$<,manual striplevel)
-
-morphodita.pdf: morphodita.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_pdf,$@,$<,manual)
-
-morphodita_%.pdf: morphodita_%.t2t $(wildcard *.t2t)
-	$(call t2t_docsys_pdf,$@,$<,manual striplevel)
+morphodita%pdf: morphodita%t2t $(wildcard *.t2t)
+	$(call t2t_docsys_pdf,$@,$<,manual $(if $(filter-out .,$*),striplevel))
 
 .PHONY: clean
 clean:

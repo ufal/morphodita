@@ -134,7 +134,6 @@ Compilation
 To compile MorphoDiTa on Unix-like systems, run make in the src directory.
 
 Make targets and options:
-
 - exe: compile the binaries (default)
 - lib: compile the shared (dynamically loaded) library
 - BITS=32 or BITS=64: compile for specified 32-bit or 64-bit architecture
@@ -154,7 +153,6 @@ compilers (most notably, Visual Studio), let us know.
 
 By default, Unix-like shell is required (i.e., Cygwin or MSYS). If you use
 standard Windows Cmd.exe (i.e., TDM-GCC or plain MinGW), use
-
   make WINCMD=1
 
 Note that make in MinGW is usually distributed as mingw32-make.
@@ -175,7 +173,6 @@ newer is supported.
 
 The Java installation specified in the environment variable JAVA_HOME is used.
 If the environment variable does not exist, the JAVA_HOME can be specified using
-
   make JAVA_HOME=path_to_Java_installation
 
 
@@ -190,7 +187,6 @@ later is supported.
 
 Path to the include headers of the required Perl version must be specified in
 the PERL_INCLUDE variable using
-
   make PERL_INCLUDE=path_to_Perl_includes
 
 
@@ -205,7 +201,6 @@ and Python 3+ are supported.
 
 Path to the include headers of the required Python version must be specified in
 the PYTHON_INCLUDE variable using
-
   make PYTHON_INCLUDE=path_to_Python_includes
 
 
@@ -292,18 +287,18 @@ Publications
 - (Hajič 2004) Jan Hajič. Disambiguation of Rich Inflection: Computational
   Morphology of Czech. (http://books.google.cz/books?id=sB63AAAACAAJ) Karolinum
   Press (2004).
-  
+
 - Hlaváčová Jaroslava, Kolovratník David. Morfologie češtiny znovu a
   lépe. In Informačné Technológie - Aplikácie a Teória. Zborník
   príspevkov, ITAT 2008.  Seňa, Slovakia: PONT s.r.o., 2008, pp. 43-47.
-  
+
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
   Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
   Perceptron POS Tagger. (http://aclweb.org/anthology//E/E09/E09-1087.pdf) In
   Proceedings of the 12th Conference of the European Chapter of the ACL (EACL
   2009), pages 763-771, Athens, Greece, March. Association for Computational
   Linguistics.
-  
+
 - (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan.
   Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity
   Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003) In Proceedings
@@ -344,12 +339,12 @@ czech-morfflex-<version>.dict
   created from MorfFlex CZ
   (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphological
   dictionary.
-  
+
 czech-morfflex-pdt-<version>.tagger-best_accuracy
   Best and slowest tagger (Viterbi of order 3) trained on the training portion
   of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set.
   Contains the czech-morfflex-<version>.dict morphological dictionary.
-  
+
   The latest version czech-morfflex-pdt-131112.tagger-best_accuracy reaches
   95.67% tag accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on PDT
   2.5 (http://ufal.mff.cuni.cz/pdt2.5/) etest data (whose morphological tags and
@@ -358,13 +353,13 @@ czech-morfflex-pdt-<version>.tagger-best_accuracy
   Featurama (http://sourceforge.net/projects/featurama/) (state-of-the-art Czech
   tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and
   overall accuracy, respectively, with speed ~2k words/s and size 210MB.
-  
+
 czech-morfflex-pdt-<version>.tagger-fast
   Faster tagger with slightly worse results (Viterbi of order 2) trained on the
   training portion of PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5/) using the
   neopren feature set. Contains the czech-morfflex-<version>.dict morphological
   dictionary.
-  
+
   The latest version czech-morfflex-pdt-131112.tagger-fast reaches 94.70% tag
   accuracy, 97.64% lemma accuracy and 93.94% overall accuracy on PDT 2.5
   (http://ufal.mff.cuni.cz/pdt2.5) etest data (whose morphological tags and
@@ -386,12 +381,12 @@ czech-morfflex-<version>-pos_only.dict
   (http://books.google.cz/books?id=sB63AAAACAAJ)) system created from MorfFlex
   CZ (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9) morphological
   dictionary. Only first two tag characters of PDT tag set are used.
-  
+
 czech-morfflex-pdt-<version>-pos_only.tagger
   Very fast tagger trained on the training portion of PDT 2.5
   (http://ufal.mff.cuni.cz/pdt2.5/) using the neopren feature set. Containins
   the czech-morfflex-<version>-pos_only.dict morphological dictionary.
-  
+
   The latest version czech-morfflex-pdt-131112-pos_only.tagger reaches 99.20%
   tag accuracy, 97.64% lemma accuracy and 97.60% overall accuracy on PDT 2.5
   (http://ufal.mff.cuni.cz/pdt2.5) etest data (which morphological tags and
@@ -423,10 +418,9 @@ English MorphoDiTa Models
 -------------------------
 
 English models are created using the following data:
-
 - SCOWL (Spell Checker Oriented Word Lists): This word list is used in
   morphological generation to create all possible word forms of a given word.
-  
+
   Copyright: Copyright 2000-2011 by Kevin Atkinson. Permission to use, copy,
   modify, distribute and sell these word lists, the associated scripts, the
   output created from the scripts, and its documentation for any purpose is
@@ -435,10 +429,10 @@ English models are created using the following data:
   appear in supporting documentation. Kevin Atkinson makes no representations
   about the suitability of this array for any purpose. It is provided "as is"
   without express or implied warranty.
-  
+
 - Wall Street Journal, part of the Penn Treebank 3: Morphologically annotated
   texts which are commonly used to train English POS tagger.
-  
+
   Licensing: Available as LDC99T42 in LDC catalog under LDC User Agreement.
 
 The resulting models are distributed under the CC BY-NC-SA
@@ -482,19 +476,19 @@ Publications
   Machine Translation. (http://ufal.mff.cuni.cz/~popel/papers/master_thesis.pdf)
   Master Thesis at Institute of Formal and Applied Linguistics, Faculty of
   Mathematics and Physics, Charles University in Prague (2009).
-  
+
 - (Spoustová 2008) Drahomíra "johanka" Spoustová. Morphium - morphological
   analyser for Penn treebank POS tagset. (http://ufal.mff.cuni.cz/morphium/)
   Perl Software developed at Institute of Formal and Applied Linguistics,
   Faculty of Mathematics and Physics, Charles University in Prague (2008).
-  
+
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
   Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
   Perceptron POS Tagger. (http://aclweb.org/anthology//E/E09/E09-1087.pdf) In
   Proceedings of the 12th Conference of the European Chapter of the ACL (EACL
   2009), pages 763-771, Athens, Greece, March. Association for Computational
   Linguistics.
-  
+
 - (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan.
   Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity
   Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003) In Proceedings
@@ -508,7 +502,6 @@ English Morphological System
 
 The English morphology uses standard Penn Treebank POS tags. Nevertheless, the
 lemma structure is unique:
-
 - The lemmatizer recognizes negative prefixes and removes it from the lemma. In
   terms of MorphoDiTa API, raw lemma is the lemma without negative prefix.
 - The negative prefix is also stored to allow morphological generation of word
@@ -532,12 +525,12 @@ english-morphium-<version>.dict
   Morphological dictionary. The SCOWL word list has been automatically analyzed
   and lemmatized and uses as the dictionary. The guesser performing the
   analyzation and lemmatization is available.
-  
+
 english-morphium-wsj-<version>.tagger
   Tagger trained on the training portion of Wall Street Journal (Sections 0-18)
   and tuned on the development portion (Sections 19-21). Contains the
   english-morphium-<version>.dict morphological dictionary.
-  
+
   The latest version english-morphium-wsj-140407.tagger reaches 97.27% tag
   accuracy on Wall Street Journal test portion (Section 22-24). Model speed:
   ~60k words/s, model size: 6MB.
@@ -556,13 +549,13 @@ english-morphium-<version>-no_negation.dict
   SCOWL word list has been automatically analyzed and lemmatized and uses as the
   dictionary. The guesser performing the analyzation and lemmatization is
   available.
-  
+
 english-morphium-wsj-<version>-no_negation.tagger
   Tagger which does not strip negative lemma prefixes, trained on the training
   portion of Wall Street Journal (Sections 0-18) and tuned on the development
   portion (Sections 19-21). Contains the
   english-morphium-<version>-no_negation.dict morphological dictionary.
-  
+
   The latest version english-morphium-wsj-140407-no_negation.tagger reaches
   97.25% tag accuracy on Wall Street Journal test portion (Section 22-24). Model
   speed: ~60k words/s, model size: 6MB.
@@ -574,7 +567,7 @@ English Model Changes
 english-morphium-140407 and english-morphium-wsj-140407 (require MorphoDiTa 1.1 or later)
   Recognize also "non-" as a negative prefix. Formerly, only "non" was
   recognized.
-  
+
 english-morphium-140304 and english-morphium-wsj-140304 (require MorphoDiTa 1.0 or later)
   Initial release.
 
@@ -584,7 +577,6 @@ Running the Tagger
 
 Probably the most common usage of MorphoDita is running a tagger to tag your
 data using
-
   run_tagger tagger_model
 
 The input is assumed to be in UTF-8 encoding and can be either already tokenized
@@ -598,7 +590,6 @@ standard output. If no argument is given, input is read from standard input and
 written to standard output.
 
 The full command syntax of run_tagger is
-
   run_tagger [options] tagger_file [file[:output_file]]...
   Options: --input=untokenized|vertical
            --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
@@ -610,7 +601,6 @@ Input Formats
 
 The input format is specified using the --input option. Currently supported
 input formats are:
-
 - untokenized (default): the input is tokenized and segmented using a tokenizer
   defined by the model,
 - vertical: the input is in vertical format, every line is considered a word,
@@ -622,7 +612,6 @@ Tag Set Conversion
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
-
 - pdt_to_conll2009: convert Czech PDT tag set to CoNLL 2009 tag set,
 - strip_lemma_comment: strip lemma comment (see Lemma Structure in API
   Reference),
@@ -634,11 +623,10 @@ Output Formats
 
 The output format is specified using the --output option. Currently supported
 output formats are:
-
 - xml (default): Simple XML format without a root element, using <sentence>
   element to mark sentences and <token lemma="..." tag="...">...</token> element
   to encode token and its assigned lemma and tag.
-  
+
   Example output for input Děti pojedou k babičce. Už se těší. (line
   breaks added):
   <sentence><token lemma='dítě' tag='NNFP1-----A----'>Děti</token>
@@ -651,17 +639,17 @@ output formats are:
   <token lemma='těšit_:T' tag='VB-S---3P-AA---'>těší</token>
   <token lemma='.' tag='Z:-------------'>.</token></sentence>
 
-  
+
 - vertical: Every output line is a tag separated triple form-lemma-tag, with
   empty line denoting end of sentence.
-  
+
   Example output for input Děti pojedou k babičce. Už se těší.:
   Děti	dítě	NNFP1-----A----
   pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
   k	k-1	RR--3----------
   babičce	babička	NNFS3-----A----
   .	.	Z:-------------
-  
+
   Už	už-1	Db-------------
   se	se_^(zvr._zájmeno/částice)	P7-X4----------
   těší	těšit_:T	VB-S---3P-AA---
@@ -686,7 +674,6 @@ Morphological Analysis
 ----------------------
 
 The morphological analysis can be performed by running
-
   run_morpho_analyze morphology_model use_guesser
 
 The input is assumed to be in UTF-8 encoding and can be either already tokenized
@@ -702,7 +689,6 @@ Because tagger models contain an embedded morphological model, a tagger model
 can be used instead of morphological one if --from_tagger option is specified.
 
 The full command syntax of run_morpho_analyze is
-
   run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
   Options: --input=untokenized|vertical
            --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
@@ -715,7 +701,6 @@ Input Formats
 
 The input format is specified using the --input option. Currently supported
 input formats are:
-
 - untokenized (default): the input is tokenized and segmented using a tokenizer
   defined by the model,
 - vertical: the input is in vertical format, every line is considered a word,
@@ -731,7 +716,6 @@ Tag Set Conversion
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
-
 - pdt_to_conll2009: convert Czech PDT tag set to CoNLL 2009 tag set,
 - strip_lemma_comment: strip lemma comment (see Lemma Structure in API
   Reference),
@@ -743,11 +727,10 @@ Output Formats
 
 The output format is specified using the --output option. Currently supported
 output formats are:
-
 - xml (default): Simple XML format without a root element, using using
   <token><analysis lemma="..." tag="..."/><analysis...>...</token> element to
   encode morphological analysis.
-  
+
   Example output for input Děti pojedou k babičce. Už se těší. (line
   breaks added):
   <sentence><token><analysis lemma="dítě" tag="NNFP1-----A----"/><analysis lemma="dítě" tag="NNFP4-----A----"/><analysis lemma="dítě" tag="NNFP5-----A----"/>Děti</token>
@@ -760,17 +743,17 @@ output formats are:
   <token><analysis lemma="těšit_:T" tag="VB-P---3P-AA---"/><analysis lemma="těšit_:T" tag="VB-S---3P-AA---"/>těší</token>
   <token><analysis lemma="." tag="Z:-------------"/>.</token></sentence>
 
-  
+
 - vertical: Every output line contains a word and a tab separated lemma-tag
   pairs assigned to the input word, with empty line denoting end of sentence.
-  
+
   Example output for input Děti pojedou k babičce. Už se těší.:
   Děti	dítě	NNFP1-----A----	dítě	NNFP4-----A----	dítě	NNFP5-----A----
   pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
   k	k-1	RR--3----------	k-3_^(označení_pomocí_písmene)	NNNXX-----A----	k-4`kůň_:B_^(jednotka_výkonu)	NNMXX-----A---8	k-8_:B_^(ost._zkratka)	XX------------8	komanditní_:B_^(jen_komanditní_společnost)	AAXXX----1A---8	koncernový_:B	AAXXX----1A---8	kuo-1_:B_,t_^(stará_jednotka_výkonu)	NNNXX-----A---8
   babičce	babička	NNFS3-----A----	babička	NNFS6-----A----
   .	.	Z:-------------
-  
+
   Už	už-1	Db-------------	už-2	TT-------------
   se	se_^(zvr._zájmeno/částice)	P7-X4----------	s-1	RV--2----------	s-1	RV--7----------
   těší	těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
@@ -782,7 +765,6 @@ Morphological Generation
 ------------------------
 
 The morphological generation can be performed by running
-
   run_morpho_generate morphology_model use_guesser
 
 The input is assumed to be in UTF-8 encoding. The input files are specified same
@@ -803,20 +785,17 @@ Because tagger models contain an embedded morphological model, a tagger model
 can be used instead of morphological one if --from_tagger option is specified.
 
 The full command syntax of run_morpho_generate is
-
   run_morpho_generate [options] morphology_model use_guesser [input_file[:output_file]]...
   Options: --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
            --from_tagger
 
 Example input data:
-
   dítě
   jet	?[fN]??[-1]
   k-1
   babička	NNFS3-----A----
 
 Example output:
-
   dítě	dítě	NNNS1-----A----	dítě	dítě	NNNS4-----A----	dítě	dítě	NNNS5-----A----	dítěte	dítě	NNNS2-----A----	dítěti	dítě	NNNS3-----A----	dítěti	dítě	NNNS6-----A----	dítětem	dítě	NNNS7-----A----	děti	dítě	NNFP1-----A----	děti	dítě	NNFP4-----A----	děti	dítě	NNFP5-----A----	dětma	dítě	NNFP7-----A---6	dětmi	dítě	NNFP7-----A----	dětem	dítě	NNFP3-----A----	dětí	dítě	NNFP2-----A----	dětech	dítě	NNFP6-----A----	dětima	dítě_,h	NNFP7-----A---6
   ject	jet	Vf--------A---6	jet	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------A----	jeti	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------A---2	nejet	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------N----	nejeti	jet-1_^(pohybovat_se,_ne_však_chůzí)	Vf--------N---2	jet	jet-2_,h_^(letadlo_s_tryskovým_pohonem)NNIS1-----A----	jety	jet-2_,h_^(letadlo_s_tryskovým_pohonem)	NNIP1-----A----
   k	k-1	RR--3----------	ke	k-1	RV--3----------	ku	k-1	RV--3---------1
@@ -828,7 +807,6 @@ Tag Set Conversion
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
-
 - pdt_to_conll2009: convert Czech PDT tag set to CoNLL 2009 tag set,
 - strip_lemma_comment: strip lemma comment (see Lemma Structure in API
   Reference),
@@ -847,7 +825,6 @@ filter the results of morphological generation.
 
 Most characters of a tag wildcard match corresponding characters of a tag, with
 the following exceptions:
-
  - ? matches any character of a tag.
  - [chars] matches any of the characters listed. The dash - has no special
    meaning and if ] is the first character in chars, it is considered as one of
@@ -860,7 +837,6 @@ Interactive Morphological Analysis and Generation
 
 Morphological analysis and generation which is interactive and more human
 readable can be run using:
-
   run_morpho_cli morphology_model
 
 The input is read from standard input, command on each line. If there is no tab
@@ -873,7 +849,6 @@ Because tagger models contain an embedded morphological model, a tagger model
 can be used instead of morphological one if --from_tagger option is specified.
 
 The full command syntax of run_morpho_cli is
-
   run_morpho_cli [options] morphology_model
   Options: --from_tagger
 
@@ -890,13 +865,11 @@ as with the run_tagger command.
 The tokenizer can be specified either by using a morphology model (--morphology
 option), tagger model (--tagger option) or by using a tokenizer identifier
 (--tokenizer option). Currently supported tokenizer identifiers are:
-
 - czech
 - english
 - generic
 
 The full command syntax of run_tokenizer is
-
   run_tokenizer [options] [file[:output_file]]...
   Options: --tokenizer=czech|english|generic
            --morphology=morphology_model_file
@@ -909,32 +882,31 @@ Output Formats
 
 The output format is specified using the --output option. Currently supported
 output formats are:
-
 - xml (default): Simple XML format without a root element, using <sentence>
   element to mark sentences and <token> element to mark tokens.
-  
+
   Example output for input Děti pojedou k babičce. Už se těší. (line
   breaks added):
   <sentence><token>Děti</token> <token>pojedou</token> <token>k</token>
   <token>babičce</token><token>.</token></sentence> <sentence><token>Už</token>
   <token>se</token> <token>těší</token><token>.</token></sentence>
 
-  
+
 - vertical: Each token is on a separate line, every sentence is ended by a
   blank line.
-  
+
   Example output for input Děti pojedou k babičce. Už se těší.:
   Děti
   pojedou
   k
   babičce
   .
-  
+
   Už
   se
   těší
   .
-  
+
 
 
 
@@ -957,33 +929,31 @@ of one lemma must appear in a continuous region and no line should appear more
 than once (sort -u can be used to achieve this).
 
 Run encode_dictionary with the following options:
-
   encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag
 
 - generic: This parameter defines tokenizer and other language specific
   behaviour. Other values than generic take different options and are not
   documented.
-  
+
 - max_suffix_len: Maximum length of suffixes in automatically inferred
   inflexion classes.  If unsure, use 8 (we use 8 for Czech and 4 for English).
   Smaller values produce larger and slightly faster models.
-  
+
 - unknown_tag: Assigned to a form during analysis if no matching tag can be
   found.
-  
+
 - number_tag: Assigned to a form during analysis if the form was not found in
   the dictionary and it looks like a number. Can be the same as unknown_tag.
-  
+
 - punctuation_tag: Assigned to a form during analysis if the form was not found
   in the dictionary and it consists of Unicode characters in the Punctuation
   category. Can be the same as unknown_tag.
-  
+
 - symbol_tag: Assigned to a form during analysis if the form was not found in
   the dictionary and it consists of Unicode characters in the Symbol category.
   Can be the same as unknown_tag.
 
 Example input data:
-
   dog	NN	dog
   dog	NNS	dogs
   go	VB	go
@@ -993,7 +963,6 @@ Example input data:
   go	VBD	went
 
 Example command line:
-
   encode_dictionary generic 8 UNK NUM PUNC SYM <input_data >output_model
 
 
@@ -1005,7 +974,6 @@ analysis, without having a MorphoDiTa morphological dictionary.
 
 That is possible using a so called external morphology model. External
 morphology model can be created easily using
-
   encode_dictionary external unknown_tag >output_model
 
 No standard input is read in this case. The unknown_tag parameter is used when
@@ -1029,11 +997,9 @@ morphology, and the results can be after proper formatting used as input to
 MorphoDiTa in vertical input format.
 
 Example input form for analysis using external morphology model:
-
   wishes wish NNS wish VBZ
 
 Example input lemma for generation using external morphology model:
-
   go go VB go VBP goes VBZ going VBG went VBG
 
 
@@ -1042,7 +1008,6 @@ Custom Tagging Models
 
 Custom tagging models can be trained using train_tagger binary, which has the
 following options:
-
   train_tagger generic_234 morphology use_guesser features iterations prune_features [heldout_data [early_stopping]] <input_data >tagger_model
 
 - generic_234: This parameter defines the tagger (elementary features and
@@ -1050,39 +1015,37 @@ following options:
   generic4. If unsure, use generic3 (best released Czech and English models use
   generic3). The generic2 produces faster, but less accurate models, generic4
   produces larger and only marginally better models.
-  
+
 - morphology: File with the morphological dictionary to use.
-  
+
 - use_guesser: Use 0/1 to specify whether morphological guesser should be used.
   Unless you have a good reason not to, use 1.
-  
+
 - features: File with feature sequences for the tagger. The file format and
   available elementary features are described in following section.
-  
+
 - iterations: Number of training iterations. For English, values 5-10 are used,
   for Czech, values 10-15 are used. Can be affected by early_stopping.
-  
+
 - prune_features: Use 0/1 to disable/enable pruning of feature sequences not
   found in training data. Use 1 for smaller and marginally less accurate models,
   and 0 for larger and marginally better models. If unsure, use 1 (best released
   Czech and English models use 1).
-  
+
 - heldout_data: Optional file with heldout data in the same format as input
   data.  If supplied, accuracy is measured on the heldout data after every
   training iteration.
-  
+
 - early_stopping: Optionally use 0/1 to disable/enable early stopping. If early
   stopping is enabled, the resulting model is not the one after the last
   training iteration, but the one with best heldout data accuracy.
 
 Example command line (use morphology from morpho.dict, features from features.ft
 and no heldout data):
-
   train_tagger generic3 morpho.dict 1 features.ft 10 1 <input.data >tagger.model
 
 Example command line (use morphology from morpho.dict, features from features.ft
 and use heldout data with early stopping):
-
   train_tagger generic3 morpho.dict 1 features.ft 15 1 heldout.data 1 <input.data >tagger.model
 
 See next sections for examples of input data and feature files.
@@ -1097,13 +1060,12 @@ on consecutive lines, each line containing tab separated triplet form \t lemma
 \t tag in UTF-8 encoding. End of sentence is denoted by an empty line.
 
 Example:
-
   Děti	dítě	NNFP1-----A----
   pojedou	jet-1_^(pohybovat_se,_ne_však_chůzí)	VB-P---3F-AA---
   k	k-1	RR--3----------
   babičce	babička	NNFS3-----A----
   .	.	Z:-------------
-  
+
   Už	už-1	Db-------------
   se	se_^(zvr._zájmeno/částice)	P7-X4----------
   těší	těšit_:T	VB-S---3P-AA---
@@ -1118,7 +1080,6 @@ feature file contains several feature sequences, each sequence consisting of
 several elementary features. The elementary features are computed by MorphoDiTa
 and different tagger models can have a different set of elementary features.
 Here we describe elementary features of generic tagger:
-
 - Form: word form
 - Prefix1 .. Prefix9: word form prefix of length 1..9 (measured in Unicode
   characters)
@@ -1167,7 +1128,6 @@ Conference of the European Chapter of the ACL (EACL 2009), pages 763-771,
 Athens, Greece, March. Association for Computational Linguistics.
 
 Feature file for English:
-
   Tag 0,Form 0
   Tag 0,Prefix1 0
   Tag 0,Prefix2 0
@@ -1204,7 +1164,6 @@ Feature file for English:
 Feature file for Czech (note that some feature sequences predict only part of
 PoS tags trying to overcome data sparseness; Tag2 is extended PoS, Tag3 is
 gender, Tag5 is case):
-
   Tag 0
   Tag 0,Tag -1
   Tag 0,Tag -1,Tag -2
@@ -1268,7 +1227,6 @@ gender, Tag5 is case):
   Tag5 0,Suffix4 0
 
 Feature file for Czech, Part of Speech only variant:
-
   Tag 0
   Tag 0,Tag -1
   Tag 0,Tag -1,Tag -2
@@ -1301,7 +1259,6 @@ Measuring Tagger Accuracy
 -------------------------
 
 Measuring custom tagger accuracy can be performed by running:
-
   tagger_accuracy tagger_model <test_data
 
 This binary reads input in the same format as train_tagger, i.e., tab separated
@@ -1316,7 +1273,7 @@ The MorphoDiTa API is defined in header morphodita.h and resides in
 ufal::morphodita namespace. The easiest way to use MorphoDita is therefore:
 
   #include morphodita.h
-  
+
   using namespace ufal::morphodita;
 
 
@@ -1328,33 +1285,33 @@ this class usage can be found in program file run_tagger.cpp. A typical tagger
 usage may look like this:
 
   #include tagger/tagger.h;
-  
+
   using namespace ufal::morphodita;
-  
+
   //...
-  
+
   // load model to memory and construct tagger
   tagger* my_tagger = tagger::load("path_to_model");
-  
+
   if (!t) ...
-  
+
   // create sample input
   vector<string> words;
   words.push_back("malý");
   words.push_back("pes");
-  
+
   vector<string_piece> forms;
   for (auto& word : words)
     forms.emplace_back(word)
-  
+
   // intialize output and tag
   vector<tagged_lemma> tags;
   my_tagger->tag(forms, tags);
-  
+
   // access the output
   for (auto& tag : tags)
     printf("%s\t%s\n", tag.lemma.c_str(), tag.tag.c_str());
-  
+
   delete my_tagger;
 
 The tagger is constructed by an overloaded factory method with one argument. The
@@ -1396,16 +1353,16 @@ C string const char* with the file name of the dictionary. The factory method
 returns a pointer to morphological dictionary or NULL if unsuccessful.
 
   #include morpho/morpho.h
-  
+
   using namespace ufal::morphodita;
-  
+
   //...
-  
+
   // load dictionary to memory
   morpho* my_morpho = morpho::load("path_to_dictionary");
-  
+
   //...
-  
+
   delete(my_morpho);
 
 Another way of obtaining a pointer to morphology dictionary is through an
@@ -1435,9 +1392,9 @@ An example (assuming that morphological dictionary is already constructed, see
 previous example):
 
   vector<tagged_lemma> lemmas;    // output
-  
+
   my_morpho->analyze("pes", morpho::GUESSER, vector<tagged_lemma>& lemmas);
-  
+
   for (auto& lemma: lemmas)
     printf ("%s %s\n, lemma.lemma.c_str(), lemma.tag.c_str())
 
@@ -1478,7 +1435,6 @@ morphological tagging system.
 
 Most characters of a tag wildcard match corresponding characters of a tag, with
 the following exceptions:
-
  - ? matches any character of a tag.
  - [chars] matches any of the characters listed. The dash - has no special
    meaning and if ] is the first character in chars, it is considered as one of
@@ -1502,7 +1458,7 @@ Questions and Answers
 What is a Guesser Mode?
   Morphological analysis may try to guess the lemma and tag of an uknown word.
   This option is turned on by morpho::GUESSER and off by morpho::NO_GUESSER.
-  
+
 Why `string_piece`` and not const char* or std::string?
   We aim to make MorphoDiTa interface as effective as possible. Because the
   input strings may be substrings of larger text or come from different than C++
@@ -1568,7 +1524,7 @@ Struct string_piece
   struct string_piece {
     const char* str;
     size_t len;
-  
+
     string_piece();
     string_piece(const char* str);
     string_piece(const char* str, size_t len);
@@ -1634,7 +1590,7 @@ Class version
     unsigned major;
     unsigned minor;
     unsigned patch;
-  
+
     static version current();
   };
 
@@ -1656,10 +1612,10 @@ Class tokenizer
   class tokenizer {
    public:
     virtual ~tokenizer() {}
-  
+
     virtual void set_text(string_piece text, bool make_copy = false) = 0;
     virtual bool next_sentence(std::vector<string_piece>* forms, std::vector<token_range>* tokens) = 0;
-  
+
     static tokenizer* new_vertical_tokenizer();
     static tokenizer* new_czech_tokenizer();
     static tokenizer* new_english_tokenizer();
@@ -1758,19 +1714,19 @@ Class morpho
   class morpho {
    public:
     virtual ~morpho() {}
-  
+
     static morpho* load(const char* fname);
     static morpho* load(FILE* f);
-  
+
     enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
-  
+
     virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
     virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
-  
+
     virtual int raw_lemma_len(string_piece lemma) const = 0;
     virtual int lemma_id_len(string_piece lemma) const = 0;
     virtual int raw_form_len(string_piece form) const = 0;
-  
+
     virtual tokenizer* new_tokenizer() const = 0;
   };
 
@@ -1893,14 +1849,14 @@ Class tagger
   class tagger {
    public:
     virtual ~tagger() {}
-  
+
     static tagger* load(const char* fname);
     static tagger* load(FILE* f);
-  
+
     virtual const morpho* get_morpho() const = 0;
-  
+
     virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
-  
+
     tokenizer* new_tokenizer() const = 0;
   };
 
@@ -1963,11 +1919,11 @@ Class tagset_converter
   class tagset_converter {
    public:
     virtual ~tagset_converter() {}
-  
+
     virtual void convert(tagged_lemma& tagged_lemma) const = 0;
     virtual void convert_analyzed(std::vector<tagged_lemma>& tagged_lemmas) const = 0;
     virtual void convert_generated(std::vector<tagged_lemma_forms>& forms) const = 0;
-  
+
     static tagset_converter* new_identity_converter();
     static tagset_converter* new_pdt_to_conll2009_converter();
     static tagset_converter* new_strip_lemma_comment_converter(const morpho& dictionary);
@@ -2056,25 +2012,25 @@ Helper Structures
 -----------------
 
   typedef vector<string> Forms;
-  
+
   struct TaggedForm {
     string form;
     string tag;
   };
   typedef vector<TaggedForm> TaggedForms;
-  
+
   struct TaggedLemma {
     string lemma;
     string tag;
   };
   typedef vector<TaggedLemma> TaggedLemmas;
-  
+
   struct TaggedLemmaForms {
     string lemma;
     TaggedForms forms;
   };
   typedef vector<TaggedLemmaForms> TaggedLemmasForms;
-  
+
   struct TokenRange {
     size_t start;
     size_t length;
@@ -2090,54 +2046,54 @@ Main Classes
     unsigned major;
     unsigned minor;
     unsigned patch;
-  
+
     static Version current();
   };
-  
+
   class Tokenizer {
    public:
     virtual void setText(const char* text);
     virtual bool nextSentence(Forms* forms, TokenRanges* tokens);
-  
+
     static Tokenizer* newVerticalTokenizer();
     static Tokenizer* newCzechTokenizer();
     static Tokenizer* newEnglishTokenizer();
     static Tokenizer* newGenericTokenizer();
   };
-  
+
   class Morpho {
    public:
     static Morpho* load(const char* fname);
-  
+
     enum { NO_GUESSER = 0, GUESSER = 1 };
-  
+
     virtual int analyze(const char* form, int guesser, TaggedLemmas& lemmas) const;
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
     virtual string rawLemma(const char* lemma) const;
     virtual string lemmaId(const char* lemma) const;
     virtual string rawForm(const char* form) const;
-  
+
     virtual Tokenizer* newTokenizer() const;
   };
-  
+
   class Tagger {
    public:
     static Tagger* load(const char* fname);
-  
+
     virtual const Morpho* getMorpho() const;
-  
+
     virtual void tag(Forms& forms, TaggedLemmas& tags) const;
-  
+
     Tokenizer* newTokenizer() const;
   };
-  
+
   class TagsetConverter {
    public:
     static TagsetConverter* newIdentityConverter();
     static TagsetConverter* newPdtToConll2009Converter();
     static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
     static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
-  
+
     virtual void convert(TaggedLemma& lemma) const;
     virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
     virtual void convertGenerated(TaggedLemmasForms& forms) const;
@@ -2188,7 +2144,6 @@ Contact
 =======
 
 Authors:
-
 - Milan Straka (http://ufal.mff.cuni.cz/milan-straka), straka@ufal.mff.cuni.cz
 - Jana Straková (http://ufal.mff.cuni.cz/jana-strakova),
   strakova@ufal.mff.cuni.cz
@@ -2219,7 +2174,7 @@ Publications
   of 52nd Annual Meeting of the Association for Computational Linguistics:
   System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014.
   Association for Computational Linguistics.
-  
+
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
   Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
   Perceptron POS Tagger. (http://aclweb.org/anthology//E/E09/E09-1087.pdf) In
