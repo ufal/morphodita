@@ -87,7 +87,7 @@ licensing conditions.
 
 If you use this tool for scientific work, please give credit to us by
 referencing MorphoDiTa website (http://ufal.mff.cuni.cz/morphodita) and
-Straková et al. 2014 (http://www.aclweb.org/anthology/P/P14/P14-5003).
+Straková et al. 2014 (http://www.aclweb.org/anthology/P/P14/P14-5003.pdf).
 
 
 Platforms and Requirements
@@ -301,10 +301,10 @@ Publications
 
 - (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan.
   Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity
-  Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003) In Proceedings
-  of 52nd Annual Meeting of the Association for Computational Linguistics:
-  System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014.
-  Association for Computational Linguistics.
+  Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003.pdf) In
+  Proceedings of 52nd Annual Meeting of the Association for Computational
+  Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June
+  2014. Association for Computational Linguistics.
 
 
 Czech Morphological System
@@ -491,10 +491,10 @@ Publications
 
 - (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan.
   Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity
-  Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003) In Proceedings
-  of 52nd Annual Meeting of the Association for Computational Linguistics:
-  System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014.
-  Association for Computational Linguistics.
+  Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003.pdf) In
+  Proceedings of 52nd Annual Meeting of the Association for Computational
+  Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June
+  2014. Association for Computational Linguistics.
 
 
 English Morphological System
@@ -2170,10 +2170,10 @@ Publications
 
 - (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan.
   Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity
-  Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003) In Proceedings
-  of 52nd Annual Meeting of the Association for Computational Linguistics:
-  System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014.
-  Association for Computational Linguistics.
+  Recognition. (http://www.aclweb.org/anthology/P/P14/P14-5003.pdf) In
+  Proceedings of 52nd Annual Meeting of the Association for Computational
+  Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June
+  2014. Association for Computational Linguistics.
 
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan
   Raab, Miroslav Spousta. 2009. Semi-Supervised Training for the Averaged
@@ -2195,7 +2195,7 @@ Bibtex for referencing
     address   = {Baltimore, Maryland},
     publisher = {Association for Computational Linguistics},
     pages     = {13--18},
-    url       = {http://www.aclweb.org/anthology/P/P14/P14-5003}
+    url       = {http://www.aclweb.org/anthology/P/P14/P14-5003.pdf}
   }
 
 
