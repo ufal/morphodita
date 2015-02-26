@@ -3,13 +3,13 @@ Python MorphoDiTa Bindings
 
 %!encoding: utf-8
 
-== Installation ==
+== Installation ==[python_installation]
 %!include: morphodita_bindings_python_install.t2t
 
 
-== Python Bindings API ==
+== Python Bindings API ==[python_bindings_api]
 %!include: morphodita_bindings_python_api.t2t
 
 
-== C++ Bindings API ==
+== C++ Bindings API ==[cpp_bindings_api]
 %!include: morphodita_bindings_api.t2t

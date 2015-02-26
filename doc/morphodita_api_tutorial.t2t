@@ -12,7 +12,7 @@ The MorphoDiTa API is defined in header ``morphodita.h`` and resides in
 using namespace ufal::morphodita;
 ```
 
-== Tagger API ==
+== Tagger API ==[tutorial_tagger_api]
 
 The main access to MorphoDiTa tagger is through class ``tagger``.  An example
 of this class usage can be found in program file ``run_tagger.cpp``. A typical
@@ -74,13 +74,13 @@ output vector correspond to indexes in input vector.  ``tagged_lemma`` has two
 public members: ``std::string lemma`` and ``std:string tag``, corresponding to
 predicted lemma and tag, respectively.
 
-== Morphological Dictionary API ==
+== Morphological Dictionary API ==[tutorial_morpho_api]
 
 The main access to MorphoDiTa morphological dictionary is through class
 ``morpho``. An example of this interface usage can be found in a program file
 ``run_morpho.cpp``.
 
-=== Dictionary Construction ===
+=== Dictionary Construction ===[tutorial_morpho_construction]
 
 Similarly to the tagger, MorphoDiTa morphological dictionary is constructed by an
 overloaded factory method which accepts either a C file pointer (``FILE*``)
@@ -114,7 +114,7 @@ virtual const morpho* get_morpho() const = 0;
 Please note that you should not delete this pointer as it is owned by the
 ``tagger`` class instance.
 
-=== Morphological Analysis ===
+=== Morphological Analysis ===[tutorial_morpho_analysis]
 
 MorphoDiTa morphological dictionary offers two functionalities: It either
 //analyzes// the given word, that means it outputs all possible lemma-tag pairs
@@ -146,7 +146,7 @@ of guesser or strictly dictionary only, see question Guesser Mode in
 caller must provide an output vector ``std::vector<tagged_lemma>`` and the
 method ``morpho::analyze`` assigns the output to this vector.
 
-=== Generation ===
+=== Generation ===[tutorial_morpho_generation]
 
 MorphoDiTa performs morphological generation from a given lemma:
 
@@ -155,7 +155,7 @@ int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser,
              std::vector<tagged_lemma_forms>& forms) const;
 ```
 
-==== Tag Wildcard ====
+==== Tag Wildcard ====[tutorial_tag_wildcard]
 
 Optionally, a tag wildcard can be specified (or be ``NULL``) and if so, results
 are filtered using this wildcard. This method can be therefore used in more
@@ -180,7 +180,7 @@ Most characters of a tag wildcard match corresponding characters of a tag, with 
  - ``[^chars]`` matches any of the characters //not// listed.
 
 
-==== Unknown Lemmas ====
+==== Unknown Lemmas ====[tutorial_unknown_lemmas]
 
 When the lemma is unknown, MorphoDiTa's generation behavior is defined by Guesser mode (see also
 question Guesser Mode in Questions and Answers). If at least one lemma is found

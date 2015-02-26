@@ -50,7 +50,7 @@ Academy of Sciences of the Czech Republic. The research was performed by
 Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
 
 
-==== Publications ====
+==== Publications ====[englich-morphium-wsj_publications]
 
 - (Popel 2009) Martin Popel. //[Ways to Improve the Quality of English-Czech Machine Translation. http://ufal.mff.cuni.cz/~popel/papers/master_thesis.pdf]// Master Thesis at Institute of Formal and Applied Linguistics, Faculty of Mathematics and Physics, Charles University in Prague (2009).
 
@@ -61,7 +61,7 @@ Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
 - (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan. //[Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity Recognition. http://www.aclweb.org/anthology/P/P14/P14-5003.pdf]// In Proceedings of 52nd Annual Meeting of the Association for Computational Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014. Association for Computational Linguistics.
 
 
-=== English Morphological System ===
+=== English Morphological System ===[english-morphium-wsj_morphological_system]
 
 The English morphology uses standard Penn Treebank POS tags. Nevertheless,
 the lemma structure is unique:
@@ -80,7 +80,7 @@ to generate all forms without any negative prefix by appending ``+`` after the l
 (for example ``able+``).
 
 
-=== English Model ===
+=== English Model ===[english-morphium-wsj_model]
 
 The English model contains the following files:
 
@@ -99,7 +99,7 @@ The English model contains the following files:
   model size: 6MB.
 
 
-=== No Negations Variant ===
+=== No Negations Variant ===[english-morphium-wsj_no_negations_variant]
 
 Stripping of negative prefixes (or handling the lemmas with negative prefixes
 stripped) may not be desirable. Therefore, a variant of the English model
@@ -123,7 +123,7 @@ from lemmas.
   speed: ~60k words/s, model size: 6MB.
 
 
-=== English Model Changes ===
+=== English Model Changes ===[english-morphium-wsj_changes]
 : ``english-morphium-140407`` and ``english-morphium-wsj-140407`` (require MorphoDiTa 1.1 or later)
   Recognize also "non-" as a negative prefix. Formerly, only "non" was recognized.
 

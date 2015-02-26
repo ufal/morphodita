@@ -455,7 +455,7 @@ which must remain valid during existence of the tag set converter. The user
 should delete the tag set converter instance after use.
 
 
-== C++ Bindings API ==
+== C++ Bindings API ==[cpp_bindings_api]
 
 Bindings for other languages than C++ are created using SWIG from the C++
 bindings API, which is a slightly modified version of the native C++ API.
@@ -465,14 +465,14 @@ declaration:
 
 %!include: morphodita_bindings_api.t2t
 
-== Java Bindings ==
+== Java Bindings ==[java_bindings]
 
 %!include: morphodita_bindings_java_api.t2t
 
-== Perl Bindings ==
+== Perl Bindings ==[perl_bindings]
 
 %!include: morphodita_bindings_perl_api.t2t
 
-== Python Bindings ==
+== Python Bindings ==[python_bindings]
 
 %!include: morphodita_bindings_python_api.t2t

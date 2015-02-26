@@ -51,7 +51,7 @@ Options: --input=untokenized|vertical
          --output=vertical|xml
 ```
 
-=== Input Formats ===
+=== Input Formats ===[tagger_input_formats]
 
 The input format is specified using the ``--input`` option. Currently supported
 input formats are:
@@ -61,7 +61,7 @@ input formats are:
   a word, with empty line denoting end of sentence.
 
 
-=== Tag Set Conversion ===
+=== Tag Set Conversion ===[tagger_tagset_conversion]
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
@@ -70,7 +70,7 @@ conversions are:
 - ``strip_lemma_id``: strip lemma id (see Lemma Structure in API Reference).
 
 
-=== Output Formats ===
+=== Output Formats ===[tagger_output_formats]
 
 The output format is specified using the ``--output`` option. Currently
 supported output formats are:
@@ -110,7 +110,7 @@ těší	těšit_:T	VB-S---3P-AA---
 ```
 
 
-== Running the Morphology ==
+== Running the Morphology ==[running_morphology]
 
 There are multiple commands performing morphological tasks.
 The [``run_morpho_analyze`` #run_morpho_analyze] executable performs morphological analysis and
@@ -147,7 +147,7 @@ Options: --input=untokenized|vertical
          --from_tagger
 ```
 
-==== Input Formats ====
+==== Input Formats ====[run_morpho_analyze_input_formats]
 
 The input format is specified using the ``--input`` option. Currently supported
 input formats are:
@@ -161,7 +161,7 @@ Note that the input data is also segmented, even if it is not strictly
 necessary. Therefore, the input is processed by whole paragraphs (ending
 by an empty line).
 
-==== Tag Set Conversion ====
+==== Tag Set Conversion ====[run_morpho_analyze_tagset_conversion]
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
@@ -170,7 +170,7 @@ conversions are:
 - ``strip_lemma_id``: strip lemma id (see Lemma Structure in API Reference).
 
 
-==== Output Formats ====
+==== Output Formats ====[run_morpho_analyze_output_formats]
 
 The output format is specified using the ``--output`` option. Currently
 supported output formats are:
@@ -219,7 +219,7 @@ same as with the [``run_tagger`` #run_tagger] command.
 
 Input for morphological generation has to be in vertical format, each line
 containing a lemma, which can be optionally followed by a tab and a
-[tag wildcard #tag_wildcard]. The output has the same number of lines as input,
+[tag wildcard #run_morpho_generate_tag_wildcard]. The output has the same number of lines as input,
 line //l// contains tab separated form-lemma-tag triplets which can be generated
 from the lemma on he input line //l//. If a tag wildcard was provided, only
 triplets with matching tags are returned.
@@ -255,7 +255,7 @@ k	k-1	RR--3----------	ke	k-1	RV--3----------	ku	k-1	RV--3---------1
 babičce babička NNFS3-----A----
 ```
 
-==== Tag Set Conversion ====
+==== Tag Set Conversion ====[run_morpho_generate_tagset_conversion]
 
 Some tag sets can be converted to different ones. Currently supported tag set
 conversions are:
@@ -268,7 +268,7 @@ Note that the tag set conversion is applied only to the output, not to the
 input lemmas and wildcards.
 
 
-==== Tag Wildcards ====[tag_wildcard]
+==== Tag Wildcards ====[run_morpho_generate_tag_wildcard]
 
 When only forms with a specific tag should be generated for a given lemma, tag
 wildcard can be specified. The tag wildcard is a simple wildcard allowing to filter
@@ -291,7 +291,7 @@ can be run using:
 The input is read from standard input, command on each line. If there is no tab
 on a line, analysis is performed on the given word. If there is a tab on
 a line, generation is performed on the first word, using the second word as
-a [tag wildcard #tag_wildcard].  If the second word is empty (i.e., the input
+a [tag wildcard #run_morpho_generate_tag_wildcard].  If the second word is empty (i.e., the input
 is for example ``on	``), all forms are generated.
 
 Because tagger models contain an embedded morphological model, a tagger model
@@ -330,7 +330,7 @@ Options: --tokenizer=czech|english|generic
          --output=vertical|xml
 ```
 
-=== Output Formats ===
+=== Output Formats ===[run_tokenizer_output_formats]
 
 The output format is specified using the ``--output`` option. Currently
 supported output formats are:
@@ -368,7 +368,7 @@ těší
 
 It is possible to create custom morphological and tagging models.
 
-=== Custom Morphological Models ===
+=== Custom Morphological Models ===[custom_morphological_models]
 
 Custom morphological models can be created using ``encode_dictionary`` binary.
 
@@ -420,7 +420,7 @@ Example command line:
 ``` encode_dictionary generic 8 UNK NUM PUNC SYM <input_data >output_model
 
 
-==== Using External Morphology ====
+==== Using External Morphology ====[using_external_morphology]
 
 Sometimes it is useful to train MorphoDiTa tagger using external morphological
 analysis, without having a MorphoDiTa morphological dictionary.
@@ -455,7 +455,7 @@ Example input lemma for generation using external morphology model:
 ``` go go VB go VBP goes VBZ going VBG went VBG
 
 
-=== Custom Tagging Models ===
+=== Custom Tagging Models ===[custom_tagging_models]
 
 Custom tagging models can be trained using ``train_tagger`` binary, which has
 the following options:
@@ -704,7 +704,7 @@ Tag 0,Cap 0
 Tag 0,Dash 0
 ```
 
-==== Measuring Tagger Accuracy ====
+==== Measuring Tagger Accuracy ====[tagger_accuracy]
 
 Measuring custom tagger accuracy can be performed by running:
 ``` tagger_accuracy tagger_model <test_data

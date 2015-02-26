@@ -4,7 +4,7 @@ MorphoDiTa API Bindings
 %!encoding: utf-8
 
 
-=== Helper Structures ===
+=== Helper Structures ===[bindings_helper_structures]
 
 ```
 typedef vector<string> Forms;
@@ -34,7 +34,7 @@ struct TokenRange {
 typedef vector<TokenRange> TokenRanges;
 ```
 
-=== Main Classes ===
+=== Main Classes ===[bindings_main_classes]
 
 ```
 class Version {

@@ -3,19 +3,19 @@ Version 1.3.1
 
 %!encoding: utf-8
 
-= Introduction =
+= Introduction =[introduction]
 
 %!include: morphodita_about.t2t
 
 
-= Online =
+= Online =[online]
 
 %!include: morphodita_online.t2t
 
 
-= Release =
+= Release =[release]
 
-== Download ==
+== Download ==[download]
 
 MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
 a pre-compiled binary package, or source code only. The binary package contains Linux,
@@ -41,7 +41,7 @@ Currently the following language models are available:
 - English: [english-morphium-wsj-140407 http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0] ([documentation http://ufal.mff.cuni.cz/morphodita/users-manual#english-morphium-wsj])
 
 
-== License ==
+== License ==[license]
 
 MorphoDiTa is an open-source project and is freely available for non-commercial
 purposes. The library is distributed under
@@ -55,12 +55,12 @@ referencing [MorphoDiTa website http://ufal.mff.cuni.cz/morphodita] and
 [Straková et al. 2014 http://www.aclweb.org/anthology/P/P14/P14-5003.pdf].
 
 
-== Platforms and Requirements ==
+== Platforms and Requirements ==[platforms_and_requirements]
 
 MorphoDiTa is available as a standalone tool and as a library for Linux/Windows/OS X. It does not require any additional libraries. As any supervised machine learning tool, it needs trained linguistic models to perform morphological analysis. The models for the Czech language are available with the tool.
 
 
-= MorphoDiTa Installation =
+= MorphoDiTa Installation =[instalation]
 
 %web% [MorphoDiTa Installation on separate page. /morphodita/install]
 %manual% %!include: morphodita_install.t2t
@@ -72,19 +72,19 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows/
 %manual% %!include: morphodita_user.t2t
 
 
-= MorphoDiTa API Tutorial =
+= MorphoDiTa API Tutorial =[api_tutorial]
 
 %web% [MorphoDiTa API Tutorial on separate page. /morphodita/api-tutorial]
 %manual% %!include: morphodita_api_tutorial.t2t
 
 
-= MorphoDiTa API Reference =
+= MorphoDiTa API Reference =[api_reference]
 
 %web% [MorphoDiTa API Reference on separate page. /morphodita/api-reference]
 %manual% %!include: morphodita_api_reference.t2t
 
 
-= Contact =
+= Contact =[contact]
 
 Authors:
 - [Milan Straka http://ufal.mff.cuni.cz/milan-straka], straka@ufal.mff.cuni.cz
@@ -104,14 +104,14 @@ This work has been using language resources developed and/or stored and/or distr
 %manual% Acknowledgements for individual language models are listed in [MorphoDiTa User's Manual #users_manual].
 
 
-== Publications ==
+== Publications ==[publications]
 
 - (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan. //[Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity Recognition. http://www.aclweb.org/anthology/P/P14/P14-5003.pdf]// In Proceedings of 52nd Annual Meeting of the Association for Computational Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014. Association for Computational Linguistics.
 
 - (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. //[Semi-Supervised Training for the Averaged Perceptron POS Tagger. http://aclweb.org/anthology//E/E09/E09-1087.pdf]// In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
 
 
-== Bibtex for referencing ==
+== Bibtex for Referencing ==[bibtex_for_referencing]
 
 ```
 @InProceedings{strakova14,
@@ -127,7 +127,7 @@ This work has been using language resources developed and/or stored and/or distr
 }
 ```
 
-== Permanent identifier ==
+== Permanent Identifier ==[permanent_identifier]
 
 If you prefer to reference MorphoDiTa by a permanent identifier (PID),
 you can use ``http://hdl.handle.net/11858/00-097C-0000-0023-43CD-0``.

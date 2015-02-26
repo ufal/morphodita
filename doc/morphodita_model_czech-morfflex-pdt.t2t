@@ -54,7 +54,7 @@ Hana Hanová, Barbora Hladká, Emil Jeřábek, Lenka Kebortová, Kristýna Kupko
 Pavel Květoň, Jiří Mírovský, Andrea Pfimpfrová, Jan Štěpánek and Daniel Zeman.
 
 
-==== Publications ====
+==== Publications ====[czech-morfflex-pdt_publications]
 
 - (Hajič 2004) Jan Hajič. //[Disambiguation of Rich Inflection: Computational Morphology of Czech. http://books.google.cz/books?id=sB63AAAACAAJ]// Karolinum Press (2004).
 
@@ -84,7 +84,7 @@ is called a //raw lemma//. The following examples illustrate this:
 For a more detailed reference about the Czech morphology, please see
 [Lemma and Tag Structure in PDT 2.0 http://ufal.mff.cuni.cz/pdt2.0/doc/manuals/en/m-layer/html/ch02.html].
 
-=== Main Czech Model ===
+=== Main Czech Model ===[czech-morfflex-pdt_model]
 
 The main Czech model contains the following files:
 
@@ -119,7 +119,7 @@ The main Czech model contains the following files:
   model size: 11MB.
 
 
-=== Part of Speech Only Variant ===
+=== Part of Speech Only Variant ===[czech-morfflex-pdt_pos_variant]
 
 The PDT tag set used by the main Czech model is very fine-grained. In many
 situations, only the part of speech tags would be sufficient. Therefore, we
@@ -145,7 +145,7 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
   Model speed: ~200k words/s, model size: 4MB.
 
 
-=== Raw Lemmas Variant ===
+=== Raw Lemmas Variant ===[czech-morfflex-pdt_raw_lemmas_variant]
 
 //Deprecated: These model variants are deprecated as of MorphoDiTa 1.2, because very similar functionality can be achieved using ``strip_lemma_id`` tag set converter. Next release of the models will not contain these variants.//
 

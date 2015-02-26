@@ -19,14 +19,14 @@ If you want to compile MorphoDiTa manually, sources are available on on
 and in the repository itself.
 
 
-== Requirements ==
+== Requirements ==[requirements]
 
 - ``G++ 4.7`` or newer, alternatively ``clang 3.2`` or newer
 - ``make``
 - ``SWIG 2.0.5`` or newer for language bindings other than ``C++``
 
 
-== Compilation ==
+== Compilation ==[compilation]
 
 To compile MorphoDiTa on Unix-like systems, run ``make`` in the ``src`` directory.
 
@@ -39,7 +39,7 @@ Make targets and options:
 - ``DEBUG=1``: compile with debug informations and C++ library debugging
 
 
-=== Windows ===
+=== Windows ===[compilation_windows]
 
 Currently only G++ is supported under Windows. We use
 [TDM-GCC http://tdm-gcc.tdragon.net/] for producing Windows builds,
@@ -53,15 +53,15 @@ standard Windows Cmd.exe (i.e., TDM-GCC or plain MinGW), use
 Note that ``make`` in MinGW is usually distributed as ``mingw32-make``.
 
 
-== Other language bindings ==
+== Other language bindings ==[other_language_bindings]
 
-=== Java ===
+=== Java ===[java_installation]
 %!include: morphodita_bindings_java_install.t2t
 
 
-=== Perl ===
+=== Perl ===[perl_installation]
 %!include: morphodita_bindings_perl_install.t2t
 
 
-=== Python ===
+=== Python ===[python_installation]
 %!include: morphodita_bindings_python_install.t2t
