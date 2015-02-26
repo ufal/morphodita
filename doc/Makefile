@@ -1,14 +1,13 @@
 include t2t_docsys/Makefile.include
 
-all:
-	@echo "make [html | txt | pdf | web | manual]"
-
+all: doc
 html: morphodita.html
 txt: morphodita.txt
 pdf: morphodita.pdf
 web: web.html web_install.html web_user.html web_api_tutorial.html web_api_reference.html web_about.html web_online.html
-manual: morphodita.html morphodita.txt morphodita_readme.txt morphodita_install.txt
-manual: morphodita_bindings_java_readme.txt morphodita_bindings_perl_readme.txt morphodita_bindings_python_readme.txt
+doc: morphodita.html morphodita.txt morphodita_readme.txt morphodita_install.txt
+doc: morphodita_bindings_java_readme.txt morphodita_bindings_perl_readme.txt morphodita_bindings_python_readme.txt
+install: doc
 	cp morphodita.txt ../MANUAL
 	cp morphodita.html ../MANUAL.html
 	cp morphodita_readme.txt ../README
@@ -31,4 +30,4 @@ morphodita%pdf: morphodita%t2t $(wildcard *.t2t)
 
 .PHONY: clean
 clean:
-	@rm -f $(wildcard $(t2t_docsys_output_wildcards))
+	@rm -f $(T2T_DOCSYS_OUTPUT_WILDCARDS)

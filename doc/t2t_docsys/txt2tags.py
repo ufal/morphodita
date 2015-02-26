@@ -96,6 +96,9 @@ HTML_LOWER  = 0   # use lowercased HTML tags instead upper? (default is 0)
 # These are all the core Python modules used by txt2tags (KISS!)
 import re, os, sys, time, getopt
 
+# Define type for strings (basestring for Python 2 and str for others)
+string_type = basestring if sys.version_info[0] == 2 else str
+
 # The CSV module is new in Python version 2.3
 try:
 	import csv
@@ -137,7 +140,7 @@ else:
 # first file and gui for the second. There is no --no-<action>.
 # --version and --help inside %!options are also odd
 #
-TARGETS  = 'html xhtml sgml dbk tex lout man mgp wiki gwiki doku pmw moin pm6 txt art adoc creole'.split()
+TARGETS  = 'html xhtml sgml dbk tex lout man mgp wiki gwiki doku pmw moin pm6 txt md art adoc creole'.split()
 TARGETS.sort()
 
 FLAGS	 = {'headers'	 :1 , 'enum-title' :0 , 'mask-email' :0 ,
@@ -145,7 +148,7 @@ FLAGS	 = {'headers'	 :1 , 'enum-title' :0 , 'mask-email' :0 ,
 	    'css-sugar'  :0 , 'css-suggar' :0 , 'css-inside' :0 ,
 	    'quiet'	 :0 , 'slides'	   :0 }
 OPTIONS  = {'target'	 :'', 'toc-level'  :3 , 'style'      :'',
-	    'infile'	 :'', 'outfile'    :'', 'encoding'   :'',
+	    'infile'	 :'', 'outfile'    :'', 'encoding'   :'utf-8',
 	    'config-file':'', 'split'	   :0 , 'lang'	     :'',
 	    'width'	 :0 , 'height'	   :0 , 'art-chars'  :'',
 	    'show-config-value':''}
@@ -177,6 +180,7 @@ TARGET_NAMES = {
   'moin'   : _('MoinMoin page'),
   'pm6'    : _('PageMaker document'),
   'txt'    : _('Plain Text'),
+  'md'     : _('GitHub Flavoured Markdown'),
   'art'    : _('ASCII Art text'),
   'adoc'   : _('AsciiDoc document'),
   'creole' : _('Creole 1.0 document')
@@ -297,6 +301,12 @@ Fake template to respect the general process.
 """,
 	'txt': """\
 %(HEADER1)s
+%(HEADER2)s
+%(HEADER3)s
+""",
+
+	'md': """\
+# %(HEADER1)s
 %(HEADER2)s
 %(HEADER3)s
 """,
@@ -662,6 +672,37 @@ def getTags(config):
 		'email'		       : '\a'	     ,
 		'emailMark'	       : '\a (\a)'   ,
 		'img'		       : '[\a]'      ,
+	},
+
+	'md': {
+		'title1'	       : '# \a',
+		'title2'	       : '## \a',
+		'title3'	       : '### \a',
+		'title4'	       : '#### \a',
+		'title5'	       : '##### \a',
+		'blockVerbOpen'        : '```',
+		'blockVerbClose'       : '```',
+		'blockQuoteLine'       : '> ',
+		'fontMonoOpen'	       : '`',
+		'fontMonoClose'        : '`',
+		'fontBoldOpen'	       : '__',
+		'fontBoldClose'        : '__',
+		'fontItalicOpen'       : '*',
+		'fontItalicClose'      : '*',
+		'fontStrikeOpen'       : '~~',
+		'fontStrikeClose'      : '~~',
+		'listItemOpen'	       : '- ',
+		'numlistItemOpen'      : '\a. ',
+		'bar1'		       : '-',
+		'url'		       : '\a',
+		'urlMark'	       : '[\a](\a)',
+		'email'		       : '\a',
+		'emailMark'	       : '[\a](mailto:\a)',
+		'img'		       : '![](\a)',
+		'tableRowOpen'	       : '| ',
+		'tableRowClose'        : ' |',
+		'tableCellSep'         : ' | ',
+		'tableTitleRowClose'   : ' |\n-----'
 	},
 
 	'html': {
@@ -1540,6 +1581,29 @@ def getRules(config):
 			'blanksaroundtitle':1,
 			'blanksaroundnumtitle':1,
 		},
+		'md': {
+			'indentverbblock':1,
+			'linkable':1,
+			'labelbeforelink':1,
+			'imglinkable':1,
+			'spacedlistitem':1,
+			'parainsidelist':1,
+			'tableable':1,
+			'keeplistindent':1,
+			'keepquoteindent':1,
+			'barinsidequote':1,
+
+			'blanksaroundpara':1,
+			'blanksaroundverb':1,
+			'blanksaroundquote':1,
+			'blanksaroundlist':1,
+			'blanksaroundnumlist':1,
+			'blanksarounddeflist':1,
+			'blanksaroundtable':1,
+			'blanksaroundbar':1,
+			'blanksaroundtitle':1,
+			'blanksaroundnumtitle':1,
+		},
 		'art': {
 			#TIP art inherits all TXT rules
 		},
@@ -2106,38 +2170,38 @@ def aa_slide(title, length):
 	return res
 
 def aa_table(table):
-    data = [row[2:-2].split(' | ') for row in table]
-    n = max([len(line) for line in data])
-    data = [line + (n - len(line)) * [''] for line in data]
-    tab = []
-    for i in range(n):
-	tab.append([line[i] for line in data])
-    length = [max([len(el) for el in line]) for line in tab]
-    res = "+"
-    for i in range(n):
-	res = res + (length[i] + 2) * "-" + '+'
-    ret = []
-    for line in data:
-	aff = "|"
+	data = [row[2:-2].split(' | ') for row in table]
+	n = max([len(line) for line in data])
+	data = [line + (n - len(line)) * [''] for line in data]
+	tab = []
+	for i in range(n):
+		tab.append([line[i] for line in data])
+	length = [max([len(el) for el in line]) for line in tab]
+	res = "+"
+	for i in range(n):
+		res = res + (length[i] + 2) * "-" + '+'
+	ret = []
+	for line in data:
+		aff = "|"
+		ret.append(res)
+		for j,el in enumerate(line):
+			aff = aff + " " + el + (length[j] - len(el) + 1) * " " + "|"
+		ret.append(aff)
 	ret.append(res)
-	for j,el in enumerate(line):
-	    aff = aff + " " + el + (length[j] - len(el) + 1) * " " + "|"
-	ret.append(aff)
-    ret.append(res)
-    return ret
+	return ret
 
 ##############################################################################
 
 class error(Exception):
 	pass
 def echo(msg):	 # for quick debug
-	print '\033[32;1m%s\033[m'%msg
+	print('\033[32;1m%s\033[m'%msg)
 def Quit(msg=''):
-	if msg: print msg
+	if msg: print(msg)
 	sys.exit(0)
 def Error(msg):
 	msg = _("%s: Error: ")%my_name + msg
-	raise error, msg
+	raise error(msg)
 def getTraceback():
 	try:
 		from traceback import format_exception
@@ -2153,7 +2217,7 @@ def getUnknownErrorMessage():
 def Message(msg,level):
 	if level <= VERBOSE and not QUIET:
 		prefix = '-'*5
-		print "%s %s"%(prefix*level, msg)
+		print("%s %s"%(prefix*level, msg))
 def Debug(msg,id_=0,linenr=None):
 	"Show debug messages, categorized (colored or not)"
 	if QUIET or not DEBUG: return
@@ -2167,7 +2231,7 @@ def Debug(msg,id_=0,linenr=None):
 		if BG_LIGHT: color = colors_bglight[id_]
 		else	   : color = colors_bgdark[id_]
 		msg = '\033[3%sm%s\033[m'%(color,msg)
-	print "++ %s: %s"%(ids[id_],msg)
+	print("++ %s: %s"%(ids[id_],msg))
 
 def Readfile(file_path, remove_linebreaks=0, ignore_error=0):
 	data = []
@@ -2186,13 +2250,13 @@ def Readfile(file_path, remove_linebreaks=0, ignore_error=0):
 			if not ignore_error:
 				Error(_("Cannot read file:") + ' ' + file_path)
 	if remove_linebreaks:
-		data = map(lambda x:re.sub('[\n\r]+$', '', x), data)
+		data = [re.sub('[\n\r]+$', '', x) for x in data]
 	Message(_("File read (%d lines): %s") % (len(data), file_path), 2)
 	return data
 
 def Savefile(file_path, contents):
 	try:
-		f = open(file_path, 'wb')
+		f = open(file_path, 'w')
 	except:
 		Error(_("Cannot open file for writing:") + ' ' + file_path)
 	if type(contents) == type([]):
@@ -2203,7 +2267,7 @@ def Savefile(file_path, contents):
 	f.close()
 
 def showdic(dic):
-	for k in dic.keys(): print "%15s : %s" % (k,dic[k])
+	for k in dic.keys(): print("%15s : %s" % (k,dic[k]))
 def dotted_spaces(txt=''):
 	return txt.replace(' ', '.')
 
@@ -2275,9 +2339,9 @@ class CommandLine:
 	    raw = CommandLine().get_raw_config(sys.argv[1:])
 	"""
 	def __init__(self):
-		self.all_options = OPTIONS.keys()
-		self.all_flags	 = FLAGS.keys()
-		self.all_actions = ACTIONS.keys()
+		self.all_options = list(OPTIONS.keys())
+		self.all_flags	 = list(FLAGS.keys())
+		self.all_actions = list(ACTIONS.keys())
 
 		# short:long options equivalence
 		self.short_long = {
@@ -2310,14 +2374,14 @@ class CommandLine:
 
 	def _compose_long_opts(self):
 		"Returns a list with all the valid long options/flags"
-		ret = map(lambda x:x+'=', self.all_options)	     # add =
-		ret.extend(self.all_flags)			     # flag ON
-		ret.extend(self.all_actions)			     # actions
-		ret.extend(map(lambda x:'no-'+x, self.all_flags))    # add no-*
-		ret.extend(['no-style','no-encoding'])		     # turn OFF
-		ret.extend(['no-outfile','no-infile'])		     # turn OFF
-		ret.extend(['no-dump-config', 'no-dump-source'])     # turn OFF
-		ret.extend(['no-targets'])			     # turn OFF
+		ret = [x+'=' for x in self.all_options]			# add =
+		ret.extend(self.all_flags)				# flag ON
+		ret.extend(self.all_actions)				# actions
+		ret.extend(['no-'+x for x in self.all_flags])		# add no-*
+		ret.extend(['no-style','no-encoding'])			# turn OFF
+		ret.extend(['no-outfile','no-infile'])			# turn OFF
+		ret.extend(['no-dump-config', 'no-dump-source'])	# turn OFF
+		ret.extend(['no-targets'])				# turn OFF
 		#Debug('Valid LONG options: %s'%ret)
 		return ret
 
@@ -2333,7 +2397,7 @@ class CommandLine:
 		# Parse it!
 		try:
 			opts, args = getopt.getopt(cmdline, short, long_)
-		except getopt.error, errmsg:
+		except getopt.error as errmsg:
 			Error(_("%s (try --help)")%errmsg)
 		return (opts, args)
 
@@ -2344,7 +2408,7 @@ class CommandLine:
 		ret = []
 
 		# We need lists, not strings (such as from %!options)
-		if type(cmdline) in (type(''), type(u'')):
+		if isinstance(cmdline, string_type):
 			cmdline = self._tokenize(cmdline)
 
 		# Extract name/value pair of all configs, check for invalid names
@@ -2406,16 +2470,16 @@ class CommandLine:
 		use_short = {'no-headers':'H', 'enum-title':'n'}
 		# Remove useless options
 		if not no_check and cfg.get('toc-only'):
-			if cfg.has_key('no-headers'):
+			if 'no-headers' in cfg:
 				del cfg['no-headers']
-			if cfg.has_key('outfile'):
+			if 'outfile' in cfg:
 				del cfg['outfile']	# defaults to STDOUT
 			if cfg.get('target') == 'txt':
 				del cfg['target']	# already default
 			args.append('--toc-only')  # must be the first
 			del cfg['toc-only']
 		# Add target type
-		if cfg.has_key('target'):
+		if 'target' in cfg:
 			args.append('-t '+cfg['target'])
 			del cfg['target']
 		# Add other options
@@ -2436,11 +2500,11 @@ class CommandLine:
 			else:			  # add --option=value
 				args.append('--%s=%s'%(key,val))
 		# The outfile using -o
-		if cfg.has_key('outfile') and \
+		if 'outfile' in cfg and \
 		   cfg['outfile'] != dft_options.get('outfile'):
 			args.append('-o '+cfg['outfile'])
 		# Place input file(s) always at the end
-		if cfg.has_key('infile'):
+		if 'infile' in cfg:
 			args.append(' '.join(cfg['infile']))
 		# Return as a nice list
 		Debug("Diet command line: %s"%' '.join(args), 1)
@@ -2541,7 +2605,7 @@ class SourceDocument:
 			ref[0] = 0 ; ref[1] = 2
 		rgx = getRegexes()
 		on_comment_block = 0
-		for i in xrange(ref[1],len(buf)):	  # find body init:
+		for i in range(ref[1],len(buf)):	  # find body init:
 			# Handle comment blocks inside config area
 			if not on_comment_block \
 			   and rgx['blockCommentOpen'].search(buf[i]):
@@ -2571,7 +2635,7 @@ class SourceDocument:
 		# Fancyness sample: head conf body (1 4 8)
 		self.areas_fancy = "%s (%s)"%(
 			' '.join(self.areas),
-			' '.join(map(str, map(lambda x:x or '', ref))))
+			' '.join(map(str, [x or '' for x in ref])))
 		Message(_("Areas found: %s")%self.areas_fancy, 2)
 
 	def get_raw_config(self):
@@ -2664,7 +2728,7 @@ class ConfigMaster:
 			kind = type(self.defaults[key])
 			if kind == type(9):
 				off[key] = 0
-			elif kind == type('') or kind == type(u''):
+			elif issubclass(kind, string_type):
 				off[key] = ''
 			elif kind == type([]):
 				off[key] = []
@@ -2690,7 +2754,7 @@ class ConfigMaster:
 		"Adds the key:value pair to the config dictionary (if needed)"
 		# %!options
 		if key == 'options':
-			ignoreme = self.dft_actions.keys() + ['target']
+			ignoreme = list(self.dft_actions.keys()) + ['target']
 			ignoreme.remove('dump-config')
 			ignoreme.remove('dump-source')
 			ignoreme.remove('targets')
@@ -2710,7 +2774,7 @@ class ConfigMaster:
 		# Is this value the default one?
 		if val == self.defaults.get(key):
 			# If default value, remove previous key:val
-			if self.parsed.has_key(key):
+			if key in self.parsed:
 				del self.parsed[key]
 			# Nothing more to do
 			return
@@ -2722,7 +2786,7 @@ class ConfigMaster:
 		# Multi value or single?
 		if key in self.multi:
 			# First one? start new list
-			if not self.parsed.has_key(key):
+			if key not in self.parsed:
 				self.parsed[key] = []
 			self.parsed[key].append(val)
 		# Incremental value? so let's add it
@@ -2887,7 +2951,7 @@ class ConfigLines:
 		errormsg = _("Invalid CONFIG line on %s")+"\n%03d:%s"
 		lines = Readfile(filename, remove_linebreaks=1)
 		# Sanity: try to find invalid config lines
-		for i in xrange(len(lines)):
+		for i in range(len(lines)):
 			line = lines[i].rstrip()
 			if not line: continue  # empty
 			if line[0] != '%': Error(errormsg%(filename,i+1,line))
@@ -2908,7 +2972,7 @@ class ConfigLines:
 		ret = []
 		self.load_lines()
 		first = self.first_line
-		for i in xrange(len(self.lines)):
+		for i in range(len(self.lines)):
 			line = self.lines[i]
 			Message(_("Processing line %03d: %s")%(first+i,line),2)
 			target, key, val = self.parse_line(line)
@@ -3032,7 +3096,7 @@ class MaskMaster:
 			# Try to match the line for the three marks
 			# Note: 'z' > 999999
 			#
-			t = r = v = 'z'
+			t = r = v = sys.maxsize
 			try: t = regex['tagged'].search(line).start()
 			except: pass
 			try: r = regex['raw'].search(line).start()
@@ -3153,6 +3217,7 @@ class TitleMaster:
 		self.user_labels = {}
 		self.anchor_count = 0
 		self.anchor_prefix = 'toc'
+		self.anchor_used = set()
 
 	def _open_close_blocks(self):
 		"Open new title blocks, closing the previous (if any)"
@@ -3242,8 +3307,8 @@ class TitleMaster:
 			self.tag = TAGS.get('%s%dOpen'%(kind,level)) or \
 				   TAGS.get('title%dOpen'%level)
 		else:
-			self.tag = TAGS.get(kind+`level`) or \
-				   TAGS.get('title'+`level`)
+			self.tag = TAGS.get(kind+repr(level)) or \
+				   TAGS.get('title'+repr(level))
 		self.last_level = self.level
 		self.kind  = kind
 		self.level = level
@@ -3259,10 +3324,10 @@ class TitleMaster:
 			# Reset sublevels count (if any)
 			max_levels = len(self.count)
 			if self.level < max_levels-1:
-				for i in xrange(self.level+1, max_levels):
+				for i in range(self.level+1, max_levels):
 					self.count[i] = 0
 			# Compose count id from hierarchy
-			for i in xrange(self.level):
+			for i in range(self.level):
 				count_id= "%s%d."%(count_id, self.count[i+1])
 		self.count_id = count_id
 
@@ -3289,6 +3354,8 @@ class TitleMaster:
 			label = label or '%s%s' % (self.anchor_prefix, self.anchor_count)
 		if label and TAGS['anchor']:
 			ret = regex['x'].sub(label,TAGS['anchor'])
+			if label in self.anchor_used: Error(_("Anchor '%s' used multiple times!") % label)
+			self.anchor_used.add(label)
 		return ret
 
 	def _get_full_title_text(self):
@@ -3327,12 +3394,7 @@ class TitleMaster:
 		if TARGET == 'txt':
 			if BLOCK.count > 1: ret.append('') # blank line before
 			ret.append(tagged)
-			# Get the right letter count for UTF
-			if CONF['encoding'].lower() == 'utf-8':
-				i = len(full_title.decode('utf-8'))
-			else:
-				i = len(full_title)
-			ret.append(regex['x'].sub(('=' if self.level == 1 else '-')*i, self.tag))
+			ret.append(regex['x'].sub(('=' if self.level == 1 else '-')*len(full_title), self.tag))
 		elif TARGET == 'art' and self.level == 1:
 			if CONF['slides'] :
 				AA_TITLE = tagged
@@ -3356,7 +3418,7 @@ class TitleMaster:
 			if level > max_level: continue	 # ignore
 			indent = '  '*level
 			id_txt = ('%s %s'%(count_id, txt)).lstrip()
-			label = label or self.anchor_prefix+`toc_count`
+			label = label or self.anchor_prefix+repr(toc_count)
 			toc_count += 1
 
 			# TOC will have crosslinks to anchors
@@ -3419,7 +3481,7 @@ class TableMaster:
 		if not self.border: tborder = ''
 		# Set the columns alignment
 		if rules['tablecellaligntype'] == 'column':
-			calign = map(lambda x: TAGS['_tableColAlign%s'%x], self.colalign)
+			calign = [TAGS['_tableColAlign%s'%x] for x in self.colalign]
 			calign = calignsep.join(calign)
 		# Align full table, set border and Column align (if any)
 		topen = regex['_tableAlign'   ].sub(talign , topen)
@@ -3458,7 +3520,7 @@ class TableMaster:
 		open_	= TAGS['tableCellOpen']
 		close  = TAGS['tableCellClose']
 		sep    = TAGS['tableCellSep']
-		calign	  = map(lambda x: TAGS['_tableCellAlign'+x], rowdata['cellalign'])
+		calign	  = [TAGS['_tableCellAlign'+x] for x in rowdata['cellalign']]
 		calignsep = TAGS['tableColAlignSep']
 		ncolumns = len(self.colalign)
 
@@ -3502,9 +3564,9 @@ class TableMaster:
 
 		# Cells pre processing
 		if rules['tablecellstrip']:
-			cells = map(lambda x: x.strip(), cells)
+			cells = [x.strip() for x in cells]
 		if rowdata['title'] and rules['tabletitlerowinbold']:
-			cells = map(lambda x: enclose_me('fontBold',x), cells)
+			cells = [enclose_me('fontBold',x) for x in cells]
 
 		# Add cell BEGIN/END tags
 		for cell in cells:
@@ -3566,7 +3628,7 @@ class TableMaster:
 		# Find cells span
 		ret['cellspan'] = self._get_cell_span(ret['cells'])
 		# Remove span ID
-		ret['cells'] = map(lambda x:re.sub('\a\|+$','',x),ret['cells'])
+		ret['cells'] = [re.sub('\a\|+$','',x) for x in ret['cells']]
 		# Find cells align
 		ret['cellalign'] = self._get_cell_align(ret['cells'])
 		# Hooray!
@@ -3656,7 +3718,7 @@ class BlockMaster:
 			'title'   :[],
 			'numtitle':[],
 		}
-		self.allblocks = self.contains.keys()
+		self.allblocks = list(self.contains.keys())
 
 		# If one is found inside another, ignore the marks
 		self.exclusive = ['comment','verb','raw','tagged']
@@ -3707,7 +3769,7 @@ class BlockMaster:
 		if block not in self.allblocks:
 			Error("Invalid block '%s'"%block)
 
-                props = {}
+		props = {}
 		# First, let's close other possible open blocks
 		while self.block() and block not in self.contains[self.block()]:
 			if self.block() == 'para' and (block.endswith('list') or block == 'verb'):
@@ -3776,33 +3838,45 @@ class BlockMaster:
 	def _get_escaped_hold(self):
 		ret = []
 		for line in self.hold():
-			linetype = type(line)
-			if linetype == type('') or linetype == type(u''):
+			if isinstance(line, string_type):
 				ret.append(self._last_escapes(line))
-			elif linetype == type([]):
+			elif type(line) == type([]):
 				ret.extend(line)
 			else:
-				Error("BlockMaster: Unknown HOLD item type: %s" % linetype)
+				Error("BlockMaster: Unknown HOLD item type: %s" % type(line))
 		return ret
 
-	# Milan Straka: Perform text reflow for txt TARGET to 80 columns.
+	# Milan Straka: Perform text reflow for txt TARGET to 80 columns
+	# and make two or more spaces at end of line denote line break.
 	def _reflow(self, what, indent = 0):
+		if TARGET == 'html' or TARGET == 'tex':
+			line_break = r'\\\\' if TARGET == 'tex' else '<br>'
+			ret = []
+			for line in what:
+				ret.append(re.sub(r'\s{2,}$', line_break, line) if isinstance(line, string_type) else line)
+			return ret
+
 		if TARGET != 'txt':
 			return what
 
 		tmp = []
+		was_line_break = False
 		for line in what:
-			linetype = type(line)
-			if linetype == type('') or linetype == type(u''):
-				if not line or not tmp or type(tmp[-1]) == type([]) or not tmp[-1]:
+			if isinstance(line, string_type):
+				line_break = re.search(r'\s{2,}$', line)
+				if line_break: line = re.sub(r'\s{2,}$', '', line)
+				if not line or not tmp or type(tmp[-1]) == type([]) or not tmp[-1] or was_line_break:
 					tmp.append(self._last_escapes(line).strip())
 				else:
 					tmp[-1] += " " + self._last_escapes(line).strip()
+				was_line_break = line_break
 			else:
 				tmp.append(line)
+				was_line_break = False
+
 		ret = []
 		for line in tmp:
-			if type(line) == type('') or type(line) == type(u''):
+			if isinstance(line, string_type):
 				while len(line) > 80 - indent:
 					pos = line.rfind(" ", 0, 81 - indent)
 					if pos == -1: pos = line.find(" ", 80 - indent)
@@ -3871,7 +3945,7 @@ class BlockMaster:
 
 	def raw(self):
 		lines = self.hold()
-		return map(lambda x: doEscape(TARGET, x), lines)
+		return [doEscape(TARGET, x) for x in lines]
 
 	def tagged(self):
 		return self.hold()
@@ -3879,7 +3953,7 @@ class BlockMaster:
 	def para(self):
 		result = []
 		open_ = TAGS['paragraphOpen']
-		if self.prop('attached_after') and TAGS.has_key('paragraphOpenAttachedAfter'): open_ = TAGS['paragraphOpenAttachedAfter']
+		if self.prop('attached_after') and 'paragraphOpenAttachedAfter' in TAGS: open_ = TAGS['paragraphOpenAttachedAfter']
 		close = TAGS['paragraphClose']
 		self._reflow_hold()
 		lines = self._get_escaped_hold()
@@ -3918,7 +3992,7 @@ class BlockMaster:
 		"Verbatim lines are not masked, so there's no need to unmask"
 		result = []
 		open_ = TAGS['blockVerbOpen']
-		if self.prop('attached_before') and TAGS.has_key('blockVerbOpenAttachedBefore'): open_ = TAGS['blockVerbOpenAttachedBefore']
+		if self.prop('attached_before') and 'blockVerbOpenAttachedBefore' in TAGS: open_ = TAGS['blockVerbOpenAttachedBefore']
 		close = TAGS['blockVerbClose']
 
 		# Blank line before?
@@ -3970,7 +4044,7 @@ class BlockMaster:
 
 		# Rewrite all table cells by the unmasked and escaped data
 		lines = self._get_escaped_hold()
-		for i in xrange(len(lines)):
+		for i in range(len(lines)):
 			cells = lines[i].split(SEPARATOR)
 			self.tableparser.rows[i]['cells'] = cells
 		result.extend(self.tableparser.dump())
@@ -4140,11 +4214,11 @@ class BlockMaster:
 
 		if not widelist and rules['compactlist']:
 			listopen = TAGS.get(name+'OpenCompact')
-			if self.prop('attached_before') and TAGS.has_key(name+'OpenCompactAttachedBefore'): listopen = TAGS.get(name+'OpenCompactAttachedBefore')
+			if self.prop('attached_before') and name+'OpenCompactAttachedBefore' in TAGS: listopen = TAGS.get(name+'OpenCompactAttachedBefore')
 			listclose = TAGS.get(name+'CloseCompact')
 		else:
 			listopen  = TAGS.get(name+'Open')
-			if self.prop('attached_before') and TAGS.has_key(name+'OpenAttachedBefore'): listopen = TAGS.get(name+'OpenAttachedBefore')
+			if self.prop('attached_before') and name+'OpenAttachedBefore' in TAGS: listopen = TAGS.get(name+'OpenAttachedBefore')
 			listclose = TAGS.get(name+'Close')
 
 		# Open list (not nestable lists are only opened at mother)
@@ -4254,7 +4328,7 @@ def listTargets():
 	targets = TARGETS
 	targets.sort()
 	for target in targets:
-		print "%s\t%s" % (target, TARGET_NAMES.get(target))
+		print("%s\t%s" % (target, TARGET_NAMES.get(target)))
 
 def dumpConfig(source_raw, parsed_config):
 	onoff = {1:_('ON'), 0:_('OFF')}
@@ -4265,16 +4339,16 @@ def dumpConfig(source_raw, parsed_config):
 	]
 	# First show all RAW data found
 	for label, cfg in data:
-		print _('RAW config for %s')%label
+		print(_('RAW config for %s')%label)
 		for target,key,val in cfg:
 			target = '(%s)'%target
 			key    = dotted_spaces("%-14s"%key)
 			val    = val or _('ON')
-			print '  %-8s %s: %s'%(target,key,val)
-		print
+			print('  %-8s %s: %s'%(target,key,val))
+		print()
 	# Then the parsed results of all of them
-	print _('Full PARSED config')
-	keys = parsed_config.keys() ; keys.sort()  # sorted
+	print(_('Full PARSED config'))
+	keys = list(parsed_config.keys()) ; keys.sort()  # sorted
 	for key in keys:
 		val = parsed_config[key]
 		# Filters are the last
@@ -4288,13 +4362,13 @@ def dumpConfig(source_raw, parsed_config):
 			if key == 'options': sep = ' '
 			else		   : sep = ', '
 			val = sep.join(val)
-		print "%25s: %s"%(dotted_spaces("%-14s"%key),val)
-	print
-	print _('Active filters')
+		print("%25s: %s"%(dotted_spaces("%-14s"%key),val))
+	print()
+	print(_('Active filters'))
 	for filter_ in ['preproc', 'postproc']:
 		for rule in parsed_config.get(filter_) or []:
-			print "%25s: %s  ->  %s" % (
-				dotted_spaces("%-14s"%filter_), rule[0], rule[1])
+			print("%25s: %s  ->  %s" % (
+				dotted_spaces("%-14s"%filter_), rule[0], rule[1]))
 
 
 def get_file_body(file_):
@@ -4327,17 +4401,17 @@ def finish_him(outlist, config):
 		if GUI:
 			return outlist, config
 		else:
-			for line in outlist: print line
+			for line in outlist: print(line)
 	else:
 		Savefile(outfile, addLineBreaks(outlist))
 		if not GUI and not QUIET:
-			print _('%s wrote %s')%(my_name,outfile)
+			print(_('%s wrote %s')%(my_name,outfile))
 
 	if config['split']:
-		if not QUIET: print "--- html..."
+		if not QUIET: print("--- html...")
 		sgml2html = 'sgml2html -s %s -l %s %s' % (
 			config['split'], config['lang'] or lang, outfile)
-		if not QUIET: print "Running system command:", sgml2html
+		if not QUIET: print("Running system command:", sgml2html)
 		os.system(sgml2html)
 
 
@@ -4418,7 +4492,7 @@ def doHeader(headers, config):
 	if not config['headers']: return []
 	if not headers: headers = ['','','']
 	target = config['target']
-	if not HEADER_TEMPLATE.has_key(target):
+	if target not in HEADER_TEMPLATE:
 		Error("doHeader: Unknown target '%s'"%target)
 
 	if target in ('html','xhtml') and config.get('css-sugar'):
@@ -4432,7 +4506,7 @@ def doHeader(headers, config):
 		# Remove .sty extension from each style filename (freaking tex)
 		# XXX Can't handle --style foo.sty,bar.sty
 		if target == 'tex' and key == 'STYLE':
-			val = map(lambda x:re.sub('(?i)\.sty$','',x), val)
+			val = [re.sub('(?i)\.sty$','',x) for x in val]
 		if key == 'ENCODING':
 			val = get_encoding_string(val, target)
 		head_data[key] = val
@@ -4492,7 +4566,7 @@ def doHeader(headers, config):
 		head_data['STYLE'] = styles[0]
 	elif len(styles) > 1:
 		style_mark = '%(STYLE)s'
-		for i in xrange(len(template)):
+		for i in range(len(template)):
 			if template[i].count(style_mark):
 				while styles:
 					template.insert(i+1, template[i].replace(style_mark, styles.pop()))
@@ -4506,7 +4580,7 @@ def doHeader(headers, config):
 	if target in ('html','xhtml') and config.get('css-inside') and \
 	   config.get('style'):
 		set_global_config(config) # usually on convert(), needed here
-		for i in xrange(len(config['style'])):
+		for i in range(len(config['style'])):
 			cssfile = config['style'][i]
 			if not os.path.isabs(cssfile):
 				infile = config.get('sourcefile')
@@ -4632,13 +4706,13 @@ def EscapeCharHandler(action, data):
 def maskEscapeChar(data):
 	"Replace any Escape Char \ with a text mask (Input: str or list)"
 	if type(data) == type([]):
-		return map(lambda x: EscapeCharHandler('mask', x), data)
+		return [EscapeCharHandler('mask', x) for x in data]
 	return EscapeCharHandler('mask',data)
 
 def unmaskEscapeChar(data):
 	"Undo the Escape char \ masking (Input: str or list)"
 	if type(data) == type([]):
-		return map(lambda x: EscapeCharHandler('unmask', x), data)
+		return [EscapeCharHandler('unmask', x) for x in data]
 	return EscapeCharHandler('unmask',data)
 
 def addLineBreaks(mylist):
@@ -4658,7 +4732,7 @@ def expandLineBreaks(mylist):
 
 def compile_filters(filters, errmsg='Filter'):
 	if filters:
-		for i in xrange(len(filters)):
+		for i in range(len(filters)):
 			patt,repl = filters[i]
 			try: rgx = re.compile(patt)
 			except: Error("%s: '%s'"%(errmsg, patt))
@@ -4878,9 +4952,9 @@ def process_source_file(file_='', noconf=0, contents=[]):
 			config_value = full_parsed.get(full_parsed['show-config-value'])
 			if config_value:
 				if type(config_value) == type([]):
-					print '\n'.join(config_value)
+					print('\n'.join(config_value))
 				else:
-					print config_value
+					print(config_value)
 			Quit()
 		# Okay, all done
 		Debug("FULL config for this file: %s"%full_parsed, 1)
@@ -4919,7 +4993,7 @@ def convert_this_files(configs):
 		# If dump-source, we're done
 		if myconf['dump-source']:
 			for line in source_head+source_conf+target_body:
-				print line
+				print(line)
 			return
 
 		# Close the last slide
@@ -5289,7 +5363,7 @@ def convert(bodylines, config, firstlinenr=1):
 				try:
 					for row in reader:
 						table.append('| %s |' % ' | '.join(row))
-				except csv.Error, e:
+				except csv.Error as e:
 					Error('CSV: file %s: %s' % (filename, e))
 
 				# Parse and convert the new table
@@ -5464,7 +5538,7 @@ def convert(bodylines, config, firstlinenr=1):
 		  regex['deflist'].search(line):
 
 			listindent = BLOCK.prop('indent')
-			listids = ''.join(LISTNAMES.keys())
+			listids = ''.join(["\\-" if l == '-' else l for l in LISTNAMES.keys()])
 			m = re.match('^( *)([%s]) '%listids, line)
 			listitemindent = m.group(1)
 			listtype = m.group(2)
@@ -5706,7 +5780,7 @@ class Gui:
 		self.row += 2	# update row count
 	def target_name2key(self):
 		name = self.target_name.get()
-		target = filter(lambda x: TARGET_NAMES[x] == name, TARGETS)
+		target = [x for x in TARGETS if TARGET_NAMES[x] == name]
 		try   : key = target[0]
 		except: key = ''
 		self.target = self.setvar(key)
@@ -5764,9 +5838,9 @@ class Gui:
 		# Compose cmdline
 		guiflags = []
 		real_cmdline_conf = ConfigMaster(CMDLINE_RAW).parse()
-		if real_cmdline_conf.has_key('infile'):
+		if 'infile' in real_cmdline_conf:
 			del real_cmdline_conf['infile']
-		if real_cmdline_conf.has_key('target'):
+		if 'target' in real_cmdline_conf:
 			del real_cmdline_conf['target']
 		real_cmdline = CommandLine().compose_cmdline(real_cmdline_conf)
 		default_outfile = ConfigMaster().get_outfile_name(
@@ -5783,7 +5857,7 @@ class Gui:
 				else: on_cmdline = 0
 			if val != on_config or (
 			  val == on_config == on_cmdline and
-			  real_cmdline_conf.has_key(opt)):
+			  opt in real_cmdline_conf):
 				if val:
 					# Was not set, but user selected on GUI
 					Debug("user turned  ON: %s"%opt)
@@ -5827,7 +5901,7 @@ class Gui:
 			pass
 		except:		      # fatal error (windowed and printed)
 			errormsg = getUnknownErrorMessage()
-			print errormsg
+			print(errormsg)
 			showerror(_('%s FATAL ERROR!')%my_name,errormsg)
 			self.exit()
 		CMDLINE_RAW = cmdline_raw_orig
@@ -5854,7 +5928,7 @@ class Gui:
 			'toc-only'  : _("Just do TOC, nothing more"),
 			'stdout'    : _("Dump to screen (Don't save target file)")
 		}
-		targets_menu = map(lambda x: TARGET_NAMES[x], TARGETS)
+		targets_menu = [TARGET_NAMES[x] for x in TARGETS]
 
 		# Header
 		self.label("%s %s"%(my_name.upper(), my_version),
@@ -5990,7 +6064,7 @@ def exec_command_line(user_cmdline=[]):
 
 	# User forced --gui, but it's not available
 	if cmdline_parsed.get('gui') and not GUI:
-		print getTraceback(); print
+		print(getTraceback()); print()
 		Error(
 			"Sorry, I can't run my Graphical Interface - GUI\n"
 			"- Check if Python Tcl/Tk module is installed (Tkinter)\n"
@@ -6038,7 +6112,7 @@ def exec_command_line(user_cmdline=[]):
 if __name__ == '__main__':
 	try:
 		exec_command_line()
-	except error, msg:
+	except error as msg:
 		sys.stderr.write("%s\n"%msg)
 		sys.stderr.flush()
 		sys.exit(1)
