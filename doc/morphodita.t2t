@@ -33,7 +33,7 @@ languages are available in standard package repositories, i.e. on PyPI and CPAN.
 To use MorphoDiTa, a language model is needed. The language models are available
 from [LINDAT/CLARIN http://www.lindat.cz] infrastructure and described further
 in the
-%web% [MorphoDiTa User's Manual morphodita/users-manual].
+%web% [MorphoDiTa User's Manual /morphodita/users-manual].
 %manual% [MorphoDiTa User's Manual #users_manual].
 Currently the following language models are available:
 
@@ -62,25 +62,25 @@ MorphoDiTa is available as a standalone tool and as a library for Linux/Windows/
 
 = MorphoDiTa Installation =
 
-%web% [MorphoDiTa Installation on separate page. morphodita/install]
+%web% [MorphoDiTa Installation on separate page. /morphodita/install]
 %manual% %!include: morphodita_install.t2t
 
 
 = MorphoDiTa User's Manual =[users_manual]
 
-%web% [MorphoDiTa User's Manual on separate page. morphodita/users-manual]
+%web% [MorphoDiTa User's Manual on separate page. /morphodita/users-manual]
 %manual% %!include: morphodita_user.t2t
 
 
 = MorphoDiTa API Tutorial =
 
-%web% [MorphoDiTa API Tutorial on separate page. morphodita/api-tutorial]
+%web% [MorphoDiTa API Tutorial on separate page. /morphodita/api-tutorial]
 %manual% %!include: morphodita_api_tutorial.t2t
 
 
 = MorphoDiTa API Reference =
 
-%web% [MorphoDiTa API Reference on separate page. morphodita/api-reference]
+%web% [MorphoDiTa API Reference on separate page. /morphodita/api-reference]
 %manual% %!include: morphodita_api_reference.t2t
 
 
@@ -100,7 +100,7 @@ Authors:
 
 This work has been using language resources developed and/or stored and/or distributed by the LINDAT/CLARIN project of the Ministry of Education of the Czech Republic (project //LM2010013//).
 
-%web% Acknowledgements for individual language models are listed in [MorphoDiTa User's Manual page morphodita/users-manual].
+%web% Acknowledgements for individual language models are listed in [MorphoDiTa User's Manual page /morphodita/users-manual].
 %manual% Acknowledgements for individual language models are listed in [MorphoDiTa User's Manual #users_manual].
 
 
