@@ -25,6 +25,13 @@ Compared to Featurama http://sourceforge.net/projects/featurama/
 (state-of-the-art Czech tagger implementation), the models are 5 times faster
 and 10 times smaller.
 
+
+=== Download ===[czech-morfflex-pdt_download]
+
+The latest version 131112 of the Czech MorphoDiTa models can be downloaded
+from [LINDAT/CLARIN repository http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1].
+
+
 === Acknowledgements ===[czech-morfflex-pdt_acknowledgements]
 
 This work has been using language resources developed and/or stored and/or

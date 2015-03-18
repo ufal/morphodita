@@ -250,6 +250,13 @@ Compared to Featurama http://sourceforge.net/projects/featurama/
 and 10 times smaller.
 
 
+Download
+--------
+
+The latest version 131112 of the Czech MorphoDiTa models can be downloaded from
+LINDAT/CLARIN repository (http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1).
+
+
 Acknowledgements
 ----------------
 
@@ -442,6 +449,14 @@ in MorphoDiTa version 1.1 or later.
 English models are versioned according to the release date, the version format
 is YYMMDD, where YY, MM and DD are two-digit representation of year, month and
 day, respectively. The latest version is 140407.
+
+
+Download
+--------
+
+The latest version 140407 of the English MorphoDiTa models can be downloaded
+from LINDAT/CLARIN repository
+(http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0).
 
 
 Acknowledgements
