@@ -36,8 +36,7 @@ class RunMorphoCli {
 
         TaggedLemmas lemmas = new TaggedLemmas();
         TaggedLemmasForms lemmasForms = new TaggedLemmasForms();
-        string line;
-        while ((line = Console.In.ReadLine()) != null) {
+        for (string line; (line = Console.In.ReadLine()) != null; ) {
             string[] tokens = line.Split('\t');
 
             if (tokens.Length == 1) /* analyze */ {
