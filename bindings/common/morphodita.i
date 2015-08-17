@@ -16,13 +16,12 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
 
+%include "morphodita_stl.i"
+
 %{
 #include "morphodita.h"
 using namespace ufal::morphodita;
 %}
-
-%include "std_string.i"
-%include "std_vector.i"
 
 %template(Forms) std::vector<std::string>;
 typedef std::vector<std::string> Forms;
