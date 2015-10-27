@@ -19,8 +19,8 @@ Version 1.3.1
 
 MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
 a pre-compiled binary package, or source code only. The binary package contains Linux,
-Windows and OS X binaries, ``C++`` library binary, Java bindings binary, and source code of
-all language bindings (Java, Python, Perl) and MorphoDiTa. While the binary
+Windows and OS X binaries, Java bindings binary, C# bindings binary, and source
+code of MorphoDiTa and all language bindings). While the binary
 packages do not contain compiled Python or Perl bindings, packages for those
 languages are available in standard package repositories, i.e. on PyPI and CPAN.
 

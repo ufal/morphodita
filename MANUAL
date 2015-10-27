@@ -48,11 +48,11 @@ Download
 
 MorphoDiTa releases are available on GitHub (http://github.com/ufal/morphodita),
 either as a pre-compiled binary package, or source code only. The binary package
-contains Linux, Windows and OS X binaries, C++ library binary, Java bindings
-binary, and source code of all language bindings (Java, Python, Perl) and
-MorphoDiTa. While the binary packages do not contain compiled Python or Perl
-bindings, packages for those languages are available in standard package
-repositories, i.e. on PyPI and CPAN.
+contains Linux, Windows and OS X binaries, Java bindings binary, C# bindings
+binary, and source code of MorphoDiTa and all language bindings). While the
+binary packages do not contain compiled Python or Perl bindings, packages for
+those languages are available in standard package repositories, i.e. on PyPI and
+CPAN.
 
 - Latest release (http://github.com/ufal/morphodita/releases/latest)
 - All releases (http://github.com/ufal/morphodita/releases), Changelog
@@ -105,11 +105,11 @@ MorphoDiTa Installation
 
 MorphoDiTa releases are available on GitHub (http://github.com/ufal/morphodita),
 either as a pre-compiled binary package, or source code only. The binary package
-contains Linux, Windows and OS X binaries, C++ library binary, Java bindings
-binary, and source code of all language bindings (Java, Python, Perl) and
-MorphoDiTa. While the binary packages do not contain compiled Python or Perl
-bindings, packages for those languages are available in standard package
-repositories, i.e. on PyPI and CPAN.
+contains Linux, Windows and OS X binaries, Java bindings binary, C# bindings
+binary, and source code of MorphoDiTa and all language bindings. While the
+binary packages do not contain compiled Python or Perl bindings, packages for
+those languages are available in standard package repositories, i.e. on PyPI and
+CPAN.
 
 To use MorphoDiTa, a language model is needed. Here is a list of available
 language models (http://ufal.mff.cuni.cz/morphodita#language_models).
