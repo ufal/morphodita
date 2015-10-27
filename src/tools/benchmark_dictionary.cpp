@@ -1,20 +1,11 @@
-// This file is part of MorphoDiTa.
+// This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
 //
-// Copyright 2013 by Institute of Formal and Applied Linguistics, Faculty of
+// Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
 // Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
-// MorphoDiTa is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as
-// published by the Free Software Foundation, either version 3 of
-// the License, or (at your option) any later version.
-//
-// MorphoDiTa is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with MorphoDiTa.  If not, see <http://www.gnu.org/licenses/>.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <ctime>
 #include <memory>

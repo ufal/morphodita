@@ -45,7 +45,7 @@ Currently the following language models are available:
 
 MorphoDiTa is an open-source project and is freely available for non-commercial
 purposes. The library is distributed under
-[LGPL http://www.gnu.org/licenses/lgpl.html] and the associated models and data
+[Mozilla Public License 2.0 http://www.mozilla.org/MPL/2.0/] and the associated models and data
 under [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/], although
 for some models the original data used to create the model may impose
 additional licensing conditions.

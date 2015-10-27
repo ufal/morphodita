@@ -9,7 +9,7 @@ analysis, morphological generation, tagging and tokenization and is distributed
 as a standalone tool or a library, along with trained linguistic models. In the
 Czech language, MorphoDiTa achieves state-of-the-art results with a throughput
 around 10-200K words per second. MorphoDiTa is a free software under
-[LGPL http://www.gnu.org/licenses/lgpl.html] license and the linguistic models
+[Mozilla Public License 2.0 http://www.mozilla.org/MPL/2.0/] and the linguistic models
 are free for non-commercial use and distributed under
 [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] license, although for some
 models the original data used to create the model may impose additional
