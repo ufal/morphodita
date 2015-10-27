@@ -1,0 +1,15 @@
+C# MorphoDiTa Bindings
+======================
+
+%!encoding: utf-8
+
+== Installation ==[csharp_installation]
+%!include: morphodita_bindings_csharp_install.t2t
+
+
+== C# Bindings API ==[csharp_bindings_api]
+%!include: morphodita_bindings_csharp_api.t2t
+
+
+== C++ Bindings API ==[cpp_bindings_api]
+%!include: morphodita_bindings_api.t2t
