@@ -1,24 +1,25 @@
 // This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
-// Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty
-// of Mathematics and Physics, Charles University in Prague, Czech Republic.
-// All rights reserved.
+// Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
+// Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted under 3-clause BSD licence.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-// UniLib version: 2.0
-// Unicode version: 7.0.0
+// UniLib version: 3.1.0
+// Unicode version: 8.0.0
 
-#ifndef UFAL_UNILIB_UTF8_H
-#define UFAL_UNILIB_UTF8_H
+#pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <iterator>
 #include <string>
 
 namespace ufal {
 namespace morphodita {
+namespace unilib {
 
 class utf8 {
  public:
@@ -36,35 +37,34 @@ class utf8 {
   static void decode(const char* str, size_t len, std::u32string& decoded);
   static inline void decode(const std::string& str, std::u32string& decoded);
 
-  class string_decoder_helper {
+  class string_decoder {
    public:
     class iterator;
     inline iterator begin();
     inline iterator end();
    private:
-    inline string_decoder_helper(const char* str);
+    inline string_decoder(const char* str);
     const char* str;
     friend class utf8;
   };
-  static inline string_decoder_helper decoder(const char* str);
-  static inline string_decoder_helper decoder(const std::string& str);
+  static inline string_decoder decoder(const char* str);
+  static inline string_decoder decoder(const std::string& str);
 
-  class buffer_decoder_helper {
+  class buffer_decoder {
    public:
     class iterator;
     inline iterator begin();
     inline iterator end();
    private:
-    inline buffer_decoder_helper(const char* str, size_t len);
+    inline buffer_decoder(const char* str, size_t len);
     const char* str;
     size_t len;
     friend class utf8;
   };
-  static inline buffer_decoder_helper decoder(const char* str, size_t len);
+  static inline buffer_decoder decoder(const char* str, size_t len);
 
   static inline void append(char*& str, char32_t chr);
   static inline void append(std::string& str, char32_t chr);
-
   static void encode(const std::u32string& str, std::string& encoded);
 
   template<class F> static void map(F f, const char* str, std::string& result);
@@ -146,7 +146,7 @@ void utf8::decode(const std::string& str, std::u32string& decoded) {
   decode(str.c_str(), decoded);
 }
 
-class utf8::string_decoder_helper::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
+class utf8::string_decoder::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
  public:
   iterator(const char* str) : codepoint(0), next(str) { operator++(); }
   iterator(const iterator& it) : codepoint(it.codepoint), next(it.next) {}
@@ -160,25 +160,25 @@ class utf8::string_decoder_helper::iterator : public std::iterator<std::input_it
   const char* next;
 };
 
-utf8::string_decoder_helper::string_decoder_helper(const char* str) : str(str) {}
+utf8::string_decoder::string_decoder(const char* str) : str(str) {}
 
-utf8::string_decoder_helper::iterator utf8::string_decoder_helper::begin() {
+utf8::string_decoder::iterator utf8::string_decoder::begin() {
   return iterator(str);
 }
 
-utf8::string_decoder_helper::iterator utf8::string_decoder_helper::end() {
+utf8::string_decoder::iterator utf8::string_decoder::end() {
   return iterator(nullptr);
 }
 
-utf8::string_decoder_helper utf8::decoder(const char* str) {
-  return string_decoder_helper(str);
+utf8::string_decoder utf8::decoder(const char* str) {
+  return string_decoder(str);
 }
 
-utf8::string_decoder_helper utf8::decoder(const std::string& str) {
-  return string_decoder_helper(str.c_str());
+utf8::string_decoder utf8::decoder(const std::string& str) {
+  return string_decoder(str.c_str());
 }
 
-class utf8::buffer_decoder_helper::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
+class utf8::buffer_decoder::iterator : public std::iterator<std::input_iterator_tag, char32_t> {
  public:
   iterator(const char* str, size_t len) : codepoint(0), next(str), len(len) { operator++(); }
   iterator(const iterator& it) : codepoint(it.codepoint), next(it.next), len(it.len) {}
@@ -193,18 +193,18 @@ class utf8::buffer_decoder_helper::iterator : public std::iterator<std::input_it
   size_t len;
 };
 
-utf8::buffer_decoder_helper::buffer_decoder_helper(const char* str, size_t len) : str(str), len(len) {}
+utf8::buffer_decoder::buffer_decoder(const char* str, size_t len) : str(str), len(len) {}
 
-utf8::buffer_decoder_helper::iterator utf8::buffer_decoder_helper::begin() {
+utf8::buffer_decoder::iterator utf8::buffer_decoder::begin() {
   return iterator(str, len);
 }
 
-utf8::buffer_decoder_helper::iterator utf8::buffer_decoder_helper::end() {
+utf8::buffer_decoder::iterator utf8::buffer_decoder::end() {
   return iterator(nullptr, 0);
 }
 
-utf8::buffer_decoder_helper utf8::decoder(const char* str, size_t len) {
-  return buffer_decoder_helper(str, len);
+utf8::buffer_decoder utf8::decoder(const char* str, size_t len) {
+  return buffer_decoder(str, len);
 }
 
 void utf8::append(char*& str, char32_t chr) {
@@ -241,7 +241,6 @@ template<class F> void utf8::map(F f, const std::string& str, std::string& resul
   map(f, str.c_str(), result);
 }
 
+} // namespace unilib
 } // namespace morphodita
 } // namespace ufal
-
-#endif // UFAL_UNILIB_UTF8_H

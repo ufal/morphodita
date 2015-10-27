@@ -1,23 +1,24 @@
 // This file is part of UniLib <http://github.com/ufal/unilib/>.
 //
-// Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty
-// of Mathematics and Physics, Charles University in Prague, Czech Republic.
-// All rights reserved.
+// Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
+// Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted under 3-clause BSD licence.
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-// UniLib version: 2.0
-// Unicode version: 7.0.0
+// UniLib version: 3.1.0
+// Unicode version: 8.0.0
 
-#ifndef UFAL_UNILIB_UNICODE_H
-#define UFAL_UNILIB_UNICODE_H
+#pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <string>
 
 namespace ufal {
 namespace morphodita {
+namespace unilib {
 
 class unicode {
   enum : uint8_t {
@@ -44,7 +45,7 @@ class unicode {
     Cc = 1 << _Cc, Cf = 1 << _Cf, Cs = 1 << _Cs, Co = 1 << _Co, Cn = 1 << _Cn, C = Cc | Cf | Cs | Co | Cn
   };
 
-  static inline uint32_t category(char32_t chr);
+  static inline category_t category(char32_t chr);
 
   static inline char32_t lowercase(char32_t chr);
   static inline char32_t uppercase(char32_t chr);
@@ -62,7 +63,7 @@ class unicode {
   enum othercase_type { LOWER_ONLY = 1, UPPERTITLE_ONLY = 2, LOWER_THEN_UPPER = 3, UPPER_THEN_TITLE = 4, TITLE_THEN_LOWER = 5 };
 };
 
-uint32_t unicode::category(char32_t chr) {
+unicode::category_t unicode::category(char32_t chr) {
   return chr < CHARS ? 1 << category_block[category_index[chr >> 8]][chr & 0xFF] : DEFAULT_CAT;
 }
 
@@ -96,7 +97,6 @@ char32_t unicode::titlecase(char32_t chr) {
   return chr;
 }
 
+} // namespace unilib
 } // namespace morphodita
 } // namespace ufal
-
-#endif // UFAL_UNILIB_UNICODE_H
