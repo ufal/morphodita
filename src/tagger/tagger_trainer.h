@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "common.h"
 #include "feature_sequences_optimizer.h"
 #include "morpho/morpho.h"

@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "common.h"
 #include "english_lemma_addinfo.h"
 #include "english_morpho_guesser.h"

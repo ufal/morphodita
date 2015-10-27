@@ -9,7 +9,6 @@
 
 #include <algorithm>
 #include <ctime>
-#include <memory>
 
 #include "morpho/morpho.h"
 #include "morpho/raw_morpho_dictionary_reader.h"

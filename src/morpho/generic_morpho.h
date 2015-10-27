@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "common.h"
 #include "generic_lemma_addinfo.h"
 #include "morpho_dictionary.h"

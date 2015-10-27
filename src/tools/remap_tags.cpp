@@ -8,7 +8,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <algorithm>
-#include <memory>
 #include <unordered_map>
 
 #include "morpho/morpho.h"

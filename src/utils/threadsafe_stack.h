@@ -10,7 +10,6 @@
 #pragma once
 
 #include <atomic>
-#include <memory>
 
 #include "common.h"
 

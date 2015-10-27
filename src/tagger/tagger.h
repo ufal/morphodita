@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include "common.h"
 #include "morpho/morpho.h"
 

@@ -9,7 +9,6 @@
 
 #include <cstring>
 #include <ctime>
-#include <memory>
 
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"

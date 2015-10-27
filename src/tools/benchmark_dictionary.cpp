@@ -8,7 +8,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include <ctime>
-#include <memory>
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
