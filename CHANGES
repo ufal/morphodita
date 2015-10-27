@@ -1,6 +1,9 @@
 Version 1.3.1 [not yet released]
 --------------------------------
 - Use t2t_docsys http://github.com/ufal/t2t_docsys as documentation system.
+- Use C++ Builtem http://github.com/ufal/cpp_builtem as build system.
+- Add C# bindings.
+- Remove support for shared library build.
 
 
 Version 1.3.0 [29 Aug 14]
