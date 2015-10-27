@@ -2,25 +2,19 @@ include Makefile.builtem
 include Makefile.lib
 
 EXECUTABLES = $(call exe,encode_dictionary run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer tagger_accuracy train_tagger)
-DYNAMIC_LIBRARIES = $(call dynlib,libmorphodita)
-STATIC_LIBRARIES = $(call lib,libmorphodita libmorphodita.dyn)
+LIBRARIES = $(call lib,libmorphodita)
 TOOLS = $(call exe,tools/benchmark_dictionary tools/csts tools/fill_lemmas tools/morpho_accuracy tools/remap_tags tools/strip_combining_marks tools/test_dictionary)
 
-.PHONY: all exe lib a tools full
+.PHONY: all exe lib tools full
 all: exe
 exe: $(EXECUTABLES)
-lib: $(DYNAMIC_LIBRARIES)
-a: $(STATIC_LIBRARIES)
+lib: $(LIBRARIES)
 tools: $(TOOLS)
-full: exe lib a tools
+full: exe lib tools
 
 # libraries
 $(call lib,libmorphodita): $(call obj,$(MORPHODITA_O))
 	$(call link_lib,$@,$^)
-$(call lib,libmorphodita.dyn): $(call dynobj,$(MORPHODITA_O))
-	$(call link_lib,$@,$^)
-$(call dynlib,libmorphodita): $(call dynobj,$(MORPHODITA_O))
-	$(call link_dynlib,$@,$^,$(call gcc_version_script,libmorphodita.map))
 
 C_FLAGS += $(call include_dir,.)
 # executables
@@ -45,7 +39,7 @@ $(EXECUTABLES) $(TOOLS):$(call exe,%): $$(call obj,%)
 # cleaning
 .PHONY: clean
 clean:
-	@$(call rm,.build $(call all_exe,$(EXECUTABLES) $(TOOLS)) $(call all_lib,$(STATIC_LIBRARIES)) $(call all_dynlib,$(DYNAMIC_LIBRARIES)))
+	@$(call rm,.build $(call all_exe,$(EXECUTABLES) $(TOOLS)) $(call all_lib,$(LIBRARIES)))
 
 # dump library sources
 .PHONY: lib_sources

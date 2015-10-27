@@ -23,7 +23,7 @@
 namespace ufal {
 namespace morphodita {
 
-class MORPHODITA_EXPORT version {
+class version {
  public:
   unsigned major;
   unsigned minor;

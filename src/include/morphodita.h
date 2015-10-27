@@ -24,17 +24,10 @@
 #include <string>
 #include <vector>
 
-// Import attributes
-#if defined(_WIN32) && !defined(MORPHODITA_STATIC)
-  #define MORPHODITA_IMPORT __declspec(dllimport)
-#else
-  #define MORPHODITA_IMPORT
-#endif
-
 namespace ufal {
 namespace morphodita {
 
-struct MORPHODITA_IMPORT string_piece {
+struct string_piece {
   const char* str;
   size_t len;
 
@@ -44,7 +37,7 @@ struct MORPHODITA_IMPORT string_piece {
   string_piece(const std::string& str) : str(str.c_str()), len(str.size()) {}
 };
 
-struct MORPHODITA_IMPORT tagged_form {
+struct tagged_form {
   std::string form;
   std::string tag;
 
@@ -52,7 +45,7 @@ struct MORPHODITA_IMPORT tagged_form {
   tagged_form(const std::string& form, const std::string& tag) : form(form), tag(tag) {}
 };
 
-struct MORPHODITA_IMPORT tagged_lemma {
+struct tagged_lemma {
   std::string lemma;
   std::string tag;
 
@@ -60,7 +53,7 @@ struct MORPHODITA_IMPORT tagged_lemma {
   tagged_lemma(const std::string& lemma, const std::string& tag) : lemma(lemma), tag(tag) {}
 };
 
-struct MORPHODITA_IMPORT tagged_lemma_forms {
+struct tagged_lemma_forms {
   std::string lemma;
   std::vector<tagged_form> forms;
 
@@ -68,7 +61,7 @@ struct MORPHODITA_IMPORT tagged_lemma_forms {
   tagged_lemma_forms(const std::string& lemma) : lemma(lemma) {}
 };
 
-struct MORPHODITA_IMPORT token_range {
+struct token_range {
   size_t start;
   size_t length;
 
@@ -76,7 +69,7 @@ struct MORPHODITA_IMPORT token_range {
   token_range(size_t start, size_t length) : start(start), length(length) {}
 };
 
-class MORPHODITA_IMPORT version {
+class version {
  public:
   unsigned major;
   unsigned minor;
@@ -86,7 +79,7 @@ class MORPHODITA_IMPORT version {
   static version current();
 };
 
-class MORPHODITA_IMPORT tokenizer {
+class tokenizer {
  public:
   virtual ~tokenizer() {}
 
@@ -101,7 +94,7 @@ class MORPHODITA_IMPORT tokenizer {
   static tokenizer* new_generic_tokenizer();
 };
 
-class MORPHODITA_IMPORT morpho {
+class morpho {
  public:
   virtual ~morpho() {}
 
@@ -156,7 +149,7 @@ class MORPHODITA_IMPORT morpho {
   virtual tokenizer* new_tokenizer() const = 0;
 };
 
-class MORPHODITA_IMPORT tagger {
+class tagger {
  public:
   virtual ~tagger() {}
 
@@ -176,7 +169,7 @@ class MORPHODITA_IMPORT tagger {
   tokenizer* new_tokenizer() const;
 };
 
-class MORPHODITA_IMPORT tagset_converter {
+class tagset_converter {
  public:
   virtual ~tagset_converter() {}
 

@@ -25,7 +25,7 @@ namespace ufal {
 namespace morphodita {
 
 // Range of a token, measured in Unicode characters, not UTF8 bytes.
-struct MORPHODITA_EXPORT token_range {
+struct token_range {
   size_t start;
   size_t length;
 
@@ -33,7 +33,7 @@ struct MORPHODITA_EXPORT token_range {
   token_range(size_t start, size_t length) : start(start), length(length) {}
 };
 
-class MORPHODITA_EXPORT tokenizer {
+class tokenizer {
  public:
   virtual ~tokenizer() {}
 

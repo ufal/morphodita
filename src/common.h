@@ -58,16 +58,5 @@ inline void runtime_errorf(const char* fmt, ...) {
   exit(1);
 }
 
-// Export attributes
-#ifdef _WIN32
-  #ifdef BUILDING_DLL
-    #define MORPHODITA_EXPORT __attribute__ ((dllexport))
-  #else
-    #define MORPHODITA_EXPORT
-  #endif
-#else
-  #define MORPHODITA_EXPORT __attribute__ ((visibility ("default")))
-#endif
-
 } // namespace morphodita
 } // namespace ufal
