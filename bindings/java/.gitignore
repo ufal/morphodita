@@ -1,5 +1,5 @@
-cz/
-libmorphodita_java.dylib
+/.build/
+/cz/
 libmorphodita_java.so
 morphodita.jar
 morphodita_java.cpp

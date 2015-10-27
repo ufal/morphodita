@@ -1,3 +1,4 @@
-ufal/
+/.build/
+/ufal/
 morphodita_python.cpp
 ufal_morphodita.so

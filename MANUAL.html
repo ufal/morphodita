@@ -45,7 +45,9 @@
     </li>
     <li><a href="#compilation">4.2. Compilation</a>
       <ul>
-      <li><a href="#compilation_windows">4.2.1. Windows</a>
+      <li><a href="#compilation_platforms">4.2.1. Platforms</a>
+      </li>
+      <li><a href="#compilation_further_details">4.2.2. Further Details</a>
       </li>
       </ul>
     </li>
@@ -404,7 +406,7 @@ and in the repository itself.
 <h2>4.1. Requirements</h2>
 
 <ul>
-<li><code>G++ 4.7</code> or newer, alternatively <code>clang 3.2</code> or newer
+<li><code>G++ 4.7</code> or newer, <code>clang 3.2</code> or newer
 </li>
 <li><code>make</code>
 </li>
@@ -416,7 +418,7 @@ and in the repository itself.
 <h2>4.2. Compilation</h2>
 
 <p>
-To compile MorphoDiTa on Unix-like systems, run <code>make</code> in the <code>src</code> directory.
+To compile MorphoDiTa, run <code>make</code> in the <code>src</code> directory.
 </p>
 <p style="margin-bottom:0">
 Make targets and options:
@@ -428,33 +430,45 @@ Make targets and options:
 </li>
 <li><code>BITS=32</code> or <code>BITS=64</code>: compile for specified 32-bit or 64-bit architecture instead of the default one
 </li>
-<li><code>RELEASE=1</code>: turn off assertions and use LTO
+<li><code>mode=RELEASE</code>: create release build which statically links the C++ runtime and uses LTO
 </li>
-<li><code>PROFILE=1</code>: turn on profiling
+<li><code>mode=DEBUG</code>: create debug build
 </li>
-<li><code>DEBUG=1</code>: compile with debug informations and C++ library debugging
+<li><code>mode=PROFILE</code>: create profile build
 </li>
 </ul>
 
-<a id="compilation_windows" name="compilation_windows"></a>
-<h3>4.2.1. Windows</h3>
+<a id="compilation_platforms" name="compilation_platforms"></a>
+<h3>4.2.1. Platforms</h3>
 
-<p>
-Currently only G++ is supported under Windows. We use
-<a href="http://tdm-gcc.tdragon.net/">TDM-GCC</a> for producing Windows builds,
-but MinGW and Cygwin are also known to work. If you are interested in adding
-support for other compilers (most notably, Visual Studio), let us know.
-</p>
 <p style="margin-bottom:0">
-By default, Unix-like shell is required (i.e., Cygwin or MSYS). If you use
-standard Windows Cmd.exe (i.e., TDM-GCC or plain MinGW), use
+Platform can be selected using one of the following options:
 </p>
-<pre style="margin-top:0">
-make WINCMD=1
-</pre>
+<ul style="margin-top:0">
+<li><code>PLATFORM=linux</code>, <code>PLATFORM=linux-gcc</code>: gcc compiler on Linux operating system, default on Linux
+</li>
+<li><code>PLATFORM=linux-clang</code>: clang compiler on Linux, must be selected manually
+</li>
+<li><code>PLATFORM=osx</code>, <code>PLATFORM=osx-clang</code>: clang compiler on OS X, default on OS X; <code>BITS=32+64</code> enables multiarch build
+</li>
+<li><code>PLATFORM=win</code>, <code>PLATFORM=win-gcc</code>: gcc compiler on Windows (TDM-GCC is well tested), default on Windows
+</li>
+<li><code>PLATFORM=win-vs</code>: Visual C++ 2015 compiler on Windows, must be selected manually; note that the
+  <code>cl.exe</code> compiler must be already present in <code>PATH</code> and corresponding <code>BITS=32</code> or <code>BITS=64</code>
+  must be specified
+</li>
+</ul>
 
 <p>
-Note that <code>make</code> in MinGW is usually distributed as <code>mingw32-make</code>.
+Either POSIX shell or Windows CMD can be used as shell, it is detected automatically.
+</p>
+
+<a id="compilation_further_details" name="compilation_further_details"></a>
+<h3>4.2.2. Further Details</h3>
+
+<p>
+MorphoDiTa uses <a href="http://github.com/ufal/cpp_builtem">C++ BuilTem system</a>,
+please refer to its manual if interested in all supported options.
 </p>
 
 <a id="other_language_bindings" name="other_language_bindings"></a>
