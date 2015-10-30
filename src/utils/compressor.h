@@ -19,8 +19,8 @@ class binary_encoder;
 
 class compressor {
  public:
-  static bool load(FILE* f, binary_decoder& data);
-  static bool save(FILE* f, const binary_encoder& enc);
+  static bool load(istream& is, binary_decoder& data);
+  static bool save(ostream& os, const binary_encoder& enc);
 };
 
 } // namespace morphodita

@@ -26,5 +26,10 @@ struct string_piece {
   string_piece(const std::string& str) : str(str.c_str()), len(str.size()) {}
 };
 
+inline ostream& operator<<(ostream& os, const string_piece& str) {
+  os.write(str.str, str.len);
+  return os;
+}
+
 } // namespace morphodita
 } // namespace ufal

@@ -25,9 +25,9 @@
 namespace ufal {
 namespace morphodita {
 
-bool generic_morpho::load(FILE* f) {
+bool generic_morpho::load(istream& is) {
   binary_decoder data;
-  if (!compressor::load(f, data)) return false;
+  if (!compressor::load(is, data)) return false;
 
   try {
     // Load tags

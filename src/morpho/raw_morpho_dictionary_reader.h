@@ -18,10 +18,10 @@ namespace morphodita {
 
 class raw_morpho_dictionary_reader {
  public:
-  raw_morpho_dictionary_reader(FILE *in) : in(in) {}
+  raw_morpho_dictionary_reader(istream& in) : in(in) {}
   bool next_lemma(string& lemma, vector<pair<string, string>>& tagged_forms);
  private:
-  FILE *in;
+  istream& in;
   string line;
   vector<string> tokens;
 };

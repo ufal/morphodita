@@ -16,7 +16,7 @@ namespace morphodita {
 
 class external_morpho_encoder {
  public:
-  static void encode(const string& unknown_tag, FILE* out_morpho);
+  static void encode(const string& unknown_tag, ostream& out_morpho);
 };
 
 } // namespace morphodita

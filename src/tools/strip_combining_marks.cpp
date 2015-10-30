@@ -10,12 +10,15 @@
 #include "unilib/utf8.h"
 #include "unilib/unistrip.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 #include "utils/parse_int.h"
 #include "utils/parse_options.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
+  iostreams_init();
+
   show_version_if_requested(argc, argv);
 
   bool only_one_column = argc > 1;
@@ -23,8 +26,8 @@ int main(int argc, char* argv[]) {
 
   string input, output;
   vector<string> tokens;
-  while (getline(stdin, input)) {
-    if (!utf8::valid(input)) runtime_errorf("Input line is not in UTF-8 encoding: '%s'", input.c_str());
+  while (getline(cin, input)) {
+    if (!utf8::valid(input)) runtime_failure("Input line is not in UTF-8 encoding: '" << input << '\'');
 
     output.clear();
     if (only_one_column) {

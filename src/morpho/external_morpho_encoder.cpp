@@ -14,15 +14,15 @@
 namespace ufal {
 namespace morphodita {
 
-void external_morpho_encoder::encode(const string& unknown_tag, FILE* out_morpho) {
+void external_morpho_encoder::encode(const string& unknown_tag, ostream& out_morpho) {
   binary_encoder enc;
 
   // Save unknown_tag
   enc.add_1B(unknown_tag.size());
   enc.add_str(unknown_tag);
 
-  if (!compressor::save(out_morpho, enc)) runtime_errorf("Cannot compress and write dictionary to file!");
-  eprintf("Dictionary saved.\n");
+  if (!compressor::save(out_morpho, enc)) runtime_failure("Cannot compress and write dictionary to file!");
+  cerr << "Dictionary saved." << endl;
 }
 
 } // namespace morphodita

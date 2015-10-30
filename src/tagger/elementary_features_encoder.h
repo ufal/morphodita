@@ -17,14 +17,14 @@ namespace ufal {
 namespace morphodita {
 
 template <class Map>
-inline bool elementary_features<Map>::save(FILE* f) {
+inline bool elementary_features<Map>::save(ostream& os) {
   binary_encoder enc;
 
   enc.add_1B(maps.size());
   for (auto&& map : maps)
     map.save(enc);
 
-  return compressor::save(f, enc);
+  return compressor::save(os, enc);
 }
 
 } // namespace morphodita

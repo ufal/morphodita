@@ -14,12 +14,6 @@
 namespace ufal {
 namespace morphodita {
 
-// Read line and strip '\n'.
-bool getline(FILE *f, string& line);
-
-// Read a paragraph separated by an empty line. All '\n' are left intact.
-bool getpara(FILE* f, string& para);
-
 // Split given text on the separator character.
 void split(const string& text, char sep, vector<string>& tokens);
 

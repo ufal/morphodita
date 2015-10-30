@@ -46,9 +46,9 @@ class feature_sequences {
   typedef typename ElementaryFeatures::per_tag_features per_tag_features;
   typedef typename ElementaryFeatures::dynamic_features dynamic_features;
 
-  void parse(int order, FILE* f);
-  bool load(FILE* f);
-  bool save(FILE* f);
+  void parse(int order, istream& is);
+  bool load(istream& is);
+  bool save(ostream& os);
 
   struct cache;
 
@@ -78,11 +78,11 @@ template <class ElementaryFeatures> using persistent_feature_sequences = feature
 
 // Definitions
 template <class ElementaryFeatures, class Map>
-inline bool feature_sequences<ElementaryFeatures, Map>::load(FILE* f) {
-  if (!elementary.load(f)) return false;
+inline bool feature_sequences<ElementaryFeatures, Map>::load(istream& is) {
+  if (!elementary.load(is)) return false;
 
   binary_decoder data;
-  if (!compressor::load(f, data)) return false;
+  if (!compressor::load(is, data)) return false;
 
   try {
     sequences.resize(data.next_1B());

@@ -13,16 +13,18 @@
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
 #include "utils/input.h"
-#include "utils/output.h"
+#include "utils/iostreams.h"
 #include "utils/parse_options.h"
 #include "utils/process_args.h"
 
 using namespace ufal::morphodita;
 
-static void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
-static void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
+static void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
+static void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
 
 int main(int argc, char* argv[]) {
+  iostreams_init();
+
   show_version_if_requested(argc, argv);
 
   options_map options;
@@ -30,42 +32,42 @@ int main(int argc, char* argv[]) {
                       {"convert_tagset",option_values::any},
                       {"output",option_values{"vertical","xml"}}}, argc, argv, options) ||
       argc < 2)
-    runtime_errorf("Usage: %s [options] tagger_file [file[:output_file]]...\n"
-                   "Options: --input=untokenized|vertical\n"
-                   "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
-                   "         --output=vertical|xml", argv[0]);
+    runtime_failure("Usage: " << argv[0] << " [options] tagger_file [file[:output_file]]...\n"
+                    "Options: --input=untokenized|vertical\n"
+                    "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
+                    "         --output=vertical|xml");
 
-  eprintf("Loading tagger: ");
+  cerr << "Loading tagger: ";
   unique_ptr<tagger> tagger(tagger::load(argv[1]));
-  if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
-  eprintf("done\n");
+  if (!tagger) runtime_failure("Cannot load tagger from file '" << argv[1] << "'!");
+  cerr << "done" << endl;
 
   unique_ptr<tokenizer> tokenizer(options.count("input") && options["input"] == "vertical" ? tokenizer::new_vertical_tokenizer() : tagger->new_tokenizer());
-  if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
+  if (!tokenizer) runtime_failure("No tokenizer is defined for the supplied model!");
 
   unique_ptr<tagset_converter> tagset_converter;
   if (options.count("convert_tagset")) {
     tagset_converter.reset(new_tagset_converter(options["convert_tagset"], *tagger->get_morpho()));
-    if (!tagset_converter) runtime_errorf("Unknown tag set converter '%s'!", options["convert_tagset"].c_str());
+    if (!tagset_converter) runtime_failure("Unknown tag set converter '" << options["convert_tagset"] << "'!");
   } else {
     tagset_converter.reset(tagset_converter::new_identity_converter());
-    if (!tagset_converter) runtime_errorf("Cannot create identity tag set converter!");
+    if (!tagset_converter) runtime_failure("Cannot create identity tag set converter!");
   }
 
   clock_t now = clock();
   if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer, *tagset_converter);
   else process_args(2, argc, argv, tag_xml, *tagger, *tokenizer, *tagset_converter);
-  eprintf("Tagging done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
+  cerr << "Tagging done in " << fixed << setprecision(3) << (clock() - now) / double(CLOCKS_PER_SEC) << " seconds." << endl;
 
   return 0;
 }
 
-void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
+void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
-  while (getpara(in, para)) {
+  while (getpara(is, para)) {
     // Tokenize and tag
     tokenizer.set_text(para);
     while (tokenizer.next_sentence(&forms, nullptr)) {
@@ -73,19 +75,19 @@ void tag_vertical(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenize
 
       for (unsigned i = 0; i < tags.size(); i++) {
         tagset_converter.convert(tags[i]);
-        fprintf(out, "%.*s\t%s\t%s\n", int(forms[i].len), forms[i].str, tags[i].lemma.c_str(), tags[i].tag.c_str());
+        os << forms[i] << '\t' << tags[i].lemma << '\t' << tags[i].tag << '\n';
       }
-      fputc('\n', out);
+      os << endl;
     }
   }
 }
 
-void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
+void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
 
-  while (getpara(in, para)) {
+  while (getpara(is, para)) {
     // Tokenize and tag
     tokenizer.set_text(para);
     const char* unprinted = para.c_str();
@@ -95,19 +97,14 @@ void tag_xml(FILE* in, FILE* out, const tagger& tagger, tokenizer& tokenizer, co
       for (unsigned i = 0; i < forms.size(); i++) {
         tagset_converter.convert(tags[i]);
 
-        if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
-        if (!i) fputs("<sentence>", out);
-        fputs("<token lemma=\"", out);
-        print_xml_content(out, tags[i].lemma.c_str(), tags[i].lemma.size());
-        fputs("\" tag=\"", out);
-        print_xml_content(out, tags[i].tag.c_str(), tags[i].tag.size());
-        fputs("\">", out);
-        print_xml_content(out, forms[i].str, forms[i].len);
-        fputs("</token>", out);
-        if (i + 1 == forms.size()) fputs("</sentence>", out);
+        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        if (!i) os << "<sentence>";
+        os << "<token lemma=\"" << xml_encoded(tags[i].lemma, true) << "\" tag=\"" << xml_encoded(tags[i].tag, true) << "\">"
+           << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+        if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
     }
-    if (unprinted < para.c_str() + para.size()) print_xml_content(out, unprinted, para.c_str() + para.size() - unprinted);
+    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
   }
 }

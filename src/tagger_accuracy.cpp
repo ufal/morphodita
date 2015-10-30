@@ -11,6 +11,7 @@
 
 #include "tagger/tagger.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 #include "utils/parse_options.h"
 
 using namespace ufal::morphodita;
@@ -22,16 +23,18 @@ struct word {
 };
 
 int main(int argc, char* argv[]) {
+  iostreams_init();
+
   show_version_if_requested(argc, argv);
 
-  if (argc <= 1) runtime_errorf("Usage: %s tagger_file", argv[0]);
+  if (argc <= 1) runtime_failure("Usage: " << argv[0] << " tagger_file");
 
-  eprintf("Loading tagger: ");
+  cerr << "Loading tagger: ";
   unique_ptr<tagger> tagger(tagger::load(argv[1]));
-  if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
-  eprintf("done\n");
+  if (!tagger) runtime_failure("Cannot load tagger from file '" << argv[1] << "'!");
+  cerr << "done" << endl;
 
-  eprintf("Tagging: ");
+  cerr << "Tagging: ";
   clock_t now = clock();
 
   vector<word> sentence;
@@ -43,7 +46,7 @@ int main(int argc, char* argv[]) {
   string line;
   vector<string> tokens;
   for (bool eof; true; ) {
-    eof = !getline(stdin, line);
+    eof = !getline(cin, line);
     if (eof || line.empty()) {
       // End of sentence
       if (!sentence.empty()) {
@@ -67,14 +70,17 @@ int main(int argc, char* argv[]) {
     } else {
       // Just add a word to the sentence
       split(line, '\t', tokens);
-      if (tokens.size() != 3) runtime_errorf("Input line '%s' does not contain 3 columns!", line.c_str());
+      if (tokens.size() != 3) runtime_failure("Input line '" << line << "' does not contain 3 columns!");
 
       sentence.emplace_back(tokens[0], tokens.size() > 1 ? tokens[1] : string(), tokens.size() > 2 ? tokens[2] : string());
     }
   }
 
-  eprintf("done, in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
-  eprintf("Accuracy: %.2f%% tags, %.2f%% lemmas, %.2f%% both.\n", 100 * correct[TAGS] / double(total), 100 * correct[LEMMAS] / double(total), 100 * correct[BOTH] / double(total));
+  cerr << "done, in " << fixed << setprecision(3) << (clock() - now) / double(CLOCKS_PER_SEC) << " seconds." << endl;
+  cerr << "Accuracy: " << fixed << setprecision(2)
+      << 100 * correct[TAGS] / double(total) << "% tags, "
+      << 100 * correct[LEMMAS] / double(total) << "% lemmas, "
+      << 100 * correct[BOTH] / double(total) << "% both." << endl;
 
   return 0;
 }

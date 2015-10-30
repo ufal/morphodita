@@ -9,18 +9,21 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
-  if (argc <= 1) runtime_errorf("Usage: %s dict_file <data", argv[0]);
+  iostreams_init();
 
-  eprintf("Loading dictionary: ");
+  if (argc <= 1) runtime_failure("Usage: " << argv[0] << " dict_file <data");
+
+  cerr << "Loading dictionary: ";
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
-  eprintf("done\n");
+  if (!dictionary) runtime_failure("Cannot load dictionary " << argv[1] << '!');
+  cerr << "done" << endl;
 
-  eprintf("Processing data: ");
+  cerr << "Processing data: ";
 
   int forms = 0, tags[2] = {}, unique_analyses[2] = {};
   int match_tag[2] = {}, match_tag_rawlemma[2] = {}, match_tag_lemmaid[2] = {}, match_all[2] = {};
@@ -29,11 +32,11 @@ int main(int argc, char* argv[]) {
 
   string line;
   vector<string> tokens;
-  while (getline(stdin, line)) {
+  while (getline(cin, line)) {
     if (line.empty()) continue;
 
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_errorf("The line %s does not contain three columns!", line.c_str());
+    if (tokens.size() != 3) runtime_failure("The line " << line << " does not contain three columns!");
 
     // Analyse
     int guesser = dictionary->analyze(tokens[0], morpho::GUESSER, lemmas) == morpho::GUESSER;
@@ -57,16 +60,16 @@ int main(int argc, char* argv[]) {
       }
       tag_lemmaid = 1;
       if (lemma.lemma.compare(tokens[1]) != 0) {
-//        eprintf("Wrong comments in lemma '%s' versus golden '%s' of form '%s'\n", lemma.lemma.c_str(), tokens[1], tokens[0]);
+//        cerr << "Wrong comments in lemma '" << lemma.lemma << "' versus golden '" << tokens[1] << "' of form '" << tokens[0] << '\'' << endl;
         continue;
       }
       all = 1;
     }
 //    if (tag_rawlemma && !tag_lemmaid) {
-//      eprintf("Cannot match lemma '%s' of form '%s', got only", tokens[1], tokens[0]);
+//      cerr << "Cannot match lemma '" << tokens[1] << "' of form '" << tokens[0] << "', got only";
 //      for (auto&& wrong_lemma : wrong_lemmas)
-//        eprintf(" '%s'", wrong_lemma);
-//      eprintf("\n");
+//        cerr << ' ' << wrong_lemma;
+//      cerr << endl;
 //    }
     match_tag[guesser] += tag;
     match_tag_rawlemma[guesser] += tag_rawlemma;
@@ -75,18 +78,21 @@ int main(int argc, char* argv[]) {
 
 //    if (!tag) {
 //      if (lemmas.size() > 1)
-//        eprintf("Could not match form '%s' with lemma '%s' and tag '%s'\n", tokens[0], tokens[1], tokens[2]);
+//        cerr << "Could not match form '" << tokens[0] << "' with lemma '" << tokens[1] << "' and tag '" << tokens[2] << '\'' << endl;
 //    }
   }
-  eprintf("done\n");
+  cerr << "done" << endl;
 
-  printf("Forms: %d\n", forms);
-  printf("Recognized tags: %d (avg %.2f per form), with guesser %d (avg %.2f per form)\n", tags[0], tags[0] / double(forms), tags[0] + tags[1], (tags[0] + tags[1]) / double(forms));
-  printf("Unique analyses: %.2f%%, with guesser %.2f%%\n", 100. * unique_analyses[0] / double(forms), 100. * (unique_analyses[0] + unique_analyses[1]) / double(forms));
-  printf("Accuracy of tags: %.3f%%, with guesser %.3f%%\n", 100 * match_tag[0] / double(forms), 100 * (match_tag[0] + match_tag[1]) / double(forms));
-  printf("Accuracy of trl:  %.3f%%, with guesser %.3f%%\n", 100 * match_tag_rawlemma[0] / double(forms), 100 * (match_tag_rawlemma[0] + match_tag_rawlemma[1]) / double(forms));
-  printf("Accuracy of tli:  %.3f%%, with guesser %.3f%%\n", 100 * match_tag_lemmaid[0] / double(forms), 100 * (match_tag_lemmaid[0] + match_tag_lemmaid[1]) / double(forms));
-  printf("Accuracy of all:  %.3f%%, with guesser %.3f%%\n", 100 * match_all[0] / double(forms), 100 * (match_all[0] + match_all[1]) / double(forms));
+  cout << "Forms: " << forms << endl;
+  cout << fixed << setprecision(2);
+  cout << "Recognized tags: " << tags[0] << " (avg " << (tags[0] / double(forms)) << " per form),"
+      << "with guesser: " << tags[0] + tags[1] << " (avg " << (tags[0] + tags[1]) / double(forms) << " per form)" << endl;
+  cout << "Unique analyses: " << 100 * unique_analyses[0] / double(forms) << "%, with guesser " << 100 * (unique_analyses[0] + unique_analyses[1]) / double(forms) << '%' << endl;
+  cout << fixed << setprecision(3);
+  cout << "Accuracy of tags: " << 100 * match_tag[0] / double(forms) << "%, with guesser " << 100 * (match_tag[0] + match_tag[1]) / double(forms) << '%' << endl;
+  cout << "Accuracy of trl:  " << 100 * match_tag_rawlemma[0] / double(forms) << "%, with guesser " << 100 * (match_tag_rawlemma[0] + match_tag_rawlemma[1]) / double(forms) << '%' << endl;
+  cout << "Accuracy of tli:  " << 100 * match_tag_lemmaid[0] / double(forms) << "%, with guesser " << 100 * (match_tag_lemmaid[0] + match_tag_lemmaid[1]) / double(forms) << '%' << endl;
+  cout << "Accuracy of all:  " << 100 * match_all[0] / double(forms) << "%, with guesser " << 100 * (match_all[0] + match_all[1]) / double(forms) << '%' << endl;
 
   return 0;
 }

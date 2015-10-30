@@ -36,8 +36,8 @@ struct elementary_feature_description {
 template<class Map>
 class elementary_features {
  public:
-  bool load(FILE* f);
-  bool save(FILE* f);
+  bool load(istream& is);
+  bool save(ostream& out);
 
   vector<Map> maps;
 };
@@ -56,9 +56,9 @@ class persistent_elementary_feature_map : public persistent_unordered_map {
 
 // Definitions
 template <class Map>
-inline bool elementary_features<Map>::load(FILE* f) {
+inline bool elementary_features<Map>::load(istream& is) {
   binary_decoder data;
-  if (!compressor::load(f, data)) return false;
+  if (!compressor::load(is, data)) return false;
 
   try {
     maps.resize(data.next_1B());

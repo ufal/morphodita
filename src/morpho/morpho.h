@@ -43,7 +43,7 @@ class morpho {
  public:
   virtual ~morpho() {}
 
-  static morpho* load(FILE* f);
+  static morpho* load(istream& is);
   static morpho* load(const char* fname);
 
   enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };

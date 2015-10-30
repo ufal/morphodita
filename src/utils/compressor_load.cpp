@@ -18,18 +18,18 @@ static void *LzmaAlloc(void* /*p*/, size_t size) { return new char[size]; }
 static void LzmaFree(void* /*p*/, void *address) { delete[] (char*) address; }
 static lzma::ISzAlloc lzmaAllocator = { LzmaAlloc, LzmaFree };
 
-bool compressor::load(FILE* f, binary_decoder& data) {
+bool compressor::load(istream& is, binary_decoder& data) {
   uint32_t uncompressed_len, compressed_len, poor_crc;
   unsigned char props_encoded[LZMA_PROPS_SIZE];
 
-  if (fread(&uncompressed_len, sizeof(uncompressed_len), 1, f) != 1) return false;
-  if (fread(&compressed_len, sizeof(compressed_len), 1, f) != 1) return false;
-  if (fread(&poor_crc, sizeof(poor_crc), 1, f) != 1) return false;
+  if (!is.read((char *) &uncompressed_len, sizeof(uncompressed_len))) return false;
+  if (!is.read((char *) &compressed_len, sizeof(compressed_len))) return false;
+  if (!is.read((char *) &poor_crc, sizeof(poor_crc))) return false;
   if (poor_crc != uncompressed_len * 19991 + compressed_len * 199999991 + 1234567890) return false;
-  if (fread(props_encoded, sizeof(props_encoded), 1, f) != 1) return false;
+  if (!is.read((char *) props_encoded, sizeof(props_encoded))) return false;
 
   vector<unsigned char> compressed(compressed_len);
-  if (fread(compressed.data(), 1, compressed_len, f) != compressed_len) return false;
+  if (!is.read((char *) compressed.data(), compressed_len)) return false;
 
   lzma::ELzmaStatus status;
   size_t uncompressed_size = uncompressed_len, compressed_size = compressed_len;

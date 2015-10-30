@@ -10,16 +10,18 @@
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
 #include "utils/input.h"
-#include "utils/output.h"
+#include "utils/iostreams.h"
 #include "utils/parse_options.h"
 #include "utils/process_args.h"
 
 using namespace ufal::morphodita;
 
-static void tokenize_vertical(FILE* in, FILE* out, tokenizer& tokenizer);
-static void tokenize_xml(FILE* in, FILE* out, tokenizer& tokenizer);
+static void tokenize_vertical(istream& is, ostream& os, tokenizer& tokenizer);
+static void tokenize_xml(istream& is, ostream& os, tokenizer& tokenizer);
 
 int main(int argc, char* argv[]) {
+  iostreams_init();
+
   show_version_if_requested(argc, argv);
 
   options_map options;
@@ -29,40 +31,40 @@ int main(int argc, char* argv[]) {
                               {"tagger", option_values::any},
                               {"output", option_values{"vertical","xml"}}}, argc, argv, options);
   if (!show_usage && (options.count("tokenizer") + options.count("morphology") + options.count("tagger")) == 0) {
-    eprintf("Missing one of --tokenizer, --morphology and --tagger options!\n");
+    cerr << "Missing one of --tokenizer, --morphology and --tagger options!" << endl;
     show_usage = true;
   }
   if (!show_usage && (options.count("tokenizer") + options.count("morphology") + options.count("tagger")) > 1) {
-    eprintf("Only one of --tokenizer, --morphology and --tagger options can be specifed!\n");
+    cerr << "Only one of --tokenizer, --morphology and --tagger options can be specifed!" << endl;
     show_usage = true;
   }
   if (show_usage)
-    runtime_errorf("Usage: %s [options] [file[:output_file]]...\n"
-                   "Options: --tokenizer=czech|english|generic\n"
-                   "         --morphology=morphology_model_file\n"
-                   "         --tagger=tagger_model_file\n"
-                   "         --output=vertical|xml", argv[0]);
+    runtime_failure("Usage: " << argv[0] << " [options] [file[:output_file]]...\n"
+                    "Options: --tokenizer=czech|english|generic\n"
+                    "         --morphology=morphology_model_file\n"
+                    "         --tagger=tagger_model_file\n"
+                    "         --output=vertical|xml");
 
   unique_ptr<tokenizer> tokenizer;
   if (options.count("tokenizer") && options["tokenizer"] == "czech") tokenizer.reset(tokenizer::new_czech_tokenizer());
   else if (options.count("tokenizer") && options["tokenizer"] == "english") tokenizer.reset(tokenizer::new_english_tokenizer());
   else if (options.count("tokenizer") && options["tokenizer"] == "generic") tokenizer.reset(tokenizer::new_generic_tokenizer());
   else if (options.count("morphology")) {
-    eprintf("Loading dictionary: ");
+    cerr << "Loading dictionary: ";
     unique_ptr<morpho> dictionary(morpho::load(options["morphology"].c_str()));
-    if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", options["morphology"].c_str());
-    eprintf("done\n");
+    if (!dictionary) runtime_failure("Cannot load dictionary from file '" << options["morphology"] << "'!");
+    cerr << "done" << endl;
 
     tokenizer.reset(dictionary->new_tokenizer());
-    if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
+    if (!tokenizer) runtime_failure("No tokenizer is defined for the supplied model!");
   } else /*if (options.count("tagger"))*/ {
-    eprintf("Loading tagger: ");
+    cerr << "Loading tagger: ";
     unique_ptr<tagger> tagger(tagger::load(options["tagger"].c_str()));
-    if (!tagger) runtime_errorf("Cannot load dictionary from file '%s'!", options["tagger"].c_str());
-    eprintf("done\n");
+    if (!tagger) runtime_failure("Cannot load dictionary from file '" << options["tagger"] << "'!");
+    cerr << "done" << endl;
 
     tokenizer.reset(tagger->new_tokenizer());
-    if (!tokenizer) runtime_errorf("No tokenizer is defined for the supplied model!");
+    if (!tokenizer) runtime_failure("No tokenizer is defined for the supplied model!");
   }
 
   if (options.count("output") && options["output"] == "vertical") process_args(1, argc, argv, tokenize_vertical, *tokenizer);
@@ -71,40 +73,36 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-void tokenize_vertical(FILE* in, FILE* out, tokenizer& tokenizer) {
+void tokenize_vertical(istream& is, ostream& os, tokenizer& tokenizer) {
   string para;
   vector<string_piece> forms;
-  while (getpara(in, para)) {
+  while (getpara(is, para)) {
     // Tokenize
     tokenizer.set_text(para);
     while (tokenizer.next_sentence(&forms, nullptr)) {
-      for (auto&& form : forms) {
-        fwrite(form.str, 1, form.len, out);
-        fputc('\n', out);
-      }
-      fputc('\n', out);
+      for (auto&& form : forms)
+        os << form << '\n';
+      os << endl;
     }
   }
 }
 
-static void tokenize_xml(FILE* in, FILE* out, tokenizer& tokenizer) {
+static void tokenize_xml(istream& is, ostream& os, tokenizer& tokenizer) {
   string para;
   vector<string_piece> forms;
-  while (getpara(in, para)) {
+  while (getpara(is, para)) {
     // Tokenize
     tokenizer.set_text(para);
     const char* unprinted = para.c_str();
     while (tokenizer.next_sentence(&forms, nullptr))
       for (unsigned i = 0; i < forms.size(); i++) {
-        if (unprinted < forms[i].str) print_xml_content(out, unprinted, forms[i].str - unprinted);
-        if (!i) fputs("<sentence>", out);
-        fputs("<token>", out);
-        print_xml_content(out, forms[i].str, forms[i].len);
-        fputs("</token>", out);
-        if (i + 1 == forms.size()) fputs("</sentence>", out);
+        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        if (!i) os << "<sentence>";
+        os << "<token>" << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+        if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
 
-    if (unprinted < para.c_str() + para.size()) print_xml_content(out, unprinted, para.c_str() + para.size() - unprinted);
+    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
   }
 }

@@ -12,18 +12,21 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
-  if (argc <= 1) runtime_errorf("Usage: %s dict_file <data", argv[0]);
+  iostreams_init();
 
-  eprintf("Loading dictionary: ");
+  if (argc <= 1) runtime_failure("Usage: " << argv[0] << " dict_file <data");
+
+  cerr << "Loading dictionary: ";
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
-  eprintf("done\n");
+  if (!dictionary) runtime_failure("Cannot load dictionary " << argv[1] << '!');
+  cerr << "done" << endl;
 
-  eprintf("Processing data: ");
+  cerr << "Processing data: ";
 
   int forms = 0;
   enum match_type { COMPLETE = 0, LEMMA_ID = 1, RAWLEMMA = 2, TAG = 3, MATCH_TYPES = 4 };
@@ -34,14 +37,14 @@ int main(int argc, char* argv[]) {
 
   string line;
   vector<string> tokens;
-  while (getline(stdin, line)) {
+  while (getline(cin, line)) {
     if (line.empty()) {
-      putchar('\n');
+      cout << endl;
       continue;
     }
 
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_errorf("The line %s does not contain three columns!", line.c_str());
+    if (tokens.size() != 3) runtime_failure("The line " << line << " does not contain three columns!");
 
     // Analyse
     dictionary->analyze(tokens[0], morpho::NO_GUESSER, lemmas);
@@ -72,48 +75,48 @@ int main(int argc, char* argv[]) {
     }
 
     if (matches[COMPLETE]) {
-      if (matches[COMPLETE] != 1) eprintf("W: matches[COMPLETE]=%d\n", matches[COMPLETE]);
+      if (matches[COMPLETE] != 1) cerr << "W: matches[COMPLETE]=" << matches[COMPLETE] << endl;
       total_matches[COMPLETE]++;
-      printf("%s\t%s\t%s\n", tokens[0].c_str(), tokens[1].c_str(), tokens[2].c_str());
+      cout << tokens[0] << '\t' << tokens[1] << '\t' << tokens[2] << '\n';
     } else if (matches[LEMMA_ID]) {
-      if (matches[LEMMA_ID] != 1) eprintf("W: matches[LEMMA_ID]=%d\n", matches[COMPLETE]);
+      if (matches[LEMMA_ID] != 1) cerr << "W: matches[LEMMA_ID]=" << matches[COMPLETE] << endl;
       if (lemma_mappings[LEMMA_ID].emplace(tokens[1], matching_lemmas[LEMMA_ID][0].lemma).first->second != matching_lemmas[LEMMA_ID][0].lemma)
-        {} //eprintf("Two different lemmaid mappings for %s: %s and %s.\n", tokens[1], matching_lemmas[LEMMA_ID][0].lemma.c_str(), lemma_mappings[LEMMA_ID][tokens[1]].c_str());
+        {} //cerr("Two different lemmaid mappings for " << tokens[1] << ": " << matching_lemmas[LEMMA_ID][0].lemma << " and " << lemma_mappings[LEMMA_ID][tokens[1]] << '.' << endl;
       total_matches[LEMMA_ID]++;
-      printf("%s\t%s\t%s\n", tokens[0].c_str(), matching_lemmas[LEMMA_ID][0].lemma.c_str(), matching_lemmas[LEMMA_ID][0].tag.c_str());
+      cout << tokens[0] << '\t' << matching_lemmas[LEMMA_ID][0].lemma << '\t' << matching_lemmas[LEMMA_ID][0].tag << '\n';
     } else if (matches[RAWLEMMA] == 1) {
-      if (matches[RAWLEMMA] != 1) eprintf("W: matches[RAWLEMMA]=%d\n", matches[COMPLETE]);
+      if (matches[RAWLEMMA] != 1) cerr << "W: matches[RAWLEMMA]=" << matches[COMPLETE] << endl;
       if (lemma_mappings[RAWLEMMA].emplace(tokens[1], matching_lemmas[RAWLEMMA][0].lemma).first->second != matching_lemmas[RAWLEMMA][0].lemma)
-        {} //eprintf("W: Two different rawlemma mappings for %s: %s and %s.\n", tokens[1], matching_lemmas[RAWLEMMA][0].lemma.c_str(), lemma_mappings[RAWLEMMA][tokens[1]].c_str());
+        {} //cerr("Two different rawlemma mappings for " << tokens[1] << ": " << matching_lemmas[RAWLEMMA][0].lemma << " and " << lemma_mappings[RAWLEMMA][tokens[1]] << '.' << endl;
       total_matches[RAWLEMMA]++;
-      printf("%s\t%s\t%s\n", tokens[0].c_str(), matching_lemmas[RAWLEMMA][0].lemma.c_str(), matching_lemmas[RAWLEMMA][0].tag.c_str());
+      cout << tokens[0] << '\t' << matching_lemmas[RAWLEMMA][0].lemma << '\t' << matching_lemmas[RAWLEMMA][0].tag << '\n';
     } else if (lemmas.size() == 1 &&
                lemmas[0].tag.compare(0, 1, tokens[2], 0, 1) == 0 &&
                lemmas[0].lemma.compare(0, dictionary->lemma_id_len(lemmas[0].lemma), tokens[1], 0, lemmaid_len) == 0) {
       if (lemma_mappings[TAG].emplace(tokens[1], lemmas[0].tag).first->second != lemmas[0].tag)
-        {} //eprintf("W: Two different tag mappings for %s-%s: %s and %s.\n", tokens[1], tokens[2], lemmas[0].tag.c_str(), lemma_mappings[TAG][tokens[1]].c_str());
+        {} //cerr("Two different tag mappings for " << tokens[1] << '-' << tokens[2] << ": " << lemmas[0].tag << " and " << lemma_mappings[TAG][tokens[1]] << '.' << endl;
       total_matches[TAG]++;
-      printf("%s\t%s\t%s\n", tokens[0].c_str(), lemmas[0].lemma.c_str(), lemmas[0].tag.c_str());
+      cout << tokens[0] << '\t' << lemmas[0].lemma << '\t' << lemmas[0].tag << '\n';
     } else
-      printf("%s\t%s\t%s\n", tokens[0].c_str(), tokens[1].c_str(), tokens[2].c_str());
+      cout << tokens[0] << '\t' << tokens[1] << '\t' << tokens[2] << '\n';
   }
-  eprintf("done\n");
+  cerr << "done" << endl;
 
 //  for (auto&& mode : {LEMMA_ID, RAWLEMMA, TAG}) {
-//    eprintf("Remappings %d\n", mode);
+//    cerr << "Remappings " << mode << endl;
 //    vector<string> mappings;
 //    for (auto&& map : lemma_mappings[mode])
 //      mappings.emplace_back("  " + map.first + " -> " + map.second);
 //    sort(mappings.begin(), mappings.end());
 //    for (auto&& mapping : mappings)
-//      eprintf("%s\n", mapping.c_str());
+//      cerr << mapping << endl;
 //  }
 
-  eprintf("Forms: %d\n", forms);
-  eprintf("Accuracy of all: %.3f%%\n", 100 * total_matches[COMPLETE] / double(forms));
-  eprintf("Accuracy of tli: %.3f%%\n", 100 * (total_matches[COMPLETE] + total_matches[LEMMA_ID]) / double(forms));
-  eprintf("Accuracy of trl: %.3f%%\n", 100 * (total_matches[COMPLETE] + total_matches[LEMMA_ID] + total_matches[RAWLEMMA]) / double(forms));
-  eprintf("Accuracy of t:   %.3f%%\n", 100 * (total_matches[COMPLETE] + total_matches[LEMMA_ID] + total_matches[RAWLEMMA] + total_matches[TAG]) / double(forms));
+  cerr << "Forms: " << forms << endl << fixed << setprecision(3);
+  cerr << "Accuracy of all: " << 100 * (total_matches[COMPLETE] / double(forms)) << '%' << endl;
+  cerr << "Accuracy of tli: " << 100 * ((total_matches[COMPLETE] + total_matches[LEMMA_ID]) / double(forms)) << '%' << endl;
+  cerr << "Accuracy of trl: " << 100 * ((total_matches[COMPLETE] + total_matches[LEMMA_ID] + total_matches[RAWLEMMA]) / double(forms)) << '%' << endl;
+  cerr << "Accuracy of t:   " << 100 * ((total_matches[COMPLETE] + total_matches[LEMMA_ID] + total_matches[RAWLEMMA] + total_matches[TAG]) / double(forms)) << '%' << endl;
 
   return 0;
 }

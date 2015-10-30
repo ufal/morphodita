@@ -25,7 +25,7 @@ inline int parse_int(const char* str, const char* value_name) {
   errno = 0;
   long result = strtol(str, &end, 10);
   if (*end || errno == ERANGE || result != int(result))
-    runtime_errorf("Cannot parse %s int value: '%s'!", value_name, str);
+    runtime_failure("Cannot parse " << value_name << " int value: '" << str << "'!");
 
   return int(result);
 }

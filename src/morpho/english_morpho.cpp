@@ -21,9 +21,9 @@
 namespace ufal {
 namespace morphodita {
 
-bool english_morpho::load(FILE* f) {
+bool english_morpho::load(istream& is) {
   binary_decoder data;
-  if (!compressor::load(f, data)) return false;
+  if (!compressor::load(is, data)) return false;
 
   try {
     dictionary.load(data);

@@ -16,7 +16,7 @@ namespace morphodita {
 
 class czech_morpho_encoder {
  public:
-  static void encode(FILE* in_dictionary, int max_suffix_len, FILE* in_prefix_guesser, FILE* in_statistical_guesser, int max_tag_length, FILE* out_morpho);
+  static void encode(istream& in_dictionary, int max_suffix_len, istream& in_prefix_guesser, istream& in_statistical_guesser, int max_tag_length, ostream& out_morpho);
 };
 
 } // namespace morphodita

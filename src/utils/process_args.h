@@ -10,6 +10,7 @@
 #pragma once
 
 #include <cstring>
+#include <fstream>
 
 #include "common.h"
 
@@ -22,25 +23,22 @@ namespace morphodita {
 template <class T, class... U>
 void process_args(int argi, int argc, char* argv[], T processor, U&&... processor_args) {
   if (argi >= argc) {
-    processor(stdin, stdout, std::forward<U>(processor_args)...);
+    processor(cin, cout, std::forward<U>(processor_args)...);
   } else for (; argi < argc; argi++) {
     char* file_in = argv[argi];
     char* file_out = strchr(file_in, ':');
     if (file_out) *file_out++ = '\0';
 
-    FILE* in = fopen(file_in, "r");
-    if (!in) runtime_errorf("Cannot open file '%s' for reading!", file_in);
+    ifstream in(file_in);
+    if (!in) runtime_failure("Cannot open file '" << file_in << "' for reading!");
 
-    FILE* out = nullptr;
+    ofstream out;
     if (file_out) {
-      out = fopen(file_out, "w");
-      if (!out) runtime_errorf("Cannot open file '%s' for writing!", file_out);
+      out.open(file_out);
+      if (!out) runtime_failure("Cannot open file '" << file_out << "' for writing!");
     }
 
-    processor(in, out ? out : stdout, std::forward<U>(processor_args)...);
-
-    if (out) fclose(out);
-    fclose(in);
+    processor(in, file_out ? out : cout, std::forward<U>(processor_args)...);
   }
 }
 

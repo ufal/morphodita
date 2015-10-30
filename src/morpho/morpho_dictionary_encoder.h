@@ -29,14 +29,14 @@ namespace morphodita {
 template <class LemmaAddinfo>
 class morpho_dictionary_encoder {
  public:
-  static void encode(FILE* f, int max_suffix_len, binary_encoder& enc);
+  static void encode(istream& is, int max_suffix_len, binary_encoder& enc);
 };
 
 // Definitions
 template <class LemmaAddinfo>
 class dictionary {
  public:
-  void load(FILE* f, int max_suffix_len);
+  void load(istream& is, int max_suffix_len);
   void encode(binary_encoder& enc);
 
  private:
@@ -128,20 +128,20 @@ class dictionary {
 };
 
 template <class LemmaAddinfo>
-void morpho_dictionary_encoder<LemmaAddinfo>::encode(FILE* f, int max_suffix_len, binary_encoder& enc) {
+void morpho_dictionary_encoder<LemmaAddinfo>::encode(istream& is, int max_suffix_len, binary_encoder& enc) {
   dictionary<LemmaAddinfo> dict;
 
   // Load the dictionary and create classes
-  dict.load(f, max_suffix_len);
+  dict.load(is, max_suffix_len);
 
   // Encode the dictionary
   dict.encode(enc);
 }
 
 template <class LemmaAddinfo>
-void dictionary<LemmaAddinfo>::load(FILE* f, int max_suffix_len) {
+void dictionary<LemmaAddinfo>::load(istream& is, int max_suffix_len) {
   // Load lemmas and create classes
-  raw_morpho_dictionary_reader raw(f);
+  raw_morpho_dictionary_reader raw(is);
   string lemma;
   vector<pair<string, string>> forms;
   while(raw.next_lemma(lemma, forms)) {
@@ -149,7 +149,7 @@ void dictionary<LemmaAddinfo>::load(FILE* f, int max_suffix_len) {
     sort(forms.begin(), forms.end());
     auto forms_end = unique(forms.begin(), forms.end());
     if (forms_end != forms.end()) {
-      eprintf("Warning: repeated form-tag in lemma %s.\n", lemma.c_str());
+      cerr << "Warning: repeated form-tag in lemma " << lemma << '.' << endl;
       forms.erase(forms_end, forms.end());
     }
 
@@ -170,7 +170,7 @@ void dictionary<LemmaAddinfo>::load(FILE* f, int max_suffix_len) {
       // Find forms of the class being added.
       auto start = forms.begin();
       while (start != forms.end() && start->first.compare(0, prefix.size(), prefix) != 0) start++;
-      if (start == forms.end()) runtime_errorf("Internal error when generating classes, cannot find prefix '%s'!", prefix.c_str());
+      if (start == forms.end()) runtime_failure("Internal error when generating classes, cannot find prefix '" << prefix << "'!");
       auto end = start;
       while (end != forms.end() && end->first.compare(0, prefix.size(), prefix) == 0) end++;
 

@@ -1342,11 +1342,11 @@ usage may look like this:
   delete my_tagger;
 
 The tagger is constructed by an overloaded factory method with one argument. The
-constructor either accepts a C file pointer (FILE*) pointing to a file with the
-model or a C string (const char*) with a file name of the model. The constructor
-loads the linguistic model to memory and returns the tagger pointer ready for
-tagging, returning NULL if unsuccessful. If a file pointer is used, it is not
-closed and is positioned right after the end of the model.
+constructor either accepts an input stream (istream&) with the model or a C
+string (const char*) with a file name of the model. The constructor loads the
+linguistic model to memory and returns the tagger pointer ready for tagging,
+returning NULL if unsuccessful. If an input stream is used, it is positioned
+right after the end of the model.
 
 The main tagging method is tagger::tag:
 
@@ -1375,8 +1375,8 @@ Dictionary Construction
 -----------------------
 
 Similarly to the tagger, MorphoDiTa morphological dictionary is constructed by
-an overloaded factory method which accepts either a C file pointer (FILE*) or a
-C string const char* with the file name of the dictionary. The factory method
+an overloaded factory method which accepts either an input stream (istream&) or
+a C string const char* with the file name of the dictionary. The factory method
 returns a pointer to morphological dictionary or NULL if unsuccessful.
 
   #include morpho/morpho.h
@@ -1743,7 +1743,7 @@ Class morpho
     virtual ~morpho() {}
 
     static morpho* load(const char* fname);
-    static morpho* load(FILE* f);
+    static morpho* load(istream& is);
 
     enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
 
@@ -1772,14 +1772,13 @@ Returns a pointer to an instance of morpho which the user should delete after
 use.
 
 
-morpho::load(FILE*)
--------------------
+morpho::load(istream&)
+----------------------
 
-  static morpho* load(FILE* f);
+  static morpho* load(istream& is);
 
-Factory method constructor. Accepts C file pointer of an opened file with the
-model. Returns a pointer to an instance of morpho which the user should delete
-after use.
+Factory method constructor. Accepts an input stream with the model. Returns a
+pointer to an instance of morpho which the user should delete after use.
 
 
 morpho::guesser_mode
@@ -1878,7 +1877,7 @@ Class tagger
     virtual ~tagger() {}
 
     static tagger* load(const char* fname);
-    static tagger* load(FILE* f);
+    static tagger* load(istream& is);
 
     virtual const morpho* get_morpho() const = 0;
 
@@ -1901,14 +1900,13 @@ Returns a pointer to an instance of tagger which the user should delete after
 use.
 
 
-tagger::load(FILE*)
--------------------
+tagger::load(istream&)
+----------------------
 
-  static tagger* load(FILE* f);
+  static tagger* load(istream& is);
 
-Factory method constructor. Accepts C file pointer of an opened file with the
-model. Returns a pointer to an instance of tagger which the user should delete
-after use.
+Factory method constructor. Accepts an input stream with the model. Returns a
+pointer to an instance of tagger which the user should delete after use.
 
 
 tagger::get_morpho()
@@ -2032,7 +2030,7 @@ C++ Bindings API
 Bindings for other languages than C++ are created using SWIG from the C++
 bindings API, which is a slightly modified version of the native C++ API. Main
 changes are replacement of string_piece type by native strings and removal of
-methods using FILE. Here is the C++ bindings API declaration:
+methods using istream. Here is the C++ bindings API declaration:
 
 
 Helper Structures

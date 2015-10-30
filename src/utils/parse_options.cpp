@@ -33,19 +33,19 @@ bool parse_options(const unordered_map<string, option_values>& allowed, int& arg
 
       string key = equal_sign ? string(option, equal_sign - option) : string(option);
       auto values = allowed.find(key);
-      if (values == allowed.end()) return eprintf("Unknown option '%s'.\n", argv[argi]), false;
+      if (values == allowed.end()) return cerr << "Unknown option '" << argv[argi] << "'." << endl, false;
 
       string value;
-      if (values->second.values == option_values::NONE && equal_sign) return eprintf("Option '%s' cannot have value.\n", key.c_str()), false;
+      if (values->second.values == option_values::NONE && equal_sign) return cerr << "Option '" << key << "' cannot have value." << endl, false;
       if (values->second.values != option_values::NONE) {
         if (equal_sign) {
           value.assign(equal_sign + 1);
         } else {
-          if (argi + 1 == argc) return eprintf("Missing value for option '%s'.\n", key.c_str()), false;
+          if (argi + 1 == argc) return cerr << "Missing value for option '" << key << "'." << endl, false;
           value.assign(argv[++argi]);
         }
         if (!(values->second.values == option_values::ANY || (values->second.values == option_values::SET && values->second.allowed.count(value))))
-          return eprintf("Option '%s' cannot have value '%s'.\n", key.c_str(), value.c_str()), false;
+          return cerr << "Option '" << key << "' cannot have value '" << value << "'." << endl, false;
       }
       options[key] = value;
     } else {
@@ -63,10 +63,9 @@ void show_version_if_requested(int argc, char* argv[]) {
       if (strcmp(argv[argi] + 1 + (argv[argi][1] == '-'), "version") == 0) {
         version version = version::current();
 
-        eprintf("MorphoDiTa version %u.%u.%u\n"
+        cerr << "MorphoDiTa version " << version.major << '.' << version.minor << '.' << version.patch << "\n"
                 "Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of\n"
-                "Mathematics and Physics, Charles University in Prague, Czech Republic.\n",
-                version.major, version.minor, version.patch);
+                "Mathematics and Physics, Charles University in Prague, Czech Republic." << endl;
 
         exit(0);
       }

@@ -10,36 +10,39 @@
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 #include "utils/parse_options.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
+  iostreams_init();
+
   show_version_if_requested(argc, argv);
 
   options_map options;
   if (!parse_options({{"from_tagger",option_values::none}}, argc, argv, options) ||
       argc < 2)
-    runtime_errorf("Usage: %s [options] dict_file\n"
-                   "Options: --from_tagger", argv[0]);
+    runtime_failure("Usage: " << argv[0] << " [options] dict_file\n"
+                    "Options: --from_tagger");
 
   unique_ptr<morpho> morpho;
   unique_ptr<tagger> tagger;
   if (options.count("from_tagger")) {
-    eprintf("Loading dictionary from tagger: ");
+    cerr << "Loading dictionary from tagger: ";
     tagger.reset(tagger::load(argv[1]));
-    if (!tagger) runtime_errorf("Cannot load tagger from file '%s'!", argv[1]);
+    if (!tagger) runtime_failure("Cannot load tagger from file '" << argv[1] << "'!");
   } else {
-    eprintf("Loading dictionary: ");
+    cerr << "Loading dictionary: ";
     morpho.reset(morpho::load(argv[1]));
-    if (!morpho) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
+    if (!morpho) runtime_failure("Cannot load dictionary from file '" << argv[1] << "'!");
   }
-  eprintf("done\n");
+  cerr << "done" << endl;
   auto& dictionary = options.count("from_tagger") ? *tagger->get_morpho() : *morpho;
 
   string line;
   vector<string> tokens;
-  while (getline(stdin, line)) {
+  while (getline(cin, line)) {
     split(line, '\t', tokens);
     if /* analyze */ (tokens.size() == 1) {
       vector<tagged_lemma> lemmas;
@@ -47,18 +50,19 @@ int main(int argc, char* argv[]) {
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
       for (auto&& lemma : lemmas)
-        printf("%sLemma: %s %s\n", guesser_name.c_str(), lemma.lemma.c_str(), lemma.tag.c_str());
-
+        cout << guesser_name << "Lemma: " << lemma.lemma << ' ' << lemma.tag << '\n';
+      cout << flush;
     } else if /* generate */ (tokens.size() == 2) {
       vector<tagged_lemma_forms> forms;
       auto result = dictionary.generate(tokens[0], tokens[1].c_str(), morpho::GUESSER, forms);
 
       string guesser_name = result == morpho::GUESSER ? "Guesser " : "";
       for (auto&& lemma : forms) {
-        printf("%sLemma: %s\n", guesser_name.c_str(), lemma.lemma.c_str());
+        cout << guesser_name << "Lemma: " << lemma.lemma << '\n';
         for (auto&& form : lemma.forms)
-          printf("  %s %s\n", form.form.c_str(), form.tag.c_str());
+          cout << "  " << form.form << ' ' << form.tag << '\n';
       }
+      cout << flush;
     }
   }
 

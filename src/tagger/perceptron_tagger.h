@@ -20,7 +20,7 @@ class perceptron_tagger : public tagger {
  public:
   perceptron_tagger();
 
-  bool load(FILE* f);
+  bool load(istream& is);
   virtual const morpho* get_morpho() const override;
   virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const override;
 
@@ -49,10 +49,10 @@ template<class FeatureSequences, int order>
 perceptron_tagger<FeatureSequences, order>::perceptron_tagger() : decoder(features) {}
 
 template<class FeatureSequences, int order>
-bool perceptron_tagger<FeatureSequences, order>::load(FILE* f) {
-  if (dict.reset(morpho::load(f)), !dict) return false;
-  use_guesser = fgetc(f);
-  if (!features.load(f)) return false;
+bool perceptron_tagger<FeatureSequences, order>::load(istream& is) {
+  if (dict.reset(morpho::load(is)), !dict) return false;
+  use_guesser = is.get();
+  if (!features.load(is)) return false;
   return true;
 }
 

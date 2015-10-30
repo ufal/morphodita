@@ -17,7 +17,7 @@
 namespace ufal {
 namespace morphodita {
 
-void morpho_prefix_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
+void morpho_prefix_guesser_encoder::encode(istream& is, binary_encoder& enc) {
   vector<string> filters;
   unordered_map<string, uint32_t> filters_map;
   unordered_map<string, uint32_t> prefixes_initial;
@@ -27,19 +27,19 @@ void morpho_prefix_guesser_encoder::encode(FILE* f, binary_encoder& enc) {
   // Load prefix guesser
   string line;
   vector<string> tokens;
-  while (getline(f, line)) {
+  while (getline(is, line)) {
     if (line.empty() && prefixes_current == &prefixes_initial) {
       prefixes_current = &prefixes_middle;
       continue;
     }
     split(line, '\t', tokens);
-    if (tokens.size() != 2) runtime_errorf("Line %s in prefix guesser prefixes file does not contain two columns!", line.c_str());
+    if (tokens.size() != 2) runtime_failure("Line " << line << " in prefix guesser prefixes file does not contain two columns!");
 
     auto it = filters_map.emplace(tokens[1], 1<<filters.size());
     if (it.second)
       filters.emplace_back(tokens[1]);
     auto filter = it.first->second;
-    if (!filter) runtime_errorf("Too much different tag filters in the prefix guesser when adding tag filter '%s'!", tokens[1].c_str());
+    if (!filter) runtime_failure("Too much different tag filters in the prefix guesser when adding tag filter '" << tokens[1] << "'!");
 
     (*prefixes_current)[tokens[0]] |= filter;
   }

@@ -227,7 +227,7 @@ class morpho {
   virtual ~morpho() {}
 
   static [morpho #morpho]* [load #morpho_load_cstring](const char* fname);
-  static [morpho #morpho]* [load #morpho_load_FILE](FILE* f);
+  static [morpho #morpho]* [load #morpho_load_istream](istream& is);
 
   enum [guesser_mode #morpho_guesser_mode] { NO_GUESSER = 0, GUESSER = 1 };
 
@@ -253,10 +253,10 @@ Factory method constructor. Accepts C string with a file name of the model.
 Returns a pointer to an instance of [``morpho`` #morpho] which the user should delete
 after use.
 
-=== morpho::load(FILE*) ===[morpho_load_FILE]
-``` static [morpho #morpho]* load(FILE* f);
+=== morpho::load(istream&) ===[morpho_load_istream]
+``` static [morpho #morpho]* load(istream& is);
 
-Factory method constructor. Accepts C file pointer of an opened file with the
+Factory method constructor. Accepts an input stream with the
 model. Returns a pointer to an instance of [``morpho`` #morpho] which the user should
 delete after use.
 
@@ -339,7 +339,7 @@ class tagger {
   virtual ~tagger() {}
 
   static [tagger #tagger]* [load #tagger_load_cstring](const char* fname);
-  static [tagger #tagger]* [load #tagger_load_FILE](FILE* f);
+  static [tagger #tagger]* [load #tagger_load_istream](istream& is);
 
   virtual const [morpho #morpho]* [get_morpho #tagger_get_morpho]() const = 0;
 
@@ -360,10 +360,10 @@ Returns a pointer to an instance of [``tagger`` #tagger] which the user should d
 after use.
 
 
-=== tagger::load(FILE*) ===[tagger_load_FILE]
-``` static [tagger #tagger]* load(FILE* f);
+=== tagger::load(istream&) ===[tagger_load_istream]
+``` static [tagger #tagger]* load(istream& is);
 
-Factory method constructor. Accepts C file pointer of an opened file with the
+Factory method constructor. Accepts an input stream with the
 model. Returns a pointer to an instance of [``tagger`` #tagger] which the user should
 delete after use.
 
@@ -460,7 +460,7 @@ should delete the tag set converter instance after use.
 Bindings for other languages than C++ are created using SWIG from the C++
 bindings API, which is a slightly modified version of the native C++ API.
 Main changes are replacement of [``string_piece`` #string_piece] type by native
-strings and removal of methods using ``FILE``. Here is the C++ bindings API
+strings and removal of methods using ``istream``. Here is the C++ bindings API
 declaration:
 
 %!include: morphodita_bindings_api.t2t

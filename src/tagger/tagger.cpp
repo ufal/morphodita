@@ -7,48 +7,49 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <fstream>
+
 #include "czech_elementary_features.h"
 #include "generic_elementary_features.h"
 #include "feature_sequences.h"
 #include "perceptron_tagger.h"
 #include "tagger.h"
 #include "tagger_ids.h"
-#include "utils/file_ptr.h"
 #include "utils/new_unique_ptr.h"
 
 namespace ufal {
 namespace morphodita {
 
-tagger* tagger::load(FILE* f) {
-  switch (fgetc(f)) {
+tagger* tagger::load(istream& is) {
+  switch (tagger_ids::tagger_id(is.get())) {
     case tagger_ids::CZECH2:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_czech_elementary_features>, 2>>();
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case tagger_ids::CZECH3:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_czech_elementary_features>, 3>>();
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case tagger_ids::GENERIC2:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 2>>();
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case tagger_ids::GENERIC3:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 3>>();
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case tagger_ids::GENERIC4:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 4>>();
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
   }
@@ -57,7 +58,7 @@ tagger* tagger::load(FILE* f) {
 }
 
 tagger* tagger::load(const char* fname) {
-  file_ptr f = fopen(fname, "rb");
+  ifstream f(fname, ifstream::in | ifstream::binary);
   if (!f) return nullptr;
 
   return load(f);

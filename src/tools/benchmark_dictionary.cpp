@@ -11,37 +11,40 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 #include "utils/parse_int.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
-  if (argc <= 2) runtime_errorf("Usage: %s dict_file forms_to_analyze <raw_dict_file", argv[0]);
+  iostreams_init();
 
-  eprintf("Loading dictionary: ");
+  if (argc <= 2) runtime_failure("Usage: " << argv[0] << " dict_file forms_to_analyze <raw_dict_file");
+
+  cerr << "Loading dictionary: ";
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
-  eprintf("done\n");
+  if (!dictionary) runtime_failure("Cannot load dictionary " << argv[1] << '!');
+  cerr << "done" << endl;
 
-  eprintf("Loading forms to analyze: ");
+  cerr << "Loading forms to analyze: ";
   vector<string> forms;
   string line;
   vector<string> tokens;
   for (int i = parse_int(argv[2], "forms_to_analyze"); i > 0; i--) {
-    if (!getline(stdin, line)) break;
+    if (!getline(cin, line)) break;
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_errorf("Line '%s' of the raw morpho dictionary does not have three columns!", line.c_str());
+    if (tokens.size() != 3) runtime_failure("Line '" << line << "' of the raw morpho dictionary does not have three columns!");
     forms.emplace_back(tokens[2]);
   }
-  eprintf("done, %d forms read.\n", int(forms.size()));
+  cerr << "done, " << forms.size() << " forms read." << endl;
 
-  eprintf("Analyzing: ");
+  cerr << "Analyzing: ";
   clock_t now = clock();
   vector<tagged_lemma> lemmas;
   for (auto&& form : forms) {
     dictionary->analyze(form, morpho::NO_GUESSER, lemmas);
   }
-  eprintf("done in %.3f seconds.\n", (clock() - now) / double(CLOCKS_PER_SEC));
+  cerr << "done, in " << fixed << setprecision(3) << (clock() - now) / double(CLOCKS_PER_SEC) << " seconds." << endl;
 
   return 0;
 }

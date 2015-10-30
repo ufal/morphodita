@@ -19,7 +19,7 @@
 namespace ufal {
 namespace morphodita {
 
-void english_morpho_guesser_encoder::encode(FILE* guesser_file, FILE* negations_file, binary_encoder& enc) {
+void english_morpho_guesser_encoder::encode(istream& guesser_file, istream& negations_file, binary_encoder& enc) {
   // Guesser exceptions
   typedef map<string, set<string>> lemma_info;
   unordered_map<string, lemma_info> guesser;
@@ -32,7 +32,7 @@ void english_morpho_guesser_encoder::encode(FILE* guesser_file, FILE* negations_
   // Load guesser exceptions
   while (getline(guesser_file, line)) {
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_errorf("The line '%s' in english guesser file does not have three columns!", line.c_str());
+    if (tokens.size() != 3) runtime_failure("The line '" << line << "' in english guesser file does not have three columns!");
     guesser[tokens[2]][tokens[0]].insert(tokens[1]);
     if (tags_map.emplace(tokens[1], tags_map.size()).second) tags.emplace_back(tokens[1]);
   }
@@ -50,14 +50,14 @@ void english_morpho_guesser_encoder::encode(FILE* guesser_file, FILE* negations_
   // Load negations
   while (negations_file && getline(negations_file, line)) {
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_errorf("The line '%s' in english negation file does not have three columns!", line.c_str());
+    if (tokens.size() != 3) runtime_failure("The line '" << line << "' in english negation file does not have three columns!");
 
     unsigned negation_len = parse_int(tokens[2].c_str(), "negation_len in english negation file");
-    if (!negation_len) runtime_errorf("Negation len in line '%s' in english negation file is zero!", line.c_str());
+    if (!negation_len) runtime_failure("Negation len in line '" << line << "' in english negation file is zero!");
 
     unsigned to_follow = parse_int(tokens[1].c_str(), "to_follow in english negation file");
 
-    if (negations.count(tokens[0])) runtime_errorf("The negation '%s' in english negation file is repeated!", tokens[0].c_str());
+    if (negations.count(tokens[0])) runtime_failure("The negation '" << tokens[0] << "' in english negation file is repeated!");
     negations.emplace(tokens[0], negation_info(negation_len, to_follow));
   }
 

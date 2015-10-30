@@ -20,7 +20,7 @@ class tagger {
   virtual ~tagger() {}
 
   static tagger* load(const char* fname);
-  static tagger* load(FILE* f);
+  static tagger* load(istream& is);
 
   // Return morpho associated with the tagger. Do not delete the pointer, it is
   // owned by the tagger instance and deleted in the tagger destructor.

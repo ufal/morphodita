@@ -16,9 +16,9 @@
 namespace ufal {
 namespace morphodita {
 
-bool external_morpho::load(FILE* f) {
+bool external_morpho::load(istream& is) {
   binary_decoder data;
-  if (!compressor::load(f, data)) return false;
+  if (!compressor::load(is, data)) return false;
 
   try {
     // Load unknown_tag

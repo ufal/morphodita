@@ -51,11 +51,11 @@ delete my_tagger;
 ```
 
 The tagger is constructed by an overloaded factory method with one argument.
-The constructor either accepts a C file pointer (``FILE*``) pointing to a file
+The constructor either accepts an input stream (``istream&``)
 with the model or a C string (``const char*``) with a file name of the model.
 The constructor loads the linguistic model to memory and returns the tagger
-pointer ready for tagging, returning ``NULL`` if unsuccessful. If a file
-pointer is used, it is not closed and is positioned right after the end of the
+pointer ready for tagging, returning ``NULL`` if unsuccessful. If an input
+stream is used, it is positioned right after the end of the
 model.
 
 The main tagging method is ``tagger::tag``:
@@ -83,7 +83,7 @@ The main access to MorphoDiTa morphological dictionary is through class
 === Dictionary Construction ===[tutorial_morpho_construction]
 
 Similarly to the tagger, MorphoDiTa morphological dictionary is constructed by an
-overloaded factory method which accepts either a C file pointer (``FILE*``)
+overloaded factory method which accepts either an input stream (``istream&``)
 or a C string ``const char*`` with the file name of the dictionary.
 The factory method returns a pointer to morphological dictionary or ``NULL`` if
 unsuccessful.

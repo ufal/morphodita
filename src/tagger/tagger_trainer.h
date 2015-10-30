@@ -29,43 +29,43 @@ class tagger_trainer {
     vector<int> gold_index;
   };
 
-  static void train(int iterations, FILE* in_morpho_dict, bool use_guesser, FILE* in_feature_templates, bool prune_features, FILE* in_train, FILE* in_heldout, bool early_stopping, FILE* out_tagger);
+  static void train(int iterations, istream& in_morpho_dict, bool use_guesser, istream& in_feature_templates, bool prune_features, istream& in_train, istream& in_heldout, bool early_stopping, ostream& out_tagger);
 
  private:
-  static double load_data(FILE* f, const morpho& d, bool use_guesser, vector<sentence>& sentences, bool add_gold);
+  static double load_data(istream& is, const morpho& d, bool use_guesser, vector<sentence>& sentences, bool add_gold);
 };
 
 
 // Definitions
 template <class TaggerTrainer>
-void tagger_trainer<TaggerTrainer>::train(int iterations, FILE* in_morpho_dict, bool use_guesser, FILE* in_feature_templates, bool prune_features, FILE* in_train, FILE* in_heldout, bool early_stopping, FILE* out_tagger) {
-  eprintf("Loading dictionary: ");
+void tagger_trainer<TaggerTrainer>::train(int iterations, istream& in_morpho_dict, bool use_guesser, istream& in_feature_templates, bool prune_features, istream& in_train, istream& in_heldout, bool early_stopping, ostream& out_tagger) {
+  cerr << "Loading dictionary: ";
   unique_ptr<morpho> d(morpho::load(in_morpho_dict));
-  if (!d) runtime_errorf("Cannot load dictionary!");
-  eprintf("done\n");
-  if (fseek(in_morpho_dict, 0, SEEK_SET) != 0) runtime_errorf("Cannot seek in dictionary file to the beginning!");
+  if (!d) runtime_failure("Cannot load dictionary!");
+  cerr << "done" << endl;
+  if (!in_morpho_dict.seekg(0, istream::beg)) runtime_failure("Cannot seek in dictionary file to the beginning!");
 
   vector<sentence> train_data;
-  eprintf("Loading train data: ");
-  eprintf("done, matched %.2f%%\n", 100 * load_data(in_train, *d, use_guesser, train_data, true));
+  cerr << "Loading train data: ";
+  cerr << "done, matched " << fixed << setprecision(2) << 100 * load_data(in_train, *d, use_guesser, train_data, true) << '%' << endl;
 
   vector<sentence> heldout_data;
   if (in_heldout) {
-    eprintf("Loading heldout data: ");
-    eprintf("done, matched %.2f%%\n", 100 * load_data(in_heldout, *d, use_guesser, heldout_data, false));
+    cerr << "Loading heldout data: ";
+    cerr << "done, matched " << fixed << setprecision(2) << 100 * load_data(in_heldout, *d, use_guesser, heldout_data, false) << '%' << endl;
   }
 
   // Encode morphological dictionary
-  eprintf("Encoding morphological dictionary.\n");
-  for (int c; (c = fgetc(in_morpho_dict)) != EOF; fputc(c, out_tagger)) ;
-  fputc(use_guesser, out_tagger);
+  cerr << "Encoding morphological dictionary." << endl;
+  out_tagger << in_morpho_dict.rdbuf();
+  out_tagger.put(use_guesser);
 
   // Train and encode the tagger
   TaggerTrainer::train(iterations, train_data, heldout_data, early_stopping, prune_features, in_feature_templates, out_tagger);
 }
 
 template <class TaggerTrainer>
-double tagger_trainer<TaggerTrainer>::load_data(FILE* f, const morpho& d, bool use_guesser, vector<sentence>& sentences, bool add_gold) {
+double tagger_trainer<TaggerTrainer>::load_data(istream& is, const morpho& d, bool use_guesser, vector<sentence>& sentences, bool add_gold) {
   sentences.clear();
 
   int forms = 0, forms_matched = 0;
@@ -74,7 +74,7 @@ double tagger_trainer<TaggerTrainer>::load_data(FILE* f, const morpho& d, bool u
   vector<string> tokens;
   vector<tagged_lemma> lemmas;
   sentences.emplace_back();
-  while (getline(f, line)) {
+  while (getline(is, line)) {
     if (line.empty()) {
       if (!sentences.back().forms_with_tags.empty())
         sentences.emplace_back();
@@ -82,7 +82,7 @@ double tagger_trainer<TaggerTrainer>::load_data(FILE* f, const morpho& d, bool u
     }
 
     split(line, '\t', tokens);
-    if (tokens.size() != 3) runtime_errorf("The tagger data line '%s' does not contain three columns!", line.c_str());
+    if (tokens.size() != 3) runtime_failure("The tagger data line '" << line << "' does not contain three columns!");
 
     // Analyse
     d.analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);

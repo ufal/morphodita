@@ -11,10 +11,11 @@
 
 // Headers available in all sources
 #include <cassert>
-#include <cstdarg>
-#include <cstdio>
+#include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include <iomanip>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -27,6 +28,8 @@ static_assert(sizeof(int) >= sizeof(int32_t), "Int must be at least 4B wide!");
 static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, "Only little endian systems are supported!");
 #endif
 
+#define runtime_failure(message) exit((cerr << message << endl, 1))
+
 // Define namespace ufal::morphodita.
 namespace ufal {
 namespace morphodita {
@@ -35,25 +38,6 @@ using namespace std;
 
 namespace unilib {}
 using namespace unilib;
-
-// Printf-like logging function.
-inline int eprintf(const char* fmt, ...) {
-  va_list ap;
-  va_start(ap, fmt);
-  int res = vfprintf(stderr, fmt, ap);
-  va_end(ap);
-  return res;
-}
-
-// Printf-like exit function.
-inline void runtime_errorf(const char* fmt, ...) {
-  va_list ap;
-  va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
-  va_end(ap);
-  fputc('\n', stderr);
-  exit(1);
-}
 
 } // namespace morphodita
 } // namespace ufal

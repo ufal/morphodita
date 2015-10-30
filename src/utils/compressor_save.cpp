@@ -18,7 +18,7 @@ static void *LzmaAlloc(void* /*p*/, size_t size) { return new char[size]; }
 static void LzmaFree(void* /*p*/, void *address) { delete[] (char*) address; }
 static lzma::ISzAlloc lzmaAllocator = { LzmaAlloc, LzmaFree };
 
-bool compressor::save(FILE* f, const binary_encoder& enc) {
+bool compressor::save(ostream& os, const binary_encoder& enc) {
   size_t uncompressed_size = enc.data.size(), compressed_size = 2 * enc.data.size() + 100;
   vector<unsigned char> compressed(compressed_size);
 
@@ -32,11 +32,11 @@ bool compressor::save(FILE* f, const binary_encoder& enc) {
 
   uint32_t poor_crc = uncompressed_size * 19991 + compressed_size * 199999991 + 1234567890;
   if (uint32_t(uncompressed_size) != uncompressed_size || uint32_t(compressed_size) != compressed_size) return false;
-  if (fwrite(&uncompressed_size, sizeof(uint32_t), 1, f) != 1) return false;
-  if (fwrite(&compressed_size, sizeof(uint32_t), 1, f) != 1) return false;
-  if (fwrite(&poor_crc, sizeof(uint32_t), 1, f) != 1) return false;
-  if (fwrite(props_encoded, sizeof(props_encoded), 1, f) != 1) return false;
-  if (fwrite(compressed.data(), 1, compressed_size, f) != compressed_size) return false;
+  if (!os.write((const char*) &uncompressed_size, sizeof(uint32_t))) return false;
+  if (!os.write((const char*) &compressed_size, sizeof(uint32_t))) return false;
+  if (!os.write((const char*) &poor_crc, sizeof(uint32_t))) return false;
+  if (!os.write((const char*) props_encoded, sizeof(props_encoded))) return false;
+  if (!os.write((const char*) compressed.data(), compressed_size)) return false;
 
   return true;
 }

@@ -90,7 +90,7 @@ class morpho {
   virtual ~morpho() {}
 
   static morpho* load(const char* fname);
-  static morpho* load(FILE* f);
+  static morpho* load(istream& is);
 
   enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
 
@@ -145,7 +145,7 @@ class tagger {
   virtual ~tagger() {}
 
   static tagger* load(const char* fname);
-  static tagger* load(FILE* f);
+  static tagger* load(istream& is);
 
   // Return morpho associated with the tagger. Do not delete the pointer, it is
   // owned by the tagger instance and deleted in the tagger destructor.

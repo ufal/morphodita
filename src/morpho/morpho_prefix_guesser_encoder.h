@@ -17,7 +17,7 @@ namespace morphodita {
 
 class morpho_prefix_guesser_encoder {
  public:
-  static void encode(FILE* f, binary_encoder& enc);
+  static void encode(istream& is, binary_encoder& enc);
 };
 
 } // namespace morphodita

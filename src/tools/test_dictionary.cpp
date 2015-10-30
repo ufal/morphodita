@@ -12,18 +12,21 @@
 
 #include "morpho/morpho.h"
 #include "morpho/raw_morpho_dictionary_reader.h"
+#include "utils/iostreams.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
-  if (argc <= 1) runtime_errorf("Usage: %s dict_file <raw_dict_file", argv[0]);
+  iostreams_init();
 
-  eprintf("Loading dictionary: ");
+  if (argc <= 1) runtime_failure("Usage: " << argv[0] << " dict_file <raw_dict_file");
+
+  cerr << "Loading dictionary: ";
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
-  eprintf("done\n");
+  if (!dictionary) runtime_failure("Cannot load dictionary " << argv[1] << '!');
+  cerr << "done" << endl;
 
-  raw_morpho_dictionary_reader raw(stdin);
+  raw_morpho_dictionary_reader raw(cin);
   string lemma;
   vector<pair<string, string>> raw_forms;
   vector<tagged_lemma_forms> lemmas_forms;
@@ -31,7 +34,7 @@ int main(int argc, char* argv[]) {
 
   clock_t now = clock();
   int processed = 0;
-  eprintf("Processing raw dictionary: ");
+  cerr << "Processing raw dictionary: ";
   while (raw.next_lemma(lemma, raw_forms)) {
     sort(raw_forms.begin(), raw_forms.end());
     raw_forms.erase(unique(raw_forms.begin(), raw_forms.end()), raw_forms.end());
@@ -64,16 +67,16 @@ int main(int argc, char* argv[]) {
       }
 
     if (!same_results) {
-      eprintf("[error for lemma %s] ", lemma.c_str());
+      cerr << "[error for lemma " << lemma << "] ";
     }
 
     processed++;
     if (clock() > now + CLOCKS_PER_SEC) {
-      eprintf("%-10d\b\b\b\b\b\b\b\b\b\b", processed);
+      cerr << setw(10) << processed << "\b\b\b\b\b\b\b\b\b\b";
       now = clock();
     }
   }
-  eprintf("done      \n");
+  cerr << "done      " << endl;
 
   return 0;
 }

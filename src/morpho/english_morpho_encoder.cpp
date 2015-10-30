@@ -17,18 +17,18 @@
 namespace ufal {
 namespace morphodita {
 
-void english_morpho_encoder::encode(FILE* dictionary, int max_suffix_len, FILE* guesser, FILE* negations, FILE* out) {
+void english_morpho_encoder::encode(istream& dictionary, int max_suffix_len, istream& guesser, istream& negations, ostream& out) {
   binary_encoder enc;
 
-  eprintf("Encoding dictionary.\n");
+  cerr << "Encoding dictionary." << endl;
   morpho_dictionary_encoder<english_lemma_addinfo>::encode(dictionary, max_suffix_len, enc);
 
-  eprintf("Encoding guesser.\n");
+  cerr << "Encoding guesser." << endl;
   english_morpho_guesser_encoder::encode(guesser, negations, enc);
 
-  eprintf("Compressing dictionary.\n");
-  if (!compressor::save(out, enc)) runtime_errorf("Cannot compress and write dictionary to file!");
-  eprintf("Dictionary saved.\n");
+  cerr << "Compressing dictionary." << endl;
+  if (!compressor::save(out, enc)) runtime_failure("Cannot compress and write dictionary to file!");
+  cerr << "Dictionary saved." << endl;
 }
 
 } // namespace morphodita

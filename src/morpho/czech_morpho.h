@@ -32,7 +32,7 @@ class czech_morpho : public morpho {
   virtual int raw_form_len(string_piece form) const override;
   virtual tokenizer* new_tokenizer() const override;
 
-  bool load(FILE* f);
+  bool load(istream& is);
  private:
   inline void analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const;
 

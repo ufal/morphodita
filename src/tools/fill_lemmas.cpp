@@ -9,32 +9,35 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
-  if (argc <= 1) runtime_errorf("Usage: %s dict_file <data", argv[0]);
+  iostreams_init();
 
-  eprintf("Loading dictionary: ");
+  if (argc <= 1) runtime_failure("Usage: " << argv[0] << " dict_file <data");
+
+  cerr << "Loading dictionary: ";
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary %s!", argv[1]);
-  eprintf("done\n");
+  if (!dictionary) runtime_failure("Cannot load dictionary " << argv[1] << '!');
+  cerr << "done" << endl;
 
-  eprintf("Processing data: ");
+  cerr << "Processing data: ";
 
   int forms = 0, matches = 0;
   vector<tagged_lemma> lemmas;
 
   string line;
   vector<string> tokens;
-  while (getline(stdin, line)) {
+  while (getline(cin, line)) {
     if (line.empty()) {
-      putchar('\n');
+      cout << endl;
       continue;
     }
 
     split(line, '\t', tokens);
-    if (tokens.size() != 2) runtime_errorf("The line %s does not contain three columns!", line.c_str());
+    if (tokens.size() != 2) runtime_failure("The line " << line << " does not contain three columns!");
 
     // Analyse
     dictionary->analyze(tokens[0], morpho::GUESSER, lemmas);
@@ -45,22 +48,23 @@ int main(int argc, char* argv[]) {
     for (unsigned i = 0; i < lemmas.size(); i++)
       if (lemmas[i].tag == tokens[1] && lemmas[i].lemma == tokens[0]) {
         if (match == -1) match = i;
-        else if (lemmas[i].lemma != lemmas[match].lemma) eprintf("Multiple matching samelemmaasform-tags with different lemmas for form '%s'.\n", tokens[0].c_str());
+        else if (lemmas[i].lemma != lemmas[match].lemma) cerr << "Multiple matching samelemmaasform-tags with different lemmas for form '" << tokens[0] << "'." << endl;
       }
 
     if (match == -1)
       for (unsigned i = 0; i < lemmas.size(); i++)
         if (lemmas[i].tag == tokens[1]) {
           if (match == -1) match = i;
-          else if (lemmas[i].lemma != lemmas[match].lemma) eprintf("Multiple matching tags with different lemmas for form '%s'.\n", tokens[0].c_str());
+          else if (lemmas[i].lemma != lemmas[match].lemma) cerr << "Multiple matching tags with different lemmas for form '" << tokens[0] << "'." << endl;
         }
 
     matches += match != -1;
-    if (match == -1) eprintf("Did not get tag '%s' for form '%s'.\n", tokens[1].c_str(), tokens[0].c_str());
-    printf("%s\t%s\t%s\n", tokens[0].c_str(), match != -1 ? lemmas[match].lemma.c_str() : tokens[0].c_str() , tokens[1].c_str());
+    if (match == -1) cerr << "Did not get tag '" << tokens[1] << "' for form '" << tokens[0] << "'." << endl;
+
+    cout << tokens[0] << '\t' << (match != -1 ? lemmas[match].lemma : tokens[0]) << '\t' << tokens[1] << '\n';
   }
-  eprintf("done\n");
-  eprintf("Forms: %d, matched: %.3f%%\n", forms, 100 * matches / double(forms));
+  cerr << "done" << endl;
+  cerr << "Forms: " << forms << ", matched: " << fixed << setprecision(3) << 100 * matches / double(forms) << "%." << endl;
 
   return 0;
 }

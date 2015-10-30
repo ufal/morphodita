@@ -24,7 +24,7 @@ class external_morpho : public morpho {
   virtual int raw_form_len(string_piece form) const override;
   virtual tokenizer* new_tokenizer() const override;
 
-  bool load(FILE* f);
+  bool load(istream& is);
 
  private:
   string unknown_tag;

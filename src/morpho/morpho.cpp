@@ -7,60 +7,61 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <fstream>
+
 #include "czech_morpho.h"
 #include "english_morpho.h"
 #include "external_morpho.h"
 #include "generic_morpho.h"
 #include "morpho.h"
 #include "morpho_ids.h"
-#include "utils/file_ptr.h"
 #include "utils/new_unique_ptr.h"
 
 namespace ufal {
 namespace morphodita {
 
-morpho* morpho::load(FILE* f) {
-  switch (morpho_ids::morpho_id(fgetc(f))) {
+morpho* morpho::load(istream& is) {
+  switch (morpho_ids::morpho_id(is.get())) {
     case morpho_ids::CZECH:
       {
         auto res = new_unique_ptr<czech_morpho>(czech_morpho::morpho_language::CZECH, 1);
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case morpho_ids::ENGLISH_V1:
       {
         auto res = new_unique_ptr<english_morpho>(1);
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case morpho_ids::ENGLISH_V2:
       {
         auto res = new_unique_ptr<english_morpho>(2);
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case morpho_ids::ENGLISH_V3:
       {
         auto res = new_unique_ptr<english_morpho>(3);
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case morpho_ids::EXTERNAL:
       {
         auto res = new_unique_ptr<external_morpho>();
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case morpho_ids::GENERIC:
       {
         auto res = new_unique_ptr<generic_morpho>();
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
     case morpho_ids::SLOVAK_PDT:
       {
         auto res = new_unique_ptr<czech_morpho>(czech_morpho::morpho_language::SLOVAK, 1);
-        if (res->load(f)) return res.release();
+        if (res->load(is)) return res.release();
         break;
       }
   }
@@ -69,7 +70,7 @@ morpho* morpho::load(FILE* f) {
 }
 
 morpho* morpho::load(const char* fname) {
-  file_ptr f = fopen(fname, "rb");
+  ifstream f(fname, ifstream::in | ifstream::binary);
   if (!f) return nullptr;
 
   return load(f);

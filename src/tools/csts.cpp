@@ -9,31 +9,20 @@
 
 #include "morpho/morpho.h"
 #include "utils/input.h"
+#include "utils/iostreams.h"
 #include "utils/parse_int.h"
 
 using namespace ufal::morphodita;
 
-const string& encode(string& str) {
-  if (str.find_first_of("&<>") != str.npos) {
-    string encoded;
-    encoded.reserve(str.size() + 3);
-    for (auto&& chr : str)
-      if (chr == '&') encoded += "&amp;";
-      else if (chr == '<') encoded += "&lt;";
-      else if (chr == '>') encoded += "&gt;";
-      else encoded += chr;
-    str.swap(encoded);
-  }
-  return str;
-}
-
 int main(int argc, char* argv[]) {
-  if (argc <= 2) runtime_errorf("Usage: %s dict_file use_guesser", argv[0]);
+  iostreams_init();
 
-  eprintf("Loading dictionary: ");
+  if (argc <= 2) runtime_failure("Usage: " << argv[0] << " dict_file use_guesser");
+
+  cerr << "Loading dictionary: ";
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));
-  if (!dictionary) runtime_errorf("Cannot load dictionary from file '%s'!", argv[1]);
-  eprintf("done\n");
+  if (!dictionary) runtime_failure("Cannot load dictionary from file '" << argv[1] << "'!");
+  cerr << "done" << endl;
   bool use_guesser = parse_int(argv[2], "use_guesser");
 
   bool in_sentence = false;
@@ -41,25 +30,25 @@ int main(int argc, char* argv[]) {
 
   string line;
   vector<string> tokens;
-  while (getline(stdin, line)) {
+  while (getline(cin, line)) {
     if (line.empty()) {
-      if (in_sentence) printf("</s>\n");
+      if (in_sentence) cout << "</s>" << endl;
       in_sentence = false;
     } else {
-      if (!in_sentence) printf("<s>\n");
+      if (!in_sentence) cout << "<s>\n";
       in_sentence = true;
 
       split(line, '\t', tokens);
-      if (tokens.size() != 3) runtime_errorf("Input line '%s' does not contain 3 columns!", line.c_str());
+      if (tokens.size() != 3) runtime_failure("Input line '" << line << "' does not contain 3 columns!");
       dictionary->analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, tags);
 
-      printf("<f>%s<l>%s<t>%s", encode(tokens[0]).c_str(), encode(tokens[1]).c_str(), encode(tokens[2]).c_str());
+      cout << "<f>" << xml_encoded(tokens[0]) << "<l>" << xml_encoded(tokens[1]) << "<t>" << xml_encoded(tokens[2]);
       for (auto&& tag : tags)
-        printf("<MMl>%s<MMt>%s", encode(tag.lemma).c_str(), encode(tag.tag).c_str());
-      printf("\n");
+        cout << "<MMl>" << xml_encoded(tag.lemma) << "<MMt>" << xml_encoded(tag.tag);
+      cout << '\n';
     }
   }
-  if (in_sentence) printf("</s>\n");
+  if (in_sentence) cout << "</s>" << endl;
 
   return 0;
 }

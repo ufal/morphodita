@@ -7,29 +7,32 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <fstream>
+
 #include "tagger/czech_elementary_features.h"
 #include "tagger/feature_sequences.h"
 #include "tagger/generic_elementary_features.h"
 #include "tagger/perceptron_tagger_trainer.h"
 #include "tagger/tagger_ids.h"
 #include "tagger/tagger_trainer.h"
-#include "utils/file_ptr.h"
+#include "utils/iostreams.h"
 #include "utils/parse_int.h"
 #include "utils/parse_options.h"
-#include "utils/set_binary_stdout.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
+  iostreams_init();
+
   show_version_if_requested(argc, argv);
 
-  if (argc < 2) runtime_errorf("Usage: %s tagger_identifier [options]", argv[0]);
+  if (argc < 2) runtime_failure("Usage: " << argv[0] << " tagger_identifier [options]");
 
   tagger_id id;
-  if (!tagger_ids::parse(argv[1], id)) runtime_errorf("Cannot parse tagger_identifier '%s'!\n", argv[1]);
+  if (!tagger_ids::parse(argv[1], id)) runtime_failure("Cannot parse tagger_identifier '" << argv[1] << "'!\n");
 
-  // Switch stdout to binary mode. Needed on Windows only.
-  set_binary_stdout();
+  // Switch stdout to binary mode.
+  iostreams_init_binary_output();
 
   switch (id) {
     case tagger_ids::CZECH2:
@@ -38,7 +41,7 @@ int main(int argc, char* argv[]) {
     case tagger_ids::GENERIC3:
     case tagger_ids::GENERIC4:
       {
-        if (argc < 7) runtime_errorf("Usage: %s %s dict use_guesser features iterations prune_features [heldout_data [early_stopping]]", argv[0], argv[1]);
+        if (argc < 7) runtime_failure("Usage: " << argv[0] << ' ' << argv[1] << " dict use_guesser features iterations prune_features [heldout_data [early_stopping]]");
         const char* dict_file = argv[2];
         bool use_guesser = parse_int(argv[3], "use_guesser");
         const char* features_file = argv[4];
@@ -48,43 +51,43 @@ int main(int argc, char* argv[]) {
         bool early_stopping = argc >= 9 ? parse_int(argv[8], "early_stopping") : false;
 
         // Open needed files
-        file_ptr dict = fopen(dict_file, "rb");
-        if (!dict) runtime_errorf("Cannot open dictionary file '%s'!", dict_file);
+        ifstream dict(dict_file, ifstream::in | ifstream::binary);
+        if (!dict) runtime_failure("Cannot open dictionary file '" << dict_file << "'!");
 
-        file_ptr feature_templates = fopen(features_file, "r");
-        if (!feature_templates) runtime_errorf("Cannot open feature template file '%s'!", features_file);
+        ifstream feature_templates(features_file);
+        if (!feature_templates) runtime_failure("Cannot open feature template file '" << features_file << "'!");
 
-        file_ptr heldout;
+        ifstream heldout;
         if (heldout_file) {
-          heldout = fopen(heldout_file, "r");
-          if (!heldout) runtime_errorf("Cannot open heldout file '%s'!", heldout_file);
+          heldout.open(heldout_file);
+          if (!heldout) runtime_failure("Cannot open heldout file '" << heldout_file << "'!");
         }
 
         // Encode the tagger_id and the tagger itself
-        fputc(id, stdout);
+        cout.put(id);
         switch (id) {
           case tagger_ids::CZECH2:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::CZECH3:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::GENERIC2:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::GENERIC3:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::GENERIC4:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 4>>::train(iterations, dict, use_guesser, feature_templates, prune_features, stdin, heldout, early_stopping, stdout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 4>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
         }
-        eprintf("Tagger saved.\n");
+        cerr << "Tagger saved." << endl;
 
         break;
       }
     default:
-      runtime_errorf("Unimplemented tagger_identifier '%s'!\n", argv[1]);
+      runtime_failure("Unimplemented tagger_identifier '" << argv[1] << "'!\n");
   }
 
   return 0;

@@ -29,7 +29,7 @@ class perceptron_tagger_trainer {
  public:
   typedef typename tagger_trainer<perceptron_tagger_trainer<FeatureSequences, order>>::sentence sentence;
 
-  static void train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FILE* in_feature_templates, FILE* out_tagger);
+  static void train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, istream& in_feature_templates, ostream& out_tagger);
 
  private:
   static void train_viterbi(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FeatureSequences& features);
@@ -38,20 +38,20 @@ class perceptron_tagger_trainer {
 
 // Definitions
 template <class FeatureSequences, int order>
-void perceptron_tagger_trainer<FeatureSequences, order>::train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FILE *in_feature_templates, FILE *out_tagger) {
+void perceptron_tagger_trainer<FeatureSequences, order>::train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, istream& in_feature_templates, ostream& out_tagger) {
   FeatureSequences features;
 
-  eprintf("Parsing feature templates...\n");
+  cerr << "Parsing feature templates..." << endl;
   features.parse(order, in_feature_templates);
 
-  eprintf("Training tagger...\n");
+  cerr << "Training tagger..." << endl;
   train_viterbi(iterations, train, heldout, early_stopping, prune_features, features);
 
-  eprintf("Encoding tagger...\n");
+  cerr << "Encoding tagger..." << endl;
   typedef feature_sequences_optimizer<FeatureSequences> optimizer;
   typename optimizer::optimized_feature_sequences optimized_features;
   optimizer::optimize(features, optimized_features);
-  if (!optimized_features.save(out_tagger)) runtime_errorf("Cannot save feature sequences!");
+  if (!optimized_features.save(out_tagger)) runtime_failure("Cannot save feature sequences!");
 }
 
 template <class FeatureSequences, int order>
@@ -88,7 +88,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
   for (int i = 0; i < iterations; i++) {
     // Train
     int train_correct = 0, train_total = 0;
-    eprintf("Iteration %d: ", i + 1);
+    cerr << "Iteration " << i + 1;
 
     vector<int> tags;
     for (unsigned s = 0; s < train.size(); s++) {
@@ -148,7 +148,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
         element.second.gamma += element.second.alpha * (train.size() - element.second.last_gamma_update);
         element.second.last_gamma_update = 0;
       }
-    eprintf("done, accuracy %.2f%%", train_correct * 100 / double(train_total));
+    cerr << "done, accuracy " << fixed << setprecision(2) << train_correct * 100 / double(train_total) << '%';
 
     // If we have any heldout data, compute accuracy and if requested store best tagger configuration
     if (!heldout.empty()) {
@@ -179,13 +179,16 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
         best_features = features;
       }
 
-      eprintf(", heldout accuracy %.2f%%t/%.2f%%l/%.2f%%b", 100 * heldout_correct[TAGS] / double(heldout_total), 100 * heldout_correct[LEMMAS] / double(heldout_total), 100 * heldout_correct[BOTH] / double(heldout_total));
+      cerr << ", heldout accuracy " << fixed << setprecision(2)
+          << 100 * heldout_correct[TAGS] / double(heldout_total) << "%t/"
+          << 100 * heldout_correct[LEMMAS] / double(heldout_total) << "%l/"
+          << 100 * heldout_correct[BOTH] / double(heldout_total) << "%b";
     }
-    eprintf("\n");
+    cerr << endl;
   }
 
   if (early_stopping && best_iteration >= 0) {
-    eprintf("Chosen tagger model from iteration %d\n", best_iteration + 1);
+    cerr << "Chosen tagger model from iteration " << best_iteration + 1 << endl;
     features = best_features;
   }
 }
