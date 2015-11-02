@@ -17,7 +17,6 @@
 #include "common.h"
 #include "raw_morpho_dictionary_reader.h"
 #include "utils/binary_encoder.h"
-#include "utils/input.h"
 #include "utils/new_unique_ptr.h"
 #include "utils/parse_int.h"
 #include "utils/persistent_unordered_map_encoder.h"

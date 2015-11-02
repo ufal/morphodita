@@ -11,8 +11,8 @@
 #include <unordered_map>
 
 #include "morpho_prefix_guesser_encoder.h"
-#include "utils/input.h"
 #include "utils/persistent_unordered_map_encoder.h"
+#include "utils/split.h"
 
 namespace ufal {
 namespace morphodita {

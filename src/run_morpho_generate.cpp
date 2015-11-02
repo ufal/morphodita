@@ -10,7 +10,6 @@
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
-#include "utils/input.h"
 #include "utils/iostreams.h"
 #include "utils/parse_int.h"
 #include "utils/parse_options.h"

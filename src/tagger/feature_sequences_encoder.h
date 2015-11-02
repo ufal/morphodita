@@ -15,9 +15,9 @@
 #include "feature_sequences.h"
 #include "utils/binary_encoder.h"
 #include "utils/compressor.h"
-#include "utils/input.h"
 #include "utils/parse_int.h"
 #include "utils/persistent_unordered_map_encoder.h"
+#include "utils/split.h"
 
 namespace ufal {
 namespace morphodita {

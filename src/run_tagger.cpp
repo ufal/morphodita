@@ -12,7 +12,6 @@
 
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
-#include "utils/input.h"
 #include "utils/iostreams.h"
 #include "utils/parse_options.h"
 #include "utils/process_args.h"

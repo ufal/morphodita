@@ -8,8 +8,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include "morpho/morpho.h"
-#include "utils/input.h"
 #include "utils/iostreams.h"
+#include "utils/split.h"
 
 using namespace ufal::morphodita;
 

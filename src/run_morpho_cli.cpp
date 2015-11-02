@@ -9,9 +9,9 @@
 
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
-#include "utils/input.h"
 #include "utils/iostreams.h"
 #include "utils/parse_options.h"
+#include "utils/split.h"
 
 using namespace ufal::morphodita;
 

@@ -8,7 +8,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include "raw_morpho_dictionary_reader.h"
-#include "utils/input.h"
+#include "utils/split.h"
 
 namespace ufal {
 namespace morphodita {

@@ -10,9 +10,9 @@
 #include <ctime>
 
 #include "morpho/morpho.h"
-#include "utils/input.h"
 #include "utils/iostreams.h"
 #include "utils/parse_int.h"
+#include "utils/split.h"
 
 using namespace ufal::morphodita;
 

@@ -11,8 +11,8 @@
 #include <unordered_map>
 
 #include "morpho/morpho.h"
-#include "utils/input.h"
 #include "utils/iostreams.h"
+#include "utils/split.h"
 
 using namespace ufal::morphodita;
 
