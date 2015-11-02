@@ -88,6 +88,8 @@ czech_tokenizer::czech_tokenizer(tokenizer_language language, unsigned version) 
 }
 
 bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
+  using namespace unilib;
+
   int cs, act;
   const char* ts, *te;
   const char* text_start = text;

@@ -70,6 +70,8 @@ bool english_tokenizer::split_token(vector<string_piece>& tokens) {
 
 %% machine english_tokenizer; write data noerror nofinal;
 bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
+  using namespace unilib;
+
   int cs, act;
   const char* ts, *te;
   const char* text_start = text;

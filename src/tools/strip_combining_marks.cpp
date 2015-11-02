@@ -15,6 +15,7 @@
 #include "utils/split.h"
 
 using namespace ufal::morphodita;
+using namespace ufal::morphodita::unilib;
 
 int main(int argc, char* argv[]) {
   iostreams_init();

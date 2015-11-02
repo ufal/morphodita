@@ -16,6 +16,8 @@
 namespace ufal {
 namespace morphodita {
 
+using namespace unilib;
+
 hyphenated_sequences_map::hyphenated_sequences_map(std::initializer_list<string> sequences) {
   string buffer;
 

@@ -22,6 +22,8 @@ namespace morphodita {
 }%%
 
 bool generic_tokenizer::next_sentence(vector<string_piece>& forms) {
+  using namespace unilib;
+
   int cs, act;
   const char* ts, *te;
   const char* text_start = text;

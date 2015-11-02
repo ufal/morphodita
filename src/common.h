@@ -36,8 +36,5 @@ namespace morphodita {
 
 using namespace std;
 
-namespace unilib {}
-using namespace unilib;
-
 } // namespace morphodita
 } // namespace ufal

@@ -170,6 +170,8 @@ static bool punctuation_exceptions[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,1/*§*/};
 
 void czech_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const {
+  using namespace unilib;
+
   // Analyzer for numbers and punctuation.
   // Number is anything matching [+-]? is_Pn* ([.,] is_Pn*)? ([Ee] [+-]? is_Pn+)? for at least one is_Pn* nonempty.
   // Punctuation is any form beginning with either unicode punctuation or punctuation_exceptions character.

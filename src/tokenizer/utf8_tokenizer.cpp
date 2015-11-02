@@ -14,6 +14,8 @@
 namespace ufal {
 namespace morphodita {
 
+using namespace unilib;
+
 void utf8_tokenizer::set_text(string_piece text, bool make_copy /*= false*/) {
   if (make_copy && text.str) {
     text_copy.assign(text.str, text.len);

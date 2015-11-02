@@ -95,6 +95,8 @@ tokenizer* english_morpho::new_tokenizer() const {
 }
 
 void english_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const {
+  using namespace unilib;
+
   // Analyzer for numbers and punctuation.
   if (!form.len) return;
 

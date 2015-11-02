@@ -18,6 +18,8 @@ namespace ufal {
 namespace morphodita {
 
 inline void generate_casing_variants(string_piece form, string& form_uclc, string& form_lc) {
+  using namespace unilib;
+
   // Detect uppercase+titlecase characters.
   bool first_Lut = false; // first character is uppercase or titlecase
   bool rest_has_Lut = false; // any character but first is uppercase or titlecase

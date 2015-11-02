@@ -90,6 +90,8 @@ vector<elementary_feature_description> generic_elementary_features<Map>::descrip
 
 template <class Map>
 void generic_elementary_features<Map>::compute_features(const vector<form_with_tags>& forms, int forms_size, vector<per_form_features>& per_form, vector<vector<per_tag_features>>& per_tag) const {
+  using namespace unilib;
+
   // We process the sentence in reverse order, so that we can compute FollowingVerbTag and FollowingVerbLemma directly.
   elementary_feature_value following_verb_tag = elementary_feature_empty, following_verb_lemma = elementary_feature_empty;
   for (int i = forms_size - 1; i >= 0; i--) {
