@@ -65,6 +65,7 @@ class version {
   unsigned major;
   unsigned minor;
   unsigned patch;
+  std::string prerelease;
 
   // Returns current MorphoDiTa version.
   static version current();

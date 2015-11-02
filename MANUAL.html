@@ -290,7 +290,7 @@ around 10-200K words per second. MorphoDiTa is a free software under
 are free for non-commercial use and distributed under
 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA</a> license, although for some
 models the original data used to create the model may impose additional
-licensing conditions.
+licensing conditions. MorphoDiTa is versioned using <a href="http://semver.org/">Semantic Versioning</a>.
 </p>
 <p>
 Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
@@ -2133,13 +2133,14 @@ file paths, whose encoding is system dependent).
 <h2>7.1. MorphoDiTa Versioning</h2>
 
 <p>
-MorphoDiTa version consists of three numbers <i>major.minor.patch</i> with the
-following semantics:
+MorphoDiTa is versioned using <a href="http://semver.org/">Semantic Versioning</a>.
+Therefore, a version consists of three numbers <i>major.minor.patch</i>, optionally
+followed by a hyphen and pre-release version info, with the following semantics:
 </p>
 
 <ul>
-<li>Even <i>patch</i> versions denote stable releases, odd <i>patch</i> versions denote
-  development releases.
+<li>Stable versions have no pre-release version info, development have non-empty
+  pre-release version info.
 </li>
 <li>Two versions with the same <i>major.minor</i> have the same API with the same
   behaviour, apart from bugs. Therefore, if only <i>patch</i> is increased, the
@@ -2157,9 +2158,9 @@ following semantics:
 
 <p>
 Models created by MorphoDiTa have the same behaviour in all MorphoDiTa
-versions, apart from obvious bugfixes. On the other hand, models created from
-the same data by different <i>major.minor</i> MorphoDiTa versions may have
-different behaviour.
+versions with same <i>major</i>, apart from obvious bugfixes. On the other hand,
+models created from the same data by different <i>major.minor</i> MorphoDiTa
+versions may have different behaviour.
 </p>
 
 <a id="lemma_structure" name="lemma_structure"></a>
@@ -2280,6 +2281,7 @@ class version {
   unsigned major;
   unsigned minor;
   unsigned patch;
+  std::string prerelease;
 
   static <A HREF="#version">version</A> <A HREF="#version_current">current</A>();
 };

@@ -19,9 +19,13 @@ class version {
   unsigned major;
   unsigned minor;
   unsigned patch;
+  string prerelease;
 
   // Returns current MorphoDiTa version.
   static version current();
+
+  // Returns multi-line formated version and copyright string.
+  static string version_and_copyright(const string& other_libraries = string());
 };
 
 } // namespace morphodita

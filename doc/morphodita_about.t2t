@@ -13,7 +13,7 @@ around 10-200K words per second. MorphoDiTa is a free software under
 are free for non-commercial use and distributed under
 [CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/3.0/] license, although for some
 models the original data used to create the model may impose additional
-licensing conditions.
+licensing conditions. MorphoDiTa is versioned using [Semantic Versioning http://semver.org/].
 
 Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
 Mathematics and Physics, Charles University in Prague, Czech Republic.

@@ -14,7 +14,8 @@ Public License 2.0 (http://www.mozilla.org/MPL/2.0/) and the linguistic models
 are free for non-commercial use and distributed under CC BY-NC-SA
 (http://creativecommons.org/licenses/by-nc-sa/3.0/) license, although for some
 models the original data used to create the model may impose additional
-licensing conditions.
+licensing conditions. MorphoDiTa is versioned using Semantic Versioning
+(http://semver.org/).
 
 Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of
 Mathematics and Physics, Charles University in Prague, Czech Republic.
@@ -1507,11 +1508,12 @@ file paths, whose encoding is system dependent).
 MorphoDiTa Versioning
 ---------------------
 
-MorphoDiTa version consists of three numbers major.minor.patch with the
-following semantics:
+MorphoDiTa is versioned using Semantic Versioning (http://semver.org/).
+Therefore, a version consists of three numbers major.minor.patch, optionally
+followed by a hyphen and pre-release version info, with the following semantics:
 
-- Even patch versions denote stable releases, odd patch versions denote
-  development releases.
+- Stable versions have no pre-release version info, development have non-empty
+  pre-release version info.
 - Two versions with the same major.minor have the same API with the same
   behaviour, apart from bugs. Therefore, if only patch is increased, the new
   version is only a bug-fix release.
@@ -1522,9 +1524,10 @@ following semantics:
   same major.
 - If two versions differ in major, their API may differ in any way.
 
-Models created by MorphoDiTa have the same behaviour in all MorphoDiTa versions,
-apart from obvious bugfixes. On the other hand, models created from the same
-data by different major.minor MorphoDiTa versions may have different behaviour.
+Models created by MorphoDiTa have the same behaviour in all MorphoDiTa versions
+with same major, apart from obvious bugfixes. On the other hand, models created
+from the same data by different major.minor MorphoDiTa versions may have
+different behaviour.
 
 
 Lemma Structure
@@ -1617,6 +1620,7 @@ Class version
     unsigned major;
     unsigned minor;
     unsigned patch;
+    std::string prerelease;
 
     static version current();
   };
