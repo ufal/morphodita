@@ -11,7 +11,7 @@ include ../../src/Makefile.builtem
 include ../../src/Makefile.lib
 
 SWIG_FLAGS+=-O -c++ -outcurrentdir
-BINDING_C_FLAGS+=$(call include_dir,../../src/include)
+BINDING_C_FLAGS+=$(call include_dir,../../src_lib_only)
 BINDING_MORPHODITA_O=$(addprefix ../../src/,$(call dynobj,$(MORPHODITA_O)))
 ifneq ($(filter win-%,$(PLATFORM)),)
   BINDING_C_FLAGS+=-DMORPHODITA_STATIC
