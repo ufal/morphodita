@@ -20,6 +20,12 @@
 #include <string>
 #include <vector>
 
+// Define namespace ufal::morphodita.
+namespace ufal {
+namespace morphodita {
+
+using namespace std;
+
 // Assert that int is at least 4B
 static_assert(sizeof(int) >= sizeof(int32_t), "Int must be at least 4B wide!");
 
@@ -29,12 +35,6 @@ static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, "Only little endian sys
 #endif
 
 #define runtime_failure(message) exit((cerr << message << endl, 1))
-
-// Define namespace ufal::morphodita.
-namespace ufal {
-namespace morphodita {
-
-using namespace std;
 
 } // namespace morphodita
 } // namespace ufal
