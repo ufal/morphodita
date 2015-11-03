@@ -35,5 +35,3 @@ tokenizer* tokenizer::new_generic_tokenizer() {
 
 } // namespace morphodita
 } // namespace ufal
-
-

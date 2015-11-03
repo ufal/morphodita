@@ -152,5 +152,3 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
 
 } // namespace morphodita
 } // namespace ufal
-
-

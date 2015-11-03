@@ -4039,5 +4039,3 @@ _again:
 
 } // namespace morphodita
 } // namespace ufal
-
-

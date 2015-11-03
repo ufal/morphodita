@@ -30,4 +30,3 @@ class hyphenated_sequences_map {
 
 } // namespace morphodita
 } // namespace ufal
-

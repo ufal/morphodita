@@ -88,4 +88,3 @@ bool hyphenated_sequences_map::join(vector<string_piece>& forms, string& buffer)
 
 } // namespace morphodita
 } // namespace ufal
-
