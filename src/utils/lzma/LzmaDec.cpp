@@ -1,5 +1,5 @@
-/* LzmaDec.c -- LZMA Decoder
-2009-09-20 : Igor Pavlov : Public domain */
+// LzmaDec.c -- LZMA Decoder
+// 2009-09-20 : Igor Pavlov : Public domain
 
 #include <cstring>
 

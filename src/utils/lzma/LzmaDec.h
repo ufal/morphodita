@@ -1,5 +1,5 @@
-/* LzmaDec.h -- LZMA Decoder
-2009-02-07 : Igor Pavlov : Public domain */
+// LzmaDec.h -- LZMA Decoder
+// 2009-02-07 : Igor Pavlov : Public domain
 
 #pragma once
 

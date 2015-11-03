@@ -1,5 +1,5 @@
-/*  LzmaEnc.h -- LZMA Encoder
-2009-02-07 : Igor Pavlov : Public domain */
+// LzmaEnc.h -- LZMA Encoder
+// 2009-02-07 : Igor Pavlov : Public domain
 
 #pragma once
 

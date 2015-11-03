@@ -1,5 +1,5 @@
-/* LzFind.h -- Match finder for LZ algorithms
-2009-04-22 : Igor Pavlov : Public domain */
+// LzFind.h -- Match finder for LZ algorithms
+// 2009-04-22 : Igor Pavlov : Public domain
 
 #pragma once
 

@@ -1,5 +1,5 @@
-/* LzHash.h -- HASH functions for LZ algorithms
-2009-02-07 : Igor Pavlov : Public domain */
+// LzHash.h -- HASH functions for LZ algorithms
+// 2009-02-07 : Igor Pavlov : Public domain
 
 #pragma once
 
