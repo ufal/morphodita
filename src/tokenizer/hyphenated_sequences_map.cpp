@@ -16,9 +16,9 @@
 namespace ufal {
 namespace morphodita {
 
-using namespace unilib;
-
 hyphenated_sequences_map::hyphenated_sequences_map(std::initializer_list<string> sequences) {
+  using namespace unilib;
+
   string buffer;
 
   max_hyphens = 0;
@@ -41,6 +41,8 @@ hyphenated_sequences_map::hyphenated_sequences_map(std::initializer_list<string>
 }
 
 bool hyphenated_sequences_map::join(vector<string_piece>& forms, string& buffer) const {
+  using namespace unilib;
+
   unsigned matched_hyphens = 0;
   for (unsigned hyphens = 1; hyphens <= max_hyphens; hyphens++) {
     // Are the forms sequence of 'hyphens' hyphenated words?

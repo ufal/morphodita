@@ -14,8 +14,6 @@
 namespace ufal {
 namespace morphodita {
 
-using namespace unilib;
-
 void utf8_tokenizer::set_text(string_piece text, bool make_copy /*= false*/) {
   if (make_copy && text.str) {
     text_copy.assign(text.str, text.len);
@@ -54,6 +52,8 @@ bool utf8_tokenizer::next_sentence(vector<string_piece>* forms, vector<token_ran
 }
 
 bool utf8_tokenizer::emergency_sentence_split(const vector<string_piece>& forms) {
+  using namespace unilib;
+
   // Implement emergency splitting for large sentences
   return forms.size() >= 500 ||
          (forms.size() >= 450 && unicode::category(utf8::first(forms.back().str)) & unicode::P) ||
@@ -61,6 +61,8 @@ bool utf8_tokenizer::emergency_sentence_split(const vector<string_piece>& forms)
 }
 
 bool utf8_tokenizer::is_eos_exception(const vector<string_piece>& forms, const unordered_set<string>* eos_word_exceptions, string& buffer) {
+  using namespace unilib;
+
   bool eos_word_exception = false;
 
   if (!forms.empty()) {
