@@ -13,6 +13,7 @@
 #include "utils/iostreams.h"
 #include "utils/parse_options.h"
 #include "utils/split.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 
@@ -25,9 +26,16 @@ struct word {
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  show_version_if_requested(argc, argv);
-
-  if (argc <= 1) runtime_failure("Usage: " << argv[0] << " tagger_file");
+  options_map options;
+  if (!parse_options({{"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help") ||
+      (argc < 2 && !options.count("version")))
+    runtime_failure("Usage: " << argv[0] << " tagger_file\n"
+                    "Options: --version\n"
+                    "         --help");
+  if (options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
 
   cerr << "Loading tagger: ";
   unique_ptr<tagger> tagger(tagger::load(argv[1]));

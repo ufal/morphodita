@@ -56,21 +56,5 @@ bool parse_options(const unordered_map<string, option_values>& allowed, int& arg
   return true;
 }
 
-void show_version_if_requested(int argc, char* argv[]) {
-  for (int argi = 1; argi < argc; argi++)
-    if (argv[argi][0] == '-') {
-      if (strcmp(argv[argi], "--") == 0) break;
-      if (strcmp(argv[argi] + 1 + (argv[argi][1] == '-'), "version") == 0) {
-        version version = version::current();
-
-        cerr << "MorphoDiTa version " << version.major << '.' << version.minor << '.' << version.patch << "\n"
-                "Copyright 2014 by Institute of Formal and Applied Linguistics, Faculty of\n"
-                "Mathematics and Physics, Charles University in Prague, Czech Republic." << endl;
-
-        exit(0);
-      }
-    }
-}
-
 } // namespace morphodita
 } // namespace ufal

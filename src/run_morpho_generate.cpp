@@ -14,6 +14,7 @@
 #include "utils/parse_int.h"
 #include "utils/parse_options.h"
 #include "utils/process_args.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 
@@ -22,15 +23,20 @@ static void generate_vertical(istream& is, ostream& os, const morpho& dictionary
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  show_version_if_requested(argc, argv);
-
   options_map options;
   if (!parse_options({{"convert_tagset",option_values::any},
-                      {"from_tagger",option_values::none}}, argc, argv, options) ||
-      argc < 3)
+                      {"from_tagger",option_values::none},
+                      {"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help") ||
+      (argc < 3 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] dict_file use_guesser [file[:output_file]]...\n"
                     "Options: --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
-                    "         --from_tagger");
+                    "         --from_tagger\n"
+                    "         --version\n"
+                    "         --help");
+  if (options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
 
   unique_ptr<morpho> morpho;
   unique_ptr<tagger> tagger;

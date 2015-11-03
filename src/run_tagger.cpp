@@ -15,6 +15,7 @@
 #include "utils/iostreams.h"
 #include "utils/parse_options.h"
 #include "utils/process_args.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 
@@ -24,17 +25,22 @@ static void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& t
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  show_version_if_requested(argc, argv);
-
   options_map options;
   if (!parse_options({{"input",option_values{"untokenized", "vertical"}},
                       {"convert_tagset",option_values::any},
-                      {"output",option_values{"vertical","xml"}}}, argc, argv, options) ||
-      argc < 2)
+                      {"output",option_values{"vertical","xml"}},
+                      {"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help") ||
+      (argc < 2 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] tagger_file [file[:output_file]]...\n"
                     "Options: --input=untokenized|vertical\n"
                     "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
-                    "         --output=vertical|xml");
+                    "         --output=vertical|xml\n"
+                    "         --version\n"
+                    "         --help");
+  if (options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
 
   cerr << "Loading tagger: ";
   unique_ptr<tagger> tagger(tagger::load(argv[1]));

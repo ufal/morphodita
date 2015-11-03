@@ -40,8 +40,5 @@ struct option_values {
 // contains just an empty string, any value is allowed.
 bool parse_options(const unordered_map<string, option_values>& allowed, int& argc, char**& argv, options_map& options);
 
-// If requested, show current MorphoDiTa version.
-void show_version_if_requested(int argc, char* argv[]);
-
 } // namespace morphodita
 } // namespace ufal

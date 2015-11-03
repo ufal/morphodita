@@ -12,19 +12,25 @@
 #include "utils/iostreams.h"
 #include "utils/parse_options.h"
 #include "utils/split.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  show_version_if_requested(argc, argv);
-
   options_map options;
-  if (!parse_options({{"from_tagger",option_values::none}}, argc, argv, options) ||
-      argc < 2)
+  if (!parse_options({{"from_tagger",option_values::none},
+                      {"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help") ||
+      (argc < 2 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] dict_file\n"
-                    "Options: --from_tagger");
+                    "Options: --from_tagger\n"
+                    "         --version\n"
+                    "         --help");
+  if (options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
 
   unique_ptr<morpho> morpho;
   unique_ptr<tagger> tagger;

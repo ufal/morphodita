@@ -18,18 +18,26 @@
 #include "utils/iostreams.h"
 #include "utils/parse_int.h"
 #include "utils/parse_options.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  show_version_if_requested(argc, argv);
-
-  if (argc <= 1) runtime_failure("Usage: " << argv[0] << " morpho_identifier [options]\n");
+  options_map options;
+  if (!parse_options({{"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help") ||
+      (argc < 2 && !options.count("version")))
+    runtime_failure("Usage: " << argv[0] << " [options] morpho_identifier [morpho_identifier_specific_options]\n"
+                    "Options: --version\n"
+                    "         --help");
+  if (options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
 
   morpho_id id;
-  if (!morpho_ids::parse(argv[1], id)) runtime_failure("Cannot parse morpho_identifier '" << argv[1] << "'!\n");
+  if (!morpho_ids::parse(argv[1], id)) runtime_failure("Cannot parse morpho_identifier '" << argv[1] << "'!");
 
   // Switch stdout to binary mode.
   iostreams_init_binary_output();
@@ -37,7 +45,7 @@ int main(int argc, char* argv[]) {
   switch (id) {
     case morpho_ids::CZECH:
       {
-        if (argc < 3) runtime_failure("Usage: " << argv[0] << " czech max_suffix_len [prefix_guesser [statistical_guesser [tag_length]]]\n");
+        if (argc < 3) runtime_failure("Usage: " << argv[0] << " czech max_suffix_len [prefix_guesser [statistical_guesser [tag_length]]]");
         int max_suffix_len = parse_int(argv[2], "max_suffix_len");
 
         ifstream prefix_guesser;
@@ -59,7 +67,7 @@ int main(int argc, char* argv[]) {
       }
     case morpho_ids::ENGLISH:
       {
-        if (argc < 4) runtime_failure("Usage: " << argv[0] << " english max_suffix_len english_guesser_file [english_negation_prefixes]\n");
+        if (argc < 4) runtime_failure("Usage: " << argv[0] << " english max_suffix_len english_guesser_file [english_negation_prefixes]");
         int max_suffix_len = parse_int(argv[2], "max_suffix_len");
 
         ifstream guesser(argv[3]);
@@ -77,7 +85,7 @@ int main(int argc, char* argv[]) {
       }
     case morpho_ids::EXTERNAL:
       {
-        if (argc < 3) runtime_failure("Usage: " << argv[0] << " external unknown_tag\n");
+        if (argc < 3) runtime_failure("Usage: " << argv[0] << " external unknown_tag");
         string unknown_tag = argv[2];
 
         cout.put(id);
@@ -86,7 +94,7 @@ int main(int argc, char* argv[]) {
       }
     case morpho_ids::GENERIC:
       {
-        if (argc < 7) runtime_failure("Usage: " << argv[0] << " generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag [statistical_guesser]\n");
+        if (argc < 7) runtime_failure("Usage: " << argv[0] << " generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag [statistical_guesser]");
         int max_suffix_len = parse_int(argv[2], "max_suffix_len");
         generic_morpho_encoder::tags tags;
         tags.unknown_tag = argv[3];
@@ -105,7 +113,7 @@ int main(int argc, char* argv[]) {
       }
     case morpho_ids::SLOVAK_PDT:
       {
-        if (argc < 2) runtime_failure("Usage: " << argv[0] << " slovak_pdt max_suffix_len [statistical_guesser [tag_length]]\n");
+        if (argc < 2) runtime_failure("Usage: " << argv[0] << " slovak_pdt max_suffix_len [statistical_guesser [tag_length]]");
         int max_suffix_len = parse_int(argv[2], "max_suffix_len");
 
         ifstream prefix_guesser;
@@ -122,7 +130,7 @@ int main(int argc, char* argv[]) {
         break;
       }
     default:
-      runtime_failure("Unimplemented morpho_identifier '" << argv[1] << "'!\n");
+      runtime_failure("Unimplemented morpho_identifier '" << argv[1] << "'!");
   }
 
   return 0;

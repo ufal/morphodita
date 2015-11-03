@@ -12,14 +12,25 @@
 #include "morpho/morpho.h"
 #include "utils/iostreams.h"
 #include "utils/parse_int.h"
+#include "utils/parse_options.h"
 #include "utils/split.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  if (argc <= 2) runtime_failure("Usage: " << argv[0] << " dict_file forms_to_analyze <raw_dict_file");
+  options_map options;
+  if (!parse_options({{"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help") ||
+      (argc <= 2 && !options.count("version")))
+    runtime_failure("Usage: " << argv[0] << " [options] dict_file forms_to_analyze <raw_dict_file\n"
+                    "Options: --version\n"
+                    "         --help");
+  if (options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
 
   cerr << "Loading dictionary: ";
   unique_ptr<morpho> dictionary(morpho::load(argv[1]));

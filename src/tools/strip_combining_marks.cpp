@@ -13,6 +13,7 @@
 #include "utils/parse_int.h"
 #include "utils/parse_options.h"
 #include "utils/split.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 using namespace ufal::morphodita::unilib;
@@ -20,7 +21,15 @@ using namespace ufal::morphodita::unilib;
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  show_version_if_requested(argc, argv);
+  options_map options;
+  if (!parse_options({{"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help"))
+    runtime_failure("Usage: " << argv[0] << " [options] [column_index]\n"
+                    "Options: --version\n"
+                    "         --help");
+  if (options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
 
   bool only_one_column = argc > 1;
   int column = argc > 1 ? parse_int(argv[1], "column_index") : -1;

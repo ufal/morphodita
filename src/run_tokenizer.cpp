@@ -12,6 +12,7 @@
 #include "utils/iostreams.h"
 #include "utils/parse_options.h"
 #include "utils/process_args.h"
+#include "version/version.h"
 
 using namespace ufal::morphodita;
 
@@ -21,28 +22,29 @@ static void tokenize_xml(istream& is, ostream& os, tokenizer& tokenizer);
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  show_version_if_requested(argc, argv);
-
   options_map options;
-  bool show_usage = false;
-  show_usage = !parse_options({{"tokenizer", option_values{"czech", "english", "generic"}},
-                              {"morphology", option_values::any},
-                              {"tagger", option_values::any},
-                              {"output", option_values{"vertical","xml"}}}, argc, argv, options);
-  if (!show_usage && (options.count("tokenizer") + options.count("morphology") + options.count("tagger")) == 0) {
-    cerr << "Missing one of --tokenizer, --morphology and --tagger options!" << endl;
-    show_usage = true;
-  }
-  if (!show_usage && (options.count("tokenizer") + options.count("morphology") + options.count("tagger")) > 1) {
-    cerr << "Only one of --tokenizer, --morphology and --tagger options can be specifed!" << endl;
-    show_usage = true;
-  }
+  bool show_usage =
+      !parse_options({{"tokenizer", option_values{"czech", "english", "generic"}},
+                      {"morphology", option_values::any},
+                      {"tagger", option_values::any},
+                      {"output", option_values{"vertical","xml"}},
+                      {"version", option_values::none},
+                      {"help", option_values::none}}, argc, argv, options) ||
+      options.count("help");
+  if (!show_usage && options.count("version"))
+    return cout << version::version_and_copyright() << endl, 0;
+  if (!show_usage && options.count("tokenizer") + options.count("morphology") + options.count("tagger") == 0)
+    cerr << "Missing one of --tokenizer, --morphology and --tagger options!" << endl, show_usage = true;
+  if (!show_usage && options.count("tokenizer") + options.count("morphology") + options.count("tagger") > 1)
+    cerr << "Only one of --tokenizer, --morphology and --tagger options can be specifed!" << endl, show_usage = true;
   if (show_usage)
     runtime_failure("Usage: " << argv[0] << " [options] [file[:output_file]]...\n"
                     "Options: --tokenizer=czech|english|generic\n"
                     "         --morphology=morphology_model_file\n"
                     "         --tagger=tagger_model_file\n"
-                    "         --output=vertical|xml");
+                    "         --output=vertical|xml\n"
+                    "         --version\n"
+                    "         --help");
 
   unique_ptr<tokenizer> tokenizer;
   if (options.count("tokenizer") && options["tokenizer"] == "czech") tokenizer.reset(tokenizer::new_czech_tokenizer());
