@@ -42,15 +42,17 @@ void morpho_dictionary<LemmaAddinfo>::load(binary_decoder& data) {
     lemmas.resize(data.next_4B());
   for (int i = data.next_1B(); i > 0; i--)
     roots.resize(data.next_4B());
-  int max_word_len = max(lemmas.max_length(), roots.max_length());
 
   // Perform two pass over the lemmas and roots data, filling the hashes.
+
+  vector<char> lemma(max(lemmas.max_length(), roots.max_length()));
+  vector<char> root(max(lemmas.max_length(), roots.max_length()));
   unsigned data_position = data.tell();
   for (int pass = 1; pass <= 2; pass++) {
     if (pass > 1) data.seek(data_position);
 
-    char lemma[max_word_len]; int lemma_len = 0;
-    char root[max_word_len]; int root_len = 0;
+    int lemma_len = 0;
+    int root_len = 0;
 
     for (int i = data.next_4B(); i > 0; i--) {
       lemma_len -= data.next_1B();
@@ -64,9 +66,9 @@ void morpho_dictionary<LemmaAddinfo>::load(binary_decoder& data) {
       unsigned lemma_offset /* to keep compiler happy */ = 0;
 
       if (pass == 1) {
-        lemmas.add(lemma, lemma_len, 1 + lemma_info_len + 1 + lemma_roots * (sizeof(uint32_t) + sizeof(uint16_t)));
+        lemmas.add(lemma.data(), lemma_len, 1 + lemma_info_len + 1 + lemma_roots * (sizeof(uint32_t) + sizeof(uint16_t)));
       } else /*if (pass == 2)*/ {
-        lemma_data = lemmas.fill(lemma, lemma_len, 1 + lemma_info_len + 1 + lemma_roots * (sizeof(uint32_t) + sizeof(uint16_t)));
+        lemma_data = lemmas.fill(lemma.data(), lemma_len, 1 + lemma_info_len + 1 + lemma_roots * (sizeof(uint32_t) + sizeof(uint16_t)));
         lemma_offset = lemma_data - lemma_len - lemmas.data_start(lemma_len);
 
         *lemma_data++ = lemma_info_len;
@@ -74,7 +76,7 @@ void morpho_dictionary<LemmaAddinfo>::load(binary_decoder& data) {
         *lemma_data++ = lemma_roots;
       }
 
-      small_memcpy(root, lemma, lemma_len); root_len = lemma_len;
+      small_memcpy(root.data(), lemma.data(), lemma_len); root_len = lemma_len;
       for (unsigned i = 0; i < lemma_roots; i++) {
         enum { REMOVE_START = 1, REMOVE_END = 2, ADD_START = 4, ADD_END = 8 };
         int operations = data.next_1B();
@@ -90,9 +92,9 @@ void morpho_dictionary<LemmaAddinfo>::load(binary_decoder& data) {
         uint16_t clas = data.next_2B();
 
         if (pass == 1) { // for each root
-          roots.add(root, root_len, sizeof(uint16_t) + sizeof(uint32_t));
+          roots.add(root.data(), root_len, sizeof(uint16_t) + sizeof(uint32_t));
         } else /*if (pass == 2)*/ {
-          unsigned char* root_data = roots.fill(root, root_len, sizeof(uint16_t) + sizeof(uint32_t));
+          unsigned char* root_data = roots.fill(root.data(), root_len, sizeof(uint16_t) + sizeof(uint32_t));
           unsigned root_offset = root_data - root_len - roots.data_start(root_len);
 
           *(uint16_t*)(root_data) = clas; root_data += sizeof(uint16_t);
@@ -145,7 +147,9 @@ template <class LemmaAddinfo>
 void morpho_dictionary<LemmaAddinfo>::analyze(string_piece form, vector<tagged_lemma>& lemmas) const {
   int max_suffix_len = suffixes.max_length();
 
-  uint16_t* suff[max_suffix_len]; int suff_len = 0;
+  uint16_t* suff_stack[16]; vector<uint16_t*> suff_heap;
+  uint16_t** suff = max_suffix_len <= 16 ? suff_stack : (suff_heap.resize(max_suffix_len), suff_heap.data());
+  int suff_len = 0;
   for (int i = form.len; i >= 0 && suff_len < max_suffix_len; i--, suff_len++) {
     suff[suff_len] = (uint16_t*) suffixes.at(form.str + i, suff_len, [](pointer_decoder& data) {
       data.next<uint16_t>(2 * data.next_2B());
