@@ -124,7 +124,7 @@ itself.
 Requirements
 ------------
 
-- G++ 4.7 or newer, clang 3.2 or newer
+- G++ 4.7 or newer, clang 3.2 or newer, Visual C++ 2015 or newer
 - make
 - SWIG 2.0.5 or newer for language bindings other than C++
 
