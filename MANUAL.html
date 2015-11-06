@@ -123,11 +123,13 @@
       </li>
       </ul>
     </li>
-    <li><a href="#custom_models">5.6. Custom Morphological and Tagging Models</a>
+    <li><a href="#rest_server">5.6. Running REST Server</a>
+    </li>
+    <li><a href="#custom_models">5.7. Custom Morphological and Tagging Models</a>
       <ul>
-      <li><a href="#custom_morphological_models">5.6.1. Custom Morphological Models</a>
+      <li><a href="#custom_morphological_models">5.7.1. Custom Morphological Models</a>
       </li>
-      <li><a href="#custom_tagging_models">5.6.2. Custom Tagging Models</a>
+      <li><a href="#custom_tagging_models">5.7.2. Custom Tagging Models</a>
       </li>
       </ul>
     </li>
@@ -425,6 +427,8 @@ Make targets and options:
 </p>
 <ul style="margin-top:0">
 <li><code>exe</code>: compile the binaries (default)
+</li>
+<li><code>server</code>: compile the REST server
 </li>
 <li><code>tools</code>: compile various tools
 </li>
@@ -1416,15 +1420,39 @@ těší
 </li>
 </ul>
 
+<a id="rest_server" name="rest_server"></a>
+<h2>5.6. Running REST Server</h2>
+
+<p>
+MorphoDiTa also provides REST server binary <code>morphodita_server</code>.
+The binary uses <a href="http://github.com/ufal/microrestd">MicroRestD</a> as a REST
+server implementation and provides
+<a href="http://lindat.mff.cuni.cz/services/morphodita/api-reference.php">MorphoDiTa REST API</a>.
+</p>
+<p style="margin-bottom:0">
+The full command syntax of <code>morphodita_server</code> is
+</p>
+<pre style="margin-top:0">
+morphodita_server [options] port (model_name weblicht_id model_file acknowledgements)*
+Options: --daemon
+</pre>
+
+<p>
+The <code>morphodita_server</code> can run either in foreground or in background (when
+<code>--daemon</code> is used). The specified model files are loaded during start and
+kept in memory all the time. This behaviour might change in future to load the
+models on demand.
+</p>
+
 <a id="custom_models" name="custom_models"></a>
-<h2>5.6. Custom Morphological and Tagging Models</h2>
+<h2>5.7. Custom Morphological and Tagging Models</h2>
 
 <p>
 It is possible to create custom morphological and tagging models.
 </p>
 
 <a id="custom_morphological_models" name="custom_morphological_models"></a>
-<h3>5.6.1. Custom Morphological Models</h3>
+<h3>5.7.1. Custom Morphological Models</h3>
 
 <p>
 Custom morphological models can be created using <code>encode_dictionary</code> binary.
@@ -1496,7 +1524,7 @@ encode_dictionary generic 8 UNK NUM PUNC SYM &lt;input_data &gt;output_model
 </pre>
 
 <a id="using_external_morphology" name="using_external_morphology"></a>
-<h4>5.6.1.1. Using External Morphology</h4>
+<h4>5.7.1.1. Using External Morphology</h4>
 
 <p>
 Sometimes it is useful to train MorphoDiTa tagger using external morphological
@@ -1548,7 +1576,7 @@ go go VB go VBP goes VBZ going VBG went VBG
 </pre>
 
 <a id="custom_tagging_models" name="custom_tagging_models"></a>
-<h3>5.6.2. Custom Tagging Models</h3>
+<h3>5.7.2. Custom Tagging Models</h3>
 
 <p style="margin-bottom:0">
 Custom tagging models can be trained using <code>train_tagger</code> binary, which has
@@ -1619,7 +1647,7 @@ See next sections for examples of input data and feature files.
 </p>
 
 <a id="tagger_input_format" name="tagger_input_format"></a>
-<h4>5.6.2.1. Input Data Format</h4>
+<h4>5.7.2.1. Input Data Format</h4>
 
 <p>
 The input data (and the heldout data) represent a sequence of sentences.
@@ -1645,7 +1673,7 @@ těší	těšit_:T	VB-S---3P-AA---
 </pre>
 
 <a id="tagger_feature_file_format" name="tagger_feature_file_format"></a>
-<h4>5.6.2.2. Feature File Format</h4>
+<h4>5.7.2.2. Feature File Format</h4>
 
 <p style="margin-bottom:0">
 The features used in the tagger have major influence on tagging performance.
@@ -1852,7 +1880,7 @@ Tag 0,Dash 0
 </pre>
 
 <a id="tagger_accuracy" name="tagger_accuracy"></a>
-<h4>5.6.2.3. Measuring Tagger Accuracy</h4>
+<h4>5.7.2.3. Measuring Tagger Accuracy</h4>
 
 <p style="margin-bottom:0">
 Measuring custom tagger accuracy can be performed by running:

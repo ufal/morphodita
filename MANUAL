@@ -136,6 +136,7 @@ To compile MorphoDiTa, run make in the src directory.
 
 Make targets and options:
 - exe: compile the binaries (default)
+- server: compile the REST server
 - tools: compile various tools
 - lib: compile the shared (dynamically loaded) library
 - BITS=32 or BITS=64: compile for specified 32-bit or 64-bit architecture
@@ -937,6 +938,24 @@ output formats are:
   .
 
 
+
+
+Running REST Server
+-------------------
+
+MorphoDiTa also provides REST server binary morphodita_server. The binary uses
+MicroRestD (http://github.com/ufal/microrestd) as a REST server implementation
+and provides MorphoDiTa REST API
+(http://lindat.mff.cuni.cz/services/morphodita/api-reference.php).
+
+The full command syntax of morphodita_server is
+  morphodita_server [options] port (model_name weblicht_id model_file acknowledgements)*
+  Options: --daemon
+
+The morphodita_server can run either in foreground or in background (when
+--daemon is used). The specified model files are loaded during start and kept in
+memory all the time. This behaviour might change in future to load the models on
+demand.
 
 
 Custom Morphological and Tagging Models
