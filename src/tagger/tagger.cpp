@@ -58,7 +58,7 @@ tagger* tagger::load(istream& is) {
 }
 
 tagger* tagger::load(const char* fname) {
-  ifstream f(fname, ifstream::in | ifstream::binary);
+  ifstream f(fname, ifstream::binary);
   if (!f) return nullptr;
 
   return load(f);

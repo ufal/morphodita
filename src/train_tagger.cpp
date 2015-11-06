@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
         bool early_stopping = argc >= 9 ? parse_int(argv[8], "early_stopping") : false;
 
         // Open needed files
-        ifstream dict(dict_file, ifstream::in | ifstream::binary);
+        ifstream dict(dict_file, ifstream::binary);
         if (!dict) runtime_failure("Cannot open dictionary file '" << dict_file << "'!");
 
         ifstream feature_templates(features_file);

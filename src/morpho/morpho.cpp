@@ -70,7 +70,7 @@ morpho* morpho::load(istream& is) {
 }
 
 morpho* morpho::load(const char* fname) {
-  ifstream f(fname, ifstream::in | ifstream::binary);
+  ifstream f(fname, ifstream::binary);
   if (!f) return nullptr;
 
   return load(f);
