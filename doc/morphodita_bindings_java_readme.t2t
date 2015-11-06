@@ -1,8 +1,6 @@
 Java MorphoDiTa Bindings
 ========================
 
-%!encoding: utf-8
-
 == Installation ==[java_installation]
 %!include: morphodita_bindings_java_install.t2t
 

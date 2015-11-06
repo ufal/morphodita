@@ -1,8 +1,6 @@
 Java MorphoDiTa Bindings
 ========================
 
-%!encoding: utf-8
-
 MorphoDiTa library bindings is available in the ``cz.cuni.mff.ufal.morphodita``
 package.
 

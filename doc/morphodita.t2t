@@ -1,8 +1,6 @@
 MorphoDiTa: Morphological Dictionary and Tagger
 Version 1.9.0-devel
 
-%!encoding: utf-8
-
 = Introduction =[introduction]
 
 %!include: morphodita_about.t2t

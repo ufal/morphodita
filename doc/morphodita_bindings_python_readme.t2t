@@ -1,8 +1,6 @@
 Python MorphoDiTa Bindings
 ========================
 
-%!encoding: utf-8
-
 == Installation ==[python_installation]
 %!include: morphodita_bindings_python_install.t2t
 

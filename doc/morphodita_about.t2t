@@ -1,8 +1,6 @@
 MorphoDiTa
 ==========
 
-%!encoding: utf-8
-
 MorphoDiTa: Morphological Dictionary and Tagger is an open-source tool for
 morphological analysis of natural language texts. It performs morphological
 analysis, morphological generation, tagging and tokenization and is distributed

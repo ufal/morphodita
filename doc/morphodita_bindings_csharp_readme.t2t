@@ -1,8 +1,6 @@
 C# MorphoDiTa Bindings
 ======================
 
-%!encoding: utf-8
-
 == Installation ==[csharp_installation]
 %!include: morphodita_bindings_csharp_install.t2t
 

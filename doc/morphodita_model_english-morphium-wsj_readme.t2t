@@ -1,8 +1,6 @@
 MorphoDiTa
 ==========
 
-%!encoding: utf-8
-
 %!include: morphodita_model_about.t2t
 
 %!include: morphodita_model_english-morphium-wsj.t2t

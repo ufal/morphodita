@@ -1,8 +1,6 @@
 MorphoDiTa Installation
 =======================
 
-%!encoding: utf-8
-
 MorphoDiTa releases are available on [GitHub http://github.com/ufal/morphodita], either as
 a pre-compiled binary package, or source code only. The binary package contains Linux,
 Windows and OS X binaries, Java bindings binary, C# bindings binary, and source

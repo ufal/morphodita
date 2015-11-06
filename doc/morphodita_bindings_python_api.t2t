@@ -1,8 +1,6 @@
 Python MorphoDiTa Bindings
 ==========================
 
-%!encoding: utf-8
-
 MorphoDiTa library bindings is available in the
 [``ufal.morphodita`` http://pypi.python.org/pypi/ufal.morphodita] module.
 

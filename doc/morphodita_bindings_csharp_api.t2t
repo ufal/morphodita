@@ -1,8 +1,6 @@
 C# MorphoDiTa Bindings
 ======================
 
-%!encoding: utf-8
-
 MorphoDiTa library bindings is available in the ``Ufal.MorphoDiTa`` namespace.
 
 The bindings is a straightforward conversion of the ``C++`` bindings API.

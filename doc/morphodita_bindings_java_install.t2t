@@ -1,8 +1,6 @@
 Java MorphoDiTa Bindings
 ========================
 
-%!encoding: utf-8
-
 Binary Java bindings are available in MorphoDiTa binary packages.
 
 To compile Java bindings manually, run ``make`` in the ``bindings/java``

@@ -1,8 +1,6 @@
 C# MorphoDiTa Bindings
 ======================
 
-%!encoding: utf-8
-
 Binary C# bindings are available in MorphoDiTa binary packages.
 
 To compile C# bindings manually, run ``make`` in the ``bindings/csharp``

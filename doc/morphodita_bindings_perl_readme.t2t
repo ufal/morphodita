@@ -1,8 +1,6 @@
 Perl MorphoDiTa Bindings
 ========================
 
-%!encoding: utf-8
-
 == Installation ==[perl_installation]
 %!include: morphodita_bindings_perl_install.t2t
 

@@ -1,8 +1,6 @@
 MorphoDiTa User's Manual
 ========================
 
-%!encoding: utf-8
-
 In a natural language text, the task of morphological analysis is to assign for
 each token (word) in a sentence its lemma (cannonical form) and
 a part-of-speech tag (POS tag). This is usually achieved in two steps:

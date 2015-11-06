@@ -1,8 +1,6 @@
 MorphoDiTa API Tutorial
 =======================
 
-%!encoding: utf-8
-
 The MorphoDiTa API is defined in header ``morphodita.h`` and resides in
 ``ufal::morphodita`` namespace. The easiest way to use MorphoDita is therefore:
 

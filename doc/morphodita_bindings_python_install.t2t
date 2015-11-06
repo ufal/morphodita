@@ -1,8 +1,6 @@
 Python MorphoDiTa Bindings
 ==========================
 
-%!encoding: utf-8
-
 The Python bindings are available as ``ufal.morphodita`` package on PyPI.
 
 To compile Python bindings manually, run ``make`` in the ``bindings/python``
