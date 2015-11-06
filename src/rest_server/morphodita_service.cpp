@@ -144,10 +144,10 @@ bool morphodita_service::rest_response_generator::generate() {
   return true;
 }
 
-bool morphodita_service::rest_output_mode::parse(const string& str, rest_output_mode* output) {
-  if (str.compare("json") == 0) return output->mode = JSON, true;
-  if (str.compare("xml") == 0) return output->mode = XML, true;
-  if (str.compare("vertical") == 0) return output->mode = VERTICAL, true;
+bool morphodita_service::rest_output_mode::parse(const string& str, rest_output_mode& output) {
+  if (str.compare("json") == 0) return output.mode = JSON, true;
+  if (str.compare("xml") == 0) return output.mode = XML, true;
+  if (str.compare("vertical") == 0) return output.mode = VERTICAL, true;
   return false;
 }
 
@@ -168,7 +168,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
-  rest_output_mode output(output.XML); if (!get_output_mode(req, &output, error)) return req.respond_error(error);
+  rest_output_mode output(rest_output_mode::XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
@@ -245,7 +245,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
-  rest_output_mode output(output.XML); if (!get_output_mode(req, &output, error)) return req.respond_error(error);
+  rest_output_mode output(rest_output_mode::XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
@@ -322,7 +322,7 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
   auto data = get_data(req, error); if (!data) return req.respond_error(error);
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
-  rest_output_mode output(output.VERTICAL); if (!get_output_mode(req, &output, error)) return req.respond_error(error);
+  rest_output_mode output(rest_output_mode::VERTICAL); if (!get_output_mode(req, output, error)) return req.respond_error(error);
   if (output.mode == output.XML) return req.respond_error("The output 'xml' is not supported for 'generate' method.\n");
 
   class generator : public rest_response_generator {
@@ -384,7 +384,7 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
   if (!model->can_tokenize) return req.respond_error(operation_not_supported);
 
   auto data = get_data(req, error); if (!data) return req.respond_error(error);
-  rest_output_mode output(output.XML); if (!get_output_mode(req, &output, error)) return req.respond_error(error);
+  rest_output_mode output(rest_output_mode::XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
@@ -478,7 +478,7 @@ tagset_converter* morphodita_service::get_convert_tagset(microrestd::rest_reques
   return error.assign("Unknown tag set converter '").append(convert_tagset_it->second).append("'.\n"), nullptr;
 }
 
-bool morphodita_service::get_output_mode(microrestd::rest_request& req, rest_output_mode* output, string& error) {
+bool morphodita_service::get_output_mode(microrestd::rest_request& req, rest_output_mode& output, string& error) {
   auto output_it = req.params.find("output");
   if (output_it != req.params.end() && !rest_output_mode::parse(output_it->second, output))
     return error.assign("Unknown output mode '").append(output_it->second).append("'.\n"), false;

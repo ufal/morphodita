@@ -82,7 +82,7 @@ class morphodita_service : public microrestd::rest_service {
     rest_output_mode_t mode;
 
     rest_output_mode(rest_output_mode_t mode) : mode(mode) {}
-    static bool parse(const string& mode, rest_output_mode* output);
+    static bool parse(const string& mode, rest_output_mode& output);
   };
 
   class rest_response_generator : public microrestd::json_response_generator {
@@ -108,7 +108,7 @@ class morphodita_service : public microrestd::rest_service {
   morpho::guesser_mode get_guesser(microrestd::rest_request& req, string& error);
   tokenizer* get_tokenizer(microrestd::rest_request& req, const model_info* model, string& error);
   tagset_converter* get_convert_tagset(microrestd::rest_request& req, const Morpho& morpho, string& error);
-  bool get_output_mode(microrestd::rest_request& req, rest_output_mode* mode, string& error);
+  bool get_output_mode(microrestd::rest_request& req, rest_output_mode& mode, string& error);
   static bool get_line(const char*& data, string_piece& line);
 
   microrestd::json_builder json_models;
