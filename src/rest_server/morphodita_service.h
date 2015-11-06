@@ -73,12 +73,12 @@ class morphodita_service : public microrestd::rest_service {
   const model_info* load_weblicht_model(const string& weblicht_id, string& error);
 
   // REST service
+  enum rest_output_mode_t {
+    JSON,
+    XML,
+    VERTICAL,
+  };
   struct rest_output_mode {
-    enum rest_output_mode_t {
-      JSON,
-      XML,
-      VERTICAL,
-    };
     rest_output_mode_t mode;
 
     rest_output_mode(rest_output_mode_t mode) : mode(mode) {}

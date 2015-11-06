@@ -129,14 +129,14 @@ morphodita_service::rest_response_generator::rest_response_generator(const model
   json.indent().value("http://ufal.mff.cuni.cz/morphodita#morphodita_acknowledgements");
   if (!model->acknowledgements.empty()) json.indent().value(model->acknowledgements);
   json.indent().close().indent().key("result").indent();
-  if (output.mode == output.JSON) json.array();
+  if (output.mode == JSON) json.array();
 }
 
 bool morphodita_service::rest_response_generator::generate() {
   if (last) return false;
 
   if (!next(first)) {
-    if (output.mode == output.JSON) json.close();
+    if (output.mode == JSON) json.close();
     json.finish(true);
     last = true;
   }
@@ -168,7 +168,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
-  rest_output_mode output(rest_output_mode::XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
+  rest_output_mode output(XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
@@ -179,9 +179,9 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
 
     bool next(bool first) {
       if (!tokenizer->next_sentence(&forms, nullptr)) {
-        if (output.mode == output.XML && *unprinted) json.value_xml_escape(unprinted, true);
-        if (output.mode == output.JSON && !first && *unprinted) json.key("spaces").value(unprinted);
-        if (output.mode == output.JSON && !first) json.close().close();
+        if (output.mode == XML && *unprinted) json.value_xml_escape(unprinted, true);
+        if (output.mode == JSON && !first && *unprinted) json.key("spaces").value(unprinted);
+        if (output.mode == JSON && !first) json.close().close();
         return false;
       }
 
@@ -192,12 +192,12 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
             analyses[0] : tags[i];
         converter->convert(tag);
         switch (output.mode) {
-          case output.VERTICAL:
+          case VERTICAL:
             json.value(sp(forms[i]), true).value("\t", true)
                 .value(sp(tag.lemma), true).value("\t", true)
                 .value(sp(tag.tag), true).value("\n", true);
             break;
-          case output.XML:
+          case XML:
             if (unprinted < forms[i].str) json.value_xml_escape(sp(unprinted, forms[i].str - unprinted), true);
             if (!i) json.value("<sentence>", true);
             json.value("<token lemma=\"", true).value_xml_escape(sp(tag.lemma), true)
@@ -205,7 +205,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
                 .value("\">", true).value_xml_escape(sp(forms[i]), true)
                 .value("</token>", true);
             break;
-          case output.JSON:
+          case JSON:
             if ((i || !first) && unprinted < forms[i].str) json.key("space").value(sp(unprinted, forms[i].str - unprinted));
             if (i || !first) json.close();
             if (!i && !first) json.close();
@@ -215,8 +215,8 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
         }
         unprinted = forms[i].str + forms[i].len;
       }
-      if (output.mode == output.VERTICAL) json.value("\n", true);
-      if (output.mode == output.XML) json.value("</sentence>", true);
+      if (output.mode == VERTICAL) json.value("\n", true);
+      if (output.mode == XML) json.value("</sentence>", true);
 
       return true;
     }
@@ -245,7 +245,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
-  rest_output_mode output(rest_output_mode::XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
+  rest_output_mode output(XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
@@ -256,9 +256,9 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
 
     bool next(bool first) {
       if (!tokenizer->next_sentence(&forms, nullptr)) {
-        if (output.mode == output.XML && *unprinted) json.value_xml_escape(unprinted, true);
-        if (output.mode == output.JSON && !first && *unprinted) json.key("spaces").value(unprinted);
-        if (output.mode == output.JSON && !first) json.close().close();
+        if (output.mode == XML && *unprinted) json.value_xml_escape(unprinted, true);
+        if (output.mode == JSON && !first && *unprinted) json.key("spaces").value(unprinted);
+        if (output.mode == JSON && !first) json.close().close();
         return false;
       }
 
@@ -266,13 +266,13 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
         morpho->analyze(forms[i], guesser, tags);
         converter->convert_analyzed(tags);
         switch (output.mode) {
-          case output.VERTICAL:
+          case VERTICAL:
             json.value(sp(forms[i]), true);
             for (auto&& tag : tags)
               json.value("\t", true).value(tag.lemma, true).value("\t", true).value(tag.tag, true);
             json.value("\n", true);
             break;
-          case output.XML:
+          case XML:
             if (unprinted < forms[i].str) json.value_xml_escape(sp(unprinted, forms[i].str - unprinted), true);
             if (!i) json.value("<sentence>", true);
             json.value("<token>", true);
@@ -281,7 +281,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
                     .value("\" tag=\"", true).value_xml_escape(sp(tag.tag), true).value("\"/>", true);
             json.value_xml_escape(sp(forms[i]), true).value("</token>", true);
             break;
-          case output.JSON:
+          case JSON:
             if ((i || !first) && unprinted < forms[i].str) json.key("space").value(sp(unprinted, forms[i].str - unprinted));
             if (i || !first) json.close();
             if (!i && !first) json.close();
@@ -294,8 +294,8 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
         }
         unprinted = forms[i].str + forms[i].len;
       }
-      if (output.mode == output.VERTICAL) json.value("\n", true);
-      if (output.mode == output.XML) json.value("</sentence>", true);
+      if (output.mode == VERTICAL) json.value("\n", true);
+      if (output.mode == XML) json.value("</sentence>", true);
 
       return true;
     }
@@ -322,8 +322,8 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
   auto data = get_data(req, error); if (!data) return req.respond_error(error);
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
-  rest_output_mode output(rest_output_mode::VERTICAL); if (!get_output_mode(req, output, error)) return req.respond_error(error);
-  if (output.mode == output.XML) return req.respond_error("The output 'xml' is not supported for 'generate' method.\n");
+  rest_output_mode output(VERTICAL); if (!get_output_mode(req, output, error)) return req.respond_error(error);
+  if (output.mode == XML) return req.respond_error("The output 'xml' is not supported for 'generate' method.\n");
 
   class generator : public rest_response_generator {
    public:
@@ -334,7 +334,7 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
       string_piece line;
       if (!get_line(data, line)) return false;
 
-      if (output.mode == output.JSON) json.array();
+      if (output.mode == JSON) json.array();
       if (line.len) {
         string_piece lemma = line;
         const char* wildcard = (const char*) memchr((void*) line.str, '\t', line.len);
@@ -348,20 +348,20 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
         for (auto&& lemma : forms)
           for (auto&& form : lemma.forms) {
             switch (output.mode) {
-              case output.JSON:
+              case JSON:
                 json.object().key("form").value(form.form).key("lemma").value(lemma.lemma).key("tag").value(form.tag).close();
                 break;
-              case output.VERTICAL:
+              case VERTICAL:
                 if (!first) json.value("\t", true);
                 json.value(form.form, true).value("\t", true).value(lemma.lemma, true).value("\t", true).value(form.tag, true);
                 break;
-              case output.XML: break; // Not possible, just to keep compiler happy
+              case XML: break; // Not possible, just to keep compiler happy
             }
             first = false;
           }
       }
-      if (output.mode == output.JSON) json.close();
-      if (output.mode == output.VERTICAL) json.value("\n", true);
+      if (output.mode == JSON) json.close();
+      if (output.mode == VERTICAL) json.value("\n", true);
 
       return true;
     }
@@ -384,7 +384,7 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
   if (!model->can_tokenize) return req.respond_error(operation_not_supported);
 
   auto data = get_data(req, error); if (!data) return req.respond_error(error);
-  rest_output_mode output(rest_output_mode::XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
+  rest_output_mode output(XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
@@ -395,23 +395,23 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
 
     bool next(bool first) {
       if (!tokenizer->next_sentence(&forms, nullptr)) {
-        if (output.mode == output.XML && *unprinted) json.value_xml_escape(unprinted, true);
-        if (output.mode == output.JSON && !first && *unprinted) json.key("spaces").value(unprinted);
-        if (output.mode == output.JSON && !first) json.close().close();
+        if (output.mode == XML && *unprinted) json.value_xml_escape(unprinted, true);
+        if (output.mode == JSON && !first && *unprinted) json.key("spaces").value(unprinted);
+        if (output.mode == JSON && !first) json.close().close();
         return false;
       }
 
       for (unsigned i = 0; i < forms.size(); i++) {
         switch (output.mode) {
-          case output.VERTICAL:
+          case VERTICAL:
             json.value(sp(forms[i]), true).value("\n", true);
             break;
-          case output.XML:
+          case XML:
             if (unprinted < forms[i].str) json.value_xml_escape(sp(unprinted, forms[i].str - unprinted), true);
             if (!i) json.value("<sentence>", true);
             json.value("<token>", true).value_xml_escape(sp(forms[i]), true).value("</token>", true);
             break;
-          case output.JSON:
+          case JSON:
             if ((i || !first) && unprinted < forms[i].str) json.key("space").value(sp(unprinted, forms[i].str - unprinted));
             if (i || !first) json.close();
             if (!i && !first) json.close();
@@ -421,8 +421,8 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
         }
         unprinted = forms[i].str + forms[i].len;
       }
-      if (output.mode == output.VERTICAL) json.value("\n", true);
-      if (output.mode == output.XML) json.value("</sentence>", true);
+      if (output.mode == VERTICAL) json.value("\n", true);
+      if (output.mode == XML) json.value("</sentence>", true);
 
       return true;
     }
