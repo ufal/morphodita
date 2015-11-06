@@ -1,0 +1,4 @@
+MorphoDiTa
+[![Build Status](https://travis-ci.org/ufal/morphodita.svg?branch=master)](https://travis-ci.org/ufal/morphodita)
+
+%!include: morphodita_readme.t2t
