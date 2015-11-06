@@ -88,7 +88,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
   for (int i = 0; i < iterations; i++) {
     // Train
     int train_correct = 0, train_total = 0;
-    cerr << "Iteration " << i + 1;
+    cerr << "Iteration " << i + 1 << ": ";
 
     vector<int> tags;
     for (unsigned s = 0; s < train.size(); s++) {
