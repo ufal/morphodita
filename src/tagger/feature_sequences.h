@@ -21,7 +21,11 @@
 namespace ufal {
 namespace morphodita {
 
+class binary_encoder;
+
 // Declarations
+typedef uint32_t feature_sequence_hash;
+
 typedef int32_t feature_sequence_score;
 typedef int64_t feature_sequences_score;
 
@@ -55,22 +59,49 @@ class feature_sequences {
   inline void initialize_sentence(const vector<form_with_tags>& forms, int forms_size, cache& c) const;
   inline void compute_dynamic_features(int form_index, int tag_index, const dynamic_features* prev_dynamic, dynamic_features& dynamic, cache& c) const;
   inline feature_sequences_score score(int form_index, int tags_window[], int tags_unchanged, dynamic_features& dynamic, cache& c) const;
-  void feature_keys(int form_index, int tags_window[], int tags_unchanged, dynamic_features& dynamic, vector<string>& keys, cache& c) const;
+  void feature_hashes(int form_index, int tags_window[], int tags_unchanged, dynamic_features& dynamic, vector<feature_sequence_hash>& hashes, cache& c) const;
 
   ElementaryFeatures elementary;
   vector<Map> scores;
   vector<feature_sequence> sequences;
 };
 
-class persistent_feature_sequence_map : public persistent_unordered_map {
+class persistent_feature_sequence_map {
  public:
-  persistent_feature_sequence_map() : persistent_unordered_map() {}
-  persistent_feature_sequence_map(const persistent_unordered_map&& map) : persistent_unordered_map(map) {}
+  persistent_feature_sequence_map() {}
+  template<class Iterator> persistent_feature_sequence_map(pair<Iterator, Iterator> entries);
 
-  feature_sequence_score score(const char* feature, int len) const {
-    auto* it = at_typed<feature_sequence_score>(feature, len);
-    return it ? *it : 0;
+  struct info {
+    feature_sequence_score score;
+    uint32_t index;
+
+    info(feature_sequence_score score, uint32_t index) : score(score), index(index) {}
+  };
+  inline void load(binary_decoder& data) {
+    table.clear();
+    hashes.clear();
+    for (uint32_t buckets = data.next_4B(); buckets; buckets--) {
+      table.emplace_back(data.next_4B(), hashes.size());
+      for (int num = data.next_1B(); num; num--)
+        hashes.push_back(data.next_4B());
+    }
+    mask = table.size() - 1;
+    table.emplace_back(0, hashes.size());
   }
+  inline void save(binary_encoder& enc) const;
+
+  feature_sequence_score score(feature_sequence_hash hash) const {
+    feature_sequence_hash bucket = hash & mask;
+    for (uint32_t index = table[bucket].index; index < table[bucket+1].index; index++)
+      if (hashes[index] == hash)
+        return table[bucket].score;
+    return 0;
+  }
+
+ private:
+  vector<info> table;
+  vector<feature_sequence_hash> hashes;
+  feature_sequence_hash mask;
 };
 
 template <class ElementaryFeatures> using persistent_feature_sequences = feature_sequences<ElementaryFeatures, persistent_feature_sequence_map>;
@@ -113,28 +144,20 @@ struct feature_sequences<ElementaryFeatures, Map>::cache {
   vector<vector<per_tag_features>> elementary_per_tag;
 
   struct cache_element {
-    vector<char> key;
-    int key_size;
+    feature_sequence_hash hash;
     feature_sequence_score score;
-
-    cache_element(int elements) : key(vli<elementary_feature_value>::max_length() * elements), key_size(0), score(0) {}
   };
   vector<cache_element> caches;
   vector<const per_tag_features*> window;
-  vector<char> key;
   feature_sequences_score score;
 
   cache(const feature_sequences<ElementaryFeatures, Map>& self) : score(0) {
-    caches.reserve(self.sequences.size());
-    int max_sequence_elements = 0, max_window_size = 1;
-    for (auto&& sequence : self.sequences) {
-      caches.emplace_back(sequence.elements.size());
-      if (int(sequence.elements.size()) > max_sequence_elements) max_sequence_elements = sequence.elements.size();
+    caches.resize(self.sequences.size());
+    int max_window_size = 1;
+    for (auto&& sequence : self.sequences)
       for (auto&& element : sequence.elements)
         if (element.type == PER_TAG && 1 - element.sequence_index > max_window_size)
           max_window_size = 1 - element.sequence_index;
-    }
-    key.resize(max_sequence_elements * vli<elementary_feature_value>::max_length());
     window.resize(max_window_size);
   }
 };
@@ -158,7 +181,7 @@ void feature_sequences<ElementaryFeatures, Map>::initialize_sentence(const vecto
   // Clear score cache, because scores may have been modified
   c.score = 0;
   for (auto&& cache : c.caches)
-    cache.key_size = cache.score = 0;
+    cache.hash = cache.score = 0;
 }
 
 template <class ElementaryFeatures, class Map>
@@ -178,7 +201,8 @@ feature_sequences_score feature_sequences<ElementaryFeatures, Map>::score(int fo
     if (tags_unchanged >= sequences[i].dependant_range)
       break;
 
-    char* key = c.key.data();
+    feature_sequence_hash hash = 0;
+    bool found = true;
     for (unsigned j = 0; j < sequences[i].elements.size(); j++) {
       auto& element = sequences[i].elements[j];
       elementary_feature_value value;
@@ -197,21 +221,25 @@ feature_sequences_score feature_sequences<ElementaryFeatures, Map>::score(int fo
       }
 
       if (value == elementary_feature_unknown) {
-        key = c.key.data();
+        found = false;
         break;
       }
-      vli<elementary_feature_value>::encode(value, (unsigned char*&) key);
+
+      // Use MurmurHash3 mixing
+      value *= 0xcc9e2d51;
+      value = (value << 15) | (value >> 17);
+      value *= 0x1b873593;
+      hash ^= value;
+      hash = ((hash << 13) | (hash >> 19)) * 5 + 0xe6546b64;
     }
 
     result -= c.caches[i].score;
-    int key_size = key - c.key.data();
-    if (!key_size) {
+    if (!found) {
       c.caches[i].score = 0;
-      c.caches[i].key_size = 0;
-    } else if (key_size != c.caches[i].key_size || !small_memeq(c.key.data(), c.caches[i].key.data(), key_size)) {
-      c.caches[i].score = scores[i].score(c.key.data(), key_size);
-      c.caches[i].key_size = key_size;
-      small_memcpy(c.caches[i].key.data(), c.key.data(), key_size);
+      c.caches[i].hash = 0;
+    } else if (hash != c.caches[i].hash) {
+      c.caches[i].score = scores[i].score(hash);
+      c.caches[i].hash = hash;
     }
     result += c.caches[i].score;
   }
@@ -221,12 +249,12 @@ feature_sequences_score feature_sequences<ElementaryFeatures, Map>::score(int fo
 }
 
 template <class ElementaryFeatures, class Map>
-void feature_sequences<ElementaryFeatures, Map>::feature_keys(int form_index, int tags_window[], int tags_unchanged, dynamic_features& dynamic, vector<string>& keys, cache& c) const {
+void feature_sequences<ElementaryFeatures, Map>::feature_hashes(int form_index, int tags_window[], int tags_unchanged, dynamic_features& dynamic, vector<feature_sequence_hash>& hashes, cache& c) const {
   score(form_index, tags_window, tags_unchanged, dynamic, c);
 
-  keys.resize(c.caches.size());
+  hashes.resize(c.caches.size());
   for (unsigned i = 0; i < c.caches.size(); i++)
-    keys[i].assign(c.caches[i].key.data(), c.caches[i].key_size);
+    hashes[i] = c.caches[i].hash;
 }
 
 } // namespace morphodita

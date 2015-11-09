@@ -64,7 +64,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
 
   typename FeatureSequences::cache feature_sequences_cache(features);
   typename FeatureSequences::dynamic_features decoded_dynamic_features, gold_dynamic_features;
-  vector<string> decoded_feature_sequences_keys, gold_feature_sequences_keys;
+  vector<feature_sequence_hash> decoded_feature_sequences_hashes, gold_feature_sequences_hashes;
 
   // Initialize feature sequences for the gold decoding only if requested
   if (prune_features)
@@ -76,11 +76,11 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
         for (int j = 0; j < order && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
 
         features.compute_dynamic_features(i, window[0], &gold_dynamic_features, gold_dynamic_features, feature_sequences_cache);
-        features.feature_keys(i, window, 0, gold_dynamic_features, gold_feature_sequences_keys, feature_sequences_cache);
+        features.feature_hashes(i, window, 0, gold_dynamic_features, gold_feature_sequences_hashes, feature_sequences_cache);
 
         for (unsigned f = 0; f < features.scores.size(); f++)
-          if (!gold_feature_sequences_keys[f].empty())
-            features.scores[f].map[gold_feature_sequences_keys[f]];
+          if (gold_feature_sequences_hashes[f])
+            features.scores[f].entry(gold_feature_sequences_hashes[f], true);
       }
     }
 
@@ -108,33 +108,29 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
 
         for (int j = 0; j < order && i - j >= 0; j++) window[j] = tags[i - j];
         features.compute_dynamic_features(i, window[0], &decoded_dynamic_features, decoded_dynamic_features, feature_sequences_cache);
-        features.feature_keys(i, window, 0, decoded_dynamic_features, decoded_feature_sequences_keys, feature_sequences_cache);
+        features.feature_hashes(i, window, 0, decoded_dynamic_features, decoded_feature_sequences_hashes, feature_sequences_cache);
 
         for (int j = 0; j < order && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
         features.compute_dynamic_features(i, window[0], &gold_dynamic_features, gold_dynamic_features, feature_sequences_cache);
-        features.feature_keys(i, window, 0, gold_dynamic_features, gold_feature_sequences_keys, feature_sequences_cache);
+        features.feature_hashes(i, window, 0, gold_dynamic_features, gold_feature_sequences_hashes, feature_sequences_cache);
 
         for (unsigned f = 0; f < features.scores.size(); f++) {
-          if (decoded_feature_sequences_keys[f] != gold_feature_sequences_keys[f]) {
-            if (!decoded_feature_sequences_keys[f].empty()) {
-              auto it = features.scores[f].map.find(decoded_feature_sequences_keys[f]);
-              if (it == features.scores[f].map.end() && !prune_features) it = features.scores[f].map.emplace(decoded_feature_sequences_keys[f], typename decltype(features.scores[f].map)::mapped_type()).first;
-              if (it != features.scores[f].map.end()) {
-                auto& decoded_info = it->second;
-                decoded_info.gamma += decoded_info.alpha * (s - decoded_info.last_gamma_update);
-                decoded_info.last_gamma_update = s;
-                decoded_info.alpha--;
+          if (decoded_feature_sequences_hashes[f] != gold_feature_sequences_hashes[f]) {
+            if (decoded_feature_sequences_hashes[f]) {
+              auto* decoded_info = features.scores[f].entry(decoded_feature_sequences_hashes[f], !prune_features);
+              if (decoded_info) {
+                decoded_info->gamma += decoded_info->alpha * (s - decoded_info->last_gamma_update);
+                decoded_info->last_gamma_update = s;
+                decoded_info->alpha--;
               }
             }
 
-            if (!gold_feature_sequences_keys[f].empty()) {
-              auto it = features.scores[f].map.find(gold_feature_sequences_keys[f]);
-              if (it == features.scores[f].map.end() && !prune_features) it = features.scores[f].map.emplace(gold_feature_sequences_keys[f], typename decltype(features.scores[f].map)::mapped_type()).first;
-              if (it != features.scores[f].map.end()) {
-                auto& gold_info = it->second;
-                gold_info.gamma += gold_info.alpha * (s - gold_info.last_gamma_update);
-                gold_info.last_gamma_update = s;
-                gold_info.alpha++;
+            if (gold_feature_sequences_hashes[f]) {
+              auto* gold_info = features.scores[f].entry(gold_feature_sequences_hashes[f], !prune_features);
+              if (gold_info) {
+                gold_info->gamma += gold_info->alpha * (s - gold_info->last_gamma_update);
+                gold_info->last_gamma_update = s;
+                gold_info->alpha++;
               }
             }
           }
@@ -143,11 +139,13 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
     }
 
     // Finalize incremental gamma updates
-    for (auto&& score : features.scores)
-      for (auto&& element : score.map) {
-        element.second.gamma += element.second.alpha * (train.size() - element.second.last_gamma_update);
-        element.second.last_gamma_update = 0;
+    for (auto&& score : features.scores) {
+      auto entries = score.entries();
+      for (auto it = entries.first; it != entries.second; it++) {
+        it->gamma += it->alpha * (train.size() - it->last_gamma_update);
+        it->last_gamma_update = 0;
       }
+    }
     cerr << "done, accuracy " << fixed << setprecision(2) << train_correct * 100 / double(train_total) << '%';
 
     // If we have any heldout data, compute accuracy and if requested store best tagger configuration

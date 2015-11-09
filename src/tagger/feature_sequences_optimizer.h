@@ -39,6 +39,23 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
   const ElementaryFeatures<training_elementary_feature_map>& elementary = features.elementary;
   ElementaryFeatures<persistent_elementary_feature_map>& optimized_elementary = optimized_features.elementary;
 
+  // Fill elementary maps
+  optimized_elementary.maps.clear();
+  for (auto&& map : elementary.maps) {
+    optimized_elementary.maps.emplace_back(persistent_unordered_map(map.map, 1, [](binary_encoder& enc, elementary_feature_value value) {
+      enc.add_4B(value);
+    }));
+  }
+
+  // Fill feature sequences
+  optimized_features.sequences = features.sequences;
+  optimized_features.scores.clear();
+  for (auto&& score : features.scores) {
+    optimized_features.scores.emplace_back(score.entries());
+  }
+
+#if 0
+
   // Iterate over feature sequences of non-zero weight and count number of
   // occurences in corresponding elementary feature maps.
   // In order to be able to do so, precompute map_index for elements of features.sequences.
@@ -152,6 +169,7 @@ void feature_sequences_optimizer<FeatureSequences<ElementaryFeatures<training_el
   //     enc.add_4B(info.gamma);
   //   }));
   // }
+#endif
 }
 
 } // namespace morphodita

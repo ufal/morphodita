@@ -85,5 +85,28 @@ inline bool feature_sequences<ElementaryFeatures, Map>::save(ostream& os) {
   return compressor::save(os, enc);
 }
 
+template<class Iterator>
+persistent_feature_sequence_map::persistent_feature_sequence_map(pair<Iterator, Iterator> entries) {
+  table.clear();
+  hashes.clear();
+
+  for (auto it = entries.first; it != entries.second; it++) {
+    table.emplace_back(it->gamma, hashes.size());
+    hashes.insert(hashes.end(), it->hashes.begin(), it->hashes.end());
+  }
+  mask = table.size() - 1;
+  table.emplace_back(0, hashes.size());
+}
+
+inline void persistent_feature_sequence_map::save(binary_encoder& enc) const {
+  enc.add_4B(table.size() - 1);
+  for (uint32_t bucket = 0; bucket < table.size() - 1; bucket++) {
+    enc.add_4B(table[bucket].score);
+    enc.add_1B(table[bucket+1].index - table[bucket].index);
+    for (uint32_t index = table[bucket].index; index < table[bucket+1].index; index++)
+      enc.add_4B(hashes[index]);
+  }
+}
+
 } // namespace morphodita
 } // namespace ufal
