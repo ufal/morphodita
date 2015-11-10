@@ -33,7 +33,7 @@ while (<$unidata>) {
 close $unidata;
 
 print <<EOF;
-"%%{
+%%{
   machine utf8;
 
   utf8_any = 0..127 | 128..255 (128..191)* \$(utf8_any,1) %(utf8_any,0);
