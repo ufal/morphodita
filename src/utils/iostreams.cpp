@@ -43,6 +43,7 @@ istream& getpara(istream& is, string& para) {
     if (line.empty()) break;
   }
 
+  if (is.eof() && !para.empty()) is.clear(istream::eofbit);
   return is;
 }
 
