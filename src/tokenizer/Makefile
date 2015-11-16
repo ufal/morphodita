@@ -7,7 +7,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-TOKENIZERS=$(patsubst %,tokenizer/%_tokenizer.cpp,czech english generic)
+TOKENIZERS=$(patsubst %,tokenizer/%_tokenizer.cpp,czech english generic ragel)
 
-$(TOKENIZERS): %.cpp: %.rl $(wildcard %*.rl) $(wildcard tokenizer/ragel/*.rl)
+$(TOKENIZERS): %.cpp: %.rl tokenizer/ragel_tokenizer.rl
 	ragel $< -T1 -o $@ && sed '1d; /^#line [0-9]/d; /^static const int [^ ]*_en_main = [0-9]*;$$/d' -i $@

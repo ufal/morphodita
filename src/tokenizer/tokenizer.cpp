@@ -30,7 +30,7 @@ tokenizer* tokenizer::new_english_tokenizer() {
 }
 
 tokenizer* tokenizer::new_generic_tokenizer() {
-  return new generic_tokenizer();
+  return new generic_tokenizer(generic_tokenizer::LATEST);
 }
 
 } // namespace morphodita

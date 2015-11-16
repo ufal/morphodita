@@ -10,14 +10,16 @@
 #pragma once
 
 #include "common.h"
-#include "utf8_tokenizer.h"
+#include "unicode_tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
 
-class vertical_tokenizer : public utf8_tokenizer {
+class vertical_tokenizer : public unicode_tokenizer {
  public:
-  virtual bool next_sentence(vector<string_piece>& forms) override;
+  vertical_tokenizer() : unicode_tokenizer(0) {}
+
+  virtual bool next_sentence(vector<token_range>& tokens) override;
 };
 
 } // namespace morphodita

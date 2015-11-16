@@ -1892,6 +1892,9 @@ morpho::new_tokenizer
 Returns a new instance of a suitable tokenizer or NULL if no such tokenizer
 exists. The user should delete it after use.
 
+Note that the tokenizer might use the morpho instance, so the tokenizer must not
+be used after the morpho instance is destructed.
+
 
 Class tagger
 ------------

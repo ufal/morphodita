@@ -47,20 +47,23 @@ int main(int argc, char* argv[]) {
                     "         --help");
 
   unique_ptr<tokenizer> tokenizer;
+  unique_ptr<morpho> morpho;
+  unique_ptr<tagger> tagger;
+
   if (options.count("tokenizer") && options["tokenizer"] == "czech") tokenizer.reset(tokenizer::new_czech_tokenizer());
   else if (options.count("tokenizer") && options["tokenizer"] == "english") tokenizer.reset(tokenizer::new_english_tokenizer());
   else if (options.count("tokenizer") && options["tokenizer"] == "generic") tokenizer.reset(tokenizer::new_generic_tokenizer());
   else if (options.count("morphology")) {
     cerr << "Loading dictionary: ";
-    unique_ptr<morpho> dictionary(morpho::load(options["morphology"].c_str()));
-    if (!dictionary) runtime_failure("Cannot load dictionary from file '" << options["morphology"] << "'!");
+    morpho.reset(morpho::load(options["morphology"].c_str()));
+    if (!morpho) runtime_failure("Cannot load dictionary from file '" << options["morphology"] << "'!");
     cerr << "done" << endl;
 
-    tokenizer.reset(dictionary->new_tokenizer());
+    tokenizer.reset(morpho->new_tokenizer());
     if (!tokenizer) runtime_failure("No tokenizer is defined for the supplied model!");
   } else /*if (options.count("tagger"))*/ {
     cerr << "Loading tagger: ";
-    unique_ptr<tagger> tagger(tagger::load(options["tagger"].c_str()));
+    tagger.reset(tagger::load(options["tagger"].c_str()));
     if (!tagger) runtime_failure("Cannot load dictionary from file '" << options["tagger"] << "'!");
     cerr << "done" << endl;
 

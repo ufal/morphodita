@@ -119,7 +119,7 @@ int generic_morpho::raw_form_len(string_piece form) const {
 }
 
 tokenizer* generic_morpho::new_tokenizer() const {
-  return new generic_tokenizer();
+  return new generic_tokenizer(generic_tokenizer::LATEST);
 }
 
 void generic_morpho::analyze_special(string_piece form, vector<tagged_lemma>& lemmas) const {

@@ -7,17 +7,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <cstring>
-
 #include "english_tokenizer.h"
 #include "unilib/unicode.h"
-#include "unilib/utf8.h"
 
 namespace ufal {
 namespace morphodita {
 
 // The list of lowercased words that when preceding eos do not end sentence.
-static unordered_set<string> eos_word_exceptions = {
+const unordered_set<string> english_tokenizer::abbreviations = {
   // Titles
   "adj", "adm", "adv", "assoc", "asst", "bart", "bldg", "brig", "bros", "capt",
   "cmdr", "col", "comdr", "con", "corp", "cpl", "d", "dr", "dr", "drs", "ens",
@@ -33,26 +30,31 @@ static unordered_set<string> eos_word_exceptions = {
   "sgt", "sr", "tel", "un", "univ", "v", "va", "vs", "w", "yrs",
 };
 
-%% machine english_tokenizer_split_token; write data noerror nofinal;
-bool english_tokenizer::split_token(vector<string_piece>& tokens) {
-  if (tokens.empty()) return false;
+%%{
+  machine english_tokenizer_split_token;
+  write data noerror nofinal;
+}%%
 
-  const char* begin = tokens.back().str, *end = begin + tokens.back().len;
-  const char* p = begin; int cs;
-  unsigned split_len = 0, split_mark = 0;
+void english_tokenizer::split_token(vector<token_range>& tokens) {
+  if (tokens.empty() || chars[tokens.back().start].cat & ~unilib::unicode::L) return;
+
+  size_t index = tokens.back().start, end = index + tokens.back().length;
+  int cs;
+  size_t split_mark = 0, split_len = 0;
   %%{
-    getkey begin[end - p - 1];
+    include ragel_tokenizer "ragel_tokenizer.rl";
+    variable p index;
     variable pe end;
     variable eof end;
+    getkey ragel_char(chars[end - index - 1]);
 
-    # For the split_mark to work, two marks must never appear in one file.
-    action split_now { split_len = p - begin + 1; fbreak; }
-    action mark { split_mark = p - begin + 1; }
+    # For the split_mark to work, two marks must never appear in one token.
+    action mark { split_mark = index - tokens.back().start + 1; }
     action split_mark { split_len = split_mark; fbreak; }
 
-    apo = "'" | 0x99 0x80 0xe2; #"'" | "’";
+    apo = "'" | u_apo;
     main :=
-      (('s'i | 'm'i | 'd'i) apo | ('ll'i | 'er'i | 'ev'i) apo | 't'i apo 'n'i) @split_now |
+      (('s'i | 'm'i | 'd'i) apo | ('ll'i | 'er'i | 'ev'i) apo | 't'i apo 'n'i) @mark @split_mark |
       ('ton'i @mark 'nac'i | 'ey'i @mark apo 'd'i | 'em'i @mark 'mig'i | 'an'i @mark 'nog'i |
        'at'i @mark 'tog'i | 'em'i @mark 'mel'i | 'n'i apo @mark 'erom'i | 'an'i @mark 'naw'i) %split_mark
     ;
@@ -60,86 +62,76 @@ bool english_tokenizer::split_token(vector<string_piece>& tokens) {
     write exec;
   }%%
 
-  if (split_len && end - split_len > begin) {
-    tokens.back().len -= split_len;
+  if (split_len && split_len < end) {
+    tokens.back().length -= split_len;
     tokens.emplace_back(end - split_len, split_len);
-    return true;
   }
-  return false;
 }
 
-%% machine english_tokenizer; write data noerror nofinal;
-bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
+%%{
+  machine english_tokenizer;
+  write data noerror nofinal;
+}%%
+
+english_tokenizer::english_tokenizer(unsigned /*version*/) : ragel_tokenizer(1) {}
+
+bool english_tokenizer::next_sentence(vector<token_range>& tokens) {
   using namespace unilib;
 
   int cs, act;
-  const char* ts, *te;
-  const char* text_start = text;
+  size_t ts, te;
+  size_t whitespace = 0; // Suppress "may be uninitialized" warning
 
-  const char* unary_text;
-  const char* whitespace = nullptr; // Suppress "may be uninitialized" warning
+  while (tokenize_url_email(tokens))
+    if (emergency_sentence_split(tokens))
+      return true;
   %%{
-    variable p text;
-    variable pe text_end;
-    variable eof text_end;
-    alphtype unsigned char;
-    getkey (unsigned char)*text;
-
-    include utf8 "ragel/utf8.rl";
-    include url "ragel/url.rl";
-
-    action version_3 { version >= 3 }
+    include ragel_tokenizer "ragel_tokenizer.rl";
 
     # Tokenization
-    apo = "'" | "’";
-    backapo = "`" | "‘";
+    apo = "'" | u_apo;
+    backapo = "`" | u_backapo;
 
-    action unary_minus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N | unicode::Pd)) }
-    action unary_plus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N) && *unary_text != '+') }
-    whitespace = [\r\t\n] | utf8_Zs;
+    action unary_minus_allowed { !current || (chars[current-1].cat & ~(unicode::L | unicode::M | unicode::N | unicode::Pd)) }
+    action unary_plus_allowed { !current || ((chars[current-1].cat & ~(unicode::L | unicode::M | unicode::N)) && chars[current-1].chr != '+') }
+    whitespace = [\r\t\n] | u_Zs;
     eol = '\r' ('' >(eol,0) | '\n' >(eol,1)) | '\n' ('' >(eol,0) | '\r' >(eol,1));
-    word = (utf8_L (utf8_L | utf8_M | ('-' | apo) inwhen !version_3 | (('-' | '‐' | apo) utf8_L) inwhen version_3)*) -- ('--' | apo apo);
-    number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed | apo when version_3)? utf8_Nd+ (',' (utf8_Nd{3}))* ([.] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
+    word = u_L (u_L | u_M | '-' | apo)* -- ('--' | apo apo);
+    number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? u_Nd+ (',' (u_Nd{3}))* ([.] u_Nd+)? ([eE] [+\-]? u_Nd+)?;
 
-    multiletter_punctuation = "--" | "''" | "’’" inwhen !version_3 | "``" | "‘‘" inwhen !version_3 | "...";
+    multiletter_punctuation = "--" | apo apo | backapo backapo | "...";
 
     # Segmentation
-    action mark_whitespace { whitespace = text; }
-    eos = [.!?] | '…';
-    closing = '"' | "'" | ';' | utf8_Pe | utf8_Pf;
-    opening = '"' | '`' | utf8_Ps | utf8_Pi;
+    action mark_whitespace { whitespace = current; }
+    eos = [.!?] | u_3dot;
+    closing = '"' | "'" | ';' | u_Pe | u_Pf;
+    opening = '"' | '`' | u_Ps | u_Pi;
 
     main := |*
-      word
-        {
-          forms.emplace_back(ts, te - ts);
-          split_token(forms);
-
-          if (emergency_sentence_split(forms)) fbreak;
+      word | number | (any - whitespace)
+        { tokens.emplace_back(ts, te - ts);
+          split_token(tokens);
+          current = te;
+          do
+            if (emergency_sentence_split(tokens)) fbreak;
+          while (tokenize_url_email(tokens));
+          fexec current;
         };
 
-      number | url | multiletter_punctuation | (utf8_any - whitespace)
+      eos closing* whitespace+ >mark_whitespace opening* (u_Lu | u_Lt)
         {
-          forms.emplace_back(ts, te - ts);
-
-          if (emergency_sentence_split(forms)) fbreak;
-        };
-
-      eos closing* whitespace+ >mark_whitespace opening* (utf8_Lu | utf8_Lt)
-        {
-          // Does this eos character marks end of sentence?
-          bool eos_word_exception = is_eos_exception(forms, &eos_word_exceptions, buffer);
-
-          // Add all characters until first space to forms and break if eos.
-          for (text = ts; text < whitespace; forms.emplace_back(ts, text - ts), ts = text) utf8_advance(text, whitespace);
+          bool eos = is_eos(tokens, chars[ts].chr, &abbreviations);
+          for (current = ts; current < whitespace; current++)
+            tokens.emplace_back(current, 1);
           fexec whitespace;
-          if (!eos_word_exception) fbreak;
+          if (eos) fbreak;
         };
+
 
       whitespace+ -- eol eol;
 
       eol eol
-        { if (!forms.empty()) fbreak; };
+        { if (!tokens.empty()) fbreak; };
     *|;
 
     write init;
@@ -147,7 +139,7 @@ bool english_tokenizer::next_sentence(vector<string_piece>& forms) {
   }%%
   (void)act; // Suppress unused variable warning
 
-  return !forms.empty();
+  return !tokens.empty();
 }
 
 } // namespace morphodita
