@@ -23,7 +23,7 @@ namespace ufal {
 namespace morphodita {
 
 template <class ElementaryFeatures, class Map>
-void feature_sequences<ElementaryFeatures, Map>::parse(int order, istream& is) {
+void feature_sequences<ElementaryFeatures, Map>::parse(int window_size, istream& is) {
   unordered_map<string, elementary_feature_description> elementary_map;
   for (auto&& description : ElementaryFeatures::descriptions)
     if (!elementary_map.emplace(description.name, description).second)
@@ -47,11 +47,11 @@ void feature_sequences<ElementaryFeatures, Map>::parse(int order, istream& is) {
       auto& desc = it->second;
       int sequence_index = parse_int(parts[1].c_str(), "sequence_index");
       if (desc.type == DYNAMIC && sequence_index != 0) runtime_failure("Nonzero sequence index " << sequence_index << " of dynamic elementary feature '" << desc.name << "'!");
-      if (desc.type == PER_TAG && (sequence_index > 0 || sequence_index <= -order)) runtime_failure("Wrong sequence index " << sequence_index << " of per-tag elementary feature '" << desc.name << "'!");
+      if (desc.type == PER_TAG && (sequence_index > 0 || sequence_index <= -window_size)) runtime_failure("Wrong sequence index " << sequence_index << " of per-tag elementary feature '" << desc.name << "'!");
       if (desc.range == ONLY_CURRENT && sequence_index != 0) runtime_failure("Nonzero sequence index " << sequence_index << " of elementary feature '" << desc.name << "' requiring zero offset!");
 
       sequences.back().elements.emplace_back(it->second.type, it->second.index, sequence_index);
-      if (desc.type == DYNAMIC) sequences.back().dependant_range = max(sequences.back().dependant_range, order + 1);
+      if (desc.type == DYNAMIC) sequences.back().dependant_range = max(sequences.back().dependant_range, window_size + 1);
       if (desc.type == PER_TAG) sequences.back().dependant_range = max(sequences.back().dependant_range, 1 - sequence_index);
       contains_only_current |= desc.range == ONLY_CURRENT;
     }

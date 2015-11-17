@@ -19,7 +19,7 @@ namespace ufal {
 namespace morphodita {
 
 // Declarations
-template <class FeatureSequences, int order>
+template <class FeatureSequences, int decoding_order, int window_size>
 class viterbi {
  public:
   viterbi(const FeatureSequences& features) : features(features) {}
@@ -35,31 +35,31 @@ class viterbi {
 
 
 // Definitions
-template <class FeatureSequences, int order>
-struct viterbi<FeatureSequences, order>::cache {
+template <class FeatureSequences, int decoding_order, int window_size>
+struct viterbi<FeatureSequences, decoding_order, window_size>::cache {
   vector<node> nodes;
   typename FeatureSequences::cache features_cache;
 
-  cache(const viterbi<FeatureSequences, order>& self) : features_cache(self.features) {}
+  cache(const viterbi<FeatureSequences, decoding_order, window_size>& self) : features_cache(self.features) {}
 };
 
-template <class FeatureSequences, int order>
-struct viterbi<FeatureSequences, order>::node {
+template <class FeatureSequences, int decoding_order, int window_size>
+struct viterbi<FeatureSequences, decoding_order, window_size>::node {
   int tag;
   int prev;
   feature_sequences_score score;
   typename FeatureSequences::dynamic_features dynamic;
 };
 
-template <class FeatureSequences, int order>
-void viterbi<FeatureSequences, order>::tag(const vector<form_with_tags>& forms, int forms_size, cache& c, vector<int>& tags) const {
+template <class FeatureSequences, int decoding_order, int window_size>
+void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<form_with_tags>& forms, int forms_size, cache& c, vector<int>& tags) const {
   if (!forms_size) return;
 
   // Count number of nodes and allocate
   int nodes = 0;
   for (int i = 0, states = 1; i < forms_size; i++) {
     if (forms[i].tags.empty()) return;
-    states = (i >= order-1 ? states / forms[i-order+1].tags.size() : states) * forms[i].tags.size();
+    states = (i >= decoding_order-1 ? states / forms[i-decoding_order+1].tags.size() : states) * forms[i].tags.size();
     nodes += states;
   }
   if (nodes > int(c.nodes.size())) c.nodes.resize(nodes);
@@ -67,7 +67,7 @@ void viterbi<FeatureSequences, order>::tag(const vector<form_with_tags>& forms, 
   // Init feature sequences
   features.initialize_sentence(forms, forms_size, c.features_cache);
 
-  int window[order];
+  int window[window_size];
   typename FeatureSequences::dynamic_features dynamic;
   feature_sequences_score score;
 
@@ -76,13 +76,13 @@ void viterbi<FeatureSequences, order>::tag(const vector<form_with_tags>& forms, 
   for (int i = 0; i < forms_size; i++) {
     int nodes_next = nodes_now;
 
-    for (int j = 0; j < order; j++) window[j] = -1;
+    for (int j = 0; j < window_size; j++) window[j] = -1;
     for (int tag = 0; tag < int(forms[i].tags.size()); tag++)
       for (int prev = nodes_prev; prev < nodes_now; prev++) {
         // Compute predecessors and number of unchanges
         int same_tags = window[0] == tag;
         window[0] = tag;
-        for (int p = prev, n = 1; p >= 0 && n < order; p = c.nodes[p].prev, n++) {
+        for (int p = prev, n = 1; p >= 0 && n < window_size; p = c.nodes[p].prev, n++) {
           same_tags += same_tags == n && window[n] == c.nodes[p].tag;
           window[n] = c.nodes[p].tag;
         }
@@ -93,7 +93,7 @@ void viterbi<FeatureSequences, order>::tag(const vector<form_with_tags>& forms, 
             (prev >= 0 ? c.nodes[prev].score : 0);
 
         // Update existing node or create a new one
-        if (same_tags >= order-1) {
+        if (same_tags >= decoding_order-1) {
           if (score <= c.nodes[nodes_next-1].score) continue;
           nodes_next--;
         }

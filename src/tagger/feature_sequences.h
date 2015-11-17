@@ -46,7 +46,7 @@ class feature_sequences {
   typedef typename ElementaryFeatures::per_tag_features per_tag_features;
   typedef typename ElementaryFeatures::dynamic_features dynamic_features;
 
-  void parse(int order, istream& is);
+  void parse(int window_size, istream& is);
   bool load(istream& is);
   bool save(ostream& os);
 
