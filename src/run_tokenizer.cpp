@@ -10,7 +10,7 @@
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
 #include "utils/iostreams.h"
-#include "utils/parse_options.h"
+#include "utils/options.h"
 #include "utils/process_args.h"
 #include "version/version.h"
 
@@ -22,14 +22,14 @@ static void tokenize_xml(istream& is, ostream& os, tokenizer& tokenizer);
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
+  options::map options;
   bool show_usage =
-      !parse_options({{"tokenizer", option_values{"czech", "english", "generic"}},
-                      {"morphology", option_values::any},
-                      {"tagger", option_values::any},
-                      {"output", option_values{"vertical","xml"}},
-                      {"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+      !options::parse({{"tokenizer", options::value{"czech", "english", "generic"}},
+                       {"morphology", options::value::any},
+                       {"tagger", options::value::any},
+                       {"output", options::value{"vertical","xml"}},
+                       {"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help");
   if (!show_usage && options.count("version"))
     return cout << version::version_and_copyright() << endl, 0;

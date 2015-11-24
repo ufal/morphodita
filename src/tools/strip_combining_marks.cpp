@@ -10,8 +10,8 @@
 #include "unilib/utf8.h"
 #include "unilib/unistrip.h"
 #include "utils/iostreams.h"
+#include "utils/options.h"
 #include "utils/parse_int.h"
-#include "utils/parse_options.h"
 #include "utils/split.h"
 #include "version/version.h"
 
@@ -21,9 +21,9 @@ using namespace ufal::morphodita::unilib;
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
-  if (!parse_options({{"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+  options::map options;
+  if (!options::parse({{"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help"))
     runtime_failure("Usage: " << argv[0] << " [options] [column_index]\n"
                     "Options: --version\n"
