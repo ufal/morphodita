@@ -28,6 +28,7 @@ class binary_encoder {
   inline void add_4B(unsigned val);
   inline void add_float(double val);
   inline void add_double(double val);
+  inline void add_str(string_piece str);
   inline void add_data(string_piece data);
   template <class T> inline void add_data(const vector<T>& data);
   template <class T> inline void add_data(const T* data, size_t elements);
@@ -64,6 +65,12 @@ void binary_encoder::add_float(double val) {
 
 void binary_encoder::add_double(double val) {
   data.insert(data.end(), (unsigned char*) &val, ((unsigned char*) &val) + sizeof(double));
+}
+
+void binary_encoder::add_str(string_piece str) {
+  add_1B(str.len < 255 ? str.len : 255);
+  if (!(str.len < 255)) add_4B(str.len);
+  add_data(str);
 }
 
 void binary_encoder::add_data(string_piece data) {
