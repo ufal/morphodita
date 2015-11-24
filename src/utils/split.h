@@ -14,8 +14,27 @@
 namespace ufal {
 namespace morphodita {
 
+//
+// Declarations
+//
+
 // Split given text on the separator character.
-void split(const string& text, char sep, vector<string>& tokens);
+inline void split(const string& text, char sep, vector<string>& tokens);
+
+//
+// Definitions
+//
+
+inline void split(const string& text, char sep, vector<string>& tokens) {
+  tokens.clear();
+  if (text.empty()) return;
+
+  string::size_type index = 0;
+  for (string::size_type next; (next = text.find(sep, index)) != string::npos; index = next + 1)
+    tokens.emplace_back(text, index, next - index);
+
+  tokens.emplace_back(text, index);
+}
 
 } // namespace morphodita
 } // namespace ufal
