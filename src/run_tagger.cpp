@@ -13,6 +13,7 @@
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
 #include "utils/iostreams.h"
+#include "utils/iostreams_xml.h"
 #include "utils/options.h"
 #include "utils/process_args.h"
 #include "version/version.h"

@@ -47,7 +47,7 @@ $(call exe,tools/morpho_accuracy): $(call obj,$(MORPHO_O) utils/split)
 $(call exe,tools/remap_tags): $(call obj,$(MORPHO_O) utils/split)
 $(call exe,tools/strip_combining_marks): $(call obj,unilib/utf8 unilib/unistrip unilib/version utils/split version/version)
 $(call exe,tools/test_dictionary): $(call obj,$(MORPHO_O) morpho/raw_morpho_dictionary_reader utils/split)
-$(EXECUTABLES) $(SERVER) $(TOOLS):$(call exe,%): $$(call obj,% utils/iostreams utils/options)
+$(EXECUTABLES) $(SERVER) $(TOOLS):$(call exe,%): $$(call obj,% utils/options)
 	$(call link_exe,$@,$^,$(call win_subsystem,console))
 
 # cleaning

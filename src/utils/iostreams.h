@@ -9,35 +9,65 @@
 
 #pragma once
 
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
+#endif
+
 #include "common.h"
 
 namespace ufal {
 namespace morphodita {
 
+//
+// Declarations
+//
+
 // Initialize iostream and turn off stdio synchronization.
-void iostreams_init();
+inline void iostreams_init();
 
 // Use binary mode on cin.
-void iostreams_init_binary_input();
+inline void iostreams_init_binary_input();
 
 // Use binary mode on cout.
-void iostreams_init_binary_output();
+inline void iostreams_init_binary_output();
 
 // Read paragraph until EOF or end line. All encountered \n are stored.
-istream& getpara(istream& is, string& para);
+inline istream& getpara(istream& is, string& para);
 
-// Print xml content while encoding <>& and optionally " using XML entities.
-class xml_encoded {
- public:
-  xml_encoded(const string& str, bool encode_quot = false) : text(str.c_str()), length(str.size()), encode_quot(encode_quot) {}
-  xml_encoded(const char* str, size_t length, bool encode_quot = false) : text(str), length(length), encode_quot(encode_quot) {}
+//
+// Definitions
+//
 
-  friend ostream& operator<<(ostream& os, xml_encoded data);
- private:
-  const char* text;
-  size_t length;
-  bool encode_quot;
-};
+inline void iostreams_init() {
+  iostream::sync_with_stdio(false);
+}
+
+inline void iostreams_init_binary_input() {
+#ifdef _WIN32
+  _setmode(_fileno(stdin), _O_BINARY);
+#endif
+}
+
+inline void iostreams_init_binary_output() {
+#ifdef _WIN32
+  _setmode(_fileno(stdout), _O_BINARY);
+#endif
+}
+
+inline istream& getpara(istream& is, string& para) {
+  para.clear();
+
+  for (string line; getline(is, line); ) {
+    para.append(line);
+    para.push_back('\n');
+
+    if (line.empty()) break;
+  }
+
+  if (is.eof() && !para.empty()) is.clear(istream::eofbit);
+  return is;
+}
 
 } // namespace morphodita
 } // namespace ufal

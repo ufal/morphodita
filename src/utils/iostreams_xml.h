@@ -7,47 +7,37 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#ifdef _WIN32
-#include <fcntl.h>
-#include <io.h>
-#endif
+#pragma once
 
-#include "iostreams.h"
+#include "common.h"
 
 namespace ufal {
 namespace morphodita {
 
-void iostreams_init() {
-  iostream::sync_with_stdio(false);
-}
+//
+// Declarations
+//
 
-void iostreams_init_binary_input() {
-#ifdef _WIN32
-  _setmode(_fileno(stdin), _O_BINARY);
-#endif
-}
+// Print xml content while encoding <>& and optionally " using XML entities.
+class xml_encoded {
+ public:
+  xml_encoded(const string& str, bool encode_quot = false) : text(str.c_str()), length(str.size()), encode_quot(encode_quot) {}
+  xml_encoded(const char* str, size_t length, bool encode_quot = false) : text(str), length(length), encode_quot(encode_quot) {}
 
-void iostreams_init_binary_output() {
-#ifdef _WIN32
-  _setmode(_fileno(stdout), _O_BINARY);
-#endif
-}
+  friend ostream& operator<<(ostream& os, xml_encoded data);
+ private:
+  const char* text;
+  size_t length;
+  bool encode_quot;
+};
 
-istream& getpara(istream& is, string& para) {
-  para.clear();
+inline ostream& operator<<(ostream& os, xml_encoded data);
 
-  for (string line; getline(is, line); ) {
-    para.append(line);
-    para.push_back('\n');
+//
+// Definitions
+//
 
-    if (line.empty()) break;
-  }
-
-  if (is.eof() && !para.empty()) is.clear(istream::eofbit);
-  return is;
-}
-
-ostream& operator<<(ostream& os, xml_encoded data) {
+inline ostream& operator<<(ostream& os, xml_encoded data) {
   const char* to_print = data.text;
 
   while (data.length) {
