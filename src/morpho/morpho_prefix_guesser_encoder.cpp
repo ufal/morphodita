@@ -48,7 +48,7 @@ void morpho_prefix_guesser_encoder::encode(istream& is, binary_encoder& enc) {
   enc.add_1B(filters.size());
   for (auto&& filter : filters) {
     enc.add_1B(filter.size());
-    enc.add_str(filter);
+    enc.add_data(filter);
   }
 
   persistent_unordered_map(prefixes_initial, 5, true, false, [](binary_encoder& enc, uint32_t mask) { enc.add_4B(mask); }).save(enc);

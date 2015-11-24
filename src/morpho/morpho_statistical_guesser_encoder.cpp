@@ -61,7 +61,7 @@ void morpho_statistical_guesser_encoder::encode(istream& is, binary_encoder& enc
   enc.add_2B(tags.size());
   for (auto&& tag : tags) {
     enc.add_1B(tag.size());
-    enc.add_str(tag);
+    enc.add_data(tag);
   }
   enc.add_2B(statistical_guesser_default);
 
@@ -72,7 +72,7 @@ void morpho_statistical_guesser_encoder::encode(istream& is, binary_encoder& enc
       if (rule.first.size() != 4) runtime_failure("Replacement rule not of size 4 in statistical guesser!");
       for (auto&& affix : rule.first) {
         e.add_1B(affix.size());
-        e.add_str(affix);
+        e.add_data(affix);
       }
       e.add_1B(rule.second.size());
       for (auto&& tag : rule.second)

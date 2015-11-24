@@ -83,10 +83,10 @@ void persistent_unordered_map::save(binary_encoder& enc) {
 
 void persistent_unordered_map::fnv_hash::save(binary_encoder& enc) {
   enc.add_4B(hash.size());
-  enc.add_data((const unsigned char*)hash.data(), (const unsigned char*)(hash.data() + hash.size()));
+  enc.add_data(hash);
 
   enc.add_4B(data.size());
-  enc.add_data(data.data(), data.data() + data.size());
+  enc.add_data(data);
 }
 
 } // namespace morphodita

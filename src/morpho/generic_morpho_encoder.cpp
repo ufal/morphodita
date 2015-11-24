@@ -22,13 +22,13 @@ void generic_morpho_encoder::encode(istream& in_dictionary, int max_suffix_len, 
   binary_encoder enc;
 
   enc.add_1B(tags.unknown_tag.size());
-  enc.add_str(tags.unknown_tag);
+  enc.add_data(tags.unknown_tag);
   enc.add_1B(tags.number_tag.size());
-  enc.add_str(tags.number_tag);
+  enc.add_data(tags.number_tag);
   enc.add_1B(tags.punctuation_tag.size());
-  enc.add_str(tags.punctuation_tag);
+  enc.add_data(tags.punctuation_tag);
   enc.add_1B(tags.symbol_tag.size());
-  enc.add_str(tags.symbol_tag);
+  enc.add_data(tags.symbol_tag);
 
   cerr << "Encoding dictionary." << endl;
   morpho_dictionary_encoder<generic_lemma_addinfo>::encode(in_dictionary, max_suffix_len, enc);

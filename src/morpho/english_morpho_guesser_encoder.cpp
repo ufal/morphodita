@@ -65,7 +65,7 @@ void english_morpho_guesser_encoder::encode(istream& guesser_file, istream& nega
   enc.add_2B(tags.size());
   for (auto&& tag : tags) {
     enc.add_1B(tag.size());
-    enc.add_str(tag);
+    enc.add_data(tag);
   }
 
   // Save guesser exceptions
@@ -73,7 +73,7 @@ void english_morpho_guesser_encoder::encode(istream& guesser_file, istream& nega
     enc.add_1B(lemmas.size());
     for (auto&& lemma : lemmas) {
       enc.add_1B(lemma.first.size());
-      enc.add_str(lemma.first);
+      enc.add_data(lemma.first);
       enc.add_1B(lemma.second.size());
       for (auto&& tag : lemma.second)
         enc.add_2B(tags_map.at(tag));
