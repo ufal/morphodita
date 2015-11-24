@@ -29,7 +29,7 @@ inline void split(string_piece text, char sep, vector<string_piece>& tokens);
 // Definitions
 //
 
-inline void split(const string& text, char sep, vector<string>& tokens) {
+void split(const string& text, char sep, vector<string>& tokens) {
   tokens.clear();
   if (text.empty()) return;
 
@@ -40,7 +40,7 @@ inline void split(const string& text, char sep, vector<string>& tokens) {
   tokens.emplace_back(text, index);
 }
 
-inline void split(string_piece text, char sep, vector<string_piece>& tokens) {
+void split(string_piece text, char sep, vector<string_piece>& tokens) {
   tokens.clear();
   if (!text.len) return;
 

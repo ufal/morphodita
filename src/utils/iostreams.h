@@ -39,23 +39,23 @@ inline istream& getpara(istream& is, string& para);
 // Definitions
 //
 
-inline void iostreams_init() {
+void iostreams_init() {
   iostream::sync_with_stdio(false);
 }
 
-inline void iostreams_init_binary_input() {
+void iostreams_init_binary_input() {
 #ifdef _WIN32
   _setmode(_fileno(stdin), _O_BINARY);
 #endif
 }
 
-inline void iostreams_init_binary_output() {
+void iostreams_init_binary_output() {
 #ifdef _WIN32
   _setmode(_fileno(stdout), _O_BINARY);
 #endif
 }
 
-inline istream& getpara(istream& is, string& para) {
+istream& getpara(istream& is, string& para) {
   para.clear();
 
   for (string line; getline(is, line); ) {

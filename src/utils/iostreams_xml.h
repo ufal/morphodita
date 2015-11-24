@@ -37,7 +37,7 @@ inline ostream& operator<<(ostream& os, xml_encoded data);
 // Definitions
 //
 
-inline ostream& operator<<(ostream& os, xml_encoded data) {
+ostream& operator<<(ostream& os, xml_encoded data) {
   const char* to_print = data.text;
 
   while (data.length) {

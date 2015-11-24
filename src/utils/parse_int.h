@@ -34,7 +34,7 @@ inline int parse_int(string_piece str, const char* value_name);
 // Definitions
 //
 
-inline bool parse_int(string_piece str, const char* value_name, int& value, string& error) {
+bool parse_int(string_piece str, const char* value_name, int& value, string& error) {
   string_piece original = str;
 
   // Skip spaces
@@ -76,7 +76,7 @@ inline bool parse_int(string_piece str, const char* value_name, int& value, stri
   return true;
 }
 
-inline int parse_int(string_piece str, const char* value_name) {
+int parse_int(string_piece str, const char* value_name) {
   int result;
   string error;
 
