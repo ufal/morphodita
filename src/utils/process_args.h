@@ -26,7 +26,14 @@ void process_args(int argi, int argc, char* argv[], T processor, U&&... processo
     processor(cin, cout, std::forward<U>(processor_args)...);
   } else for (; argi < argc; argi++) {
     char* file_in = argv[argi];
-    char* file_out = strchr(file_in, ':');
+    char* file_out = strchr(file_in
+#ifdef _WIN32
+                            + ((((file_in[0] >= 'A' && file_in[0] <= 'Z') || (file_in[0] >= 'a' && file_in[0] <= 'z')) &&
+                                file_in[1] == ':' &&
+                                (file_in[2] == '/' || file_in[2] == '\\')
+                               ) ? 3 : 0)
+#endif
+                            , ':');
     if (file_out) *file_out++ = '\0';
 
     ifstream in(file_in);
