@@ -9,25 +9,81 @@
 
 #pragma once
 
-#include <cerrno>
+#include <limits>
 
 #include "common.h"
+#include "string_piece.h"
 
 namespace ufal {
 namespace morphodita {
 
+//
+// Declarations
+//
+
 // Try to parse an int from given string. If the int cannot be parsed or does
-// not fit into int, an error is displayed and program exits. If that happens,
-// the value_name argument is used in the error message.
-inline int parse_int(const char* str, const char* value_name) {
-  char* end;
+// not fit into int, false is returned and the error string is filled using the
+// value_name argument.
+inline bool parse_int(string_piece str, const char* value_name, int& value, string& error);
 
-  errno = 0;
-  long result = strtol(str, &end, 10);
-  if (*end || errno == ERANGE || result != int(result))
-    runtime_failure("Cannot parse " << value_name << " int value: '" << str << "'!");
+// Try to parse an int from given string. If the int cannot be parsed or does
+// not fit into int, an error is displayed and program exits.
+inline int parse_int(string_piece str, const char* value_name);
 
-  return int(result);
+//
+// Definitions
+//
+
+inline bool parse_int(string_piece str, const char* value_name, int& value, string& error) {
+  string_piece original = str;
+
+  // Skip spaces
+  while (str.len && (str.str[0] == ' ' || str.str[0] == '\f' || str.str[0] == '\n' || str.str[0] == '\r' || str.str[0] == '\t' || str.str[0] == '\v'))
+    str.str++, str.len--;
+
+  // Allow minus
+  bool positive = true;
+  if (str.len && str.str[0] == '-') {
+    positive = false;
+    str.str++, str.len--;
+  }
+
+  // Parse value, checking for overflow/underflow
+  if (!str.len) return error.assign("Cannot parse ").append(value_name).append(" int value '").append(original.str, original.len).append("': empty string."), false;
+  if (!(str.str[0] >= '0' || str.str[0] <= '9')) return error.assign("Cannot parse ").append(value_name).append(" int value '").append(original.str, original.len).append("': non-digit character found."), false;
+
+  value = 0;
+  while (str.len && str.str[0] >= '0' && str.str[0] <= '9') {
+    if (positive) {
+      if (value > (numeric_limits<int>::max() - (str.str[0] - '0')) / 10)
+        return error.assign("Cannot parse ").append(value_name).append(" int value '").append(original.str, original.len).append("': overflow occured."), false;
+      value = 10 * value + (str.str[0] - '0');
+    } else {
+      if (value < (numeric_limits<int>::min() + (str.str[0] - '0')) / 10)
+        return error.assign("Cannot parse ").append(value_name).append(" int value '").append(original.str, original.len).append("': underflow occured."), false;
+      value = 10 * value - (str.str[0] - '0');
+    }
+    str.str++, str.len--;
+  }
+
+  // Skip spaces
+  while (str.len && (str.str[0] == ' ' || str.str[0] == '\f' || str.str[0] == '\n' || str.str[0] == '\r' || str.str[0] == '\t' || str.str[0] == '\v'))
+    str.str++, str.len--;
+
+  // Check for remaining characters
+  if (str.len) return error.assign("Cannot parse ").append(value_name).append(" int value '").append(original.str, original.len).append("': non-digit character found."), false;
+
+  return true;
+}
+
+inline int parse_int(string_piece str, const char* value_name) {
+  int result;
+  string error;
+
+  if (!parse_int(str, value_name, result, error))
+    exit((cerr << error << endl, 1));
+
+  return result;
 }
 
 } // namespace morphodita
