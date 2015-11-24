@@ -16,7 +16,10 @@
 namespace ufal {
 namespace morphodita {
 
+//
 // Declarations
+//
+
 template <class T>
 class threadsafe_stack {
  public:
@@ -28,25 +31,27 @@ class threadsafe_stack {
   atomic_flag lock = ATOMIC_FLAG_INIT;
 };
 
-
+//
 // Definitions
+//
+
 template <class T>
 void threadsafe_stack<T>::push(T* t) {
-  while (lock.test_and_set()) {}
+  while (lock.test_and_set(memory_order_acquire)) {}
   stack.emplace_back(t);
-  lock.clear();
+  lock.clear(memory_order_release);
 }
 
 template <class T>
 T* threadsafe_stack<T>::pop() {
   T* res = nullptr;
 
-  while (lock.test_and_set()) {}
+  while (lock.test_and_set(memory_order_acquire)) {}
   if (!stack.empty()) {
     res = stack.back().release();
     stack.pop_back();
   }
-  lock.clear();
+  lock.clear(memory_order_release);
 
   return res;
 }
