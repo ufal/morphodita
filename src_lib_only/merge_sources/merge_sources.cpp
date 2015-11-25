@@ -66,6 +66,9 @@ void add_file(list<bundle_file>::iterator it, const string& top_directory, const
     }
   }
 
+  // Stop if the file ended.
+  if (is.eof()) return;
+
   // Check that correct namespaces are being opened
   for (auto&& namespace_opening : namespaces_opening) {
     if (line != namespace_opening) cerr << "Expected namespace declaration '" << namespace_opening << "' in file " << file << ", but got " << line << endl, exit(1);
