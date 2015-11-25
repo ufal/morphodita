@@ -101,13 +101,13 @@ static void tokenize_xml(istream& is, ostream& os, tokenizer& tokenizer) {
     const char* unprinted = para.c_str();
     while (tokenizer.next_sentence(&forms, nullptr))
       for (unsigned i = 0; i < forms.size(); i++) {
-        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
-        os << "<token>" << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+        os << "<token>" << xml_encoded(forms[i]) << "</token>";
         if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
 
-    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
+    os << xml_encoded(string_piece(unprinted, para.c_str() + para.size() - unprinted)) << flush;
   }
 }

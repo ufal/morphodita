@@ -116,16 +116,16 @@ void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_gu
         dictionary.analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
         tagset_converter.convert_analyzed(lemmas);
 
-        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
         os << "<token>";
         for (auto&& lemma : lemmas)
           os << "<analysis lemma=\"" << xml_encoded(lemma.lemma, true) << "\" tag=\"" << xml_encoded(lemma.tag, true) << "\"/>";
-        os << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+        os << xml_encoded(forms[i]) << "</token>";
         if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
 
-    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
+    os << xml_encoded(string_piece(unprinted, para.c_str() + para.size() - unprinted)) << flush;
   }
 }

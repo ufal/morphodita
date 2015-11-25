@@ -103,14 +103,14 @@ void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenize
       for (unsigned i = 0; i < forms.size(); i++) {
         tagset_converter.convert(tags[i]);
 
-        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
         os << "<token lemma=\"" << xml_encoded(tags[i].lemma, true) << "\" tag=\"" << xml_encoded(tags[i].tag, true) << "\">"
-           << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+           << xml_encoded(forms[i]) << "</token>";
         if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
     }
-    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
+    os << xml_encoded(string_piece(unprinted, para.c_str() + para.size() - unprinted)) << flush;
   }
 }
