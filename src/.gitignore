@@ -4,6 +4,7 @@ encode_dictionary
 libmorphodita.a
 libmorphodita.dyn.a
 libmorphodita.so
+rest_server/morphodita_server
 run_morpho_analyze
 run_morpho_cli
 run_morpho_generate
