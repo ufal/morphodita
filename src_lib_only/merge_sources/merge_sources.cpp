@@ -126,6 +126,8 @@ int main(int argc, char* argv[]) {
     cout << namespace_opening << endl;
 
   for (auto&& bundle : bundles) {
+    cerr << "Adding file " << bundle.file_name << endl;
+
     cout << endl;
     cout << "/////////" << endl;
     cout << "// File: " << bundle.file_name << endl;
