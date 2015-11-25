@@ -10,18 +10,21 @@
 #pragma once
 
 #include "common.h"
+#include "string_piece.h"
 
 namespace ufal {
 namespace morphodita {
 
-class binary_decoder;
-class binary_encoder;
-
-class compressor {
+class url_detector {
  public:
-  static bool load(istream& is, binary_decoder& data);
-  static bool save(ostream& os, const binary_encoder& enc);
+  enum url_type { NO_URL = 0, URL = 1, EMAIL = 2 };
+
+  // Detect whether given string is an url or an email.
+  // If length==nullptr, the whole str must match.
+  // If length!=nullptr, length of longest matching prefix is returned.
+  static url_type detect(string_piece str, size_t* length = nullptr);
 };
 
 } // namespace morphodita
 } // namespace ufal
+

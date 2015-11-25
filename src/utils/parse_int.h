@@ -1,4 +1,4 @@
-// This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
+// This file is part of UFAL C++ Utils <http://github.com/ufal/cpp_utils/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
 // Mathematics and Physics, Charles University in Prague, Czech Republic.
@@ -81,7 +81,7 @@ int parse_int(string_piece str, const char* value_name) {
   string error;
 
   if (!parse_int(str, value_name, result, error))
-    exit((cerr << error << endl, 1));
+    runtime_failure(error);
 
   return result;
 }

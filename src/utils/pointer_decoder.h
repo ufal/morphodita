@@ -1,4 +1,4 @@
-// This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
+// This file is part of UFAL C++ Utils <http://github.com/ufal/cpp_utils/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
 // Mathematics and Physics, Charles University in Prague, Czech Republic.
@@ -9,28 +9,32 @@
 
 #pragma once
 
-#include <stdexcept>
-
 #include "common.h"
 
 namespace ufal {
 namespace morphodita {
 
+//
 // Declarations
+//
+
 class pointer_decoder {
  public:
   inline pointer_decoder(const unsigned char*& data);
   inline unsigned next_1B();
   inline unsigned next_2B();
   inline unsigned next_4B();
+  inline void next_str(string& str);
   template <class T> inline const T* next(unsigned elements);
 
  private:
   const unsigned char*& data;
 };
 
-
+//
 // Definitions
+//
+
 pointer_decoder::pointer_decoder(const unsigned char*& data) : data(data) {}
 
 unsigned pointer_decoder::next_1B() {
@@ -47,6 +51,12 @@ unsigned pointer_decoder::next_4B() {
   unsigned result = *(uint32_t*)data;
   data += sizeof(uint32_t);
   return result;
+}
+
+void pointer_decoder::next_str(string& str) {
+  unsigned len = next_1B();
+  if (len == 255) len = next_4B();
+  str.assign(next<char>(len), len);
 }
 
 template <class T> const T* pointer_decoder::next(unsigned elements) {
