@@ -10,7 +10,7 @@
 #pragma once
 
 #include "common.h"
-#include "utils/small_stringops.h"
+#include "small_stringops.h"
 #include "utils/string_piece.h"
 
 namespace ufal {

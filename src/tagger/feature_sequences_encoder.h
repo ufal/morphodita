@@ -13,10 +13,10 @@
 
 #include "common.h"
 #include "feature_sequences.h"
+#include "morpho/persistent_unordered_map_encoder.h"
 #include "utils/binary_encoder.h"
 #include "utils/compressor.h"
 #include "utils/parse_int.h"
-#include "utils/persistent_unordered_map_encoder.h"
 #include "utils/split.h"
 
 namespace ufal {

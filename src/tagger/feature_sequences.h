@@ -12,10 +12,10 @@
 #include "common.h"
 #include "elementary_features.h"
 #include "form_with_tags.h"
+#include "morpho/persistent_unordered_map.h"
+#include "morpho/small_stringops.h"
 #include "utils/binary_decoder.h"
 #include "utils/compressor.h"
-#include "utils/persistent_unordered_map.h"
-#include "utils/small_stringops.h"
 #include "vli.h"
 
 namespace ufal {

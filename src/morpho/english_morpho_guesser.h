@@ -11,8 +11,8 @@
 
 #include "common.h"
 #include "morpho.h"
+#include "persistent_unordered_map.h"
 #include "utils/binary_decoder.h"
-#include "utils/persistent_unordered_map.h"
 
 namespace ufal {
 namespace morphodita {

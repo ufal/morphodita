@@ -10,8 +10,8 @@
 #pragma once
 
 #include "common.h"
-#include "binary_encoder.h"
 #include "persistent_unordered_map.h"
+#include "utils/binary_encoder.h"
 
 namespace ufal {
 namespace morphodita {

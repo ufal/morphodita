@@ -15,11 +15,11 @@
 #include <unordered_set>
 
 #include "common.h"
+#include "persistent_unordered_map_encoder.h"
 #include "raw_morpho_dictionary_reader.h"
 #include "utils/binary_encoder.h"
 #include "utils/new_unique_ptr.h"
 #include "utils/parse_int.h"
-#include "utils/persistent_unordered_map_encoder.h"
 
 namespace ufal {
 namespace morphodita {

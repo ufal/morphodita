@@ -12,8 +12,8 @@
 #include <unordered_map>
 
 #include "english_morpho_guesser_encoder.h"
+#include "persistent_unordered_map_encoder.h"
 #include "utils/parse_int.h"
-#include "utils/persistent_unordered_map_encoder.h"
 #include "utils/split.h"
 
 namespace ufal {

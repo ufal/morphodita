@@ -10,10 +10,10 @@
 #pragma once
 
 #include "common.h"
+#include "morpho/persistent_unordered_map.h"
 #include "tagger.h"
 #include "utils/binary_decoder.h"
 #include "utils/compressor.h"
-#include "utils/persistent_unordered_map.h"
 
 namespace ufal {
 namespace morphodita {
