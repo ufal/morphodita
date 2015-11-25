@@ -96,7 +96,7 @@ void ragel_tokenizer::ragel_map_add(char32_t chr, uint8_t mapping) {
 bool ragel_tokenizer::ragel_url_email(unsigned version, const vector<char_info>& chars, size_t& current, vector<token_range>& tokens) {
   int cs;
 
-  size_t start = current, end = current;
+  size_t start = current, end = current, parens = 0;
   %%{
     include ragel_tokenizer;
 
@@ -104,9 +104,11 @@ bool ragel_tokenizer::ragel_url_email(unsigned version, const vector<char_info>&
 
     uchar = alnum | "$" | "-" | "_" | "." | "+" | "!" | "*" | "'" | "(" | ")" | "," | "%";
     xchar = uchar | ";" | "/" | "?" | ":" | "@" | "&" | "=";
-    u_alnum = alnum | ((u_L | u_M | u_N) when version_2);
+    u_alnum = alnum | u_L | u_M | u_N;
 
-    urlpath = '/' | '/' (xchar | u_alnum)* ((alnum | u_alnum) | "'" | ')');
+    urlpath = '/' |
+        ('/' xchar* (alnum | "'" | ')')) inwhen !version_2 |
+        ('/' ('(' >{parens++;} | ')' >{parens-=!!parens;} | xchar | u_alnum)* (')' when {parens} | (xchar -- [.!',;?:)]) | u_alnum)) inwhen version_2;
 
     port = ':' digit*;
 
