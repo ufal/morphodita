@@ -9,6 +9,7 @@
 
 #include "morpho/morpho.h"
 #include "utils/iostreams.h"
+#include "utils/iostreams_xml.h"
 #include "utils/options.h"
 #include "utils/parse_int.h"
 #include "utils/split.h"
