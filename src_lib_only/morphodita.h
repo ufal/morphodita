@@ -7,8 +7,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#ifndef MORPHODITA_H
-#define MORPHODITA_H
+#ifndef UFAL_MORPHODITA_H
+#define UFAL_MORPHODITA_H
 
 #include <cstdio>
 #include <cstring>
