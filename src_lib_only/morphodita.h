@@ -10,8 +10,8 @@
 #ifndef UFAL_MORPHODITA_H
 #define UFAL_MORPHODITA_H
 
-#include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <string>
 #include <vector>
 
