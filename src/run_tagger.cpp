@@ -13,7 +13,8 @@
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
 #include "utils/iostreams.h"
-#include "utils/parse_options.h"
+#include "utils/iostreams_xml.h"
+#include "utils/options.h"
 #include "utils/process_args.h"
 #include "version/version.h"
 
@@ -25,12 +26,12 @@ static void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& t
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
-  if (!parse_options({{"input",option_values{"untokenized", "vertical"}},
-                      {"convert_tagset",option_values::any},
-                      {"output",option_values{"vertical","xml"}},
-                      {"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+  options::map options;
+  if (!options::parse({{"input",options::value{"untokenized", "vertical"}},
+                       {"convert_tagset",options::value::any},
+                       {"output",options::value{"vertical","xml"}},
+                       {"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       (argc < 2 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] tagger_file [file[:output_file]]...\n"
@@ -102,14 +103,14 @@ void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenize
       for (unsigned i = 0; i < forms.size(); i++) {
         tagset_converter.convert(tags[i]);
 
-        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
         os << "<token lemma=\"" << xml_encoded(tags[i].lemma, true) << "\" tag=\"" << xml_encoded(tags[i].tag, true) << "\">"
-           << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+           << xml_encoded(forms[i]) << "</token>";
         if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
     }
-    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
+    os << xml_encoded(string_piece(unprinted, para.c_str() + para.size() - unprinted)) << flush;
   }
 }

@@ -29,7 +29,7 @@ class tagger {
   // Perform morphologic analysis and subsequent disambiguation.
   virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const = 0;
 
-  // Construct a new tokenizer instance appropriate for this tokenizer.
+  // Construct a new tokenizer instance appropriate for this tagger.
   // Can return NULL if no such tokenizer exists.
   // Is equal to get_morpho()->new_tokenizer.
   tokenizer* new_tokenizer() const;

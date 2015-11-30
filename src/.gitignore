@@ -1,9 +1,9 @@
 /.build/
-*.swp
 encode_dictionary
 libmorphodita.a
 libmorphodita.dyn.a
 libmorphodita.so
+rest_server/morphodita_server
 run_morpho_analyze
 run_morpho_cli
 run_morpho_generate
@@ -18,3 +18,5 @@ tools/remap_tags
 tools/strip_combining_marks
 tools/test_dictionary
 train_tagger
+*.exe
+*.swp

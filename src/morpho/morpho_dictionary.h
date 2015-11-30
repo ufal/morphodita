@@ -11,10 +11,10 @@
 
 #include "common.h"
 #include "morpho.h"
+#include "persistent_unordered_map.h"
+#include "small_stringops.h"
 #include "tag_filter.h"
 #include "utils/binary_decoder.h"
-#include "utils/persistent_unordered_map.h"
-#include "utils/small_stringops.h"
 
 namespace ufal {
 namespace morphodita {

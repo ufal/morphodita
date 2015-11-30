@@ -16,8 +16,8 @@
 #include "tagger/tagger_ids.h"
 #include "tagger/tagger_trainer.h"
 #include "utils/iostreams.h"
+#include "utils/options.h"
 #include "utils/parse_int.h"
-#include "utils/parse_options.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
@@ -25,9 +25,9 @@ using namespace ufal::morphodita;
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
-  if (!parse_options({{"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+  options::map options;
+  if (!options::parse({{"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       (argc < 2 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] tagger_identifier [tagger_identifier_specific_options]\n"
@@ -44,8 +44,10 @@ int main(int argc, char* argv[]) {
 
   switch (id) {
     case tagger_ids::CZECH2:
+    case tagger_ids::CZECH2_3:
     case tagger_ids::CZECH3:
     case tagger_ids::GENERIC2:
+    case tagger_ids::GENERIC2_3:
     case tagger_ids::GENERIC3:
     case tagger_ids::GENERIC4:
       {
@@ -75,19 +77,25 @@ int main(int argc, char* argv[]) {
         cout.put(id);
         switch (id) {
           case tagger_ids::CZECH2:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 2, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            break;
+          case tagger_ids::CZECH2_3:
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 2, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::CZECH3:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<czech_elementary_features>, 3, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::GENERIC2:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 2, 2>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            break;
+          case tagger_ids::GENERIC2_3:
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 2, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::GENERIC3:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 3, 3>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
           case tagger_ids::GENERIC4:
-            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 4>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>, 4, 4>>::train(iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
         }
         cerr << "Tagger saved." << endl;

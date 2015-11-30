@@ -10,29 +10,29 @@
 #pragma once
 
 #include "common.h"
-#include "hyphenated_sequences_map.h"
-#include "utf8_tokenizer.h"
+#include "morpho/morpho.h"
+#include "ragel_tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
 
-class czech_tokenizer : public utf8_tokenizer {
+class czech_tokenizer : public ragel_tokenizer {
  public:
   enum tokenizer_language { CZECH = 0, SLOVAK = 1 };
   enum { LATEST = 1 };
-  czech_tokenizer(tokenizer_language language, unsigned version);
+  czech_tokenizer(tokenizer_language language, unsigned version, const morpho* m = nullptr);
 
-  virtual bool next_sentence(vector<string_piece>& forms) override;
+  virtual bool next_sentence(vector<token_range>& tokens) override;
 
  private:
-  unsigned version;
-  string buffer;
-  const unordered_set<string>* eos_word_exceptions;
-  const hyphenated_sequences_map* hyphenated_sequences;
+  const morpho* m;
+  const unordered_set<string>* abbreviations;
+  vector<tagged_lemma> lemmas;
 
-  static const unordered_set<string> eos_word_exceptions_czech;
-  static const unordered_set<string> eos_word_exceptions_slovak;
-  static const hyphenated_sequences_map hyphenated_sequences_czech;
+  void merge_hyphenated(vector<token_range>& tokens);
+
+  static const unordered_set<string> abbreviations_czech;
+  static const unordered_set<string> abbreviations_slovak;
 };
 
 } // namespace morphodita

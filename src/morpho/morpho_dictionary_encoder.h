@@ -15,11 +15,11 @@
 #include <unordered_set>
 
 #include "common.h"
+#include "persistent_unordered_map_encoder.h"
 #include "raw_morpho_dictionary_reader.h"
 #include "utils/binary_encoder.h"
 #include "utils/new_unique_ptr.h"
 #include "utils/parse_int.h"
-#include "utils/persistent_unordered_map_encoder.h"
 
 namespace ufal {
 namespace morphodita {
@@ -220,7 +220,7 @@ void dictionary<LemmaAddinfo>::encode(binary_encoder& enc) {
 
     enc.add_1B(prev.length() - cpl);
     enc.add_1B(lemma.lemma.size() - cpl);
-    enc.add_str(lemma.lemma.substr(cpl));
+    enc.add_data(lemma.lemma.substr(cpl));
     enc.add_1B(lemma.addinfo.data.size());
     enc.add_data(lemma.addinfo.data);
     enc.add_1B(lemma.forms.size());
@@ -242,11 +242,11 @@ void dictionary<LemmaAddinfo>::encode(binary_encoder& enc) {
       if (best_prev_from + best_len < prev_form.size()) enc.add_1B(prev_form.size() - best_prev_from - best_len);
       if (best_form_from > 0) {
         enc.add_1B(best_form_from);
-        enc.add_str(lemma_form.form.substr(0, best_form_from));
+        enc.add_data(lemma_form.form.substr(0, best_form_from));
       }
       if (best_form_from + best_len < lemma_form.form.size()) {
         enc.add_1B(lemma_form.form.size() - best_form_from - best_len);
-        enc.add_str(lemma_form.form.substr(best_form_from + best_len));
+        enc.add_data(lemma_form.form.substr(best_form_from + best_len));
       }
       enc.add_2B(lemma_form.clas);
 
@@ -260,7 +260,7 @@ void dictionary<LemmaAddinfo>::encode(binary_encoder& enc) {
   enc.add_2B(tags.size());
   for (auto&& tag : tags) {
     enc.add_1B(tag.size());
-    enc.add_str(tag);
+    enc.add_data(tag);
   }
 
   // Encode classes

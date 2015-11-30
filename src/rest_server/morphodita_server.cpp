@@ -13,8 +13,8 @@
 #include "common.h"
 #include "morphodita_service.h"
 #include "utils/iostreams.h"
+#include "utils/options.h"
 #include "utils/parse_int.h"
-#include "utils/parse_options.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
@@ -58,10 +58,10 @@ morphodita_service service;
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
-  if (!parse_options({{"daemon",option_values::none},
-                      {"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+  options::map options;
+  if (!options::parse({{"daemon",options::value::none},
+                       {"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       ((argc < 2 || (argc % 4) != 2) && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] port (model_name model_weblicht_id model_file acknowledgements)*\n"

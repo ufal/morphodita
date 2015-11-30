@@ -8,8 +8,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include "morpho_statistical_guesser.h"
+#include "small_stringops.h"
 #include "utils/binary_decoder.h"
-#include "utils/small_stringops.h"
 
 namespace ufal {
 namespace morphodita {

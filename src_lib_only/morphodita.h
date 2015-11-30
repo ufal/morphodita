@@ -7,11 +7,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#ifndef MORPHODITA_H
-#define MORPHODITA_H
+#ifndef UFAL_MORPHODITA_H
+#define UFAL_MORPHODITA_H
 
-#include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -155,7 +155,7 @@ class tagger {
   // Perform morphologic analysis and subsequent disambiguation.
   virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
 
-  // Construct a new tokenizer instance appropriate for this tokenizer.
+  // Construct a new tokenizer instance appropriate for this tagger.
   // Can return NULL if no such tokenizer exists.
   // Is equal to get_morpho()->new_tokenizer.
   tokenizer* new_tokenizer() const;

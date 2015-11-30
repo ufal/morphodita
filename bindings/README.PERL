@@ -70,6 +70,7 @@ Main Classes
     unsigned major;
     unsigned minor;
     unsigned patch;
+    string prerelease;
 
     static Version current();
   };

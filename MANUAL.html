@@ -2631,6 +2631,10 @@ virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
 Returns a new instance of a suitable tokenizer or <code>NULL</code> if no such tokenizer
 exists. The user should delete it after use.
 </p>
+<p>
+Note that the tokenizer might use the <code>morpho</code> instance, so the tokenizer
+must not be used after the <code>morpho</code> instance is destructed.
+</p>
 
 <a id="tagger" name="tagger"></a>
 <h2>7.11. Class tagger</h2>
@@ -2882,6 +2886,7 @@ class Version {
   unsigned major;
   unsigned minor;
   unsigned patch;
+  string prerelease;
 
   static Version current();
 };

@@ -14,9 +14,9 @@
 #include <unordered_map>
 
 #include "common.h"
-#include "binary_decoder.h"
 #include "small_stringops.h"
-#include "pointer_decoder.h"
+#include "utils/binary_decoder.h"
+#include "utils/pointer_decoder.h"
 
 namespace ufal {
 namespace morphodita {

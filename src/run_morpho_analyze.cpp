@@ -11,8 +11,9 @@
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
 #include "utils/iostreams.h"
+#include "utils/iostreams_xml.h"
+#include "utils/options.h"
 #include "utils/parse_int.h"
-#include "utils/parse_options.h"
 #include "utils/process_args.h"
 #include "version/version.h"
 
@@ -24,13 +25,13 @@ static void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
-  if (!parse_options({{"input",option_values{"untokenized", "vertical"}},
-                      {"convert_tagset",option_values::any},
-                      {"output",option_values{"vertical","xml"}},
-                      {"from_tagger",option_values::none},
-                      {"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+  options::map options;
+  if (!options::parse({{"input",options::value{"untokenized", "vertical"}},
+                       {"convert_tagset",options::value::any},
+                       {"output",options::value{"vertical","xml"}},
+                       {"from_tagger",options::value::none},
+                       {"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       (argc < 3 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << "[options] dict_file use_guesser [file[:output_file]]...\n"
@@ -115,16 +116,16 @@ void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_gu
         dictionary.analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
         tagset_converter.convert_analyzed(lemmas);
 
-        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
         os << "<token>";
         for (auto&& lemma : lemmas)
           os << "<analysis lemma=\"" << xml_encoded(lemma.lemma, true) << "\" tag=\"" << xml_encoded(lemma.tag, true) << "\"/>";
-        os << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+        os << xml_encoded(forms[i]) << "</token>";
         if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
 
-    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
+    os << xml_encoded(string_piece(unprinted, para.c_str() + para.size() - unprinted)) << flush;
   }
 }

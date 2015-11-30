@@ -10,7 +10,7 @@
 #pragma once
 
 #include "common.h"
-#include "tokenizer/string_piece.h"
+#include "utils/string_piece.h"
 #include "unilib/unicode.h"
 #include "unilib/utf8.h"
 

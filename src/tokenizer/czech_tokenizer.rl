@@ -7,11 +7,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <cstring>
-
 #include "czech_tokenizer.h"
 #include "unilib/unicode.h"
-#include "unilib/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -22,7 +19,7 @@ namespace morphodita {
 }%%
 
 // The list of lower cased words that when preceding eos do not end sentence.
-const unordered_set<string> czech_tokenizer::eos_word_exceptions_czech = {
+const unordered_set<string> czech_tokenizer::abbreviations_czech = {
   // Titles
   "prof", "csc", "drsc", "doc", "phd", "ph", "d",
   "judr", "mddr", "mudr", "mvdr", "paeddr", "paedr", "phdr", "rndr", "rsdr", "dr",
@@ -38,7 +35,7 @@ const unordered_set<string> czech_tokenizer::eos_word_exceptions_czech = {
   "sv", "tel", "tj", "tzv", "ú", "u", "uh", "ul", "um", "zl", "zn",
 };
 
-const unordered_set<string> czech_tokenizer::eos_word_exceptions_slovak = {
+const unordered_set<string> czech_tokenizer::abbreviations_slovak = {
   // Titles
   "prof", "csc", "drsc", "doc", "phd", "ph", "d",
   "judr", "mddr", "mudr", "mvdr", "paeddr", "paedr", "phdr", "rndr", "rsdr", "dr",
@@ -54,95 +51,98 @@ const unordered_set<string> czech_tokenizer::eos_word_exceptions_slovak = {
   "sv", "tel", "tj", "tzv", "ú", "u", "uh", "ul", "um", "zl", "zn",
 };
 
-// List of hyphenated sequences that should be tokenized as words. Additional letters
-// are allowed after the listed sequences. The uppercase letters must be uppercase to match,
-// but the lowercase letters might be uppercased (or titlecased).
-const hyphenated_sequences_map czech_tokenizer::hyphenated_sequences_czech = {
-  "CD-ROM", "Chang-čou", "Chuang-min", "Chuang-pchu", "Coca-Col", "Frýdecko-Místecka",
-  "Frýdecko-Místecko", "Frýdecko-Místecku", "Frýdek-Místek", "Frýdkem-Místkem",
-  "Frýdku-Místku", "Guth-Jarkovský", "Gutha-Jarkovského", "Guthem-Jarkovským",
-  "Guthovi-Jarkovskému", "Guthu-Jarkovském", "Harley-Davidson", "Hewlett-Packard",
-  "IP-adres", "KDU-ČSL", "Ki-mun", "Koh-i-noor", "Kuang-tun", "Kuang-čou", "Kuo-fen",
-  "Mercedes-Benz", "Mjong-ba", "Notre-Dame", "Orient-expres", "RM-Systém",
-  "Rakousko-Uherska", "Rakousko-Uherskem", "Rakousko-Uhersko", "Rakousko-Uhersku",
-  "Rolls-Royce", "Seton-Watson", "T-Mobil", "T-Mobile", "Tchaj-wan", "U-ramp",
-  "US-DEU", "al-Kajd", "al-Kajdá", "al-Káid", "beta-blokátor", "coca-col",
-  "duty-free", "e-business", "e-mail", "e-mailov", "fair-play", "fifty-fifty",
-  "hands-free", "hi-fi", "hi-tech", "high-tech", "know-how", "kung-fu", "make-up",
-  "marxismu-leninismu", "marxismus-leninismus", "on-line", "ping-pong", "ping-pongář",
-  "play-off", "pop-music", "propan-butan", "sci-fi", "sex-appeal", "show-business"
-};
-
-czech_tokenizer::czech_tokenizer(tokenizer_language language, unsigned version) : version(version) {
-  // Fill eos_word_exceptions and hyphenated_sequences.
+czech_tokenizer::czech_tokenizer(tokenizer_language language, unsigned /*version*/, const morpho* m)
+  : ragel_tokenizer(1), m(m) {
   switch (language) {
     case CZECH:
-      eos_word_exceptions = &eos_word_exceptions_czech;
-      hyphenated_sequences = &hyphenated_sequences_czech;
+      abbreviations = &abbreviations_czech;
       break;
     case SLOVAK:
-      eos_word_exceptions = &eos_word_exceptions_slovak;
-      hyphenated_sequences = nullptr;
+      abbreviations = &abbreviations_slovak;
       break;
   }
 }
 
-bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
+void czech_tokenizer::merge_hyphenated(vector<token_range>& tokens) {
+  using namespace unilib;
+
+  if (!m) return;
+  if (tokens.empty() || chars[tokens.back().start].cat & ~unicode::L) return;
+
+  unsigned matched_hyphens = 0;
+  for (unsigned hyphens = 1; hyphens <= 2; hyphens++) {
+    // Are the tokens a sequence of 'hyphens' hyphenated tokens?
+    if (tokens.size() < 2*hyphens + 1) break;
+    unsigned first_hyphen = tokens.size() - 2*hyphens;
+    if (tokens[first_hyphen].length != 1 || chars[tokens[first_hyphen].start].cat & ~unicode::P ||
+        tokens[first_hyphen].start + tokens[first_hyphen].length != tokens[first_hyphen + 1].start ||
+        tokens[first_hyphen-1].start + tokens[first_hyphen-1].length != tokens[first_hyphen].start ||
+        chars[tokens[first_hyphen-1].start].cat & ~unicode::L)
+      break;
+
+    if (m->analyze(string_piece(chars[tokens[first_hyphen-1].start].str, chars[tokens.back().start + tokens.back().length].str - chars[tokens[first_hyphen-1].start].str), morpho::NO_GUESSER, lemmas) >= 0)
+      matched_hyphens = hyphens;
+  }
+
+  if (matched_hyphens) {
+    unsigned first = tokens.size() - 2*matched_hyphens - 1;
+    tokens[first].length = tokens.back().start + tokens.back().length - tokens[first].start;
+    tokens.resize(first + 1);
+  }
+}
+
+bool czech_tokenizer::next_sentence(vector<token_range>& tokens) {
   using namespace unilib;
 
   int cs, act;
-  const char* ts, *te;
-  const char* text_start = text;
+  size_t ts, te;
+  size_t whitespace = 0; // Suppress "may be uninitialized" warning
 
-  const char* unary_text;
-  const char* whitespace = nullptr; // Suppress "may be uninitialized" warning
+  while (tokenize_url_email(tokens))
+    if (emergency_sentence_split(tokens))
+      return true;
   %%{
-    variable p text;
-    variable pe text_end;
-    variable eof text_end;
-    alphtype unsigned char;
-    getkey (unsigned char)*text;
-
-    include utf8 "ragel/utf8.rl";
-    include url "ragel/url.rl";
+    include ragel_tokenizer "ragel_tokenizer.rl";
 
     # Tokenization
-    action unary_minus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N | unicode::Pd)) }
-    action unary_plus_allowed { text == text_start || (utf8_back(unary_text=text, text_start), unicode::category(utf8::first(unary_text, text - unary_text)) & ~(unicode::L | unicode::M | unicode::N) && *unary_text != '+') }
-    whitespace = [\r\t\n] | utf8_Zs;
+    action unary_minus_allowed { !current || (chars[current-1].cat & ~(unicode::L | unicode::M | unicode::N | unicode::Pd)) }
+    action unary_plus_allowed { !current || ((chars[current-1].cat & ~(unicode::L | unicode::M | unicode::N)) && chars[current-1].chr != '+') }
+    whitespace = [\r\t\n] | u_Zs;
     eol = '\r' ('' >(eol,0) | '\n' >(eol,1)) | '\n' ('' >(eol,0) | '\r' >(eol,1));
-    word = utf8_L (utf8_L | utf8_M)*;
-    number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? utf8_Nd+ ([.,] utf8_Nd+)? ([eE] [+\-]? utf8_Nd+)?;
+    word = u_L (u_L | u_M)*;
+    number = ('-' when unary_minus_allowed | '+' when unary_plus_allowed)? u_Nd+ ([.,] u_Nd+)? ([eE] [+\-]? u_Nd+)?;
 
     # Segmentation
-    action mark_whitespace { whitespace = text; }
-    eos = [.!?] | '…';
-    closing = '"' | "'" | ';' | utf8_Pe | utf8_Pf;
-    opening = '"' | '`' | utf8_Ps | utf8_Pi;
+    action mark_whitespace { whitespace = current; }
+    eos = [.!?] | u_3dot;
+    closing = '"' | "'" | ';' | u_Pe | u_Pf;
+    opening = '"' | '`' | u_Ps | u_Pi;
 
     main := |*
-      word | number | url | (utf8_any - whitespace)
-        { forms.emplace_back(ts, te - ts);
-
-          if (hyphenated_sequences) hyphenated_sequences->join(forms, buffer);
-          if (emergency_sentence_split(forms)) fbreak;
+      word | number | (any - whitespace)
+        { tokens.emplace_back(ts, te - ts);
+          merge_hyphenated(tokens);
+          current = te;
+          do
+            if (emergency_sentence_split(tokens)) fbreak;
+          while (tokenize_url_email(tokens));
+          fexec current;
         };
 
-      eos closing* whitespace+ >mark_whitespace opening* (utf8_Lu | utf8_Lt)
+      eos closing* whitespace+ >mark_whitespace opening* (u_Lu | u_Lt)
         {
-          // Does this eos character marks end of sentence?
-          bool eos_word_exception = is_eos_exception(forms, eos_word_exceptions, buffer);
-
-          // Add all characters until first space to forms and break if eos.
-          for (text = ts; text < whitespace; forms.emplace_back(ts, text - ts), ts = text) utf8_advance(text, whitespace);
+          bool eos = is_eos(tokens, chars[ts].chr, abbreviations);
+          for (current = ts; current < whitespace; current++)
+            tokens.emplace_back(current, 1);
           fexec whitespace;
-          if (!eos_word_exception) fbreak;
+          if (eos) fbreak;
         };
+
 
       whitespace+ -- eol eol;
 
       eol eol
-        { if (!forms.empty()) fbreak; };
+        { if (!tokens.empty()) fbreak; };
     *|;
 
     write init;
@@ -150,7 +150,7 @@ bool czech_tokenizer::next_sentence(vector<string_piece>& forms) {
   }%%
   (void)act; // Suppress unused variable warning
 
-  return !forms.empty();
+  return !tokens.empty();
 }
 
 } // namespace morphodita

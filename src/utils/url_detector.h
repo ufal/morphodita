@@ -1,4 +1,4 @@
-// This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
+// This file is part of UFAL C++ Utils <http://github.com/ufal/cpp_utils/>.
 //
 // Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
 // Mathematics and Physics, Charles University in Prague, Czech Republic.
@@ -9,24 +9,22 @@
 
 #pragma once
 
-#include <initializer_list>
-#include <unordered_map>
-
 #include "common.h"
 #include "string_piece.h"
 
 namespace ufal {
 namespace morphodita {
 
-class hyphenated_sequences_map {
+class url_detector {
  public:
-  hyphenated_sequences_map(std::initializer_list<string> sequences);
-  bool join(vector<string_piece>& forms, string& buffer) const;
+  enum url_type { NO_URL = 0, URL = 1, EMAIL = 2 };
 
- private:
-  unsigned max_hyphens;
-  unordered_map<string, string> sequences;
+  // Detect whether given string is an url or an email.
+  // If length==nullptr, the whole str must match.
+  // If length!=nullptr, length of longest matching prefix is returned.
+  static url_type detect(string_piece str, size_t* length = nullptr);
 };
 
 } // namespace morphodita
 } // namespace ufal
+

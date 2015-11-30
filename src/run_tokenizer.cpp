@@ -10,7 +10,8 @@
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
 #include "utils/iostreams.h"
-#include "utils/parse_options.h"
+#include "utils/iostreams_xml.h"
+#include "utils/options.h"
 #include "utils/process_args.h"
 #include "version/version.h"
 
@@ -22,14 +23,14 @@ static void tokenize_xml(istream& is, ostream& os, tokenizer& tokenizer);
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
+  options::map options;
   bool show_usage =
-      !parse_options({{"tokenizer", option_values{"czech", "english", "generic"}},
-                      {"morphology", option_values::any},
-                      {"tagger", option_values::any},
-                      {"output", option_values{"vertical","xml"}},
-                      {"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+      !options::parse({{"tokenizer", options::value{"czech", "english", "generic"}},
+                       {"morphology", options::value::any},
+                       {"tagger", options::value::any},
+                       {"output", options::value{"vertical","xml"}},
+                       {"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help");
   if (!show_usage && options.count("version"))
     return cout << version::version_and_copyright() << endl, 0;
@@ -47,20 +48,23 @@ int main(int argc, char* argv[]) {
                     "         --help");
 
   unique_ptr<tokenizer> tokenizer;
+  unique_ptr<morpho> morpho;
+  unique_ptr<tagger> tagger;
+
   if (options.count("tokenizer") && options["tokenizer"] == "czech") tokenizer.reset(tokenizer::new_czech_tokenizer());
   else if (options.count("tokenizer") && options["tokenizer"] == "english") tokenizer.reset(tokenizer::new_english_tokenizer());
   else if (options.count("tokenizer") && options["tokenizer"] == "generic") tokenizer.reset(tokenizer::new_generic_tokenizer());
   else if (options.count("morphology")) {
     cerr << "Loading dictionary: ";
-    unique_ptr<morpho> dictionary(morpho::load(options["morphology"].c_str()));
-    if (!dictionary) runtime_failure("Cannot load dictionary from file '" << options["morphology"] << "'!");
+    morpho.reset(morpho::load(options["morphology"].c_str()));
+    if (!morpho) runtime_failure("Cannot load dictionary from file '" << options["morphology"] << "'!");
     cerr << "done" << endl;
 
-    tokenizer.reset(dictionary->new_tokenizer());
+    tokenizer.reset(morpho->new_tokenizer());
     if (!tokenizer) runtime_failure("No tokenizer is defined for the supplied model!");
   } else /*if (options.count("tagger"))*/ {
     cerr << "Loading tagger: ";
-    unique_ptr<tagger> tagger(tagger::load(options["tagger"].c_str()));
+    tagger.reset(tagger::load(options["tagger"].c_str()));
     if (!tagger) runtime_failure("Cannot load dictionary from file '" << options["tagger"] << "'!");
     cerr << "done" << endl;
 
@@ -97,13 +101,13 @@ static void tokenize_xml(istream& is, ostream& os, tokenizer& tokenizer) {
     const char* unprinted = para.c_str();
     while (tokenizer.next_sentence(&forms, nullptr))
       for (unsigned i = 0; i < forms.size(); i++) {
-        os << xml_encoded(unprinted, forms[i].str - unprinted);
+        os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
-        os << "<token>" << xml_encoded(forms[i].str, forms[i].len) << "</token>";
+        os << "<token>" << xml_encoded(forms[i]) << "</token>";
         if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;
       }
 
-    os << xml_encoded(unprinted, para.c_str() + para.size() - unprinted) << flush;
+    os << xml_encoded(string_piece(unprinted, para.c_str() + para.size() - unprinted)) << flush;
   }
 }

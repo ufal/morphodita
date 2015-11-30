@@ -10,7 +10,7 @@
 #pragma once
 
 #include "common.h"
-#include "string_piece.h"
+#include "utils/string_piece.h"
 
 namespace ufal {
 namespace morphodita {

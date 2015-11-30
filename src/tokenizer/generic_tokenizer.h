@@ -10,17 +10,17 @@
 #pragma once
 
 #include "common.h"
-#include "utf8_tokenizer.h"
+#include "ragel_tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
 
-class generic_tokenizer : public utf8_tokenizer {
+class generic_tokenizer : public ragel_tokenizer {
  public:
-  virtual bool next_sentence(vector<string_piece>& forms) override;
+  enum { LATEST = 1 };
+  generic_tokenizer(unsigned /*version*/) : ragel_tokenizer(1) {}
 
- private:
-  string buffer;
+  virtual bool next_sentence(vector<token_range>& tokens) override;
 };
 
 } // namespace morphodita

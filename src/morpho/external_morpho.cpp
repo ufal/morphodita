@@ -122,7 +122,7 @@ int external_morpho::raw_form_len(string_piece form) const {
 }
 
 tokenizer* external_morpho::new_tokenizer() const {
-  return new generic_tokenizer();
+  return new generic_tokenizer(generic_tokenizer::LATEST);
 }
 
 } // namespace morphodita

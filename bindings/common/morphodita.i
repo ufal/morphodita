@@ -55,6 +55,7 @@ class version {
   unsigned major;
   unsigned minor;
   unsigned patch;
+  std::string prerelease;
 
   static version current();
 };

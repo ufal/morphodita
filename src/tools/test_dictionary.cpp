@@ -13,7 +13,7 @@
 #include "morpho/morpho.h"
 #include "morpho/raw_morpho_dictionary_reader.h"
 #include "utils/iostreams.h"
-#include "utils/parse_options.h"
+#include "utils/options.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
@@ -21,9 +21,9 @@ using namespace ufal::morphodita;
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
-  if (!parse_options({{"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+  options::map options;
+  if (!options::parse({{"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       (argc < 2 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] dict_file <raw_dict_file\n"

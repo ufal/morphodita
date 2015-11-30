@@ -24,10 +24,10 @@ namespace ufal {
 namespace morphodita {
 
 // Declarations
-template <class FeatureSequences, int order>
+template <class FeatureSequences, int decoding_order, int window_size>
 class perceptron_tagger_trainer {
  public:
-  typedef typename tagger_trainer<perceptron_tagger_trainer<FeatureSequences, order>>::sentence sentence;
+  typedef typename tagger_trainer<perceptron_tagger_trainer<FeatureSequences, decoding_order, window_size>>::sentence sentence;
 
   static void train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, istream& in_feature_templates, ostream& out_tagger);
 
@@ -37,12 +37,12 @@ class perceptron_tagger_trainer {
 
 
 // Definitions
-template <class FeatureSequences, int order>
-void perceptron_tagger_trainer<FeatureSequences, order>::train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, istream& in_feature_templates, ostream& out_tagger) {
+template <class FeatureSequences, int decoding_order, int window_size>
+void perceptron_tagger_trainer<FeatureSequences, decoding_order, window_size>::train(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, istream& in_feature_templates, ostream& out_tagger) {
   FeatureSequences features;
 
   cerr << "Parsing feature templates..." << endl;
-  features.parse(order, in_feature_templates);
+  features.parse(window_size, in_feature_templates);
 
   cerr << "Training tagger..." << endl;
   train_viterbi(iterations, train, heldout, early_stopping, prune_features, features);
@@ -54,12 +54,12 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train(int iterations, c
   if (!optimized_features.save(out_tagger)) runtime_failure("Cannot save feature sequences!");
 }
 
-template <class FeatureSequences, int order>
-void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FeatureSequences& features) {
+template <class FeatureSequences, int decoding_order, int window_size>
+void perceptron_tagger_trainer<FeatureSequences, decoding_order, window_size>::train_viterbi(int iterations, const vector<sentence>& train, const vector<sentence>& heldout, bool early_stopping, bool prune_features, FeatureSequences& features) {
   int best_correct = 0, best_iteration = -1;
   FeatureSequences best_features;
 
-  viterbi<FeatureSequences, order> decoder(features);
+  viterbi<FeatureSequences, decoding_order, window_size> decoder(features);
   typename decltype(decoder)::cache decoder_cache(decoder);
 
   typename FeatureSequences::cache feature_sequences_cache(features);
@@ -72,8 +72,8 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
       auto& sentence = train[s];
       features.initialize_sentence(sentence.forms_with_tags, sentence.forms_with_tags.size(), feature_sequences_cache);
       for (int i = 0; i < int(sentence.forms_with_tags.size()); i++) {
-        int window[order];
-        for (int j = 0; j < order && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
+        int window[window_size];
+        for (int j = 0; j < window_size && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
 
         features.compute_dynamic_features(i, window[0], &gold_dynamic_features, gold_dynamic_features, feature_sequences_cache);
         features.feature_keys(i, window, 0, gold_dynamic_features, gold_feature_sequences_keys, feature_sequences_cache);
@@ -88,7 +88,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
   for (int i = 0; i < iterations; i++) {
     // Train
     int train_correct = 0, train_total = 0;
-    cerr << "Iteration " << i + 1;
+    cerr << "Iteration " << i + 1 << ": ";
 
     vector<int> tags;
     for (unsigned s = 0; s < train.size(); s++) {
@@ -104,13 +104,13 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
         train_correct += tags[i] == sentence.gold_index[i];
         train_total++;
 
-        int window[order];
+        int window[window_size];
 
-        for (int j = 0; j < order && i - j >= 0; j++) window[j] = tags[i - j];
+        for (int j = 0; j < window_size && i - j >= 0; j++) window[j] = tags[i - j];
         features.compute_dynamic_features(i, window[0], &decoded_dynamic_features, decoded_dynamic_features, feature_sequences_cache);
         features.feature_keys(i, window, 0, decoded_dynamic_features, decoded_feature_sequences_keys, feature_sequences_cache);
 
-        for (int j = 0; j < order && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
+        for (int j = 0; j < window_size && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
         features.compute_dynamic_features(i, window[0], &gold_dynamic_features, gold_dynamic_features, feature_sequences_cache);
         features.feature_keys(i, window, 0, gold_dynamic_features, gold_feature_sequences_keys, feature_sequences_cache);
 
@@ -158,7 +158,7 @@ void perceptron_tagger_trainer<FeatureSequences, order>::train_viterbi(int itera
       typedef feature_sequences_optimizer<FeatureSequences> optimizer;
       typename optimizer::optimized_feature_sequences frozen_features;
       optimizer::optimize(features, frozen_features);
-      viterbi<decltype(frozen_features), order> frozen_decoder(frozen_features);
+      viterbi<decltype(frozen_features), decoding_order, window_size> frozen_decoder(frozen_features);
       typename decltype(frozen_decoder)::cache frozen_decoder_cache(frozen_decoder);
 
       for (auto&& sentence : heldout) {

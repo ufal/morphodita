@@ -12,10 +12,10 @@
 #include "common.h"
 #include "elementary_features.h"
 #include "form_with_tags.h"
+#include "morpho/persistent_unordered_map.h"
+#include "morpho/small_stringops.h"
 #include "utils/binary_decoder.h"
 #include "utils/compressor.h"
-#include "utils/persistent_unordered_map.h"
-#include "utils/small_stringops.h"
 #include "vli.h"
 
 namespace ufal {
@@ -46,7 +46,7 @@ class feature_sequences {
   typedef typename ElementaryFeatures::per_tag_features per_tag_features;
   typedef typename ElementaryFeatures::dynamic_features dynamic_features;
 
-  void parse(int order, istream& is);
+  void parse(int window_size, istream& is);
   bool load(istream& is);
   bool save(ostream& os);
 

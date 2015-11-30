@@ -33,7 +33,7 @@ list<bundle_file> bundles;
 void add_file(list<bundle_file>::iterator it, const string& top_directory, const string& file) {
   if (local_includes.count(file)) return;
 
-  auto bundle = bundles.emplace(it, file);
+  auto bundle = bundles.insert(it, file);
   local_includes.insert(file);
 
   ifstream is(top_directory + file);
@@ -51,7 +51,7 @@ void add_file(list<bundle_file>::iterator it, const string& top_directory, const
         bundle->lines.push_back(line);
     } else if (line == "#pragma once") {
     } else if (line.find("#include <") == 0 && line.substr(line.size() - 1) == ">") {
-      system_includes.emplace(line, 10, line.size() - 11);
+      system_includes.insert(string(line, 10, line.size() - 11));
     } else if (line.find("#include \"") == 0) {
       string header_path;
       for (int location = 0; header_path.empty() && location <= 1; location++) {
@@ -65,6 +65,9 @@ void add_file(list<bundle_file>::iterator it, const string& top_directory, const
       break;
     }
   }
+
+  // Stop if the file ended.
+  if (is.eof()) return;
 
   // Check that correct namespaces are being opened
   for (auto&& namespace_opening : namespaces_opening) {
@@ -123,6 +126,8 @@ int main(int argc, char* argv[]) {
     cout << namespace_opening << endl;
 
   for (auto&& bundle : bundles) {
+    cerr << "Adding file " << bundle.file_name << endl;
+
     cout << endl;
     cout << "/////////" << endl;
     cout << "// File: " << bundle.file_name << endl;

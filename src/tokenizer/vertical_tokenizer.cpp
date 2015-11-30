@@ -12,21 +12,26 @@
 namespace ufal {
 namespace morphodita {
 
-bool vertical_tokenizer::next_sentence(vector<string_piece>& forms) {
-  if (text == text_end) return false;
+bool vertical_tokenizer::next_sentence(vector<token_range>& tokens) {
+  if (current >= chars.size() - 1) return false;
 
   while (true) {
-    const char* line_start = text;
-    while (text < text_end && *text != '\r' && *text != '\n') text++;
+    size_t line_start = current;
+    while (current < chars.size() - 1 && chars[current].chr != '\r' && chars[current].chr != '\n') current++;
 
-    const char* line_end = text;
-    if (text < text_end) {
-      text++;
-      if (text < text_end && ((text[-1] == '\r' && *text == '\n') || (text[-1] == '\n' && *text == '\r'))) text++;
+    size_t line_end = current;
+    if (current < chars.size() - 1) {
+      current++;
+      if (current < chars.size() - 1 &&
+          ((chars[current-1].chr == '\r' && chars[current].chr == '\n') ||
+           (chars[current-1].chr == '\n' && chars[current].chr == '\r')))
+        current++;
     }
 
-    if (line_start < line_end) forms.emplace_back(line_start, line_end - line_start);
-    else break;
+    if (line_start < line_end)
+      tokens.emplace_back(line_start, line_end - line_start);
+    else
+      break;
   }
 
   return true;

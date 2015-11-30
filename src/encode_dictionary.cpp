@@ -16,8 +16,8 @@
 #include "morpho/external_morpho_encoder.h"
 #include "morpho/generic_morpho_encoder.h"
 #include "utils/iostreams.h"
+#include "utils/options.h"
 #include "utils/parse_int.h"
-#include "utils/parse_options.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
@@ -25,9 +25,9 @@ using namespace ufal::morphodita;
 int main(int argc, char* argv[]) {
   iostreams_init();
 
-  options_map options;
-  if (!parse_options({{"version", option_values::none},
-                      {"help", option_values::none}}, argc, argv, options) ||
+  options::map options;
+  if (!options::parse({{"version", options::value::none},
+                       {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       (argc < 2 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] morpho_identifier [morpho_identifier_specific_options]\n"
