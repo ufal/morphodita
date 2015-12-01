@@ -2162,6 +2162,16 @@ Main Classes
   };
 
 
+C# Bindings
+-----------
+
+MorphoDiTa library bindings is available in the Ufal.MorphoDiTa namespace.
+
+The bindings is a straightforward conversion of the C++ bindings API. The
+bindings requires native C++ library libmorphodita_csharp (called
+morphodita_csharp on Windows).
+
+
 Java Bindings
 -------------
 
