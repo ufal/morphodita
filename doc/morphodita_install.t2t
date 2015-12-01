@@ -62,6 +62,10 @@ please refer to its manual if interested in all supported options.
 == Other language bindings ==[other_language_bindings]
 
 
+=== C# ===[csharp_installation]
+%!include: morphodita_bindings_csharp_install.t2t
+
+
 === Java ===[java_installation]
 %!include: morphodita_bindings_java_install.t2t
 
