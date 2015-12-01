@@ -10,13 +10,15 @@
 include ../common/Makefile.common
 
 BINDING_MODULE=$(call dynlib,$(if $(filter win-%,$(PLATFORM)),morphodita_java,libmorphodita_java))
-BINDING_C_FLAGS+=-fno-strict-aliasing
 BINDING_C_FLAGS+=$(if $(JAVA_HOME),,$(error JAVA_HOME must be set))
+BINDING_C_FLAGS+=$(if $(filter %-gcc %-clang,$(PLATFORM)),-fno-strict-aliasing)
 ifneq ($(filter linux-%,$(PLATFORM)),)
   BINDING_C_FLAGS+=$(call include_dir,$(JAVA_HOME)/include $(JAVA_HOME)/include/linux)
 else ifneq ($(filter win-%,$(PLATFORM)),)
   BINDING_C_FLAGS+=$(call include_dir,"$(JAVA_HOME)"/include "$(JAVA_HOME)"/include/win32)
-  BINDING_LD_FLAGS+=-Wl,--kill-at
+  ifeq ($(PLATFORM),win-gcc)
+    BINDING_LD_FLAGS+=-Wl,--kill-at
+  endif
 else ifneq ($(filter osx-%,$(PLATFORM)),)
   BINDING_C_FLAGS+=$(call include_dir,$(JAVA_HOME)/include $(JAVA_HOME)/include/darwin $(patsubst %/Home,%/Headers,$(filter %/Home,$(JAVA_HOME))))
 endif

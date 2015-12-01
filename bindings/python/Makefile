@@ -11,7 +11,8 @@ include ../common/Makefile.common
 
 BINDING_MODULE=$(if $(filter osx-%,$(PLATFORM)),ufal_morphodita.so,$(call dynlib,ufal_morphodita))
 BINDING_C_FLAGS+=$(if $(PYTHON_INCLUDE),,$(error PYTHON_INCLUDE must be set to the directory containing Python.h))
-BINDING_C_FLAGS+=-w $(call include_dir,$(PYTHON_INCLUDE))
+BINDING_C_FLAGS+=$(call include_dir,$(PYTHON_INCLUDE))
+BINDING_C_FLAGS+=$(if $(filter %-gcc %-clang,$(PLATFORM)),-w)
 
 all: $(BINDING_MODULE)
 
