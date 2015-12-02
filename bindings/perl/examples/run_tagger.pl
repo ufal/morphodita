@@ -11,7 +11,7 @@ use warnings;
 use strict;
 use open qw(:std :utf8);
 
-use Ufal::MorphoDiTa qw(:all);
+use Ufal::MorphoDiTa;
 
 sub encode_entities($) {
   my ($text) = @_;
@@ -22,14 +22,14 @@ sub encode_entities($) {
 @ARGV >= 1 or die "Usage: $0 tagger_file\n";
 
 print STDERR "Loading tagger: ";
-my $tagger = Tagger::load($ARGV[0]);
+my $tagger = Ufal::MorphoDiTa::Tagger::load($ARGV[0]);
 $tagger or die "Cannot load tagger from file '$ARGV[0]'\n";
 print STDERR "done\n";
 shift @ARGV;
 
-my $forms = Forms->new();
-my $lemmas = TaggedLemmas->new();
-my $tokens = TokenRanges->new();
+my $forms = Ufal::MorphoDiTa::Forms->new();
+my $lemmas = Ufal::MorphoDiTa::TaggedLemmas->new();
+my $tokens = Ufal::MorphoDiTa::TokenRanges->new();
 my $tokenizer = $tagger->newTokenizer();
 $tokenizer or die "No tokenizer is defined for the supplied model!";
 
