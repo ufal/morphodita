@@ -26,4 +26,4 @@ morphodita_csharp.cpp: morphodita_csharp.i ../common/morphodita.i
 
 .PHONY: clean
 clean:
-	@$(call rm,.build Ufal $(call all_dynlib,$(BINDING_MODULE)) morphodita_csharp.cpp $(wildcard examples/*.class))
+	@$(call rm,.build Ufal $(call all_dynlib,morphodita_csharp libmorphodita_csharp) morphodita_csharp.cpp $(wildcard examples/*.class))

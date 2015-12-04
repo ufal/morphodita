@@ -39,4 +39,4 @@ morphodita.jar: morphodita_java.cpp
 
 .PHONY: clean
 clean:
-	@$(call rm,.build cz $(call all_dynlib,$(BINDING_MODULE)) morphodita.jar morphodita_java.cpp $(wildcard examples/*.class))
+	@$(call rm,.build cz $(call all_dynlib,morphodita_java libmorphodita_java) morphodita.jar morphodita_java.cpp $(wildcard examples/*.class))
