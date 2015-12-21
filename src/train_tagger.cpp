@@ -7,6 +7,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include <cstring>
 #include <fstream>
 
 #include "tagger/czech_elementary_features.h"
@@ -68,9 +69,11 @@ int main(int argc, char* argv[]) {
         if (!feature_templates) runtime_failure("Cannot open feature template file '" << features_file << "'!");
 
         ifstream heldout;
-        if (heldout_file && *heldout_file) {
+        if (heldout_file && strlen(heldout_file)) {
           heldout.open(heldout_file);
           if (!heldout) runtime_failure("Cannot open heldout file '" << heldout_file << "'!");
+        } else {
+          heldout.setstate(ios::failbit);
         }
 
         // Encode the tagger_id and the tagger itself
