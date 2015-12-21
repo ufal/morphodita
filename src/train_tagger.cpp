@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
         if (!feature_templates) runtime_failure("Cannot open feature template file '" << features_file << "'!");
 
         ifstream heldout;
-        if (heldout_file) {
+        if (heldout_file && *heldout_file) {
           heldout.open(heldout_file);
           if (!heldout) runtime_failure("Cannot open heldout file '" << heldout_file << "'!");
         }
