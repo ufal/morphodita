@@ -23,8 +23,9 @@ template <class TaggerTrainer>
 class tagger_trainer {
  public:
   struct sentence {
-    vector<string> forms;
-    vector<form_with_tags> forms_with_tags;
+    vector<string> sentence;
+    vector<string_piece> forms;
+    vector<vector<tagged_lemma>> analyses;
     vector<tagged_lemma> gold;
     vector<int> gold_index;
   };
@@ -72,11 +73,10 @@ double tagger_trainer<TaggerTrainer>::load_data(istream& is, const morpho& d, bo
 
   string line;
   vector<string> tokens;
-  vector<tagged_lemma> lemmas;
   sentences.emplace_back();
   while (getline(is, line)) {
     if (line.empty()) {
-      if (!sentences.back().forms_with_tags.empty())
+      if (!sentences.back().sentence.empty())
         sentences.emplace_back();
       continue;
     }
@@ -84,30 +84,31 @@ double tagger_trainer<TaggerTrainer>::load_data(istream& is, const morpho& d, bo
     split(line, '\t', tokens);
     if (tokens.size() != 3) runtime_failure("The tagger data line '" << line << "' does not contain three columns!");
 
-    // Analyse
-    d.analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
-
     // Add form to sentence
     forms++;
     sentence& s = sentences.back();
-    s.forms.emplace_back(tokens[0]);
-    s.forms_with_tags.emplace_back(string_piece(s.forms.back().c_str(), d.raw_form_len(s.forms.back())));
+    s.sentence.emplace_back(tokens[0]);
+    s.forms.emplace_back(string_piece(s.sentence.back().c_str(), d.raw_form_len(s.sentence.back())));
     s.gold.emplace_back(tokens[1], tokens[2]);
     s.gold_index.emplace_back(-1);
-    for (auto&& lemma : lemmas) {
-      if (s.gold_index.back() == -1 && lemma.lemma == s.gold.back().lemma && lemma.tag == s.gold.back().tag) {
-        s.gold_index.back() = s.forms_with_tags.back().tags.size();
-        forms_matched++;
-      }
-      s.forms_with_tags.back().tags.emplace_back(lemma.lemma, lemma.tag);
-    }
 
+    // Analyse
+    s.analyses.emplace_back();
+    d.analyze(tokens[0], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, s.analyses.back());
+
+    // Locate gold analysis
+    for (size_t i = 0; i < s.analyses.back().size(); i++)
+      if (s.analyses.back()[i].lemma == s.gold.back().lemma && s.analyses.back()[i].tag == s.gold.back().tag) {
+        s.gold_index.back() = i;
+        forms_matched++;
+        break;
+      }
     if (s.gold_index.back() == -1 && add_gold) {
-      s.gold_index.back() = s.forms_with_tags.back().tags.size();
-      s.forms_with_tags.back().tags.emplace_back(tokens[1], tokens[2]);
+      s.gold_index.back() = s.analyses.back().size();
+      s.analyses.back().emplace_back(tokens[1], tokens[2]);
     }
   }
-  if (!sentences.empty() && sentences.back().forms_with_tags.empty()) sentences.pop_back();
+  if (!sentences.empty() && sentences.back().sentence.empty()) sentences.pop_back();
 
   return forms_matched / double(forms);
 }

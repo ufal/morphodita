@@ -1919,6 +1919,8 @@ Class tagger
 
     virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
 
+    virtual void tag_analyzed(const std::vector<string_piece>& forms, std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const = 0;
+
     tokenizer* new_tokenizer() const = 0;
   };
 
@@ -1962,6 +1964,17 @@ tagger::tag()
 
 Perform morphological analysis and subsequent disambiguation. Accepts a
 std::vector of string_piece and fills the output vector of tagged_lemma.
+
+
+tagger::tag_analyzed()
+----------------------
+
+  virtual void tag_analyzed(const std::vector<string_piece>& forms, std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const = 0;
+
+Perform morphological disambiguation using given morphological analyses. The
+indices of chosen analyses are stored in the output vector `tags`. Note that
+none of the `analyses` can be empty - in that case, no operation is performed
+and `tags` is empty.
 
 
 tagger::new_tokenizer
@@ -2072,6 +2085,8 @@ methods using istream. Here is the C++ bindings API declaration:
 Helper Structures
 -----------------
 
+  typedef vector<int> Indices;
+
   typedef vector<string> Forms;
 
   struct TaggedForm {
@@ -2085,6 +2100,7 @@ Helper Structures
     string tag;
   };
   typedef vector<TaggedLemma> TaggedLemmas;
+  typedef vector<TaggedLemmas> Analyses;
 
   struct TaggedLemmaForms {
     string lemma;
@@ -2144,7 +2160,9 @@ Main Classes
 
     virtual const Morpho* getMorpho() const;
 
-    virtual void tag(Forms& forms, TaggedLemmas& tags) const;
+    virtual void tag(const Forms& forms, TaggedLemmas& tags) const;
+
+    virtual void tag_analyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 
     Tokenizer* newTokenizer() const;
   };

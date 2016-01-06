@@ -11,7 +11,6 @@
 
 #include "common.h"
 #include "elementary_features.h"
-#include "form_with_tags.h"
 #include "morpho/persistent_unordered_map.h"
 #include "morpho/small_stringops.h"
 #include "utils/binary_decoder.h"
@@ -52,7 +51,7 @@ class feature_sequences {
 
   struct cache;
 
-  inline void initialize_sentence(const vector<form_with_tags>& forms, int forms_size, cache& c) const;
+  inline void initialize_sentence(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, cache& c) const;
   inline void compute_dynamic_features(int form_index, int tag_index, const dynamic_features* prev_dynamic, dynamic_features& dynamic, cache& c) const;
   inline feature_sequences_score score(int form_index, int tags_window[], int tags_unchanged, dynamic_features& dynamic, cache& c) const;
   void feature_keys(int form_index, int tags_window[], int tags_unchanged, dynamic_features& dynamic, vector<string>& keys, cache& c) const;
@@ -108,7 +107,8 @@ inline bool feature_sequences<ElementaryFeatures, Map>::load(istream& is) {
 
 template <class ElementaryFeatures, class Map>
 struct feature_sequences<ElementaryFeatures, Map>::cache {
-  const vector<form_with_tags>* forms; int forms_size;
+  const vector<string_piece>* forms;
+  const vector<vector<tagged_lemma>>* analyses;
   vector<per_form_features> elementary_per_form;
   vector<vector<per_tag_features>> elementary_per_tag;
 
@@ -140,20 +140,20 @@ struct feature_sequences<ElementaryFeatures, Map>::cache {
 };
 
 template <class ElementaryFeatures, class Map>
-void feature_sequences<ElementaryFeatures, Map>::initialize_sentence(const vector<form_with_tags>& forms, int forms_size, cache& c) const {
+void feature_sequences<ElementaryFeatures, Map>::initialize_sentence(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, cache& c) const {
   // Store forms and forms_size
   c.forms = &forms;
-  c.forms_size = forms_size;
+  c.analyses = &analyses;
 
   // Enlarge elementary features vectors if needed
-  if (forms_size > int(c.elementary_per_form.size())) c.elementary_per_form.resize(forms_size * 2);
-  if (forms_size > int(c.elementary_per_tag.size())) c.elementary_per_tag.resize(forms_size * 2);
-  for (int i = 0; i < forms_size; i++)
-    if (forms[i].tags.size() > c.elementary_per_tag[i].size())
-      c.elementary_per_tag[i].resize(forms[i].tags.size() * 2);
+  if (forms.size() > c.elementary_per_form.size()) c.elementary_per_form.resize(forms.size() * 2);
+  if (forms.size() > c.elementary_per_tag.size()) c.elementary_per_tag.resize(forms.size() * 2);
+  for (unsigned i = 0; i < forms.size(); i++)
+    if (analyses[i].size() > c.elementary_per_tag[i].size())
+      c.elementary_per_tag[i].resize(analyses[i].size() * 2);
 
   // Compute elementary features
-  elementary.compute_features(forms, forms_size, c.elementary_per_form, c.elementary_per_tag);
+  elementary.compute_features(forms, analyses, c.elementary_per_form, c.elementary_per_tag);
 
   // Clear score cache, because scores may have been modified
   c.score = 0;
@@ -163,7 +163,7 @@ void feature_sequences<ElementaryFeatures, Map>::initialize_sentence(const vecto
 
 template <class ElementaryFeatures, class Map>
 void feature_sequences<ElementaryFeatures, Map>::compute_dynamic_features(int form_index, int tag_index, const dynamic_features* prev_dynamic, dynamic_features& dynamic, cache& c) const {
-  elementary.compute_dynamic_features((*c.forms)[form_index].tags[tag_index], c.elementary_per_form[form_index], c.elementary_per_tag[form_index][tag_index], form_index > 0 ? prev_dynamic : nullptr, dynamic);
+  elementary.compute_dynamic_features((*c.analyses)[form_index][tag_index], c.elementary_per_form[form_index], c.elementary_per_tag[form_index][tag_index], form_index > 0 ? prev_dynamic : nullptr, dynamic);
 }
 
 template <class ElementaryFeatures, class Map>
@@ -185,8 +185,7 @@ feature_sequences_score feature_sequences<ElementaryFeatures, Map>::score(int fo
 
       switch (element.type) {
         case PER_FORM:
-          value = form_index + element.sequence_index < 0 || form_index + element.sequence_index >= c.forms_size ? elementary_feature_empty :
-              c.elementary_per_form[form_index + element.sequence_index].values[element.elementary_index];
+          value = form_index + element.sequence_index < 0 || unsigned(form_index + element.sequence_index) >= c.forms->size() ? elementary_feature_empty : c.elementary_per_form[form_index + element.sequence_index].values[element.elementary_index];
           break;
         case PER_TAG:
           value = form_index + element.sequence_index < 0 ? elementary_feature_empty : c.window[-element.sequence_index]->values[element.elementary_index];

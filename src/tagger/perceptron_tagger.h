@@ -23,6 +23,7 @@ class perceptron_tagger : public tagger {
   bool load(istream& is);
   virtual const morpho* get_morpho() const override;
   virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const override;
+  virtual void tag_analyzed(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<int>& tags) const override;
 
  private:
   unique_ptr<morpho> dict;
@@ -30,9 +31,9 @@ class perceptron_tagger : public tagger {
   FeatureSequences features;
   typedef viterbi<FeatureSequences, decoding_order, window_size> viterbi_decoder;
   viterbi_decoder decoder;
-
   struct cache {
-    vector<form_with_tags> tagged_forms;
+    vector<string_piece> forms;
+    vector<vector<tagged_lemma>> analyses;
     vector<int> tags;
     typename viterbi_decoder::cache decoder_cache;
 
@@ -69,22 +70,32 @@ void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag(const
   cache* c = caches.pop();
   if (!c) c = new cache(*this);
 
-  if (c->tagged_forms.size() < forms.size()) c->tagged_forms.reserve(forms.size() * 2);
+  c->forms.resize(forms.size());
+  if (c->analyses.size() < forms.size()) c->analyses.resize(forms.size());
   for (unsigned i = 0; i < forms.size(); i++) {
-    if (i >= c->tagged_forms.size())
-      c->tagged_forms.emplace_back(forms[i]);
-    else
-      c->tagged_forms[i].form = forms[i];
-
-    dict->analyze(c->tagged_forms[i].form, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, c->tagged_forms[i].tags);
-    c->tagged_forms[i].form.len = dict->raw_form_len(c->tagged_forms[i].form);
+    c->forms[i] = forms[i];
+    c->forms[i].len = dict->raw_form_len(forms[i]);
+    dict->analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, c->analyses[i]);
   }
 
   if (c->tags.size() < forms.size()) c->tags.resize(forms.size() * 2);
-  decoder.tag(c->tagged_forms, forms.size(), c->decoder_cache, c->tags);
+  decoder.tag(c->forms, c->analyses, c->decoder_cache, c->tags);
 
   for (unsigned i = 0; i < forms.size(); i++)
-    tags.emplace_back(c->tagged_forms[i].tags[c->tags[i]]);
+    tags.emplace_back(c->analyses[i][c->tags[i]]);
+
+  caches.push(c);
+}
+
+template<class FeatureSequences, int decoding_order, int window_size>
+void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag_analyzed(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<int>& tags) const {
+  tags.clear();
+
+  cache* c = caches.pop();
+  if (!c) c = new cache(*this);
+
+  tags.resize(forms.size());
+  decoder.tag(forms, analyses, c->decoder_cache, tags);
 
   caches.push(c);
 }

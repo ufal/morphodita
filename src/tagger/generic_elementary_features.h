@@ -34,7 +34,7 @@ class generic_elementary_features : public elementary_features<Map> {
 
   static vector<elementary_feature_description> descriptions;
 
-  void compute_features(const vector<form_with_tags>& forms, int forms_size, vector<per_form_features>& per_form, vector<vector<per_tag_features>>& per_tag) const;
+  void compute_features(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<per_form_features>& per_form, vector<vector<per_tag_features>>& per_tag) const;
   inline void compute_dynamic_features(const tagged_lemma& tag, const per_form_features& per_form, const per_tag_features& per_tag, const dynamic_features* prev_dynamic, dynamic_features& dynamic) const;
 
   using elementary_features<Map>::maps;
@@ -89,33 +89,33 @@ vector<elementary_feature_description> generic_elementary_features<Map>::descrip
 };
 
 template <class Map>
-void generic_elementary_features<Map>::compute_features(const vector<form_with_tags>& forms, int forms_size, vector<per_form_features>& per_form, vector<vector<per_tag_features>>& per_tag) const {
+void generic_elementary_features<Map>::compute_features(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<per_form_features>& per_form, vector<vector<per_tag_features>>& per_tag) const {
   using namespace unilib;
 
   // We process the sentence in reverse order, so that we can compute FollowingVerbTag and FollowingVerbLemma directly.
   elementary_feature_value following_verb_tag = elementary_feature_empty, following_verb_lemma = elementary_feature_empty;
-  for (int i = forms_size - 1; i >= 0; i--) {
+  for (unsigned i = forms.size(); i--;) {
     int verb_candidate = -1;
 
     // Per_tag features and verb_candidate
-    for (unsigned j = 0; j < forms[i].tags.size(); j++) {
-      per_tag[i][j].values[TAG] = maps[MAP_TAG].value(forms[i].tags[j].tag.c_str(), forms[i].tags[j].tag.size());
-      per_tag[i][j].values[TAG1] = forms[i].tags[j].tag.size() >= 1 ? maps[MAP_TAG1].value(forms[i].tags[j].tag.c_str() + 0, 1) : elementary_feature_empty;
-      per_tag[i][j].values[TAG2] = forms[i].tags[j].tag.size() >= 2 ? maps[MAP_TAG2].value(forms[i].tags[j].tag.c_str() + 1, 1) : elementary_feature_empty;
-      per_tag[i][j].values[TAG3] = forms[i].tags[j].tag.size() >= 3 ? maps[MAP_TAG3].value(forms[i].tags[j].tag.c_str() + 2, 1) : elementary_feature_empty;
-      per_tag[i][j].values[TAG4] = forms[i].tags[j].tag.size() >= 4 ? maps[MAP_TAG4].value(forms[i].tags[j].tag.c_str() + 3, 1) : elementary_feature_empty;
-      per_tag[i][j].values[TAG5] = forms[i].tags[j].tag.size() >= 5 ? maps[MAP_TAG5].value(forms[i].tags[j].tag.c_str() + 4, 1) : elementary_feature_empty;
-      per_tag[i][j].values[LEMMA] = j && forms[i].tags[j-1].lemma == forms[i].tags[j].lemma ? per_tag[i][j-1].values[LEMMA] :
-          maps[MAP_LEMMA].value(forms[i].tags[j].lemma.c_str(), forms[i].tags[j].lemma.size());
+    for (unsigned j = 0; j < analyses[i].size(); j++) {
+      per_tag[i][j].values[TAG] = maps[MAP_TAG].value(analyses[i][j].tag.c_str(), analyses[i][j].tag.size());
+      per_tag[i][j].values[TAG1] = analyses[i][j].tag.size() >= 1 ? maps[MAP_TAG1].value(analyses[i][j].tag.c_str() + 0, 1) : elementary_feature_empty;
+      per_tag[i][j].values[TAG2] = analyses[i][j].tag.size() >= 2 ? maps[MAP_TAG2].value(analyses[i][j].tag.c_str() + 1, 1) : elementary_feature_empty;
+      per_tag[i][j].values[TAG3] = analyses[i][j].tag.size() >= 3 ? maps[MAP_TAG3].value(analyses[i][j].tag.c_str() + 2, 1) : elementary_feature_empty;
+      per_tag[i][j].values[TAG4] = analyses[i][j].tag.size() >= 4 ? maps[MAP_TAG4].value(analyses[i][j].tag.c_str() + 3, 1) : elementary_feature_empty;
+      per_tag[i][j].values[TAG5] = analyses[i][j].tag.size() >= 5 ? maps[MAP_TAG5].value(analyses[i][j].tag.c_str() + 4, 1) : elementary_feature_empty;
+      per_tag[i][j].values[LEMMA] = j && analyses[i][j-1].lemma == analyses[i][j].lemma ? per_tag[i][j-1].values[LEMMA] :
+          maps[MAP_LEMMA].value(analyses[i][j].lemma.c_str(), analyses[i][j].lemma.size());
 
-      if (forms[i].tags[j].tag[0] == 'V') {
+      if (analyses[i][j].tag[0] == 'V') {
         int tag_compare;
-        verb_candidate = verb_candidate < 0 || (tag_compare = forms[i].tags[j].tag.compare(forms[i].tags[verb_candidate].tag), tag_compare < 0) || (tag_compare == 0 && forms[i].tags[j].lemma < forms[i].tags[verb_candidate].lemma) ? j : verb_candidate;
+        verb_candidate = verb_candidate < 0 || (tag_compare = analyses[i][j].tag.compare(analyses[i][verb_candidate].tag), tag_compare < 0) || (tag_compare == 0 && analyses[i][j].lemma < analyses[i][verb_candidate].lemma) ? j : verb_candidate;
       }
     }
 
     // Per_form features
-    per_form[i].values[FORM] = maps[MAP_FORM].value(forms[i].form.str, forms[i].form.len);
+    per_form[i].values[FORM] = maps[MAP_FORM].value(forms[i].str, forms[i].len);
     per_form[i].values[FOLLOWING_VERB_TAG] = following_verb_tag;
     per_form[i].values[FOLLOWING_VERB_LEMMA] = following_verb_lemma;
 
@@ -126,7 +126,7 @@ void generic_elementary_features<Map>::compute_features(const vector<form_with_t
     }
 
     // Ortographic per_form features if needed
-    if (forms[i].tags.size() == 1) {
+    if (analyses[i].size() == 1) {
       per_form[i].values[NUM] = per_form[i].values[CAP] = per_form[i].values[DASH] = elementary_feature_unknown;
       per_form[i].values[PREFIX1] = per_form[i].values[PREFIX2] = per_form[i].values[PREFIX3] = elementary_feature_unknown;
       per_form[i].values[PREFIX4] = per_form[i].values[PREFIX5] = per_form[i].values[PREFIX6] = elementary_feature_unknown;
@@ -134,7 +134,7 @@ void generic_elementary_features<Map>::compute_features(const vector<form_with_t
       per_form[i].values[SUFFIX1] = per_form[i].values[SUFFIX2] = per_form[i].values[SUFFIX3] = elementary_feature_unknown;
       per_form[i].values[SUFFIX4] = per_form[i].values[SUFFIX5] = per_form[i].values[SUFFIX6] = elementary_feature_unknown;
       per_form[i].values[SUFFIX7] = per_form[i].values[SUFFIX8] = per_form[i].values[SUFFIX9] = elementary_feature_unknown;
-    } else if (forms[i].form.len <= 0) {
+    } else if (forms[i].len <= 0) {
       per_form[i].values[NUM] = per_form[i].values[CAP] = per_form[i].values[DASH] = elementary_feature_empty + 1;
       per_form[i].values[PREFIX1] = per_form[i].values[PREFIX2] = per_form[i].values[PREFIX3] = elementary_feature_empty;
       per_form[i].values[PREFIX4] = per_form[i].values[PREFIX5] = per_form[i].values[PREFIX6] = elementary_feature_empty;
@@ -143,7 +143,7 @@ void generic_elementary_features<Map>::compute_features(const vector<form_with_t
       per_form[i].values[SUFFIX4] = per_form[i].values[SUFFIX5] = per_form[i].values[SUFFIX6] = elementary_feature_empty;
       per_form[i].values[SUFFIX7] = per_form[i].values[SUFFIX8] = per_form[i].values[SUFFIX9] = elementary_feature_empty;
     } else {
-      string_piece form = forms[i].form;
+      string_piece form = forms[i];
       const char* form_start = form.str;
 
       bool num = false, cap = false, dash = false;

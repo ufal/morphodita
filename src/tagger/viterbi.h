@@ -25,7 +25,7 @@ class viterbi {
   viterbi(const FeatureSequences& features) : features(features) {}
 
   struct cache;
-  void tag(const vector<form_with_tags>& forms, int forms_size, cache& c, vector<int>& tags) const;
+  void tag(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, cache& c, vector<int>& tags) const;
 
  private:
   struct node;
@@ -52,20 +52,20 @@ struct viterbi<FeatureSequences, decoding_order, window_size>::node {
 };
 
 template <class FeatureSequences, int decoding_order, int window_size>
-void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<form_with_tags>& forms, int forms_size, cache& c, vector<int>& tags) const {
-  if (!forms_size) return;
+void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, cache& c, vector<int>& tags) const {
+  if (!forms.size()) return;
 
   // Count number of nodes and allocate
-  int nodes = 0;
-  for (int i = 0, states = 1; i < forms_size; i++) {
-    if (forms[i].tags.empty()) return;
-    states = (i >= decoding_order-1 ? states / forms[i-decoding_order+1].tags.size() : states) * forms[i].tags.size();
+  unsigned nodes = 0;
+  for (unsigned i = 0, states = 1; i < forms.size(); i++) {
+    if (analyses[i].empty()) return;
+    states = (i >= decoding_order-1 ? states / analyses[i-decoding_order+1].size() : states) * analyses[i].size();
     nodes += states;
   }
-  if (nodes > int(c.nodes.size())) c.nodes.resize(nodes);
+  if (nodes > c.nodes.size()) c.nodes.resize(nodes);
 
   // Init feature sequences
-  features.initialize_sentence(forms, forms_size, c.features_cache);
+  features.initialize_sentence(forms, analyses, c.features_cache);
 
   int window[window_size];
   typename FeatureSequences::dynamic_features dynamic;
@@ -73,11 +73,11 @@ void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<fo
 
   // Compute all nodes score
   int nodes_prev = -1, nodes_now = 0;
-  for (int i = 0; i < forms_size; i++) {
+  for (unsigned i = 0; i < forms.size(); i++) {
     int nodes_next = nodes_now;
 
     for (int j = 0; j < window_size; j++) window[j] = -1;
-    for (int tag = 0; tag < int(forms[i].tags.size()); tag++)
+    for (int tag = 0; tag < int(analyses[i].size()); tag++)
       for (int prev = nodes_prev; prev < nodes_now; prev++) {
         // Compute predecessors and number of unchanges
         int same_tags = window[0] == tag;
@@ -89,7 +89,7 @@ void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<fo
 
         // Compute dynamic elementary features and score
         features.compute_dynamic_features(i, tag, prev >= 0 ? &c.nodes[prev].dynamic : nullptr, dynamic, c.features_cache);
-        score = (nodes_prev + 1 == nodes_now && forms[i].tags.size() == 1 ? 0 : features.score(i, window, same_tags, dynamic, c.features_cache)) +
+        score = (nodes_prev + 1 == nodes_now && analyses[i].size() == 1 ? 0 : features.score(i, window, same_tags, dynamic, c.features_cache)) +
             (prev >= 0 ? c.nodes[prev].score : 0);
 
         // Update existing node or create a new one
@@ -113,7 +113,7 @@ void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<fo
     if (c.nodes[node].score > c.nodes[best].score)
       best = node;
 
-  for (int i = forms_size - 1; i >= 0; i--, best = c.nodes[best].prev)
+  for (int i = forms.size() - 1; i >= 0; i--, best = c.nodes[best].prev)
     tags[i] = c.nodes[best].tag;
 }
 

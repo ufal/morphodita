@@ -70,8 +70,8 @@ void perceptron_tagger_trainer<FeatureSequences, decoding_order, window_size>::t
   if (prune_features)
     for (unsigned s = 0; s < train.size(); s++) {
       auto& sentence = train[s];
-      features.initialize_sentence(sentence.forms_with_tags, sentence.forms_with_tags.size(), feature_sequences_cache);
-      for (int i = 0; i < int(sentence.forms_with_tags.size()); i++) {
+      features.initialize_sentence(sentence.forms, sentence.analyses, feature_sequences_cache);
+      for (int i = 0; i < int(sentence.forms.size()); i++) {
         int window[window_size];
         for (int j = 0; j < window_size && i - j >= 0; j++) window[j] = sentence.gold_index[i - j];
 
@@ -95,12 +95,12 @@ void perceptron_tagger_trainer<FeatureSequences, decoding_order, window_size>::t
       auto& sentence = train[s];
 
       // Run Viterbi
-      if (tags.size() < sentence.forms_with_tags.size()) tags.resize(2 * sentence.forms_with_tags.size());
-      decoder.tag(sentence.forms_with_tags, sentence.forms_with_tags.size(), decoder_cache, tags);
+      if (tags.size() < sentence.forms.size()) tags.resize(2 * sentence.forms.size());
+      decoder.tag(sentence.forms, sentence.analyses, decoder_cache, tags);
 
       // Compute feature sequence keys or decoded result and gold result and update alpha & gamma
-      features.initialize_sentence(sentence.forms_with_tags, sentence.forms_with_tags.size(), feature_sequences_cache);
-      for (int i = 0; i < int(sentence.forms_with_tags.size()); i++) {
+      features.initialize_sentence(sentence.forms, sentence.analyses, feature_sequences_cache);
+      for (int i = 0; i < int(sentence.forms.size()); i++) {
         train_correct += tags[i] == sentence.gold_index[i];
         train_total++;
 
@@ -162,13 +162,13 @@ void perceptron_tagger_trainer<FeatureSequences, decoding_order, window_size>::t
       typename decltype(frozen_decoder)::cache frozen_decoder_cache(frozen_decoder);
 
       for (auto&& sentence : heldout) {
-        if (tags.size() < sentence.forms_with_tags.size()) tags.resize(sentence.forms_with_tags.size() * 2);
-        frozen_decoder.tag(sentence.forms_with_tags, sentence.forms_with_tags.size(), frozen_decoder_cache, tags);
+        if (tags.size() < sentence.forms.size()) tags.resize(sentence.forms.size() * 2);
+        frozen_decoder.tag(sentence.forms, sentence.analyses, frozen_decoder_cache, tags);
 
-        for (unsigned i = 0; i < sentence.forms_with_tags.size(); i++) {
-          heldout_correct[TAGS] += sentence.gold[i].tag == sentence.forms_with_tags[i].tags[tags[i]].tag;
-          heldout_correct[LEMMAS] += sentence.gold[i].lemma == sentence.forms_with_tags[i].tags[tags[i]].lemma;
-          heldout_correct[BOTH] += sentence.gold[i].tag == sentence.forms_with_tags[i].tags[tags[i]].tag && sentence.gold[i].lemma == sentence.forms_with_tags[i].tags[tags[i]].lemma;
+        for (unsigned i = 0; i < sentence.forms.size(); i++) {
+          heldout_correct[TAGS] += sentence.gold[i].tag == sentence.analyses[i][tags[i]].tag;
+          heldout_correct[LEMMAS] += sentence.gold[i].lemma == sentence.analyses[i][tags[i]].lemma;
+          heldout_correct[BOTH] += sentence.gold[i].tag == sentence.analyses[i][tags[i]].tag && sentence.gold[i].lemma == sentence.analyses[i][tags[i]].lemma;
           heldout_total++;
         }
       }

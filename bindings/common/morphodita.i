@@ -14,6 +14,9 @@
 using namespace ufal::morphodita;
 %}
 
+%template(Indices) std::vector<int>;
+typedef std::vector<int> Indices;
+
 %template(Forms) std::vector<std::string>;
 typedef std::vector<std::string> Forms;
 
@@ -32,6 +35,8 @@ struct tagged_lemma {
 };
 %template(TaggedLemmas) std::vector<tagged_lemma>;
 typedef std::vector<tagged_lemma> TaggedLemmas;
+%template(Analyses) std::vector<std::vector<tagged_lemma> >;
+typedef std::vector<std::vector<tagged_lemma> > Analyses;
 
 %rename(TaggedLemmaForms) tagged_lemma_forms;
 struct tagged_lemma_forms {
@@ -159,6 +164,16 @@ class tagger {
       for (auto&& form : forms)
         string_pieces.emplace_back(form);
       $self->tag(string_pieces, tags);
+    }
+  }
+
+  %extend {
+    void tag_analyzed(const std::vector<std::string>& forms, const std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const {
+      std::vector<string_piece> string_pieces;
+      string_pieces.reserve(forms.size());
+      for (auto&& form : forms)
+        string_pieces.emplace_back(form);
+      $self->tag_analyzed(string_pieces, analyses, tags);
     }
   }
 

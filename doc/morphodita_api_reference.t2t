@@ -348,6 +348,8 @@ class tagger {
 
   virtual void [tag #tagger_tag](const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags) const = 0;
 
+  virtual void [tag_analyzed #tagger_tag_analyzed](const std::vector<[string_piece #string_piece]>& forms, std::vector<std::vector<[tagged_lemma #tagged_lemma]> >& analyses, std::vector<int>& tags) const = 0;
+
   [tokenizer #tokenizer]* [new_tokenizer #tagger_new_tokenizer]() const = 0;
 };
 ```
@@ -382,6 +384,14 @@ tagger destructor.
 
 Perform morphological analysis and subsequent disambiguation. Accepts
 a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vector of [``tagged_lemma`` #tagged_lemma].
+
+=== tagger::tag_analyzed() ===[tagger_tag_analyzed]
+``` virtual void tag_analyzed(const std::vector<[string_piece #string_piece]>& forms, std::vector<std::vector<[tagged_lemma #tagged_lemma]> >& analyses, std::vector<int>& tags) const = 0;
+
+Perform morphological disambiguation using given morphological analyses.
+The indices of chosen analyses are stored in the output vector `tags`.
+Note that none of the `analyses` can be empty -- in that case,
+no operation is performed and `tags` is empty.
 
 === tagger::new_tokenizer ===[tagger_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;

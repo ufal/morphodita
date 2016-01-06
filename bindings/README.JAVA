@@ -38,6 +38,8 @@ C++ Bindings API
 Helper Structures
 -----------------
 
+  typedef vector<int> Indices;
+
   typedef vector<string> Forms;
 
   struct TaggedForm {
@@ -51,6 +53,7 @@ Helper Structures
     string tag;
   };
   typedef vector<TaggedLemma> TaggedLemmas;
+  typedef vector<TaggedLemmas> Analyses;
 
   struct TaggedLemmaForms {
     string lemma;
@@ -110,7 +113,9 @@ Main Classes
 
     virtual const Morpho* getMorpho() const;
 
-    virtual void tag(Forms& forms, TaggedLemmas& tags) const;
+    virtual void tag(const Forms& forms, TaggedLemmas& tags) const;
+
+    virtual void tag_analyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 
     Tokenizer* newTokenizer() const;
   };
