@@ -52,12 +52,16 @@ int main(int argc, char* argv[]) {
         if (argc > 3 && strlen(argv[3])) {
           prefix_guesser.open(argv[3]);
           if (!prefix_guesser) runtime_failure("Cannot open prefix guesser file '" << argv[3] << "'!");
+        } else {
+          prefix_guesser.setstate(ios::failbit);
         }
 
         ifstream statistical_guesser;
         if (argc > 4 && strlen(argv[4])) {
           statistical_guesser.open(argv[4]);
           if (!statistical_guesser) runtime_failure("Cannot open statistical guesser file '" << argv[4] << "'!");
+        } else {
+          statistical_guesser.setstate(ios::failbit);
         }
 
         cout.put(id);
@@ -77,6 +81,8 @@ int main(int argc, char* argv[]) {
         if (argc > 4 && strlen(argv[4])) {
           negations.open(argv[4]);
           if (!negations) runtime_failure("Cannot open negations file '" << argv[4] << "'!");
+        } else {
+          negations.setstate(ios::failbit);
         }
 
         cout.put(id);
@@ -105,6 +111,8 @@ int main(int argc, char* argv[]) {
         if (argc > 7 && strlen(argv[7])) {
           statistical_guesser.open(argv[7]);
           if (!statistical_guesser) runtime_failure("Cannot open statistical guesser file '" << argv[7] << "'!");
+        } else {
+          statistical_guesser.setstate(ios::failbit);
         }
 
         cout.put(id);
@@ -117,11 +125,14 @@ int main(int argc, char* argv[]) {
         int max_suffix_len = parse_int(argv[2], "max_suffix_len");
 
         ifstream prefix_guesser;
+        prefix_guesser.setstate(ios::failbit);
 
         ifstream statistical_guesser;
         if (argc > 3 && strlen(argv[3])) {
           statistical_guesser.open(argv[3]);
           if (!statistical_guesser) runtime_failure("Cannot open statistical guesser file '" << argv[3] << "'!");
+        } else {
+          statistical_guesser.setstate(ios::failbit);
         }
 
         cout.put(id);
