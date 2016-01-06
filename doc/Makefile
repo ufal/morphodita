@@ -20,7 +20,7 @@ install: doc
 %.html: %.t2t $(wildcard *.t2t)
 	$(call t2t_docsys_html,$@,$<,manual $(if $(findstring _,$*),striplevel))
 
-web%html: manual%t2t $(wildcard *.t2t)
+web%html: morphodita%t2t $(wildcard *.t2t)
 	$(call t2t_docsys_html,$@,$<,web html_addlevel $(if $(findstring _,$*),striplevel))
 
 %.txt: %.t2t $(wildcard *.t2t)
