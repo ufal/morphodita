@@ -389,9 +389,16 @@ a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vecto
 ``` virtual void tag_analyzed(const std::vector<[string_piece #string_piece]>& forms, std::vector<std::vector<[tagged_lemma #tagged_lemma]> >& analyses, std::vector<int>& tags) const = 0;
 
 Perform morphological disambiguation using given morphological analyses.
-The indices of chosen analyses are stored in the output vector `tags`.
-Note that none of the `analyses` can be empty -- in that case,
-no operation is performed and `tags` is empty.
+The indices of chosen analyses are stored in the output vector ``tags``.
+
+None of the ``analyses`` can be empty -- in that case, no operation is performed
+and ``tags`` is empty. On the other hand, the ``analyses`` vector can be larger
+than ``forms`` -- additional entries are ignored in that case.
+
+Note that the tagger was trained with a specific morphology -- the more your
+morphological analyses differ from the original ones, the worse the results
+will be. One of the usages of [``tag_analyzed`` #tagger_tag_analyzed] is to
+consider only a subset of morphological analyses.
 
 === tagger::new_tokenizer ===[tagger_new_tokenizer]
 ``` virtual [tokenizer #tokenizer]* new_tokenizer() const = 0;

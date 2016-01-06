@@ -2739,9 +2739,18 @@ virtual void tag_analyzed(const std::vector&lt;<A HREF="#string_piece">string_pi
 
 <p>
 Perform morphological disambiguation using given morphological analyses.
-The indices of chosen analyses are stored in the output vector `tags`.
-Note that none of the `analyses` can be empty &ndash; in that case,
-no operation is performed and `tags` is empty.
+The indices of chosen analyses are stored in the output vector <code>tags</code>.
+</p>
+<p>
+None of the <code>analyses</code> can be empty &ndash; in that case, no operation is performed
+and <code>tags</code> is empty. On the other hand, the <code>analyses</code> vector can be larger
+than <code>forms</code> &ndash; additional entries are ignored in that case.
+</p>
+<p>
+Note that the tagger was trained with a specific morphology &ndash; the more your
+morphological analyses differ from the original ones, the worse the results
+will be. One of the usages of <a href="#tagger_tag_analyzed"><code>tag_analyzed</code></a> is to
+consider only a subset of morphological analyses.
 </p>
 
 <a id="tagger_new_tokenizer" name="tagger_new_tokenizer"></a>
