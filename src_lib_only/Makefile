@@ -12,7 +12,7 @@ include ../src/Makefile.lib
 
 MERGE=$(call exe,merge_sources/merge_sources)
 
-morphodita.cpp: $(MERGE) ../src/Makefile.lib $(patsubst %,../src/%.cpp,$(MORPHODITA_O))
+morphodita.cpp: $(MERGE) force
 	@$(call echo,>$@,// This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.)
 	@$(call echo,>>$@,//)
 	@$(call echo,>>$@,// This file is a bundle of all sources and headers of MorphoDiTa library.)
@@ -21,6 +21,9 @@ morphodita.cpp: $(MERGE) ../src/Makefile.lib $(patsubst %,../src/%.cpp,$(MORPHOD
 
 $(MERGE):$(call exe,%):$$(call obj,%)
 	$(call link_exe,$@,$^,$(call win_subsystem,console))
+
+.PHONY: force
+force:
 
 .PHONY: clean
 clean:
