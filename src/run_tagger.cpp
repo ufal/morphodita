@@ -15,13 +15,14 @@
 #include "utils/iostreams.h"
 #include "utils/iostreams_xml.h"
 #include "utils/options.h"
+#include "utils/parse_int.h"
 #include "utils/process_args.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
 
-static void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
-static void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter);
+static void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser);
+static void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser);
 
 int main(int argc, char* argv[]) {
   iostreams_init();
@@ -29,6 +30,7 @@ int main(int argc, char* argv[]) {
   options::map options;
   if (!options::parse({{"input",options::value{"untokenized", "vertical"}},
                        {"convert_tagset",options::value::any},
+                       {"guesser",options::value{"-1", "0", "1"}},
                        {"output",options::value{"vertical","xml"}},
                        {"version", options::value::none},
                        {"help", options::value::none}}, argc, argv, options) ||
@@ -37,6 +39,7 @@ int main(int argc, char* argv[]) {
     runtime_failure("Usage: " << argv[0] << " [options] tagger_file [file[:output_file]]...\n"
                     "Options: --input=untokenized|vertical\n"
                     "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
+                    "         --guesser=0|1 (should morphological guesser be used)\n"
                     "         --output=vertical|xml\n"
                     "         --version\n"
                     "         --help");
@@ -60,15 +63,17 @@ int main(int argc, char* argv[]) {
     if (!tagset_converter) runtime_failure("Cannot create identity tag set converter!");
   }
 
+  morpho::guesser_mode guesser = morpho::guesser_mode(options.count("guesser") ? parse_int(options["guesser"], "use_guesser") : -1);
+
   clock_t now = clock();
-  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer, *tagset_converter);
-  else process_args(2, argc, argv, tag_xml, *tagger, *tokenizer, *tagset_converter);
+  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer, *tagset_converter, guesser);
+  else process_args(2, argc, argv, tag_xml, *tagger, *tokenizer, *tagset_converter, guesser);
   cerr << "Tagging done in " << fixed << setprecision(3) << (clock() - now) / double(CLOCKS_PER_SEC) << " seconds." << endl;
 
   return 0;
 }
 
-void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
+void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
@@ -77,7 +82,7 @@ void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tok
     // Tokenize and tag
     tokenizer.set_text(para);
     while (tokenizer.next_sentence(&forms, nullptr)) {
-      tagger.tag(forms, tags);
+      tagger.tag(forms, tags, guesser);
 
       for (unsigned i = 0; i < tags.size(); i++) {
         tagset_converter.convert(tags[i]);
@@ -88,7 +93,7 @@ void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tok
   }
 }
 
-void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
+void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
@@ -98,7 +103,7 @@ void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenize
     tokenizer.set_text(para);
     const char* unprinted = para.c_str();
     while (tokenizer.next_sentence(&forms, nullptr)) {
-      tagger.tag(forms, tags);
+      tagger.tag(forms, tags, guesser);
 
       for (unsigned i = 0; i < forms.size(); i++) {
         tagset_converter.convert(tags[i]);

@@ -105,7 +105,9 @@
       </li>
       <li><a href="#tagger_tagset_conversion">5.3.2. Tag Set Conversion</a>
       </li>
-      <li><a href="#tagger_output_formats">5.3.3. Output Formats</a>
+      <li><a href="#tagger_morpho_guesser">5.3.3. Morphological Guesser</a>
+      </li>
+      <li><a href="#tagger_output_formats">5.3.4. Output Formats</a>
       </li>
       </ul>
     </li>
@@ -999,6 +1001,7 @@ The full command syntax of <code>run_tagger</code> is
 run_tagger [options] tagger_file [file[:output_file]]...
 Options: --input=untokenized|vertical
          --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
+         --guesser=0|1 (should morphological guesser be used)
          --output=vertical|xml
 </pre>
 
@@ -1034,8 +1037,17 @@ conversions are:
 </li>
 </ul>
 
+<a id="tagger_morpho_guesser" name="tagger_morpho_guesser"></a>
+<h3>5.3.3. Morphological Guesser</h3>
+
+<p>
+By default, every tagger model uses the morphological guesser settings employed
+during the model training. However, the usage of morphological guesser can be
+overridden by the <code>guesser</code> parameter.
+</p>
+
 <a id="tagger_output_formats" name="tagger_output_formats"></a>
-<h3>5.3.3. Output Formats</h3>
+<h3>5.3.4. Output Formats</h3>
 
 <p style="margin-bottom:0">
 The output format is specified using the <code>--output</code> option. Currently

@@ -46,6 +46,7 @@ The full command syntax of ``run_tagger`` is
 run_tagger [options] tagger_file [file[:output_file]]...
 Options: --input=untokenized|vertical
          --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
+         --guesser=0|1 (should morphological guesser be used)
          --output=vertical|xml
 ```
 
@@ -66,6 +67,13 @@ conversions are:
 - ``pdt_to_conll2009``: convert Czech PDT tag set to CoNLL 2009 tag set,
 - ``strip_lemma_comment``: strip lemma comment (see Lemma Structure in API Reference),
 - ``strip_lemma_id``: strip lemma id (see Lemma Structure in API Reference).
+
+
+=== Morphological Guesser ===[tagger_morpho_guesser]
+
+By default, every tagger model uses the morphological guesser settings employed
+during the model training. However, the usage of morphological guesser can be
+overridden by the ``guesser`` parameter.
 
 
 === Output Formats ===[tagger_output_formats]
