@@ -2666,7 +2666,7 @@ class tagger {
 
   virtual const <A HREF="#morpho">morpho</A>* <A HREF="#tagger_get_morpho">get_morpho</A>() const = 0;
 
-  virtual void <A HREF="#tagger_tag">tag</A>(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tags) const = 0;
+  virtual void <A HREF="#tagger_tag">tag</A>(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tags, <A HREF="#morpho">morpho</A>::<A HREF="#morpho_guesser_mode">guesser_mode</A> guesser = -1) const = 0;
 
   virtual void <A HREF="#tagger_tag_analyzed">tag_analyzed</A>(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt; &gt;&amp; analyses, std::vector&lt;int&gt;&amp; tags) const = 0;
 
@@ -2722,12 +2722,17 @@ tagger destructor.
 <h3>7.11.4. tagger::tag()</h3>
 
 <pre>
-virtual void tag(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tags) const = 0;
+virtual void tag(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tags, <A HREF="#morpho">morpho</A>::<A HREF="#morpho_guesser_mode">guesser_mode</A> guesser = -1) const = 0;
 </pre>
 
 <p>
 Perform morphological analysis and subsequent disambiguation. Accepts
 a <code>std::vector</code> of <a href="#string_piece"><code>string_piece</code></a> and fills the output vector of <a href="#tagged_lemma"><code>tagged_lemma</code></a>.
+</p>
+<p>
+The `guesser` parameter defines whether morphological guesser should be used.
+If negative value is specified (which is the default), the guesser settings
+employed when the tagger model was trained is used.
 </p>
 
 <a id="tagger_tag_analyzed" name="tagger_tag_analyzed"></a>
@@ -2968,7 +2973,7 @@ class Tagger {
 
   virtual const Morpho* getMorpho() const;
 
-  virtual void tag(const Forms&amp; forms, TaggedLemmas&amp; tags) const;
+  virtual void tag(const Forms&amp; forms, TaggedLemmas&amp; tags, int guesser = -1) const;
 
   virtual void tag_analyzed(const Forms&amp; forms, const Analyses&amp; analyses, Indices&amp; tags) const;
 

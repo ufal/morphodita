@@ -1917,7 +1917,7 @@ Class tagger
 
     virtual const morpho* get_morpho() const = 0;
 
-    virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
+    virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags, morpho::guesser_mode guesser = -1) const = 0;
 
     virtual void tag_analyzed(const std::vector<string_piece>& forms, std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const = 0;
 
@@ -1960,10 +1960,14 @@ destructor.
 tagger::tag()
 -------------
 
-  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
+  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags, morpho::guesser_mode guesser = -1) const = 0;
 
 Perform morphological analysis and subsequent disambiguation. Accepts a
 std::vector of string_piece and fills the output vector of tagged_lemma.
+
+The `guesser` parameter defines whether morphological guesser should be used. If
+negative value is specified (which is the default), the guesser settings
+employed when the tagger model was trained is used.
 
 
 tagger::tag_analyzed()
@@ -2167,7 +2171,7 @@ Main Classes
 
     virtual const Morpho* getMorpho() const;
 
-    virtual void tag(const Forms& forms, TaggedLemmas& tags) const;
+    virtual void tag(const Forms& forms, TaggedLemmas& tags, int guesser = -1) const;
 
     virtual void tag_analyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 

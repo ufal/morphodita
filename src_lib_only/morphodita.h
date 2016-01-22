@@ -153,7 +153,7 @@ class tagger {
   virtual const morpho* get_morpho() const = 0;
 
   // Perform morphologic analysis and subsequent disambiguation.
-  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags) const = 0;
+  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags, morpho::guesser_mode guesser = morpho::guesser_mode(-1)) const = 0;
 
   // Perform disambiguation only on given analyses.
   virtual void tag_analyzed(const std::vector<string_piece>& forms, const std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const = 0;

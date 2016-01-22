@@ -22,7 +22,7 @@ class perceptron_tagger : public tagger {
 
   bool load(istream& is);
   virtual const morpho* get_morpho() const override;
-  virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const override;
+  virtual void tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags, morpho::guesser_mode guesser = morpho::guesser_mode(-1)) const override;
   virtual void tag_analyzed(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<int>& tags) const override;
 
  private:
@@ -63,7 +63,7 @@ const morpho* perceptron_tagger<FeatureSequences, decoding_order, window_size>::
 }
 
 template<class FeatureSequences, int decoding_order, int window_size>
-void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags) const {
+void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags, morpho::guesser_mode guesser) const {
   tags.clear();
   if (!dict) return;
 
@@ -75,7 +75,7 @@ void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag(const
   for (unsigned i = 0; i < forms.size(); i++) {
     c->forms[i] = forms[i];
     c->forms[i].len = dict->raw_form_len(forms[i]);
-    dict->analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, c->analyses[i]);
+    dict->analyze(forms[i], guesser >= 0 ? guesser : use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, c->analyses[i]);
   }
 
   if (c->tags.size() < forms.size()) c->tags.resize(forms.size() * 2);

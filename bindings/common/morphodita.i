@@ -158,12 +158,12 @@ class tagger {
   virtual const morpho* get_morpho() const;
 
   %extend {
-    void tag(const std::vector<std::string>& forms, std::vector<tagged_lemma>& tags) const {
+    void tag(const std::vector<std::string>& forms, std::vector<tagged_lemma>& tags, int guesser = -1) const {
       std::vector<string_piece> string_pieces;
       string_pieces.reserve(forms.size());
       for (auto&& form : forms)
         string_pieces.emplace_back(form);
-      $self->tag(string_pieces, tags);
+      $self->tag(string_pieces, tags, morpho::guesser_mode(guesser));
     }
   }
 

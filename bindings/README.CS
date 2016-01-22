@@ -102,7 +102,7 @@ Main Classes
 
     virtual const Morpho* getMorpho() const;
 
-    virtual void tag(const Forms& forms, TaggedLemmas& tags) const;
+    virtual void tag(const Forms& forms, TaggedLemmas& tags, int guesser = -1) const;
 
     virtual void tag_analyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 

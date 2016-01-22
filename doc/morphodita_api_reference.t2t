@@ -346,7 +346,7 @@ class tagger {
 
   virtual const [morpho #morpho]* [get_morpho #tagger_get_morpho]() const = 0;
 
-  virtual void [tag #tagger_tag](const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags) const = 0;
+  virtual void [tag #tagger_tag](const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags, [morpho #morpho]::[guesser_mode #morpho_guesser_mode] guesser = -1) const = 0;
 
   virtual void [tag_analyzed #tagger_tag_analyzed](const std::vector<[string_piece #string_piece]>& forms, std::vector<std::vector<[tagged_lemma #tagged_lemma]> >& analyses, std::vector<int>& tags) const = 0;
 
@@ -380,10 +380,14 @@ not delete the pointer, it is owned by the tagger instance and deleted in the
 tagger destructor.
 
 === tagger::tag() ===[tagger_tag]
-``` virtual void tag(const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags) const = 0;
+``` virtual void tag(const std::vector<[string_piece #string_piece]>& forms, std::vector<[tagged_lemma #tagged_lemma]>& tags, [morpho #morpho]::[guesser_mode #morpho_guesser_mode] guesser = -1) const = 0;
 
 Perform morphological analysis and subsequent disambiguation. Accepts
 a ``std::vector`` of [``string_piece`` #string_piece] and fills the output vector of [``tagged_lemma`` #tagged_lemma].
+
+The `guesser` parameter defines whether morphological guesser should be used.
+If negative value is specified (which is the default), the guesser settings
+employed when the tagger model was trained is used.
 
 === tagger::tag_analyzed() ===[tagger_tag_analyzed]
 ``` virtual void tag_analyzed(const std::vector<[string_piece #string_piece]>& forms, std::vector<std::vector<[tagged_lemma #tagged_lemma]> >& analyses, std::vector<int>& tags) const = 0;
