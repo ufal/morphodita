@@ -185,23 +185,21 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
         return false;
       }
 
-      tagger->tag(forms, tags);
+      tagger->tag(forms, tags, guesser);
 
       for (unsigned i = 0; i < forms.size(); i++) {
-        auto& tag = (guesser == morpho::NO_GUESSER && tagger->get_morpho()->analyze(forms[i], guesser, analyses) < 0) ?
-            analyses[0] : tags[i];
-        converter->convert(tag);
+        converter->convert(tags[i]);
         switch (output.mode) {
           case VERTICAL:
             json.value(sp(forms[i]), true).value("\t", true)
-                .value(sp(tag.lemma), true).value("\t", true)
-                .value(sp(tag.tag), true).value("\n", true);
+                .value(sp(tags[i].lemma), true).value("\t", true)
+                .value(sp(tags[i].tag), true).value("\n", true);
             break;
           case XML:
             if (unprinted < forms[i].str) json.value_xml_escape(sp(unprinted, forms[i].str - unprinted), true);
             if (!i) json.value("<sentence>", true);
-            json.value("<token lemma=\"", true).value_xml_escape(sp(tag.lemma), true)
-                .value("\" tag=\"", true).value_xml_escape(sp(tag.tag), true)
+            json.value("<token lemma=\"", true).value_xml_escape(sp(tags[i].lemma), true)
+                .value("\" tag=\"", true).value_xml_escape(sp(tags[i].tag), true)
                 .value("\">", true).value_xml_escape(sp(forms[i]), true)
                 .value("</token>", true);
             break;
@@ -210,7 +208,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
             if (i || !first) json.close();
             if (!i && !first) json.close();
             if (!i) json.array();
-            json.object().key("token").value(sp(forms[i])).key("lemma").value(tag.lemma).key("tag").value(tag.tag);
+            json.object().key("token").value(sp(forms[i])).key("lemma").value(tags[i].lemma).key("tag").value(tags[i].tag);
             break;
         }
         unprinted = forms[i].str + forms[i].len;
