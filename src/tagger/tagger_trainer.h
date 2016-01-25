@@ -23,7 +23,7 @@ template <class TaggerTrainer>
 class tagger_trainer {
  public:
   struct sentence {
-    vector<string> sentence;
+    vector<string> words;
     vector<string_piece> forms;
     vector<vector<tagged_lemma>> analyses;
     vector<tagged_lemma> gold;
@@ -76,7 +76,7 @@ double tagger_trainer<TaggerTrainer>::load_data(istream& is, const morpho& d, bo
   sentences.emplace_back();
   while (getline(is, line)) {
     if (line.empty()) {
-      if (!sentences.back().sentence.empty())
+      if (!sentences.back().words.empty())
         sentences.emplace_back();
       continue;
     }
@@ -87,8 +87,8 @@ double tagger_trainer<TaggerTrainer>::load_data(istream& is, const morpho& d, bo
     // Add form to sentence
     forms++;
     sentence& s = sentences.back();
-    s.sentence.emplace_back(tokens[0]);
-    s.forms.emplace_back(string_piece(s.sentence.back().c_str(), d.raw_form_len(s.sentence.back())));
+    s.words.emplace_back(tokens[0]);
+    s.forms.emplace_back(string_piece(s.words.back().c_str(), d.raw_form_len(s.words.back())));
     s.gold.emplace_back(tokens[1], tokens[2]);
     s.gold_index.emplace_back(-1);
 
@@ -108,7 +108,7 @@ double tagger_trainer<TaggerTrainer>::load_data(istream& is, const morpho& d, bo
       s.analyses.back().emplace_back(tokens[1], tokens[2]);
     }
   }
-  if (!sentences.empty() && sentences.back().sentence.empty()) sentences.pop_back();
+  if (!sentences.empty() && sentences.back().words.empty()) sentences.pop_back();
 
   return forms_matched / double(forms);
 }
