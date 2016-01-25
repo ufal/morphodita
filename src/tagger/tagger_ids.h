@@ -32,6 +32,28 @@ class tagger_ids {
     if (str == "generic4") return id = GENERIC4, true;
     return false;
   }
+
+  static int decoding_order(tagger_id id) {
+    switch (id) {
+      case CZECH2: return 2;
+      case CZECH2_3: return 2;
+      case CZECH3: return 3;
+      case GENERIC2: return 2;
+      case GENERIC2_3: return 2;
+      case GENERIC3: return 3;
+      case GENERIC4: return 4;
+    }
+    return 0;
+  }
+
+  static int window_size(tagger_id id) {
+    switch (id) {
+      case CZECH2_3: return 3;
+      case GENERIC2_3: return 3;
+      default: break;
+    }
+    return decoding_order(id);
+  }
 };
 
 typedef tagger_ids::tagger_id tagger_id;

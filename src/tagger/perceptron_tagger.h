@@ -15,10 +15,10 @@ namespace ufal {
 namespace morphodita {
 
 // Declarations
-template<class FeatureSequences, int decoding_order, int window_size>
+template<class FeatureSequences>
 class perceptron_tagger : public tagger {
  public:
-  perceptron_tagger();
+  perceptron_tagger(int decoding_order, int window_size);
 
   bool load(istream& is);
   virtual const morpho* get_morpho() const override;
@@ -26,10 +26,12 @@ class perceptron_tagger : public tagger {
   virtual void tag_analyzed(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<int>& tags) const override;
 
  private:
+  int decoding_order, window_size;
+
   unique_ptr<morpho> dict;
   bool use_guesser;
   FeatureSequences features;
-  typedef viterbi<FeatureSequences, decoding_order, window_size> viterbi_decoder;
+  typedef viterbi<FeatureSequences> viterbi_decoder;
   viterbi_decoder decoder;
   struct cache {
     vector<string_piece> forms;
@@ -37,7 +39,7 @@ class perceptron_tagger : public tagger {
     vector<int> tags;
     typename viterbi_decoder::cache decoder_cache;
 
-    cache(const perceptron_tagger<FeatureSequences, decoding_order, window_size>& self) : decoder_cache(self.decoder) {}
+    cache(const perceptron_tagger<FeatureSequences>& self) : decoder_cache(self.decoder) {}
   };
 
   mutable threadsafe_stack<cache> caches;
@@ -46,24 +48,25 @@ class perceptron_tagger : public tagger {
 
 // Definitions
 
-template<class FeatureSequences, int decoding_order, int window_size>
-perceptron_tagger<FeatureSequences, decoding_order, window_size>::perceptron_tagger() : decoder(features) {}
+template<class FeatureSequences>
+perceptron_tagger<FeatureSequences>::perceptron_tagger(int decoding_order, int window_size)
+  : decoding_order(decoding_order), window_size(window_size), decoder(features, decoding_order, window_size) {}
 
-template<class FeatureSequences, int decoding_order, int window_size>
-bool perceptron_tagger<FeatureSequences, decoding_order, window_size>::load(istream& is) {
+template<class FeatureSequences>
+bool perceptron_tagger<FeatureSequences>::load(istream& is) {
   if (dict.reset(morpho::load(is)), !dict) return false;
   use_guesser = is.get();
   if (!features.load(is)) return false;
   return true;
 }
 
-template<class FeatureSequences, int decoding_order, int window_size>
-const morpho* perceptron_tagger<FeatureSequences, decoding_order, window_size>::get_morpho() const {
+template<class FeatureSequences>
+const morpho* perceptron_tagger<FeatureSequences>::get_morpho() const {
   return dict.get();
 }
 
-template<class FeatureSequences, int decoding_order, int window_size>
-void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags, morpho::guesser_mode guesser) const {
+template<class FeatureSequences>
+void perceptron_tagger<FeatureSequences>::tag(const vector<string_piece>& forms, vector<tagged_lemma>& tags, morpho::guesser_mode guesser) const {
   tags.clear();
   if (!dict) return;
 
@@ -87,8 +90,8 @@ void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag(const
   caches.push(c);
 }
 
-template<class FeatureSequences, int decoding_order, int window_size>
-void perceptron_tagger<FeatureSequences, decoding_order, window_size>::tag_analyzed(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<int>& tags) const {
+template<class FeatureSequences>
+void perceptron_tagger<FeatureSequences>::tag_analyzed(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, vector<int>& tags) const {
   tags.clear();
 
   cache* c = caches.pop();

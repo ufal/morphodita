@@ -21,46 +21,22 @@ namespace ufal {
 namespace morphodita {
 
 tagger* tagger::load(istream& is) {
-  switch (tagger_ids::tagger_id(is.get())) {
+  tagger_id id = tagger_id(is.get());
+  switch (id) {
     case tagger_ids::CZECH2:
-      {
-        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_czech_elementary_features>, 2, 2>>();
-        if (res->load(is)) return res.release();
-        break;
-      }
     case tagger_ids::CZECH2_3:
-      {
-        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_czech_elementary_features>, 2, 3>>();
-        if (res->load(is)) return res.release();
-        break;
-      }
     case tagger_ids::CZECH3:
       {
-        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_czech_elementary_features>, 3, 3>>();
+        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_czech_elementary_features>>>(tagger_ids::decoding_order(id), tagger_ids::window_size(id));
         if (res->load(is)) return res.release();
         break;
       }
     case tagger_ids::GENERIC2:
-      {
-        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 2, 2>>();
-        if (res->load(is)) return res.release();
-        break;
-      }
     case tagger_ids::GENERIC2_3:
-      {
-        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 2, 3>>();
-        if (res->load(is)) return res.release();
-        break;
-      }
     case tagger_ids::GENERIC3:
-      {
-        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 3, 3>>();
-        if (res->load(is)) return res.release();
-        break;
-      }
     case tagger_ids::GENERIC4:
       {
-        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>, 4, 4>>();
+        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>>>(tagger_ids::decoding_order(id), tagger_ids::window_size(id));
         if (res->load(is)) return res.release();
         break;
       }

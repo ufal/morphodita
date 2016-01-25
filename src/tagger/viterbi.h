@@ -19,10 +19,11 @@ namespace ufal {
 namespace morphodita {
 
 // Declarations
-template <class FeatureSequences, int decoding_order, int window_size>
+template <class FeatureSequences>
 class viterbi {
  public:
-  viterbi(const FeatureSequences& features) : features(features) {}
+  viterbi(const FeatureSequences& features, int decoding_order, int window_size)
+      : features(features), decoding_order(decoding_order), window_size(window_size) {}
 
   struct cache;
   void tag(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, cache& c, vector<int>& tags) const;
@@ -31,28 +32,29 @@ class viterbi {
   struct node;
 
   const FeatureSequences& features;
+  int decoding_order, window_size;
 };
 
 
 // Definitions
-template <class FeatureSequences, int decoding_order, int window_size>
-struct viterbi<FeatureSequences, decoding_order, window_size>::cache {
+template <class FeatureSequences>
+struct viterbi<FeatureSequences>::cache {
   vector<node> nodes;
   typename FeatureSequences::cache features_cache;
 
-  cache(const viterbi<FeatureSequences, decoding_order, window_size>& self) : features_cache(self.features) {}
+  cache(const viterbi<FeatureSequences>& self) : features_cache(self.features) {}
 };
 
-template <class FeatureSequences, int decoding_order, int window_size>
-struct viterbi<FeatureSequences, decoding_order, window_size>::node {
+template <class FeatureSequences>
+struct viterbi<FeatureSequences>::node {
   int tag;
   int prev;
   feature_sequences_score score;
   typename FeatureSequences::dynamic_features dynamic;
 };
 
-template <class FeatureSequences, int decoding_order, int window_size>
-void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, cache& c, vector<int>& tags) const {
+template <class FeatureSequences>
+void viterbi<FeatureSequences>::tag(const vector<string_piece>& forms, const vector<vector<tagged_lemma>>& analyses, cache& c, vector<int>& tags) const {
   if (!forms.size()) return;
 
   // Count number of nodes and allocate
@@ -67,7 +69,8 @@ void viterbi<FeatureSequences, decoding_order, window_size>::tag(const vector<st
   // Init feature sequences
   features.initialize_sentence(forms, analyses, c.features_cache);
 
-  int window[window_size];
+  int window_stack[16]; vector<int> window_heap;
+  int* window = window_size <= 16 ? window_stack : (window_heap.resize(window_size), window_heap.data());
   typename FeatureSequences::dynamic_features dynamic;
   feature_sequences_score score;
 

@@ -30,7 +30,7 @@ class tagger_trainer {
     vector<int> gold_index;
   };
 
-  static void train(int iterations, istream& in_morpho_dict, bool use_guesser, istream& in_feature_templates, bool prune_features, istream& in_train, istream& in_heldout, bool early_stopping, ostream& out_tagger);
+  static void train(int decoding_order, int window_size, int iterations, istream& in_morpho_dict, bool use_guesser, istream& in_feature_templates, bool prune_features, istream& in_train, istream& in_heldout, bool early_stopping, ostream& out_tagger);
 
  private:
   static double load_data(istream& is, const morpho& d, bool use_guesser, vector<sentence>& sentences, bool add_gold);
@@ -39,7 +39,7 @@ class tagger_trainer {
 
 // Definitions
 template <class TaggerTrainer>
-void tagger_trainer<TaggerTrainer>::train(int iterations, istream& in_morpho_dict, bool use_guesser, istream& in_feature_templates, bool prune_features, istream& in_train, istream& in_heldout, bool early_stopping, ostream& out_tagger) {
+void tagger_trainer<TaggerTrainer>::train(int decoding_order, int window_size, int iterations, istream& in_morpho_dict, bool use_guesser, istream& in_feature_templates, bool prune_features, istream& in_train, istream& in_heldout, bool early_stopping, ostream& out_tagger) {
   cerr << "Loading dictionary: ";
   unique_ptr<morpho> d(morpho::load(in_morpho_dict));
   if (!d) runtime_failure("Cannot load dictionary!");
@@ -62,7 +62,7 @@ void tagger_trainer<TaggerTrainer>::train(int iterations, istream& in_morpho_dic
   out_tagger.put(use_guesser);
 
   // Train and encode the tagger
-  TaggerTrainer::train(iterations, train_data, heldout_data, early_stopping, prune_features, in_feature_templates, out_tagger);
+  TaggerTrainer::train(decoding_order, window_size, iterations, train_data, heldout_data, early_stopping, prune_features, in_feature_templates, out_tagger);
 }
 
 template <class TaggerTrainer>
