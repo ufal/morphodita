@@ -79,10 +79,10 @@ ragel_tokenizer::ragel_tokenizer(unsigned url_email_tokenizer) : unicode_tokeniz
     for (uint8_t ascii = 0; ascii < 128; ascii++)
       ragel_map.push_back(ascii);
 
-    ragel_map_add(U'…', 160);
-    ragel_map_add(U'’', 161);
-    ragel_map_add(U'‘', 162);
-    ragel_map_add(U'‐', 163);
+    ragel_map_add(U'\u2026', 160); // horizontal ellipsis (TRIPLE DOT)
+    ragel_map_add(U'\u2019', 161); // right single quotation mark
+    ragel_map_add(U'\u2018', 162); // left single quotation mark
+    ragel_map_add(U'\u2010', 163); // hyphen
   }
   ragel_map_flag.clear();
 }
