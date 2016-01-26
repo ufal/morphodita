@@ -61,7 +61,7 @@ void viterbi<FeatureSequences>::tag(const vector<string_piece>& forms, const vec
   unsigned nodes = 0;
   for (unsigned i = 0, states = 1; i < forms.size(); i++) {
     if (analyses[i].empty()) return;
-    states = (i >= decoding_order-1 ? states / analyses[i-decoding_order+1].size() : states) * analyses[i].size();
+    states = (i+1 >= unsigned(decoding_order) ? states / analyses[i-decoding_order+1].size() : states) * analyses[i].size();
     nodes += states;
   }
   if (nodes > c.nodes.size()) c.nodes.resize(nodes);
