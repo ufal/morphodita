@@ -9,6 +9,7 @@
 
 #include <fstream>
 
+#include "conllu_elementary_features.h"
 #include "czech_elementary_features.h"
 #include "generic_elementary_features.h"
 #include "feature_sequences.h"
@@ -37,6 +38,14 @@ tagger* tagger::load(istream& is) {
     case tagger_ids::GENERIC4:
       {
         auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_generic_elementary_features>>>(tagger_ids::decoding_order(id), tagger_ids::window_size(id));
+        if (res->load(is)) return res.release();
+        break;
+      }
+    case tagger_ids::CONLLU2:
+    case tagger_ids::CONLLU2_3:
+    case tagger_ids::CONLLU3:
+      {
+        auto res = new_unique_ptr<perceptron_tagger<persistent_feature_sequences<persistent_conllu_elementary_features>>>(tagger_ids::decoding_order(id), tagger_ids::window_size(id));
         if (res->load(is)) return res.release();
         break;
       }

@@ -10,6 +10,7 @@
 #include <cstring>
 #include <fstream>
 
+#include "tagger/conllu_elementary_features.h"
 #include "tagger/czech_elementary_features.h"
 #include "tagger/feature_sequences.h"
 #include "tagger/generic_elementary_features.h"
@@ -51,6 +52,9 @@ int main(int argc, char* argv[]) {
     case tagger_ids::GENERIC2_3:
     case tagger_ids::GENERIC3:
     case tagger_ids::GENERIC4:
+    case tagger_ids::CONLLU2:
+    case tagger_ids::CONLLU2_3:
+    case tagger_ids::CONLLU3:
       {
         if (argc < 7) runtime_failure("Usage: " << argv[0] << ' ' << argv[1] << " dict use_guesser features iterations prune_features [heldout_data [early_stopping]]");
         const char* dict_file = argv[2];
@@ -89,6 +93,11 @@ int main(int argc, char* argv[]) {
           case tagger_ids::GENERIC3:
           case tagger_ids::GENERIC4:
             tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<generic_elementary_features>>>::train(tagger_ids::decoding_order(id), tagger_ids::window_size(id), iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
+            break;
+          case tagger_ids::CONLLU2:
+          case tagger_ids::CONLLU2_3:
+          case tagger_ids::CONLLU3:
+            tagger_trainer<perceptron_tagger_trainer<train_feature_sequences<conllu_elementary_features>>>::train(tagger_ids::decoding_order(id), tagger_ids::window_size(id), iterations, dict, use_guesser, feature_templates, prune_features, cin, heldout, early_stopping, cout);
             break;
         }
         cerr << "Tagger saved." << endl;

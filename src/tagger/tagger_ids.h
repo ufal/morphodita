@@ -20,6 +20,7 @@ class tagger_ids {
     CZECH2 = 0, CZECH3 = 1, CZECH2_3 = 6,
     /* 2 was used internally for ENGLISH3, but never released publicly */
     GENERIC2 = 3, GENERIC3 = 4, GENERIC4 = 5, GENERIC2_3 = 7,
+    CONLLU2 = 8, CONLLU2_3 = 9, CONLLU3 = 10,
   };
 
   static bool parse(const string& str, tagger_id& id) {
@@ -30,6 +31,9 @@ class tagger_ids {
     if (str == "generic2_3") return id = GENERIC2_3, true;
     if (str == "generic3") return id = GENERIC3, true;
     if (str == "generic4") return id = GENERIC4, true;
+    if (str == "conllu2") return id = CONLLU2, true;
+    if (str == "conllu2_3") return id = CONLLU2_3, true;
+    if (str == "conllu3") return id = CONLLU3, true;
     return false;
   }
 
@@ -42,6 +46,9 @@ class tagger_ids {
       case GENERIC2_3: return 2;
       case GENERIC3: return 3;
       case GENERIC4: return 4;
+      case CONLLU2: return 2;
+      case CONLLU2_3: return 2;
+      case CONLLU3: return 3;
     }
     return 0;
   }
@@ -50,6 +57,7 @@ class tagger_ids {
     switch (id) {
       case CZECH2_3: return 3;
       case GENERIC2_3: return 3;
+      case CONLLU2_3: return 3;
       default: break;
     }
     return decoding_order(id);
