@@ -11,7 +11,7 @@ include Makefile.builtem
 include Makefile.lib
 include rest_server/microrestd/Makefile.include
 
-EXECUTABLES = $(call exe,encode_dictionary run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer tagger_accuracy train_tagger)
+EXECUTABLES = $(call exe,encode_dictionary run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer tagger_accuracy train_guesser train_tagger)
 SERVER = $(call exe,rest_server/morphodita_server)
 TOOLS = $(call exe,tools/benchmark_dictionary tools/csts tools/fill_lemmas tools/morpho_accuracy tools/remap_tags tools/strip_combining_marks tools/test_dictionary)
 LIBRARIES = $(call lib,libmorphodita)
@@ -37,6 +37,7 @@ $(call exe,run_morpho_generate): $(call obj,$(MORPHODITA_O))
 $(call exe,run_tagger): $(call obj,$(MORPHODITA_O))
 $(call exe,run_tokenizer): $(call obj,$(MORPHODITA_O))
 $(call exe,tagger_accuracy): $(call obj,$(MORPHODITA_O))
+$(call exe,train_guesser): $(call obj,morpho/morpho_statistical_guesser_trainer utils/compressor_save unilib/unicode unilib/utf8 unilib/version version/version)
 $(call exe,train_tagger): $(call obj,$(MORPHODITA_O) utils/compressor_save)
 $(call exe,rest_server/morphodita_server): LD_FLAGS+=$(call use_library,$(if $(filter win-%,$(PLATFORM)),$(MICRORESTD_LIBRARIES_WIN),$(MICRORESTD_LIBRARIES_POSIX)))
 $(call exe,rest_server/morphodita_server): $(call obj,$(MORPHODITA_O) rest_server/morphodita_service $(addprefix rest_server/microrestd/,$(MICRORESTD_OBJECTS) $(MICRORESTD_PUGIXML_OBJECTS)))

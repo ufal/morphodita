@@ -17,6 +17,7 @@ tools/morpho_accuracy
 tools/remap_tags
 tools/strip_combining_marks
 tools/test_dictionary
+train_guesser
 train_tagger
 *.exe
 *.swp
