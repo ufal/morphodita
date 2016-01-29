@@ -16,7 +16,7 @@ namespace morphodita {
 
 class morpho_statistical_guesser_trainer {
  public:
-  static void train(istream& is, int suffix_len, int rules_per_suffix, ostream& os);
+  static void train(istream& is, unsigned suffix_len, unsigned rules_per_suffix, unsigned max_prefixes, unsigned min_prefix_count, ostream& os);
 
  private:
   struct instance {
@@ -27,8 +27,9 @@ class morpho_statistical_guesser_trainer {
   };
 
   enum casing { CASE_LC, CASE_UCLC, CASE_UC, CASE_OTHER };
-  static casing get_casing(const string& word);
+  static casing get_casing(const string& word, bool allow_nonletters);
   static void set_casing(const string& original, casing c, string& word);
+  static bool suffix(const string& word, unsigned& length);
 };
 
 } // namespace morphodita

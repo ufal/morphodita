@@ -59,7 +59,7 @@ void morpho_statistical_guesser::analyze(string_piece form, vector<tagged_lemma>
 
     const unsigned char* rule = nullptr;
     unsigned rule_prefix_len = 0;
-    for (unsigned prefix_len = 0; prefix_len + suffix_len < form.len; prefix_len++) {
+    for (unsigned prefix_len = 0; prefix_len + suffix_len <= form.len; prefix_len++) {
       if (prefix_len) rule_label.push_back(form.str[prefix_len - 1]);
       const unsigned char* found = rules.at(rule_label.c_str(), rule_label.size(), [](pointer_decoder& data){ data.next<char>(data.next_2B()); });
       if (!found) break;
