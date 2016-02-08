@@ -16,12 +16,11 @@
 #include "common.h"
 #include "small_stringops.h"
 #include "utils/binary_decoder.h"
+#include "utils/binary_encoder.h"
 #include "utils/pointer_decoder.h"
 
 namespace ufal {
 namespace morphodita {
-
-class binary_encoder;
 
 // Declarations
 class persistent_unordered_map {
