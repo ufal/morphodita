@@ -18,7 +18,7 @@ BINDING_C_FLAGS+=$(if $(filter osx-%,$(PLATFORM)),-Wno-reserved-user-defined-lit
 all: $(BINDING_MODULE)
 
 $(call dynobj,morphodita_perl):C_FLAGS+=$(BINDING_C_FLAGS)
-$(BINDING_MODULE): $(call dynobj,morphodita_perl) $(BINDING_MORPHODITA_O)
+$(BINDING_MODULE): $(call dynobj,morphodita_perl) $(BINDING_MORPHODITA_OBJECTS)
 	@$(call mkdir,$(dir $@))
 	@$(call touch,$(dir $@)MorphoDiTa.bs)
 	$(call link_dynlib,$@,$^ $(BINDING_C_FLAGS), $(BINDING_LD_FLAGS) $(call version_script,morphodita_perl.map))

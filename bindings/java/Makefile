@@ -26,7 +26,7 @@ endif
 all: $(BINDING_MODULE) morphodita.jar
 
 $(call dynobj,morphodita_java):C_FLAGS+=$(BINDING_C_FLAGS)
-$(BINDING_MODULE): $(call dynobj,morphodita_java) $(BINDING_MORPHODITA_O)
+$(BINDING_MODULE): $(call dynobj,morphodita_java) $(BINDING_MORPHODITA_OBJECTS)
 	$(call link_dynlib,$@,$^ $(BINDING_C_FLAGS), $(BINDING_LD_FLAGS) $(call version_script,morphodita_java.map))
 
 morphodita_java.cpp: morphodita_java.i ../common/morphodita.i

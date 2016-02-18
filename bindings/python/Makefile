@@ -17,7 +17,7 @@ BINDING_C_FLAGS+=$(if $(filter %-gcc %-clang,$(PLATFORM)),-w)
 all: $(BINDING_MODULE)
 
 $(call dynobj,morphodita_python):C_FLAGS+=$(BINDING_C_FLAGS)
-$(BINDING_MODULE): $(call dynobj,morphodita_python) $(BINDING_MORPHODITA_O)
+$(BINDING_MODULE): $(call dynobj,morphodita_python) $(BINDING_MORPHODITA_OBJECTS)
 	$(call link_dynlib,$@,$^ $(BINDING_C_FLAGS), $(BINDING_LD_FLAGS) $(call version_script,morphodita_python.map))
 
 morphodita_python.cpp: morphodita_python.i ../common/morphodita.i

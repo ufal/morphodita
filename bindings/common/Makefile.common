@@ -8,19 +8,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 include ../../src/Makefile.builtem
-include ../../src/Makefile.lib
+include ../../src/Makefile.include
 
 SWIG_FLAGS+=-O -c++ -outcurrentdir
 BINDING_C_FLAGS+=$(call include_dir,../../src_lib_only)
-BINDING_MORPHODITA_O=$(addprefix ../../src/,$(call dynobj,$(MORPHODITA_O)))
+BINDING_MORPHODITA_OBJECTS=$(addprefix ../../src/,$(call dynobj,$(MORPHODITA_OBJECTS)))
 ifneq ($(filter osx-%,$(PLATFORM)),)
   BINDING_LD_FLAGS+=-Wl,-undefined -Wl,dynamic_lookup
 endif
 
 .PHONY: binding_morphodita_o
-$(BINDING_MORPHODITA_O): binding_morphodita_o
+$(BINDING_MORPHODITA_OBJECTS): binding_morphodita_o
 binding_morphodita_o:
-	@$(MAKE) -C ../../src $(call dynobj,$(MORPHODITA_O))
+	@$(MAKE) -C ../../src $(call dynobj,$(MORPHODITA_OBJECTS))
 
 .PHONY: veryclean
 veryclean: clean
