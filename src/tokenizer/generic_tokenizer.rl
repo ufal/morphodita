@@ -18,6 +18,8 @@ namespace morphodita {
   write data noerror nofinal;
 }%%
 
+generic_tokenizer::generic_tokenizer(unsigned version) : ragel_tokenizer(version <= 1 ? 1 : 2) {}
+
 bool generic_tokenizer::next_sentence(vector<token_range>& tokens) {
   using namespace unilib;
 
