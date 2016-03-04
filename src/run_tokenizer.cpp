@@ -9,10 +9,11 @@
 
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
+#include "utils/getpara.h"
 #include "utils/iostreams.h"
-#include "utils/iostreams_xml.h"
 #include "utils/options.h"
 #include "utils/process_args.h"
+#include "utils/xml_encoded.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
