@@ -46,7 +46,7 @@ void english_tokenizer::split_token(vector<token_range>& tokens) {
     variable p index;
     variable pe end;
     variable eof end;
-    getkey ragel_char(chars[end - index - 1]);
+    getkey ragel_char(chars[tokens.back().start + end - index - 1]);
 
     # For the split_mark to work, two marks must never appear in one token.
     action mark { split_mark = index - tokens.back().start + 1; }

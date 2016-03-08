@@ -151,9 +151,9 @@ _resume:
 				break;
 
 			_mid = _lower + ((_upper-_lower) >> 1);
-			if ( ( ragel_char(chars[end - index - 1])) < *_mid )
+			if ( ( ragel_char(chars[tokens.back().start + end - index - 1])) < *_mid )
 				_upper = _mid - 1;
-			else if ( ( ragel_char(chars[end - index - 1])) > *_mid )
+			else if ( ( ragel_char(chars[tokens.back().start + end - index - 1])) > *_mid )
 				_lower = _mid + 1;
 			else {
 				_trans += (unsigned int)(_mid - _keys);
@@ -174,9 +174,9 @@ _resume:
 				break;
 
 			_mid = _lower + (((_upper-_lower) >> 1) & ~1);
-			if ( ( ragel_char(chars[end - index - 1])) < _mid[0] )
+			if ( ( ragel_char(chars[tokens.back().start + end - index - 1])) < _mid[0] )
 				_upper = _mid - 2;
-			else if ( ( ragel_char(chars[end - index - 1])) > _mid[1] )
+			else if ( ( ragel_char(chars[tokens.back().start + end - index - 1])) > _mid[1] )
 				_lower = _mid + 2;
 			else {
 				_trans += (unsigned int)((_mid - _keys)>>1);
