@@ -467,13 +467,15 @@ Czech Model History
 
 czech-morfflex-160310 and czech-morfflex-pdt-160310 (require MorphoDiTa 1.0 or later)
   Trained on PDT 3.0 (http://ufal.mff.cuni.cz/pdt3.0) using MorfFlex CZ 160310
-  (http://hdl.handle.net/11234/1-1674), variants Part of Speech Only, No
-  Diacritical Marks
+  (http://hdl.handle.net/11234/1-1674), variants: Part of Speech Only, No
+  Diacritical Marks. Download from LINDAT/CLARIN repository
+  (http://hdl.handle.net/11234/1-1674).
 
 czech-morfflex-131112 and czech-morfflex-pdt-131112 (require MorphoDiTa 1.0 or later)
   Trained on PDT 2.5 (http://ufal.mff.cuni.cz/pdt2.5) using MorfFlex CZ 131112
   (http://hdl.handle.net/11858/00-097C-0000-0015-A780-9), variants Part of
-  Speech Only, Raw Lemmas
+  Speech Only, Raw Lemmas. Download from LINDAT/CLARIN repository
+  (http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1).
 
 
 English MorphoDiTa Models
