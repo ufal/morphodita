@@ -128,10 +128,24 @@ bool english_tokenizer::next_sentence(vector<token_range>& tokens) {
         };
 
 
-      whitespace+ -- eol eol;
+      whitespace+ -- eol eol
+        {
+          current = te;
+          do
+            if (emergency_sentence_split(tokens)) fbreak;
+          while (tokenize_url_email(tokens));
+          fexec current;
+        };
 
       eol eol
-        { if (!tokens.empty()) fbreak; };
+        {
+          if (!tokens.empty()) fbreak;
+          current = te;
+          do
+            if (emergency_sentence_split(tokens)) fbreak;
+          while (tokenize_url_email(tokens));
+          fexec current;
+        };
     *|;
 
     write init;
