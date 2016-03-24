@@ -79,7 +79,11 @@
       </li>
       <li><a href="#czech-morfflex-pdt_pos_variant">5.1.5. Part of Speech Only Variant</a>
       </li>
-      <li><a href="#czech-morfflex-pdt_raw_lemmas_variant">5.1.6. Raw Lemmas Variant</a>
+      <li><a href="#czech-morfflex-pdt_no_dia_variant">5.1.6. No Diacritical Marks Variant</a>
+      </li>
+      <li><a href="#czech-morfflex-pdt_raw_lemmas_variant">5.1.7. Models with Raw Lemmas</a>
+      </li>
+      <li><a href="#czech-morfflex-pdt_changes">5.1.8. Czech Model History</a>
       </li>
       </ul>
     </li>
@@ -360,7 +364,7 @@ Currently the following language models are available:
 </p>
 
 <ul>
-<li>Czech: <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1">czech-morfflex-pdt-131112</a> (<a href="http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt">documentation</a>)
+<li>Czech: <a href="http://hdl.handle.net/11234/1-1674">czech-morfflex-pdt-160222</a> (<a href="http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt">documentation</a>) <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1">czech-morfflex-pdt-131112</a> (<a href="http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt_changes">documentation</a>)
 </li>
 <li>English: <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0">english-morphium-wsj-140407</a> (<a href="http://ufal.mff.cuni.cz/morphodita/users-manual#english-morphium-wsj">documentation</a>)
 </li>
@@ -589,9 +593,9 @@ MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 Czech models are distributed under the
 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/">CC BY-NC-SA</a> licence.
 The Czech morphology uses the
-<a href="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</a>
+<a href="http://hdl.handle.net/11234/1-1673">MorfFlex CZ 160310</a>
 Czech morphological dictionary and the Czech tagger is trained on
-<a href="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</a>. Czech models work in MorphoDiTa
+<a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a>. Czech models work in MorphoDiTa
 version 1.0 or later.
 </p>
 <p>
@@ -602,7 +606,7 @@ are implemented and can be optionally used when performing morphological analysi
 Czech models are versioned according to the version of the MorfFlex CZ
 morphological dictionary used, the version format is <code>YYMMDD</code>, where <code>YY</code>,
 <code>MM</code> and <code>DD</code> are two-digit representation of year, month and day,
-respectively. The latest version is 131112.
+respectively. The latest version is 160310.
 </p>
 <p>
 Compared to Featurama <a href="http://sourceforge.net/projects/featurama/">http://sourceforge.net/projects/featurama/</a>
@@ -614,9 +618,18 @@ and 10 times smaller.
 <h3>5.1.1. Download</h3>
 
 <p>
-The latest version 131112 of the Czech MorphoDiTa models can be downloaded
-from <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1">LINDAT/CLARIN repository</a>.
+The latest version 160310 of the Czech MorphoDiTa models can be downloaded
+from <a href="http://hdl.handle.net/11234/1-1674">LINDAT/CLARIN repository</a>.
 </p>
+
+<a id="czech-morfflex-pdt_download_previous" name="czech-morfflex-pdt_download_previous"></a>
+<h4>5.1.1.1. Previous Versions</h4>
+
+<ul>
+<li>Version 131112 of the Czech MorphoDiTa models can be downloaded
+  from <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1">LINDAT/CLARIN repository</a>.
+</li>
+</ul>
 
 <a id="czech-morfflex-pdt_acknowledgements" name="czech-morfflex-pdt_acknowledgements"></a>
 <h3>5.1.2. Acknowledgements</h3>
@@ -647,7 +660,7 @@ Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
 </p>
 <p>
 The tagger is trained on morphological layer of Prague Dependency Treebank PDT
-2.5, which was supported by the projects <i>LM2010013</i>, <i>LC536</i>,
+3.0, which was supported by the projects <i>LM2010013</i>, <i>LC536</i>,
 <i>LN00A063</i> and <i>MSM0021620838</i> of Ministry of Education, Youth and Sports
 of the Czech Republic, and developed by Martin Buben, Jan Hajič, Jiří Hana,
 Hana Hanová, Barbora Hladká, Emil Jeřábek, Lenka Kebortová, Kristýna Kupková,
@@ -707,37 +720,21 @@ The main Czech model contains the following files:
 </p>
 
 <dl>
-<dt><code>czech-morfflex-&lt;version&gt;.dict</code></dt><dd>
+<dt><code>czech-morfflex-160310.dict</code></dt><dd>
   Morphological dictionary based on the Jan Hajič's (<a href="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</a>)
   system with PDT tag set created from
-  <a href="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</a> morphological dictionary.
+  <a href="http://hdl.handle.net/11234/1-1674">MorfFlex CZ 160310</a> morphological dictionary.
 <p></p>
 </dd>
-<dt><code>czech-morfflex-pdt-&lt;version&gt;.tagger-best_accuracy</code></dt><dd>
-  Best and slowest tagger (Viterbi of order 3) trained on the training portion
-  of <a href="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</a> using the <code>neopren</code> feature
-  set. Contains the <code>czech-morfflex-&lt;version&gt;.dict</code> morphological dictionary.
-<p></p>
-  The latest version <code>czech-morfflex-pdt-131112.tagger-best_accuracy</code> reaches 95.67% tag
-  accuracy, 97.78% lemma accuracy and 94.97% overall accuracy on
-  <a href="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</a> etest data (whose morphological tags and lemmas
-  were remapped using the <code>czech-morfflex-131112.dict</code> dictionary). Model speed: ~10k words/s,
-  model size: 18MB. For comparison, model trained by
-  <a href="http://sourceforge.net/projects/featurama/">Featurama</a> (state-of-the-art
-  Czech tagger implementation) reaches 95.66%, 97.70%, 94.90% of tag, lemma and
-  overall accuracy, respectively, with speed ~2k words/s and size 210MB.
-<p></p>
-</dd>
-<dt><code>czech-morfflex-pdt-&lt;version&gt;.tagger-fast</code></dt><dd>
-  Faster tagger with slightly worse results (Viterbi of order 2) trained on the
-  training portion of <a href="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</a> using the <code>neopren</code>
-  feature set. Contains the <code>czech-morfflex-&lt;version&gt;.dict</code> morphological dictionary.
-<p></p>
-  The latest version <code>czech-morfflex-pdt-131112.tagger-fast</code> reaches 94.70% tag accuracy,
-  97.64% lemma accuracy and 93.94% overall accuracy on
-  <a href="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</a> etest data (whose morphological tags and lemmas
-  were remapped using the <code>czech-morfflex-131112.dict</code> dictionary). Model speed: ~60k words/s,
-  model size: 11MB.
+<dt><code>czech-morfflex-pdt-160310.tagger</code></dt><dd>
+  Tagger trained on the training portion
+  of <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> using the <code>neopren</code> feature
+  set. It contains the <code>czech-morfflex-160310.dict</code> morphological dictionary.
+  and reaches 95.57% tag
+  accuracy, 97.75% lemma accuracy and 94.93% overall accuracy on
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> etest data (whose morphological tags and lemmas
+  were remapped using the <code>czech-morfflex-160310.dict</code> dictionary). Model speed: ~10k words/s,
+  model size: 17MB.
 </dd>
 </dl>
 
@@ -753,46 +750,101 @@ speech and detailed part of speech, respectively. There are 67 such two-letter t
 </p>
 
 <dl>
-<dt><code>czech-morfflex-&lt;version&gt;-pos_only.dict</code></dt><dd>
+<dt><code>czech-morfflex-160310-pos_only.dict</code></dt><dd>
   Morphological dictionary based on the Jan Hajič's (<a href="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</a>)
   system created from
-  <a href="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</a> morphological dictionary.
+  <a href="http://hdl.handle.net/11234/1-1674">MorfFlex CZ 160310</a> morphological dictionary.
   Only first two tag characters of PDT tag set are used.
 <p></p>
 </dd>
-<dt><code>czech-morfflex-pdt-&lt;version&gt;-pos_only.tagger</code></dt><dd>
+<dt><code>czech-morfflex-pdt-160310-pos_only.tagger</code></dt><dd>
   Very fast tagger trained on the training portion of
-  <a href="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</a> using the <code>neopren</code> feature
-  set. Containins the <code>czech-morfflex-&lt;version&gt;-pos_only.dict</code> morphological dictionary.
-<p></p>
-  The latest version <code>czech-morfflex-pdt-131112-pos_only.tagger</code> reaches 99.20% tag
-  accuracy, 97.64% lemma accuracy and 97.60% overall accuracy on
-  <a href="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</a> etest data (which morphological tags and lemmas
-  were remapped using the <code>czech-morfflex-131112-pos_only.dict</code> dictionary).
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> using the <code>neopren</code> feature
+  set. It contains the <code>czech-morfflex-160310-pos_only.dict</code> morphological dictionary
+  and reaches 99.04% tag
+  accuracy, 97.62% lemma accuracy and 97.56% overall accuracy on
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> etest data (which morphological tags and lemmas
+  were remapped using the <code>czech-morfflex-160310-pos_only.dict</code> dictionary).
   Model speed: ~200k words/s, model size: 4MB.
 </dd>
 </dl>
 
-<a id="czech-morfflex-pdt_raw_lemmas_variant" name="czech-morfflex-pdt_raw_lemmas_variant"></a>
-<h3>5.1.6. Raw Lemmas Variant</h3>
+<a id="czech-morfflex-pdt_no_dia_variant" name="czech-morfflex-pdt_no_dia_variant"></a>
+<h3>5.1.6. No Diacritical Marks Variant</h3>
 
 <p>
-<i>Deprecated: These model variants are deprecated as of MorphoDiTa 1.2, because very similar functionality can be achieved using <code>strip_lemma_id</code> tag set converter. Next release of the models will not contain these variants.</i>
+Sometimes the text to be analyzed does not contain diacritical marks.
+We therefore provide variants of the morphological dictionary and tagger
+for this purpose &ndash; morphological analysis, morphological generation and
+tagging employ forms without diacritical marks. Note that the lemmas do
+have diacritical marks.
 </p>
+<p>
+We provide the <code>no_dia</code> variants for all four models described above:
+</p>
+
+<dl>
+<dt><code>czech-morfflex-160310-no_dia.dict</code></dt><dd>
+  No diacritical marks variant of <code>czech-morfflex-160310.dict</code>.
+<p></p>
+</dd>
+<dt><code>czech-morfflex-pdt-160310-no_dia.tagger</code></dt><dd>
+  No diacritical marks variant of <code>czech-morfflex-160310.tagger</code>.
+  It reaches 94.74% tag
+  accuracy, 97.05% lemma accuracy and 93.83% overall accuracy on
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> etest data (which morphological tags and lemmas
+  were remapped using the <code>czech-morfflex-160310-no_dia.dict</code> dictionary)
+  with diacritical marks removed.
+  Model speed: ~5k words/s, model size: 21MB.
+<p></p>
+</dd>
+<dt><code>czech-morfflex-160310-no_dia-pos_only.dict</code></dt><dd>
+  No diacritical marks variant of <code>czech-morfflex-160310-pos_only.dict</code>.
+<p></p>
+</dd>
+<dt><code>czech-morfflex-pdt-160310-no_dia-pos_only.tagger</code></dt><dd>
+  No diacritical marks variant of <code>czech-morfflex-160310-pos_only.tagger</code>.
+  It reaches 98.59% tag
+  accuracy, 97.04% lemma accuracy and 96.96% overall accuracy on
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> etest data (which morphological tags and lemmas
+  were remapped using the <code>czech-morfflex-160310-no_dia-pos_only.dict</code> dictionary)
+  with diacritical marks removed.
+  Model speed: ~130k words/s, model size: 9MB.
+</dd>
+</dl>
+
+<a id="czech-morfflex-pdt_raw_lemmas_variant" name="czech-morfflex-pdt_raw_lemmas_variant"></a>
+<h3>5.1.7. Models with Raw Lemmas</h3>
+
 <p>
 The Czech morphological system distinguish different meanings of same lemmas by
 numbering the lemmas with multiple meanings and supplying additional comments
 for every lemma meaning, as described and demonstrated in
 <a href="#czech_morphological_system">Czech Morphological System</a>. Sometimes this may be
 undesirable, for example when comparing to systems which do not use the
-<a href="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ</a> morphological dictionary.
+<a href="http://hdl.handle.net/11234/1-1674">MorfFlex CZ 160310</a> morphological dictionary.
 </p>
 <p>
-Therefore, all already mentioned Czech models have a variant which does not
-disambiguate lemma meanings and provides no additional comments. (In terms of
-MorphoDiTa API, the lemmas are <i>raw lemmas</i> with empty <i>lemma ids</i> and
-<i>lemma comments</i>.) These model variants are denoted by <code>raw_lemmas</code>.
+To obtain lemmas without any additional information (<i>raw lemmas</i> in terms of
+MorphoDiTa API), use <code>strip_lemma_id</code> tag set converter.  Previously,
+specific dictionary and tagger model variants were provided, which is not needed
+anymore.
 </p>
+
+<a id="czech-morfflex-pdt_changes" name="czech-morfflex-pdt_changes"></a>
+<h3>5.1.8. Czech Model History</h3>
+
+<dl>
+<dt><code>czech-morfflex-160310</code> and <code>czech-morfflex-pdt-160310</code> (require MorphoDiTa 1.0 or later)</dt><dd>
+  Trained on <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> using <a href="http://hdl.handle.net/11234/1-1674">MorfFlex CZ 160310</a>,
+  variants: Part of Speech Only, No Diacritical Marks. <a href="http://hdl.handle.net/11234/1-1674">Download from LINDAT/CLARIN repository</a>.
+<p></p>
+</dd>
+<dt><code>czech-morfflex-131112</code> and <code>czech-morfflex-pdt-131112</code> (require MorphoDiTa 1.0 or later)</dt><dd>
+  Trained on <a href="http://ufal.mff.cuni.cz/pdt2.5">PDT 2.5</a> using <a href="http://hdl.handle.net/11858/00-097C-0000-0015-A780-9">MorfFlex CZ 131112</a>,
+  variants Part of Speech Only, Raw Lemmas. <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1">Download from LINDAT/CLARIN repository</a>.
+</dd>
+</dl>
 
 <a id="english-morphium-wsj" name="english-morphium-wsj"></a>
 <h2>5.2. English MorphoDiTa Models</h2>
@@ -2128,8 +2180,8 @@ Or even more, for example, in the Czech positional morphology tagging system
 one may even wish to generate something like "all forms in fourth case",
 then <code>tag_wildcard</code> should be set to <code>????4</code>.
 Please see Section "Czech Morphology" in User's Manual for more details about the Czech positional tagging system.
-The previous example applies to morphological annotation applied to
-<a href="http://ufal.mff.cuni.cz/pdt2.5/">PDT 2.5</a>, however, the tag wildcards can be used in any
+The previous example applies to morphological annotation of
+<a href="http://ufal.mff.cuni.cz/pdt3.0">PDT</a>, however, the tag wildcards can be used in any
 morphological tagging system.
 </p>
 <p style="margin-bottom:0">

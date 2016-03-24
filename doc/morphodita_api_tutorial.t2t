@@ -167,8 +167,8 @@ Or even more, for example, in the Czech positional morphology tagging system
 one may even wish to generate something like "all forms in fourth case",
 then ``tag_wildcard`` should be set to ``????4``.
 Please see Section "Czech Morphology" in User's Manual for more details about the Czech positional tagging system.
-The previous example applies to morphological annotation applied to
-[PDT 2.5 http://ufal.mff.cuni.cz/pdt2.5/], however, the tag wildcards can be used in any
+The previous example applies to morphological annotation of
+[PDT http://ufal.mff.cuni.cz/pdt3.0], however, the tag wildcards can be used in any
 morphological tagging system.
 
 Most characters of a tag wildcard match corresponding characters of a tag, with the following exceptions:
