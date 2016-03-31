@@ -284,9 +284,9 @@ _eof_trans:
 	{te = ( current)+1;{ tokens.emplace_back(ts, te - ts);
           current = te;
           do
-            if (emergency_sentence_split(tokens)) {( current)++; goto _out; }
+            if (emergency_sentence_split(tokens)) { ( current)--; {( current)++; goto _out; } }
           while (tokenize_url_email(tokens));
-          {( current) = (( current))-1;}
+          ( current)--;
         }}
 	break;
 	case 2:
@@ -303,27 +303,27 @@ _eof_trans:
           if (!tokens.empty()) {( current)++; goto _out; }
           current = te;
           do
-            if (emergency_sentence_split(tokens)) {( current)++; goto _out; }
+            if (emergency_sentence_split(tokens)) { ( current)--; {( current)++; goto _out; } }
           while (tokenize_url_email(tokens));
-          {( current) = (( current))-1;}
+          ( current)--;
         }}
 	break;
 	case 11:
 	{te = ( current);( current)--;{ tokens.emplace_back(ts, te - ts);
           current = te;
           do
-            if (emergency_sentence_split(tokens)) {( current)++; goto _out; }
+            if (emergency_sentence_split(tokens)) { ( current)--; {( current)++; goto _out; } }
           while (tokenize_url_email(tokens));
-          {( current) = (( current))-1;}
+          ( current)--;
         }}
 	break;
 	case 8:
 	{te = ( current);( current)--;{
           current = te;
           do
-            if (emergency_sentence_split(tokens)) {( current)++; goto _out; }
+            if (emergency_sentence_split(tokens)) { ( current)--; {( current)++; goto _out; } }
           while (tokenize_url_email(tokens));
-          {( current) = (( current))-1;}
+          ( current)--;
         }}
 	break;
 	case 9:
@@ -331,18 +331,18 @@ _eof_trans:
           if (!tokens.empty()) {( current)++; goto _out; }
           current = te;
           do
-            if (emergency_sentence_split(tokens)) {( current)++; goto _out; }
+            if (emergency_sentence_split(tokens)) { ( current)--; {( current)++; goto _out; } }
           while (tokenize_url_email(tokens));
-          {( current) = (( current))-1;}
+          ( current)--;
         }}
 	break;
 	case 1:
 	{{( current) = ((te))-1;}{ tokens.emplace_back(ts, te - ts);
           current = te;
           do
-            if (emergency_sentence_split(tokens)) {( current)++; goto _out; }
+            if (emergency_sentence_split(tokens)) { ( current)--; {( current)++; goto _out; } }
           while (tokenize_url_email(tokens));
-          {( current) = (( current))-1;}
+          ( current)--;
         }}
 	break;
 	}

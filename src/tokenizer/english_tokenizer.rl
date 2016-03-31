@@ -113,9 +113,9 @@ bool english_tokenizer::next_sentence(vector<token_range>& tokens) {
           split_token(tokens);
           current = te;
           do
-            if (emergency_sentence_split(tokens)) fbreak;
+            if (emergency_sentence_split(tokens)) { fhold; fbreak; }
           while (tokenize_url_email(tokens));
-          fexec current;
+          fhold;
         };
 
       eos closing* whitespace+ >mark_whitespace opening* (u_Lu | u_Lt)
@@ -132,9 +132,9 @@ bool english_tokenizer::next_sentence(vector<token_range>& tokens) {
         {
           current = te;
           do
-            if (emergency_sentence_split(tokens)) fbreak;
+            if (emergency_sentence_split(tokens)) { fhold; fbreak; }
           while (tokenize_url_email(tokens));
-          fexec current;
+          fhold;
         };
 
       eol eol
@@ -142,9 +142,9 @@ bool english_tokenizer::next_sentence(vector<token_range>& tokens) {
           if (!tokens.empty()) fbreak;
           current = te;
           do
-            if (emergency_sentence_split(tokens)) fbreak;
+            if (emergency_sentence_split(tokens)) { fhold; fbreak; }
           while (tokenize_url_email(tokens));
-          fexec current;
+          fhold;
         };
     *|;
 
