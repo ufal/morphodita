@@ -27,18 +27,19 @@ using namespace ufal::morphodita;
 int main(int argc, char* argv[]) {
   iostreams_init();
 
+  tagger_id id;
   options::map options;
-  if (!options::parse({{"version", options::value::none},
-                       {"help", options::value::none}}, argc, argv, options) ||
-      options.count("help") ||
-      (argc < 2 && !options.count("version")))
-    runtime_failure("Usage: " << argv[0] << " [options] tagger_identifier [tagger_identifier_specific_options]\n"
-                    "Options: --version\n"
-                    "         --help");
+  if (argc == 1 || !tagger_ids::parse(argv[1], id))
+    if (!options::parse({{"version", options::value::none},
+                         {"help", options::value::none}}, argc, argv, options) ||
+        options.count("help") ||
+        (argc < 2 && !options.count("version")))
+      runtime_failure("Usage: " << argv[0] << " [options] tagger_identifier [tagger_identifier_specific_options]\n"
+                      "Options: --version\n"
+                      "         --help");
   if (options.count("version"))
     return cout << version::version_and_copyright() << endl, 0;
 
-  tagger_id id;
   if (!tagger_ids::parse(argv[1], id)) runtime_failure("Cannot parse tagger_identifier '" << argv[1] << "'!");
 
   // Switch stdout to binary mode.
