@@ -1,4 +1,0 @@
-{
-  global: extern "C++" { ufal::morphodita::* };
-  local: *;
-};
