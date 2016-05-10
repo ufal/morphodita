@@ -11,7 +11,7 @@ include Makefile.builtem
 include Makefile.include
 include rest_server/microrestd/Makefile.include
 
-EXECUTABLES = $(call exe,encode_dictionary run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer tagger_accuracy train_guesser train_tagger)
+EXECUTABLES = $(call exe,encode_derivator encode_dictionary run_morpho_analyze run_morpho_cli run_morpho_generate run_tagger run_tokenizer tagger_accuracy train_guesser train_tagger)
 SERVER = $(call exe,rest_server/morphodita_server)
 TOOLS = $(call exe,tools/benchmark_dictionary tools/csts tools/fill_lemmas tools/morpho_accuracy tools/remap_tags tools/strip_combining_marks tools/test_dictionary)
 LIBRARIES = $(call lib,libmorphodita)
@@ -30,6 +30,7 @@ $(call lib,libmorphodita): $(call obj,$(MORPHODITA_OBJECTS))
 
 C_FLAGS += $(call include_dir,.)
 # executables
+$(call exe,encode_derivator): $(call obj,derivator/derivator_dictionary_encoder $(MORPHODITA_OBJECTS))
 $(call exe,encode_dictionary): $(call obj,morpho/czech_morpho_encoder morpho/english_morpho_encoder morpho/english_morpho_guesser_encoder morpho/external_morpho_encoder morpho/generic_morpho_encoder morpho/morpho_prefix_guesser_encoder morpho/morpho_statistical_guesser_encoder morpho/raw_morpho_dictionary_reader unilib/version utils/compressor_save version/version)
 $(call exe,run_morpho_analyze): $(call obj,$(MORPHODITA_OBJECTS))
 $(call exe,run_morpho_cli): $(call obj,$(MORPHODITA_OBJECTS))

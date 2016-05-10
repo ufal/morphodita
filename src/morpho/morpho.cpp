@@ -10,6 +10,7 @@
 #include <fstream>
 
 #include "czech_morpho.h"
+#include "derivator/derivator_dictionary.h"
 #include "english_morpho.h"
 #include "external_morpho.h"
 #include "generic_morpho.h"
@@ -57,6 +58,17 @@ morpho* morpho::load(istream& is) {
         if (res->load(is)) return res.release();
         break;
       }
+    case morpho_ids::DERIVATOR_DICTIONARY:
+      {
+        auto derinet = new_unique_ptr<derivator_dictionary>();
+        if (!derinet->load(is)) return nullptr;
+
+        unique_ptr<morpho> dictionary(load(is));
+        if (!dictionary) return nullptr;
+        derinet->dictionary = dictionary.get();
+        dictionary->derinet.reset(derinet.release());
+        return dictionary.release();
+      }
   }
 
   return nullptr;
@@ -67,6 +79,10 @@ morpho* morpho::load(const char* fname) {
   if (!f) return nullptr;
 
   return load(f);
+}
+
+const derivator* morpho::get_derivator() const {
+  return derinet.get();
 }
 
 } // namespace morphodita

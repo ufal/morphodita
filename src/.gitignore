@@ -1,4 +1,5 @@
 /.build/
+encode_derivator
 encode_dictionary
 libmorphodita.a
 libmorphodita.dyn.a
