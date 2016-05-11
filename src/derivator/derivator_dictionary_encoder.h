@@ -16,7 +16,7 @@ namespace morphodita {
 
 class derivator_dictionary_encoder {
  public:
-  static void encode(istream& is, istream& dictionary, ostream& os);
+  static void encode(istream& is, istream& dictionary, bool verbose, ostream& os);
 };
 
 } // namespace morphodita

@@ -24,12 +24,14 @@ int main(int argc, char* argv[]) {
 
   options::map options;
   if (!options::parse({{"from_tagger", options::value::none},
+                       {"verbose", options::value::none},
                        {"version", options::value::none},
                        {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       (argc < 2 && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] morpho_dictionary\n"
                     "Options: --from_tagger (use tagger instead of morpho)\n"
+                    "         --verbose (dump all derivator graph edges)\n"
                     "         --version\n"
                     "         --help");
   if (options.count("version"))
@@ -44,7 +46,7 @@ int main(int argc, char* argv[]) {
   if (options.count("from_tagger"))
     cout.put(dictionary.get());
 
-  derivator_dictionary_encoder::encode(cin, dictionary, cout);
+  derivator_dictionary_encoder::encode(cin, dictionary, options.count("verbose"), cout);
 
   if (options.count("from_tagger"))
     cout << dictionary.rdbuf();

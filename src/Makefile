@@ -30,7 +30,7 @@ $(call lib,libmorphodita): $(call obj,$(MORPHODITA_OBJECTS))
 
 C_FLAGS += $(call include_dir,.)
 # executables
-$(call exe,encode_derivator): $(call obj,derivator/derivator_dictionary_encoder $(MORPHODITA_OBJECTS))
+$(call exe,encode_derivator): $(call obj,derivator/derivator_dictionary_encoder utils/compressor_save $(MORPHODITA_OBJECTS))
 $(call exe,encode_dictionary): $(call obj,morpho/czech_morpho_encoder morpho/english_morpho_encoder morpho/english_morpho_guesser_encoder morpho/external_morpho_encoder morpho/generic_morpho_encoder morpho/morpho_prefix_guesser_encoder morpho/morpho_statistical_guesser_encoder morpho/raw_morpho_dictionary_reader unilib/version utils/compressor_save version/version)
 $(call exe,run_morpho_analyze): $(call obj,$(MORPHODITA_OBJECTS))
 $(call exe,run_morpho_cli): $(call obj,$(MORPHODITA_OBJECTS))

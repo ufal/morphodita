@@ -12,6 +12,7 @@
 #include "common.h"
 #include "derivator.h"
 #include "morpho/morpho.h"
+#include "morpho/persistent_unordered_map.h"
 
 namespace ufal {
 namespace morphodita {
@@ -26,6 +27,7 @@ class derivator_dictionary : public derivator {
  private:
   friend class morpho;
   const morpho* dictionary;
+  persistent_unordered_map derinet;
 };
 
 } // namespace morphodita
