@@ -14,9 +14,7 @@
 namespace ufal {
 namespace morphodita {
 
-void derivator_dictionary::parent(string_piece lemma, derivated_lemma& parent) const {
-  parent.lemma.clear();
-
+bool derivator_dictionary::parent(string_piece lemma, derivated_lemma& parent) const {
   if (dictionary) lemma.len = dictionary->lemma_id_len(lemma);
 
   auto lemma_data = derinet.at(lemma.str, lemma.len, [](pointer_decoder& data) {
@@ -32,13 +30,14 @@ void derivator_dictionary::parent(string_piece lemma, derivated_lemma& parent) c
       parent.lemma.assign((const char*) parent_data, parent_len);
       if (parent_data[parent_len])
         parent.lemma.append((const char*) parent_data + parent_len + 1, parent_data[parent_len]);
+      return true;
     }
   }
+  parent.lemma.clear();
+  return false;
 }
 
-void derivator_dictionary::children(string_piece lemma, vector<derivated_lemma>& children) const {
-  children.clear();
-
+bool derivator_dictionary::children(string_piece lemma, vector<derivated_lemma>& children) const {
   if (dictionary) lemma.len = dictionary->lemma_id_len(lemma);
 
   auto lemma_data = derinet.at(lemma.str, lemma.len, [](pointer_decoder& data) {
@@ -49,15 +48,20 @@ void derivator_dictionary::children(string_piece lemma, vector<derivated_lemma>&
   if (lemma_data) {
     auto children_len = *(uint16_t*)(lemma_data + 1 + *lemma_data + 4);
     auto children_encoded = (uint32_t*)(lemma_data + 1 + *lemma_data + 4 + 2);
-    children.resize(children_len);
-    for (unsigned i = 0; i < children_len; i++) {
-      unsigned child_len = children_encoded[i] & 0xFF;
-      auto child_data = derinet.data_start(child_len) + (children_encoded[i] >> 8);
-      children[i].lemma.assign((const char*) child_data, child_len);
-      if (child_data[child_len])
-        children[i].lemma.append((const char*) child_data + child_len + 1, child_data[child_len]);
+    if (children_len) {
+      children.resize(children_len);
+      for (unsigned i = 0; i < children_len; i++) {
+        unsigned child_len = children_encoded[i] & 0xFF;
+        auto child_data = derinet.data_start(child_len) + (children_encoded[i] >> 8);
+        children[i].lemma.assign((const char*) child_data, child_len);
+        if (child_data[child_len])
+          children[i].lemma.append((const char*) child_data + child_len + 1, child_data[child_len]);
+      }
+      return true;
     }
   }
+  children.clear();
+  return false;
 }
 
 bool derivator_dictionary::load(istream& is) {

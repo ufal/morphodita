@@ -19,8 +19,8 @@ namespace morphodita {
 
 class derivator_dictionary : public derivator {
  public:
-  virtual void parent(string_piece lemma, derivated_lemma& parent) const override;
-  virtual void children(string_piece lemma, vector<derivated_lemma>& children) const override;
+  virtual bool parent(string_piece lemma, derivated_lemma& parent) const override;
+  virtual bool children(string_piece lemma, vector<derivated_lemma>& children) const override;
 
   bool load(istream& is);
 

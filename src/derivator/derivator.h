@@ -25,11 +25,11 @@ class derivator {
 
   // For given lemma, return the parent in the derivation graph.
   // The lemma is assumed to be lemma id and any lemma comments are ignored.
-  virtual void parent(string_piece lemma, derivated_lemma& parent) const = 0;
+  virtual bool parent(string_piece lemma, derivated_lemma& parent) const = 0;
 
   // For given lemma, return the children in the derivation graph.
   // The lemma is assumed to be lemma id and any lemma comments are ignored.
-  virtual void children(string_piece lemma, vector<derivated_lemma>& children) const = 0;
+  virtual bool children(string_piece lemma, vector<derivated_lemma>& children) const = 0;
 };
 
 } // namespace morphodita
