@@ -124,8 +124,11 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
     lemma.second.mark = ++mark;
     for (auto node = derinet.find(lemma.first); !node->second.parent.empty(); ) {
       node = derinet.find(node->second.parent);
-      if (node->second.mark == mark)
-        runtime_failure("The given derivator forms a cycle containing lemma '" << lemma.first << "'!");
+      if (node->second.mark) {
+        if (node->second.mark == mark)
+          runtime_failure("The derivator data contains a cycle with lemma '" << lemma.first << "'!");
+        break;
+      }
       node->second.mark = mark;
     }
   }
