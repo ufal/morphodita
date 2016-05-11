@@ -41,9 +41,10 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
     string parent;
     set<string> parents;
     unsigned children;
+    unsigned mark;
 
-    lemma_info() : children(0) {}
-    lemma_info(const string& sense, const string& comment) : sense(sense), comment(comment), children(0) {}
+    lemma_info(const string& sense = string(), const string& comment = string())
+        : sense(sense), comment(comment), children(0), mark(0) {}
   };
   map<string, lemma_info> derinet;
 
@@ -116,6 +117,18 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
       if (verbose)
         cerr << lemma.first << lemma.second.comment << " -> " << lemma.second.parent << derinet[lemma.second.parent].comment << endl;
     }
+
+  // Make sure the derinet contains no cycles
+  unsigned mark = 0;
+  for (auto&& lemma : derinet) {
+    lemma.second.mark = ++mark;
+    for (auto node = derinet.find(lemma.first); !node->second.parent.empty(); ) {
+      node = derinet.find(node->second.parent);
+      if (node->second.mark == mark)
+        runtime_failure("The given derivator forms a cycle containing lemma '" << lemma.first << "'!");
+      node->second.mark = mark;
+    }
+  }
 
   // Encode the derivator
   cerr << "Encoding derivator: ";
