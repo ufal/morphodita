@@ -7,6 +7,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include "derivator/derivation_formatter.h"
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
@@ -20,8 +21,8 @@
 
 using namespace ufal::morphodita;
 
-static void analyze_vertical(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter);
-static void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter);
+static void analyze_vertical(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation);
+static void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation);
 
 int main(int argc, char* argv[]) {
   iostreams_init();
@@ -29,6 +30,7 @@ int main(int argc, char* argv[]) {
   options::map options;
   if (!options::parse({{"input",options::value{"untokenized", "vertical"}},
                        {"convert_tagset",options::value::any},
+                       {"derivation",options::value{"none", "root", "path", "tree"}},
                        {"output",options::value{"vertical","xml"}},
                        {"from_tagger",options::value::none},
                        {"version", options::value::none},
@@ -38,6 +40,7 @@ int main(int argc, char* argv[]) {
     runtime_failure("Usage: " << argv[0] << "[options] dict_file use_guesser [file[:output_file]]...\n"
                     "Options: --input=untokenized|vertical\n"
                     "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
+                    "         --derivation=none|root|path|tree\n"
                     "         --output=vertical|xml\n"
                     "         --from_tagger\n"
                     "         --version\n"
@@ -73,15 +76,26 @@ int main(int argc, char* argv[]) {
     if (!tagset_converter) runtime_failure("Cannot create identity tag set converter!");
   }
 
+  unique_ptr<derivation_formatter> derivation;
+  if (options.count("derivation")) {
+    if (!options["derivation"].empty() && options["derivation"] != "none" && !morpho->get_derivator())
+      runtime_failure("No derivator is defined for the supplied model!");
+    derivation.reset(derivation_formatter::new_derivation_formatter(options["derivation"], morpho->get_derivator()));
+    if (!derivation) runtime_failure("Cannot create derivation formatter '" << options["derivation"] << "' for the supplied model!");
+  } else {
+    derivation.reset(derivation_formatter::new_none_derivation_formatter());
+    if (!derivation) runtime_failure("Cannot create trivial derivation formatter for the supplied model!");
+  }
+
   if (options.count("output") && options["output"] == "vertical")
-    process_args(3, argc, argv, analyze_vertical, dictionary, use_guesser, *tokenizer, *tagset_converter);
+    process_args(3, argc, argv, analyze_vertical, dictionary, use_guesser, *tokenizer, *tagset_converter, *derivation);
   else
-    process_args(3, argc, argv, analyze_xml, dictionary, use_guesser, *tokenizer, *tagset_converter);
+    process_args(3, argc, argv, analyze_xml, dictionary, use_guesser, *tokenizer, *tagset_converter, *derivation);
 
   return 0;
 }
 
-void analyze_vertical(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
+void analyze_vertical(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> lemmas;
@@ -94,8 +108,10 @@ void analyze_vertical(istream& is, ostream& os, const morpho& dictionary, bool u
         tagset_converter.convert_analyzed(lemmas);
 
         os << form;
-        for (auto&& lemma : lemmas)
+        for (auto&& lemma : lemmas) {
+          derivation.format_derivation(lemma.lemma);
           os << '\t' << lemma.lemma << '\t' << lemma.tag;
+        }
         os << '\n';
       }
       os << endl;
@@ -103,7 +119,7 @@ void analyze_vertical(istream& is, ostream& os, const morpho& dictionary, bool u
   }
 }
 
-void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter) {
+void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_guesser, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> lemmas;
@@ -120,8 +136,10 @@ void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_gu
         os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
         os << "<token>";
-        for (auto&& lemma : lemmas)
+        for (auto&& lemma : lemmas) {
+          derivation.format_derivation(lemma.lemma);
           os << "<analysis lemma=\"" << xml_encoded(lemma.lemma, true) << "\" tag=\"" << xml_encoded(lemma.tag, true) << "\"/>";
+        }
         os << xml_encoded(forms[i]) << "</token>";
         if (i + 1 == forms.size()) os << "</sentence>";
         unprinted = forms[i].str + forms[i].len;

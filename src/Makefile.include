@@ -7,7 +7,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-MORPHODITA_OBJECTS = derivator/derivator_dictionary
+MORPHODITA_OBJECTS = derivator/derivation_formatter derivator/derivator_dictionary
 MORPHODITA_OBJECTS += morpho/czech_morpho morpho/english_morpho morpho/english_morpho_guesser
 MORPHODITA_OBJECTS += morpho/external_morpho morpho/generic_morpho morpho/morpho
 MORPHODITA_OBJECTS += morpho/morpho_statistical_guesser morpho/tag_filter tagger/tagger

@@ -10,6 +10,7 @@
 #include <cstring>
 #include <ctime>
 
+#include "derivator/derivation_formatter.h"
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
 #include "utils/getpara.h"
@@ -22,8 +23,8 @@
 
 using namespace ufal::morphodita;
 
-static void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser);
-static void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser);
+static void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation, morpho::guesser_mode guesser);
+static void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation, morpho::guesser_mode guesser);
 
 int main(int argc, char* argv[]) {
   iostreams_init();
@@ -31,6 +32,7 @@ int main(int argc, char* argv[]) {
   options::map options;
   if (!options::parse({{"input",options::value{"untokenized", "vertical"}},
                        {"convert_tagset",options::value::any},
+                       {"derivation",options::value{"none", "root", "path", "tree"}},
                        {"guesser",options::value{"-1", "0", "1"}},
                        {"output",options::value{"vertical","xml"}},
                        {"version", options::value::none},
@@ -40,6 +42,7 @@ int main(int argc, char* argv[]) {
     runtime_failure("Usage: " << argv[0] << " [options] tagger_file [file[:output_file]]...\n"
                     "Options: --input=untokenized|vertical\n"
                     "         --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id\n"
+                    "         --derivation=none|root|path|tree\n"
                     "         --guesser=0|1 (should morphological guesser be used)\n"
                     "         --output=vertical|xml\n"
                     "         --version\n"
@@ -64,17 +67,30 @@ int main(int argc, char* argv[]) {
     if (!tagset_converter) runtime_failure("Cannot create identity tag set converter!");
   }
 
+  unique_ptr<derivation_formatter> derivation;
+  if (options.count("derivation")) {
+    if (!options["derivation"].empty() && options["derivation"] != "none" && !tagger->get_morpho()->get_derivator())
+      runtime_failure("No derivator is defined for the supplied model!");
+    derivation.reset(derivation_formatter::new_derivation_formatter(options["derivation"], tagger->get_morpho()->get_derivator()));
+    if (!derivation) runtime_failure("Cannot create derivation formatter '" << options["derivation"] << "' for the supplied model!");
+  } else {
+    derivation.reset(derivation_formatter::new_none_derivation_formatter());
+    if (!derivation) runtime_failure("Cannot create trivial derivation formatter for the supplied model!");
+  }
+
   morpho::guesser_mode guesser = morpho::guesser_mode(options.count("guesser") ? parse_int(options["guesser"], "use_guesser") : -1);
 
   clock_t now = clock();
-  if (options.count("output") && options["output"] == "vertical") process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer, *tagset_converter, guesser);
-  else process_args(2, argc, argv, tag_xml, *tagger, *tokenizer, *tagset_converter, guesser);
+  if (options.count("output") && options["output"] == "vertical")
+    process_args(2, argc, argv, tag_vertical, *tagger, *tokenizer, *tagset_converter, *derivation, guesser);
+  else
+    process_args(2, argc, argv, tag_xml, *tagger, *tokenizer, *tagset_converter, *derivation, guesser);
   cerr << "Tagging done in " << fixed << setprecision(3) << (clock() - now) / double(CLOCKS_PER_SEC) << " seconds." << endl;
 
   return 0;
 }
 
-void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser) {
+void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation, morpho::guesser_mode guesser) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
@@ -87,6 +103,7 @@ void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tok
 
       for (unsigned i = 0; i < tags.size(); i++) {
         tagset_converter.convert(tags[i]);
+        derivation.format_derivation(tags[i].lemma);
         os << forms[i] << '\t' << tags[i].lemma << '\t' << tags[i].tag << '\n';
       }
       os << endl;
@@ -94,7 +111,7 @@ void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tok
   }
 }
 
-void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, morpho::guesser_mode guesser) {
+void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenizer, const tagset_converter& tagset_converter, const derivation_formatter& derivation, morpho::guesser_mode guesser) {
   string para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
@@ -108,6 +125,7 @@ void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenize
 
       for (unsigned i = 0; i < forms.size(); i++) {
         tagset_converter.convert(tags[i]);
+        derivation.format_derivation(tags[i].lemma);
 
         os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
