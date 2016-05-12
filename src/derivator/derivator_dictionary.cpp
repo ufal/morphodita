@@ -130,16 +130,16 @@ bool derivator_dictionary::load(istream& is) {
           assert(lemma_data && parent_data);
 
           unsigned parent_offset = parent_data - parent.size() - derinet.data_start(parent.size());
-          assert(parent.size() < (1<<8) && parent_offset <  (1<<24));
+          assert(parent.size() < (1<<8) && parent_offset < (1<<24));
           *(uint32_t*)(lemma_data + 1 + *lemma_data) = (parent_offset << 8) | parent.size();
 
           unsigned lemma_offset = lemma_data - lemma.size() - derinet.data_start(lemma.size());
-          assert(lemma.size() < (1<<8) && lemma_offset <  (1<<24));
+          assert(lemma.size() < (1<<8) && lemma_offset < (1<<24));
           auto children_len = *(uint16_t*)(parent_data + 1 + *parent_data + 4);
           auto children = (uint32_t*)(parent_data + 1 + *parent_data + 4 + 2);
           auto child_index = children[children_len-1];
           children[child_index] = (lemma_offset << 8) | lemma.size();
-          if (child_index < children_len) children[children_len-1]++;
+          if (child_index+1 < children_len) children[children_len-1]++;
         }
       }
 
