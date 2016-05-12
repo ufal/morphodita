@@ -55,11 +55,36 @@ derivation_formatter* derivation_formatter::new_path_derivation_formatter(const 
   return derinet ? new path_derivation_formatter(derinet) : nullptr;
 }
 
+class tree_derivation_formatter : public derivation_formatter {
+ public:
+  tree_derivation_formatter(const derivator* derinet) : derinet(derinet) {}
+
+  virtual void format_derivation(string& lemma) const override {
+    string root(lemma);
+    for (derivated_lemma parent; derinet->parent(root, parent); root.swap(parent.lemma)) {}
+    format_tree(root, lemma);
+  }
+
+  void format_tree(const string& root, string& tree) const {
+    vector<derivated_lemma> children;
+
+    tree.append(" ").append(root);
+    if (derinet->children(root, children))
+      for (auto&& child : children)
+        format_tree(child.lemma, tree);
+    tree.push_back(' ');
+  }
+
+ private:
+  const derivator* derinet;
+};
+
 derivation_formatter* derivation_formatter::new_tree_derivation_formatter(const derivator* derinet) {
+  return derinet ? new tree_derivation_formatter(derinet) : nullptr;
 }
 
 derivation_formatter* derivation_formatter::new_derivation_formatter(const string& name, const derivator* derinet) {
-  if (name.empty() || name == "none") return new_none_derivation_formatter();
+  if (name == "none") return new_none_derivation_formatter();
   if (name == "root") return new_root_derivation_formatter(derinet);
   if (name == "path") return new_path_derivation_formatter(derinet);
   if (name == "tree") return new_tree_derivation_formatter(derinet);
