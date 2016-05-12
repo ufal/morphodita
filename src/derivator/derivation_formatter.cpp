@@ -83,7 +83,7 @@ derivation_formatter* derivation_formatter::new_tree_derivation_formatter(const 
   return derinet ? new tree_derivation_formatter(derinet) : nullptr;
 }
 
-derivation_formatter* derivation_formatter::new_derivation_formatter(const string& name, const derivator* derinet) {
+derivation_formatter* derivation_formatter::new_derivation_formatter(string_piece name, const derivator* derinet) {
   if (name == "none") return new_none_derivation_formatter();
   if (name == "root") return new_root_derivation_formatter(derinet);
   if (name == "path") return new_path_derivation_formatter(derinet);

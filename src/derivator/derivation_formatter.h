@@ -11,6 +11,7 @@
 
 #include "common.h"
 #include "derivator.h"
+#include "utils/string_piece.h"
 
 namespace ufal {
 namespace morphodita {
@@ -19,13 +20,16 @@ class derivation_formatter {
  public:
   virtual ~derivation_formatter() {}
 
+  // Perform the required derivation and store it directly in the lemma.
   virtual void format_derivation(string& lemma) const = 0;
 
+  // Static factory methods.
   static derivation_formatter* new_none_derivation_formatter();
   static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
   static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
   static derivation_formatter* new_tree_derivation_formatter(const derivator* derinet);
-  static derivation_formatter* new_derivation_formatter(const string& name, const derivator* derinet);
+  // String version of static factory method.
+  static derivation_formatter* new_derivation_formatter(string_piece name, const derivator* derinet);
 };
 
 } // namespace morphodita
