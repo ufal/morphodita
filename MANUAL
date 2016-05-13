@@ -265,6 +265,9 @@ later.
 
 Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser are
 implemented and can be optionally used when performing morphological analysis.
+The version 160310 cotains also models with DeriNet
+(http://ufal.mff.cuni.cz/derinet) as a morphological derivator (requiring
+MorphoDiTa 1.9 or later).
 
 Czech models are versioned according to the version of the MorfFlex CZ
 morphological dictionary used, the version format is YYMMDD, where YY, MM and DD
@@ -321,6 +324,12 @@ and developed by Martin Buben, Jan Hajič, Jiří Hana, Hana Hanová, Barbora
 Hladká, Emil Jeřábek, Lenka Kebortová, Kristýna Kupková, Pavel Květoň,
 Jiří Mírovský, Andrea Pfimpfrová, Jan Štěpánek and Daniel Zeman.
 
+The morphological derivator is based on DeriNet, which was supported by the
+Grant No. 16-18177S of the Grant Agency of the Czech Republic and uses language
+resources developed, stored, and distributed by the LINDAT/CLARIN project of the
+Ministry of Edu- cation, Youth and Sports of the Czech Republic (project
+LM2015071).
+
 
 Publications
 ------------
@@ -346,6 +355,11 @@ Publications
   Proceedings of 52nd Annual Meeting of the Association for Computational
   Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June
   2014. Association for Computational Linguistics.
+
+- (Limburská et al. 2016) ŠevčíAdéla Limburská, Milan Straka, Magda
+  Sevcikova, Jonáš Vidra and Zdeněk Žabokrtský. Merging an Inflectional
+  Dictionary with a Resource of Derivational Morphology of Czech. LREC 2016,
+  Portorož, Slovenia.
 
 
 Czech Morphological System
