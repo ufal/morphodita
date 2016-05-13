@@ -1682,6 +1682,18 @@ start and length fields specify the token position in Unicode characters, not in
 bytes of UTF-8 encoding.
 
 
+Struct derivated_lemma
+----------------------
+
+  struct derivated_lemma {
+    std::string lemma;
+  };
+
+The derivated_lemma structure stores information about a derivation. This
+information currently consists of lemma only, but a type of the derivation may
+be added later.
+
+
 Class version
 -------------
 
@@ -1809,6 +1821,136 @@ tokenizer whose behaviour does not change, use tokenizer embedded in a
 morphological dictionary.
 
 
+Class derivator
+---------------
+
+  class derivator {
+   public:
+    virtual ~derivator();
+
+    virtual bool parent(string_piece lemma, derivated_lemma& parent) const = 0;
+    virtual bool children(string_piece lemma, std::vector<derivated_lemma>& children) const = 0;
+  };
+
+The derivator class perform morphological derivation on given lemmas. The
+derivation are computed using lemma ids, see Lemma Structure.
+
+The derivator instances can be obtained through instances of morpho (and
+transitively through tagger).
+
+
+derivator::parent
+-----------------
+
+  virtual bool parent(string_piece lemma, derivated_lemma& parent) const = 0;
+
+Return the parent of a given lemma in the morphological derivation tree. The
+lemma is assumed to be lemma id (see Lemma Structure), so if it contains any
+lemma comments, they are ignored.
+
+The returned lemma is a full lemma (lemma id plus appropriate lemma comments).
+
+If no parent exists, the function empties the parent lemma and returns false.
+
+
+derivator::children
+-------------------
+
+  virtual bool children(string_piece lemma, std::vector<derivated_lemma>& children) const = 0;
+
+Return children of a given lemma in the morphological derivation tree. The lemma
+is assumed to be lemma id (see Lemma Structure), so if it contains any lemma
+comments, they are ignored.
+
+The returned lemmas are full lemmas (lemma ids plus appropriate lemma comments).
+
+If no children exist, the function empties the children vector and returns
+false.
+
+
+Class derivation_formatter
+--------------------------
+
+  class derivation_formatter {
+   public:
+    virtual ~derivation_formatter() {}
+
+    virtual void format_derivation(std::string& lemma) const = 0;
+
+    static derivation_formatter* new_none_derivation_formatter();
+    static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
+    static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
+    static derivation_formatter* new_tree_derivation_formatter(const derivator* derinet);
+    static derivation_formatter* new_derivation_formatter(string_piece name, const derivator* derinet);
+  };
+
+The derivation_formatter class performs required morphological derivation and
+formats the results using a single string field (i.e., directly in the lemma).
+
+
+derivation_formatter::format_derivation
+---------------------------------------
+
+  virtual void format_derivation(std::string& lemma) const = 0;
+
+Perform the required morphological derivation and format the result back
+directly in the lemma.
+
+
+derivation_formatter::new_none_derivation_formatter
+---------------------------------------------------
+
+  static derivation_formatter* new_none_derivation_formatter();
+
+Return a new derivation_formatter instance which does nothing (i.e., it performs
+no derivation).
+
+
+derivation_formatter::new_root_derivation_formatter
+---------------------------------------------------
+
+  static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
+
+Return a new derivation_formatter instance which replaces a lemma by the
+corresponding root in the derivation tree.
+
+
+derivation_formatter::new_path_derivation_formatter
+---------------------------------------------------
+
+  static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
+
+Return a new derivation_formatter instance which replaces a lemma by a space
+separated path in the morphological derivation tree (the original lemma is
+first, followed by its parent, with the root being the last one).
+
+
+derivation_formatter::new_tree_derivation_formatter
+---------------------------------------------------
+
+  static derivation_formatter* new_tree_derivation_formatter(const derivator* derinet);
+
+Return a new derivation_formatter instance which appends to the lemma the whole
+morphological derivation tree which contains it.
+
+The tree is encoded in the following way: root node is the first, then the
+subtrees of the root children are encoded recursively (each after one space),
+followed by a final space (which denotes that the children are complete).
+
+
+derivation_formatter::new_derivation_formatter
+----------------------------------------------
+
+  static derivation_formatter* new_derivation_formatter(string_piece name, const derivator* derinet);
+
+Return one of the available derivation_formatter instances according to the name
+parameter:
+- none: return new_none_derivation_formatter instance
+- root: return new_root_derivation_formatter instance
+- path: return new_path_derivation_formatter instance
+- tree: return new_tree_derivation_formatter instance
+
+
 Class morpho
 ------------
 
@@ -1829,6 +1971,8 @@ Class morpho
     virtual int raw_form_len(string_piece form) const = 0;
 
     virtual tokenizer* new_tokenizer() const = 0;
+
+    virtual const derivator* get_derivator() const;
   };
 
 A morpho instance represents a morphological dictionary. Such a dictionary allow
@@ -1944,6 +2088,17 @@ exists. The user should delete it after use.
 
 Note that the tokenizer might use the morpho instance, so the tokenizer must not
 be used after the morpho instance is destructed.
+
+
+morpho::get_derivator
+---------------------
+
+  virtual const derivator* get_derivator() const;
+
+Returns a derivator for the morphology, or NULL if not available.
+
+The derivator is owned by the morphology, so the returned instance should not be
+freed and it cannot be used after the morpho instance is destructed.
 
 
 Class tagger
@@ -2166,6 +2321,11 @@ Helper Structures
   };
   typedef vector<TokenRange> TokenRanges;
 
+  struct DerivatedLemma {
+    std::string lemma;
+  };
+  typedef vector<DerivatedLemma> DerivatedLemmas;
+
 
 Main Classes
 ------------
@@ -2191,6 +2351,23 @@ Main Classes
     static Tokenizer* newGenericTokenizer();
   };
 
+  class Derivator {
+   public:
+    virtual bool parent(const char* lemma, DerivatedLemma& parent) const;
+    virtual bool children(const char* lemma, DerivatedLemmas& children) const;
+  };
+
+  class DerivationFormatter {
+   public:
+    virtual string formatDerivation(const char* lemma) const;
+
+    static DerivationFormatter* newNoneDerivationFormatter();
+    static DerivationFormatter* newRootDerivationFormatter(const Derivator* derivator);
+    static DerivationFormatter* newPathDerivationFormatter(const Derivator* derivator);
+    static DerivationFormatter* newTreeDerivationFormatter(const Derivator* derivator);
+    static DerivationFormatter* newDerivationFormatter(const char* name, const Derivator* derivator);
+  };
+
   class Morpho {
    public:
     static Morpho* load(const char* fname);
@@ -2204,6 +2381,8 @@ Main Classes
     virtual string rawForm(const char* form) const;
 
     virtual Tokenizer* newTokenizer() const;
+
+    virtual Derivator* getDerivator() const;
   };
 
   class Tagger {

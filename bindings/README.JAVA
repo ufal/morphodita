@@ -67,6 +67,11 @@ Helper Structures
   };
   typedef vector<TokenRange> TokenRanges;
 
+  struct DerivatedLemma {
+    std::string lemma;
+  };
+  typedef vector<DerivatedLemma> DerivatedLemmas;
+
 
 Main Classes
 ------------
@@ -92,6 +97,23 @@ Main Classes
     static Tokenizer* newGenericTokenizer();
   };
 
+  class Derivator {
+   public:
+    virtual bool parent(const char* lemma, DerivatedLemma& parent) const;
+    virtual bool children(const char* lemma, DerivatedLemmas& children) const;
+  };
+
+  class DerivationFormatter {
+   public:
+    virtual string formatDerivation(const char* lemma) const;
+
+    static DerivationFormatter* newNoneDerivationFormatter();
+    static DerivationFormatter* newRootDerivationFormatter(const Derivator* derivator);
+    static DerivationFormatter* newPathDerivationFormatter(const Derivator* derivator);
+    static DerivationFormatter* newTreeDerivationFormatter(const Derivator* derivator);
+    static DerivationFormatter* newDerivationFormatter(const char* name, const Derivator* derivator);
+  };
+
   class Morpho {
    public:
     static Morpho* load(const char* fname);
@@ -105,6 +127,8 @@ Main Classes
     virtual string rawForm(const char* form) const;
 
     virtual Tokenizer* newTokenizer() const;
+
+    virtual Derivator* getDerivator() const;
   };
 
   class Tagger {

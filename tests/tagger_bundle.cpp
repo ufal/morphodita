@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
 
   unique_ptr<tagset_converter> tagset_converter(tagset_converter::new_identity_converter());
 
+  unique_ptr<derivation_formatter> derivation(derivation_formatter::new_none_derivation_formatter());
+
   string line, para;
   vector<string_piece> forms;
   vector<tagged_lemma> tags;
@@ -51,6 +53,7 @@ int main(int argc, char* argv[]) {
 
       for (unsigned i = 0; i < tags.size(); i++) {
         tagset_converter->convert(tags[i]);
+        derivation->format_derivation(tags[i].lemma);
         cout << string(forms[i].str, forms[i].len) << '\t' << tags[i].lemma << '\t' << tags[i].tag << '\n';
       }
       cout << endl;

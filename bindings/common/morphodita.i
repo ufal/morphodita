@@ -54,6 +54,13 @@ struct token_range {
 %template(TokenRanges) std::vector<token_range>;
 typedef std::vector<token_range> TokenTanges;
 
+%rename(DerivatedLemma) derivated_lemma;
+struct derivated_lemma {
+  std::string lemma;
+};
+%template(DerivatedLemmas) std::vector<derivated_lemma>;
+typedef std::vector<derivated_lemma> DerivatedLemmas;
+
 %rename(Version) version;
 class version {
  public:
@@ -107,6 +114,53 @@ class tokenizer {
   static tokenizer* new_generic_tokenizer();
 };
 
+%rename(Derivator) derivator;
+%nodefaultctor derivator;
+class derivator {
+ public:
+  virtual ~derivator() {}
+
+  virtual bool parent(const char* lemma, derivated_lemma& parent) const = 0;
+
+  virtual bool children(const char* lemma, std::vector<derivated_lemma>& children) const = 0;
+};
+
+%rename(DerivationFormatter) derivation_formatter;
+%nodefaultctor derivation_formatter;
+class derivation_formatter {
+ public:
+  virtual ~derivation_formatter() {}
+
+  %extend {
+    %rename(formatDerivation) format_derivation;
+    std::string format_derivation(const char* lemma) const {
+      std::string derivation(lemma);
+      $self->format_derivation(derivation);
+      return derivation;
+    }
+  }
+
+  %rename(newNoneDerivationFormatter) new_none_derivation_formatter;
+  %newobject new_none_derivation_formatter;
+  static derivation_formatter* new_none_derivation_formatter();
+
+  %rename(newRootDerivationFormatter) new_root_derivation_formatter;
+  %newobject new_root_derivation_formatter;
+  static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
+
+  %rename(newPathDerivationFormatter) new_path_derivation_formatter;
+  %newobject new_path_derivation_formatter;
+  static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
+
+  %rename(newTreeDerivationFormatter) new_tree_derivation_formatter;
+  %newobject new_tree_derivation_formatter;
+  static derivation_formatter* new_tree_derivation_formatter(const derivator* derinet);
+
+  %rename(newDerivationFormatter) new_derivation_formatter;
+  %newobject new_derivation_formatter;
+  static derivation_formatter* new_derivation_formatter(const char* name, const derivator* derinet);
+};
+
 %rename(Morpho) morpho;
 %nodefaultctor morpho;
 class morpho {
@@ -143,6 +197,9 @@ class morpho {
   %rename(newTokenizer) new_tokenizer;
   %newobject new_tokenizer;
   virtual tokenizer* new_tokenizer() const;
+
+  %rename(getDerivator) get_derivator;
+  virtual const derivator* get_derivator() const;
 };
 
 %rename(Tagger) tagger;

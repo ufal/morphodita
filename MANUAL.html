@@ -177,99 +177,127 @@
     </li>
     <li><a href="#token_range">7.7. Struct token_range</a>
     </li>
-    <li><a href="#version">7.8. Class version</a>
+    <li><a href="#derivated_lemma">7.8. Struct derivated_lemma</a>
+    </li>
+    <li><a href="#version">7.9. Class version</a>
       <ul>
-      <li><a href="#version_current">7.8.1. version::current</a>
+      <li><a href="#version_current">7.9.1. version::current</a>
       </li>
       </ul>
     </li>
-    <li><a href="#tokenizer">7.9. Class tokenizer</a>
+    <li><a href="#tokenizer">7.10. Class tokenizer</a>
       <ul>
-      <li><a href="#tokenizer_set_text">7.9.1. tokenizer::set_text</a>
+      <li><a href="#tokenizer_set_text">7.10.1. tokenizer::set_text</a>
       </li>
-      <li><a href="#tokenizer_next_sentence">7.9.2. tokenizer::next_sentence</a>
+      <li><a href="#tokenizer_next_sentence">7.10.2. tokenizer::next_sentence</a>
       </li>
-      <li><a href="#tokenizer_new_vertical_tokenizer">7.9.3. tokenizer::new_vertical_tokenizer</a>
+      <li><a href="#tokenizer_new_vertical_tokenizer">7.10.3. tokenizer::new_vertical_tokenizer</a>
       </li>
-      <li><a href="#tokenizer_new_czech_tokenizer">7.9.4. tokenizer::new_czech_tokenizer</a>
+      <li><a href="#tokenizer_new_czech_tokenizer">7.10.4. tokenizer::new_czech_tokenizer</a>
       </li>
-      <li><a href="#tokenizer_new_english_tokenizer">7.9.5. tokenizer::new_english_tokenizer</a>
+      <li><a href="#tokenizer_new_english_tokenizer">7.10.5. tokenizer::new_english_tokenizer</a>
       </li>
-      <li><a href="#tokenizer_new_generic_tokenizer">7.9.6. tokenizer::new_generic_tokenizer</a>
+      <li><a href="#tokenizer_new_generic_tokenizer">7.10.6. tokenizer::new_generic_tokenizer</a>
       </li>
       </ul>
     </li>
-    <li><a href="#morpho">7.10. Class morpho</a>
+    <li><a href="#derivator">7.11. Class derivator</a>
       <ul>
-      <li><a href="#morpho_load_cstring">7.10.1. morpho::load(const char*)</a>
+      <li><a href="#derivator_parent">7.11.1. derivator::parent</a>
       </li>
-      <li><a href="#morpho_load_istream">7.10.2. morpho::load(istream&amp;)</a>
-      </li>
-      <li><a href="#morpho_guesser_mode">7.10.3. morpho::guesser_mode</a>
-      </li>
-      <li><a href="#morpho_analyze">7.10.4. morpho::analyze()</a>
-      </li>
-      <li><a href="#morpho_generate">7.10.5. morpho::generate()</a>
-      </li>
-      <li><a href="#morpho_raw_lemma_len">7.10.6. morpho::raw_lemma_len</a>
-      </li>
-      <li><a href="#morpho_lemma_id_len">7.10.7. morpho::lemma_id_len</a>
-      </li>
-      <li><a href="#morpho_raw_form_len">7.10.8. morpho::raw_form_len</a>
-      </li>
-      <li><a href="#morpho_new_tokenizer">7.10.9. morpho::new_tokenizer</a>
+      <li><a href="#derivator_children">7.11.2. derivator::children</a>
       </li>
       </ul>
     </li>
-    <li><a href="#tagger">7.11. Class tagger</a>
+    <li><a href="#derivation_formatter">7.12. Class derivation_formatter</a>
       <ul>
-      <li><a href="#tagger_load_cstring">7.11.1. tagger::load(const char*)</a>
+      <li><a href="#derivation_formatter_format_derivation">7.12.1. derivation_formatter::format_derivation</a>
       </li>
-      <li><a href="#tagger_load_istream">7.11.2. tagger::load(istream&amp;)</a>
+      <li><a href="#derivation_formatter_new_none_derivation_formatter">7.12.2. derivation_formatter::new_none_derivation_formatter</a>
       </li>
-      <li><a href="#tagger_get_morpho">7.11.3. tagger::get_morpho()</a>
+      <li><a href="#derivation_formatter_new_root_derivation_formatter">7.12.3. derivation_formatter::new_root_derivation_formatter</a>
       </li>
-      <li><a href="#tagger_tag">7.11.4. tagger::tag()</a>
+      <li><a href="#derivation_formatter_new_path_derivation_formatter">7.12.4. derivation_formatter::new_path_derivation_formatter</a>
       </li>
-      <li><a href="#tagger_tag_analyzed">7.11.5. tagger::tag_analyzed()</a>
+      <li><a href="#derivation_formatter_new_tree_derivation_formatter">7.12.5. derivation_formatter::new_tree_derivation_formatter</a>
       </li>
-      <li><a href="#tagger_new_tokenizer">7.11.6. tagger::new_tokenizer</a>
+      <li><a href="#derivation_formatter_new_derivation_formatter">7.12.6. derivation_formatter::new_derivation_formatter</a>
       </li>
       </ul>
     </li>
-    <li><a href="#tagset_converter">7.12. Class tagset_converter</a>
+    <li><a href="#morpho">7.13. Class morpho</a>
       <ul>
-      <li><a href="#tagset_converter_convert">7.12.1. tagset_converter::convert()</a>
+      <li><a href="#morpho_load_cstring">7.13.1. morpho::load(const char*)</a>
       </li>
-      <li><a href="#tagset_converter_convert_analyzed">7.12.2. tagset_converter::convert_analyzed()</a>
+      <li><a href="#morpho_load_istream">7.13.2. morpho::load(istream&amp;)</a>
       </li>
-      <li><a href="#tagset_converter_convert_generated">7.12.3. tagset_converter::convert_generated()</a>
+      <li><a href="#morpho_guesser_mode">7.13.3. morpho::guesser_mode</a>
       </li>
-      <li><a href="#tagset_converter_new_identity_converter">7.12.4. tagset_converter::new_identity_converter()</a>
+      <li><a href="#morpho_analyze">7.13.4. morpho::analyze()</a>
       </li>
-      <li><a href="#tagset_converter_new_pdt_to_conll2009_converter">7.12.5. tagset_converter::new_pdt_to_conll2009_converter()</a>
+      <li><a href="#morpho_generate">7.13.5. morpho::generate()</a>
       </li>
-      <li><a href="#tagset_converter_new_strip_lemma_comment_converter">7.12.6. tagset_converter::new_strip_lemma_comment_converter()</a>
+      <li><a href="#morpho_raw_lemma_len">7.13.6. morpho::raw_lemma_len</a>
       </li>
-      <li><a href="#tagset_converter_new_strip_lemma_id_converter">7.12.7. tagset_converter::new_strip_lemma_id_converter()</a>
+      <li><a href="#morpho_lemma_id_len">7.13.7. morpho::lemma_id_len</a>
+      </li>
+      <li><a href="#morpho_raw_form_len">7.13.8. morpho::raw_form_len</a>
+      </li>
+      <li><a href="#morpho_new_tokenizer">7.13.9. morpho::new_tokenizer</a>
+      </li>
+      <li><a href="#morpho_get_derivator">7.13.10. morpho::get_derivator</a>
       </li>
       </ul>
     </li>
-    <li><a href="#cpp_bindings_api">7.13. C++ Bindings API</a>
+    <li><a href="#tagger">7.14. Class tagger</a>
       <ul>
-      <li><a href="#bindings_helper_structures">7.13.1. Helper Structures</a>
+      <li><a href="#tagger_load_cstring">7.14.1. tagger::load(const char*)</a>
       </li>
-      <li><a href="#bindings_main_classes">7.13.2. Main Classes</a>
+      <li><a href="#tagger_load_istream">7.14.2. tagger::load(istream&amp;)</a>
+      </li>
+      <li><a href="#tagger_get_morpho">7.14.3. tagger::get_morpho()</a>
+      </li>
+      <li><a href="#tagger_tag">7.14.4. tagger::tag()</a>
+      </li>
+      <li><a href="#tagger_tag_analyzed">7.14.5. tagger::tag_analyzed()</a>
+      </li>
+      <li><a href="#tagger_new_tokenizer">7.14.6. tagger::new_tokenizer</a>
       </li>
       </ul>
     </li>
-    <li><a href="#csharp_bindings">7.14. C# Bindings</a>
+    <li><a href="#tagset_converter">7.15. Class tagset_converter</a>
+      <ul>
+      <li><a href="#tagset_converter_convert">7.15.1. tagset_converter::convert()</a>
+      </li>
+      <li><a href="#tagset_converter_convert_analyzed">7.15.2. tagset_converter::convert_analyzed()</a>
+      </li>
+      <li><a href="#tagset_converter_convert_generated">7.15.3. tagset_converter::convert_generated()</a>
+      </li>
+      <li><a href="#tagset_converter_new_identity_converter">7.15.4. tagset_converter::new_identity_converter()</a>
+      </li>
+      <li><a href="#tagset_converter_new_pdt_to_conll2009_converter">7.15.5. tagset_converter::new_pdt_to_conll2009_converter()</a>
+      </li>
+      <li><a href="#tagset_converter_new_strip_lemma_comment_converter">7.15.6. tagset_converter::new_strip_lemma_comment_converter()</a>
+      </li>
+      <li><a href="#tagset_converter_new_strip_lemma_id_converter">7.15.7. tagset_converter::new_strip_lemma_id_converter()</a>
+      </li>
+      </ul>
     </li>
-    <li><a href="#java_bindings">7.15. Java Bindings</a>
+    <li><a href="#cpp_bindings_api">7.16. C++ Bindings API</a>
+      <ul>
+      <li><a href="#bindings_helper_structures">7.16.1. Helper Structures</a>
+      </li>
+      <li><a href="#bindings_main_classes">7.16.2. Main Classes</a>
+      </li>
+      </ul>
     </li>
-    <li><a href="#perl_bindings">7.16. Perl Bindings</a>
+    <li><a href="#csharp_bindings">7.17. C# Bindings</a>
     </li>
-    <li><a href="#python_bindings">7.17. Python Bindings</a>
+    <li><a href="#java_bindings">7.18. Java Bindings</a>
+    </li>
+    <li><a href="#perl_bindings">7.19. Perl Bindings</a>
+    </li>
+    <li><a href="#python_bindings">7.20. Python Bindings</a>
     </li>
     </ul>
   </li>
@@ -2383,8 +2411,23 @@ The <code>start</code> and <code>length</code> fields specify the token position
 characters, not in bytes of UTF-8 encoding.
 </p>
 
+<a id="derivated_lemma" name="derivated_lemma"></a>
+<h2>7.8. Struct derivated_lemma</h2>
+
+<pre>
+struct derivated_lemma {
+  std::string lemma;
+};
+</pre>
+
+<p>
+The <a href="#derivated_lemma"><code>derivated_lemma</code></a> structure stores information about a derivation.
+This information currently consists of lemma only, but a type of the derivation may
+be added later.
+</p>
+
 <a id="version" name="version"></a>
-<h2>7.8. Class version</h2>
+<h2>7.9. Class version</h2>
 
 <pre>
 class version {
@@ -2404,7 +2447,7 @@ See <a href="#versioning">MorphoDiTa Versioning</a> for more information.
 </p>
 
 <a id="version_current" name="version_current"></a>
-<h3>7.8.1. version::current</h3>
+<h3>7.9.1. version::current</h3>
 
 <pre>
 static <A HREF="#version">version</A> current();
@@ -2415,7 +2458,7 @@ Returns current MorphoDiTa version.
 </p>
 
 <a id="tokenizer" name="tokenizer"></a>
-<h2>7.9. Class tokenizer</h2>
+<h2>7.10. Class tokenizer</h2>
 
 <pre>
 class tokenizer {
@@ -2442,7 +2485,7 @@ static methods or through instances of <a href="#morpho"><code>morpho</code></a>
 </p>
 
 <a id="tokenizer_set_text" name="tokenizer_set_text"></a>
-<h3>7.9.1. tokenizer::set_text</h3>
+<h3>7.10.1. tokenizer::set_text</h3>
 
 <pre>
 virtual void set_text(<A HREF="#string_piece">string_piece</A> text, bool make_copy = false) = 0;
@@ -2460,7 +2503,7 @@ tokenizer is released or <code>set_text</code> is called again.
 </p>
 
 <a id="tokenizer_next_sentence" name="tokenizer_next_sentence"></a>
-<h3>7.9.2. tokenizer::next_sentence</h3>
+<h3>7.10.2. tokenizer::next_sentence</h3>
 
 <pre>
 virtual bool next_sentence(std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;* forms, std::vector&lt;<A HREF="#token_range">token_range</A>&gt;* tokens) = 0;
@@ -2474,7 +2517,7 @@ in Unicode characters.
 </p>
 
 <a id="tokenizer_new_vertical_tokenizer" name="tokenizer_new_vertical_tokenizer"></a>
-<h3>7.9.3. tokenizer::new_vertical_tokenizer</h3>
+<h3>7.10.3. tokenizer::new_vertical_tokenizer</h3>
 
 <pre>
 static <A HREF="#tokenizer">tokenizer</A> new_vertical_tokenizer();
@@ -2487,7 +2530,7 @@ the instance after use.
 </p>
 
 <a id="tokenizer_new_czech_tokenizer" name="tokenizer_new_czech_tokenizer"></a>
-<h3>7.9.4. tokenizer::new_czech_tokenizer</h3>
+<h3>7.10.4. tokenizer::new_czech_tokenizer</h3>
 
 <pre>
 static <A HREF="#tokenizer">tokenizer</A> new_czech_tokenizer();
@@ -2506,7 +2549,7 @@ in a morphological dictionary.
 </p>
 
 <a id="tokenizer_new_english_tokenizer" name="tokenizer_new_english_tokenizer"></a>
-<h3>7.9.5. tokenizer::new_english_tokenizer</h3>
+<h3>7.10.5. tokenizer::new_english_tokenizer</h3>
 
 <pre>
 static <A HREF="#tokenizer">tokenizer</A> new_english_tokenizer();
@@ -2525,7 +2568,7 @@ in a morphological dictionary.
 </p>
 
 <a id="tokenizer_new_generic_tokenizer" name="tokenizer_new_generic_tokenizer"></a>
-<h3>7.9.6. tokenizer::new_generic_tokenizer</h3>
+<h3>7.10.6. tokenizer::new_generic_tokenizer</h3>
 
 <pre>
 static <A HREF="#tokenizer">tokenizer</A> new_generic_tokenizer();
@@ -2543,8 +2586,180 @@ If you need a tokenizer whose behaviour does not change, use tokenizer embedded
 in a morphological dictionary.
 </p>
 
+<a id="derivator" name="derivator"></a>
+<h2>7.11. Class derivator</h2>
+
+<pre>
+class derivator {
+ public:
+  virtual ~derivator();
+
+  virtual bool <A HREF="#derivator_parent">parent</A>(<A HREF="#string_piece">string_piece</A> lemma, <A HREF="#derivated_lemma">derivated_lemma</A>&amp; parent) const = 0;
+  virtual bool <A HREF="#derivator_children">children</A>(<A HREF="#string_piece">string_piece</A> lemma, std::vector&lt;<A HREF="#derivated_lemma">derivated_lemma</A>&gt;&amp; children) const = 0;
+};
+</pre>
+
+<p>
+The <a href="#derivator"><code>derivator</code></a> class perform morphological derivation on given lemmas.
+The derivation are computed using lemma ids, see <a href="#lemma_structure">Lemma Structure</a>.
+</p>
+<p>
+The <a href="#derivator"><code>derivator</code></a> instances can be obtained through instances of
+<a href="#morpho"><code>morpho</code></a> (and transitively through <a href="#tagger"><code>tagger</code></a>).
+</p>
+
+<a id="derivator_parent" name="derivator_parent"></a>
+<h3>7.11.1. derivator::parent</h3>
+
+<pre>
+virtual bool parent(<A HREF="#string_piece">string_piece</A> lemma, <A HREF="#derivated_lemma">derivated_lemma</A>&amp; parent) const = 0;
+</pre>
+
+<p>
+Return the parent of a given lemma in the morphological derivation tree.
+The lemma is assumed to be lemma id (see <a href="#lemma_structure">Lemma Structure</a>), so if it contains
+any lemma comments, they are ignored.
+</p>
+<p>
+The returned lemma is a full lemma (lemma id plus appropriate lemma comments).
+</p>
+<p>
+If no parent exists, the function empties the parent lemma and returns <code>false</code>.
+</p>
+
+<a id="derivator_children" name="derivator_children"></a>
+<h3>7.11.2. derivator::children</h3>
+
+<pre>
+virtual bool children(<A HREF="#string_piece">string_piece</A> lemma, std::vector&lt;<A HREF="#derivated_lemma">derivated_lemma</A>&gt;&amp; children) const = 0;
+</pre>
+
+<p>
+Return children of a given lemma in the morphological derivation tree.
+The lemma is assumed to be lemma id (see <a href="#lemma_structure">Lemma Structure</a>), so if it contains
+any lemma comments, they are ignored.
+</p>
+<p>
+The returned lemmas are full lemmas (lemma ids plus appropriate lemma comments).
+</p>
+<p>
+If no children exist, the function empties the children vector and returns <code>false</code>.
+</p>
+
+<a id="derivation_formatter" name="derivation_formatter"></a>
+<h2>7.12. Class derivation_formatter</h2>
+
+<pre>
+class derivation_formatter {
+ public:
+  virtual ~derivation_formatter() {}
+
+  virtual void <A HREF="#derivation_formatter_format_derivation">format_derivation</A>(std::string&amp; lemma) const = 0;
+
+  static <A HREF="#derivation_formatter">derivation_formatter</A>* <A HREF="#derivation_formatter_new_none_derivation_formatter">new_none_derivation_formatter</A>();
+  static <A HREF="#derivation_formatter">derivation_formatter</A>* <A HREF="#derivation_formatter_new_root_derivation_formatter">new_root_derivation_formatter</A>(const <A HREF="#derivator">derivator</A>* derinet);
+  static <A HREF="#derivation_formatter">derivation_formatter</A>* <A HREF="#derivation_formatter_new_path_derivation_formatter">new_path_derivation_formatter</A>(const <A HREF="#derivator">derivator</A>* derinet);
+  static <A HREF="#derivation_formatter">derivation_formatter</A>* <A HREF="#derivation_formatter_new_tree_derivation_formatter">new_tree_derivation_formatter</A>(const <A HREF="#derivator">derivator</A>* derinet);
+  static <A HREF="#derivation_formatter">derivation_formatter</A>* <A HREF="#derivation_formatter_new_derivation_formatter">new_derivation_formatter</A>(<A HREF="#string_piece">string_piece</A> name, const <A HREF="#derivator">derivator</A>* derinet);
+};
+</pre>
+
+<p>
+The <a href="#derivation_formatter"><code>derivation_formatter</code></a> class performs required
+morphological derivation and formats the results using a single string field
+(i.e., directly in the lemma).
+</p>
+
+<a id="derivation_formatter_format_derivation" name="derivation_formatter_format_derivation"></a>
+<h3>7.12.1. derivation_formatter::format_derivation</h3>
+
+<pre>
+virtual void format_derivation(std::string&amp; lemma) const = 0;
+</pre>
+
+<p>
+Perform the required morphological derivation and format the result back directly
+in the lemma.
+</p>
+
+<a id="derivation_formatter_new_none_derivation_formatter" name="derivation_formatter_new_none_derivation_formatter"></a>
+<h3>7.12.2. derivation_formatter::new_none_derivation_formatter</h3>
+
+<pre>
+static <A HREF="#derivation_formatter">derivation_formatter</A>* new_none_derivation_formatter();
+</pre>
+
+<p>
+Return a new <a href="#derivation_formatter"><code>derivation_formatter</code></a> instance which does nothing
+(i.e., it performs no derivation).
+</p>
+
+<a id="derivation_formatter_new_root_derivation_formatter" name="derivation_formatter_new_root_derivation_formatter"></a>
+<h3>7.12.3. derivation_formatter::new_root_derivation_formatter</h3>
+
+<pre>
+static <A HREF="#derivation_formatter">derivation_formatter</A>* new_root_derivation_formatter(const <A HREF="#derivator">derivator</A>* derinet);
+</pre>
+
+<p>
+Return a new <a href="#derivation_formatter"><code>derivation_formatter</code></a> instance which replaces
+a lemma by the corresponding root in the derivation tree.
+</p>
+
+<a id="derivation_formatter_new_path_derivation_formatter" name="derivation_formatter_new_path_derivation_formatter"></a>
+<h3>7.12.4. derivation_formatter::new_path_derivation_formatter</h3>
+
+<pre>
+static <A HREF="#derivation_formatter">derivation_formatter</A>* new_path_derivation_formatter(const <A HREF="#derivator">derivator</A>* derinet);
+</pre>
+
+<p>
+Return a new <a href="#derivation_formatter"><code>derivation_formatter</code></a> instance which replaces
+a lemma by a space separated path in the morphological derivation tree (the original
+lemma is first, followed by its parent, with the root being the last one).
+</p>
+
+<a id="derivation_formatter_new_tree_derivation_formatter" name="derivation_formatter_new_tree_derivation_formatter"></a>
+<h3>7.12.5. derivation_formatter::new_tree_derivation_formatter</h3>
+
+<pre>
+static <A HREF="#derivation_formatter">derivation_formatter</A>* new_tree_derivation_formatter(const <A HREF="#derivator">derivator</A>* derinet);
+</pre>
+
+<p>
+Return a new <a href="#derivation_formatter"><code>derivation_formatter</code></a> instance which appends
+to the lemma the whole morphological derivation tree which contains it.
+</p>
+<p>
+The tree is encoded in the following way: root node is the first, then the subtrees
+of the root children are encoded recursively (each after one space), followed by a final
+space (which denotes that the children are complete).
+</p>
+
+<a id="derivation_formatter_new_derivation_formatter" name="derivation_formatter_new_derivation_formatter"></a>
+<h3>7.12.6. derivation_formatter::new_derivation_formatter</h3>
+
+<pre>
+static <A HREF="#derivation_formatter">derivation_formatter</A>* new_derivation_formatter(<A HREF="#string_piece">string_piece</A> name, const <A HREF="#derivator">derivator</A>* derinet);
+</pre>
+
+<p style="margin-bottom:0">
+Return one of the available <a href="#derivation_formatter"><code>derivation_formatter</code></a> instances
+according to the <code>name</code> parameter:
+</p>
+<ul style="margin-top:0">
+<li><code>none</code>: return <a href="#derivation_formatter_new_none_derivation_formatter">new_none_derivation_formatter</a> instance
+</li>
+<li><code>root</code>: return <a href="#derivation_formatter_new_root_derivation_formatter">new_root_derivation_formatter</a> instance
+</li>
+<li><code>path</code>: return <a href="#derivation_formatter_new_path_derivation_formatter">new_path_derivation_formatter</a> instance
+</li>
+<li><code>tree</code>: return <a href="#derivation_formatter_new_tree_derivation_formatter">new_tree_derivation_formatter</a> instance
+</li>
+</ul>
+
 <a id="morpho" name="morpho"></a>
-<h2>7.10. Class morpho</h2>
+<h2>7.13. Class morpho</h2>
 
 <pre>
 class morpho {
@@ -2564,6 +2779,8 @@ class morpho {
   virtual int <A HREF="#morpho_raw_form_len">raw_form_len</A>(<A HREF="#string_piece">string_piece</A> form) const = 0;
 
   virtual <A HREF="#tokenizer">tokenizer</A>* <A HREF="#morpho_new_tokenizer">new_tokenizer</A>() const = 0;
+
+  virtual const <A HREF="#derivator">derivator</A>* <A HREF="#morpho_get_derivator">get_derivator</A>() const;
 };
 </pre>
 
@@ -2574,7 +2791,7 @@ and provides a suitable tokenizer. All methods are thread-safe.
 </p>
 
 <a id="morpho_load_cstring" name="morpho_load_cstring"></a>
-<h3>7.10.1. morpho::load(const char*)</h3>
+<h3>7.13.1. morpho::load(const char*)</h3>
 
 <pre>
 static <A HREF="#morpho">morpho</A>* load(const char* fname);
@@ -2587,7 +2804,7 @@ after use.
 </p>
 
 <a id="morpho_load_istream" name="morpho_load_istream"></a>
-<h3>7.10.2. morpho::load(istream&amp;)</h3>
+<h3>7.13.2. morpho::load(istream&amp;)</h3>
 
 <pre>
 static <A HREF="#morpho">morpho</A>* load(istream&amp; is);
@@ -2600,7 +2817,7 @@ delete after use.
 </p>
 
 <a id="morpho_guesser_mode" name="morpho_guesser_mode"></a>
-<h3>7.10.3. morpho::guesser_mode</h3>
+<h3>7.13.3. morpho::guesser_mode</h3>
 
 <pre>
 enum <A HREF="#morpho_guesser_mode">guesser_mode</A> { NO_GUESSER = 0, GUESSER = 1 };
@@ -2613,7 +2830,7 @@ morpho does not guess unknown words.
 </p>
 
 <a id="morpho_analyze" name="morpho_analyze"></a>
-<h3>7.10.4. morpho::analyze()</h3>
+<h3>7.13.4. morpho::analyze()</h3>
 
 <pre>
 virtual int analyze(<A HREF="#string_piece">string_piece</A> form, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; lemmas) const = 0;
@@ -2633,7 +2850,7 @@ analysis containing given form as lemma and a tag for unknown word.
 </p>
 
 <a id="morpho_generate" name="morpho_generate"></a>
-<h3>7.10.5. morpho::generate()</h3>
+<h3>7.13.5. morpho::generate()</h3>
 
 <pre>
 virtual int generate(<A HREF="#string_piece">string_piece</A> lemmma, const char* tag_wildcard, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
@@ -2662,7 +2879,7 @@ is returned. If <code>guesser == GUESSER</code> and the lemma is found by the gu
 </p>
 
 <a id="morpho_raw_lemma_len" name="morpho_raw_lemma_len"></a>
-<h3>7.10.6. morpho::raw_lemma_len</h3>
+<h3>7.13.6. morpho::raw_lemma_len</h3>
 
 <pre>
 virtual int raw_lemma_len(<A HREF="#string_piece">string_piece</A> lemma) const = 0;
@@ -2674,7 +2891,7 @@ a <i>raw lemma</i> (see <a href="#lemma_structure">Lemma Structure</a>).
 </p>
 
 <a id="morpho_lemma_id_len" name="morpho_lemma_id_len"></a>
-<h3>7.10.7. morpho::lemma_id_len</h3>
+<h3>7.13.7. morpho::lemma_id_len</h3>
 
 <pre>
 virtual int lemma_id_len(<A HREF="#string_piece">string_piece</A> lemma) const = 0;
@@ -2689,7 +2906,7 @@ do not identify the lemma.
 </p>
 
 <a id="morpho_raw_form_len" name="morpho_raw_form_len"></a>
-<h3>7.10.8. morpho::raw_form_len</h3>
+<h3>7.13.8. morpho::raw_form_len</h3>
 
 <pre>
 virtual int raw_form_len(<A HREF="#string_piece">string_piece</A> form) const = 0;
@@ -2702,7 +2919,7 @@ and this call can return the length of the form without the analyses.
 </p>
 
 <a id="morpho_new_tokenizer" name="morpho_new_tokenizer"></a>
-<h3>7.10.9. morpho::new_tokenizer</h3>
+<h3>7.13.9. morpho::new_tokenizer</h3>
 
 <pre>
 virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
@@ -2713,12 +2930,28 @@ Returns a new instance of a suitable tokenizer or <code>NULL</code> if no such t
 exists. The user should delete it after use.
 </p>
 <p>
-Note that the tokenizer might use the <code>morpho</code> instance, so the tokenizer
-must not be used after the <code>morpho</code> instance is destructed.
+Note that the tokenizer might use the <a href="#morpho"><code>morpho</code></a> instance, so the tokenizer
+must not be used after the <a href="#morpho"><code>morpho</code></a> instance is destructed.
+</p>
+
+<a id="morpho_get_derivator" name="morpho_get_derivator"></a>
+<h3>7.13.10. morpho::get_derivator</h3>
+
+<pre>
+virtual const <A HREF="#derivator">derivator</A>* get_derivator() const;
+</pre>
+
+<p>
+Returns a <a href="#derivator"><code>derivator</code></a> for the morphology, or <code>NULL</code> if not available.
+</p>
+<p>
+The <a href="#derivator"><code>derivator</code></a> is owned by the morphology, so the returned
+instance should not be freed and it cannot be used after the <a href="#morpho"><code>morpho</code></a> instance
+is destructed.
 </p>
 
 <a id="tagger" name="tagger"></a>
-<h2>7.11. Class tagger</h2>
+<h2>7.14. Class tagger</h2>
 
 <pre>
 class tagger {
@@ -2744,7 +2977,7 @@ morphological analyses. All methods are thread-safe.
 </p>
 
 <a id="tagger_load_cstring" name="tagger_load_cstring"></a>
-<h3>7.11.1. tagger::load(const char*)</h3>
+<h3>7.14.1. tagger::load(const char*)</h3>
 
 <pre>
 static <A HREF="#tagger">tagger</A>* load(const char* fname);
@@ -2757,7 +2990,7 @@ after use.
 </p>
 
 <a id="tagger_load_istream" name="tagger_load_istream"></a>
-<h3>7.11.2. tagger::load(istream&amp;)</h3>
+<h3>7.14.2. tagger::load(istream&amp;)</h3>
 
 <pre>
 static <A HREF="#tagger">tagger</A>* load(istream&amp; is);
@@ -2770,7 +3003,7 @@ delete after use.
 </p>
 
 <a id="tagger_get_morpho" name="tagger_get_morpho"></a>
-<h3>7.11.3. tagger::get_morpho()</h3>
+<h3>7.14.3. tagger::get_morpho()</h3>
 
 <pre>
 virtual const <A HREF="#morpho">morpho</A>* get_morpho() const = 0;
@@ -2783,7 +3016,7 @@ tagger destructor.
 </p>
 
 <a id="tagger_tag" name="tagger_tag"></a>
-<h3>7.11.4. tagger::tag()</h3>
+<h3>7.14.4. tagger::tag()</h3>
 
 <pre>
 virtual void tag(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tags, <A HREF="#morpho">morpho</A>::<A HREF="#morpho_guesser_mode">guesser_mode</A> guesser = -1) const = 0;
@@ -2800,7 +3033,7 @@ employed when the tagger model was trained is used.
 </p>
 
 <a id="tagger_tag_analyzed" name="tagger_tag_analyzed"></a>
-<h3>7.11.5. tagger::tag_analyzed()</h3>
+<h3>7.14.5. tagger::tag_analyzed()</h3>
 
 <pre>
 virtual void tag_analyzed(const std::vector&lt;<A HREF="#string_piece">string_piece</A>&gt;&amp; forms, std::vector&lt;std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt; &gt;&amp; analyses, std::vector&lt;int&gt;&amp; tags) const = 0;
@@ -2823,7 +3056,7 @@ consider only a subset of morphological analyses.
 </p>
 
 <a id="tagger_new_tokenizer" name="tagger_new_tokenizer"></a>
-<h3>7.11.6. tagger::new_tokenizer</h3>
+<h3>7.14.6. tagger::new_tokenizer</h3>
 
 <pre>
 virtual <A HREF="#tokenizer">tokenizer</A>* new_tokenizer() const = 0;
@@ -2836,7 +3069,7 @@ exists. The user should delete it after use.  The call is equal to
 </p>
 
 <a id="tagset_converter" name="tagset_converter"></a>
-<h2>7.12. Class tagset_converter</h2>
+<h2>7.15. Class tagset_converter</h2>
 
 <pre>
 class tagset_converter {
@@ -2855,7 +3088,7 @@ class tagset_converter {
 </pre>
 
 <a id="tagset_converter_convert" name="tagset_converter_convert"></a>
-<h3>7.12.1. tagset_converter::convert()</h3>
+<h3>7.15.1. tagset_converter::convert()</h3>
 
 <pre>
 virtual void convert(<A HREF="#tagged_lemma">tagged_lemma</A>&amp; tagged_lemma) const = 0;
@@ -2866,7 +3099,7 @@ Convert the given tagged lemma.
 </p>
 
 <a id="tagset_converter_convert_analyzed" name="tagset_converter_convert_analyzed"></a>
-<h3>7.12.2. tagset_converter::convert_analyzed()</h3>
+<h3>7.15.2. tagset_converter::convert_analyzed()</h3>
 
 <pre>
 virtual void convert_analyzed(std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tagged_lemmas) const = 0;
@@ -2878,7 +3111,7 @@ Convert the given results of <a href="#morpho_analyze">morpho::analyze</a>. Apar
 </p>
 
 <a id="tagset_converter_convert_generated" name="tagset_converter_convert_generated"></a>
-<h3>7.12.3. tagset_converter::convert_generated()</h3>
+<h3>7.15.3. tagset_converter::convert_generated()</h3>
 
 <pre>
 virtual void convert_generated(std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
@@ -2890,7 +3123,7 @@ Convert the given results of <a href="#morpho_generate">morpho::generate</a>. Ap
 </p>
 
 <a id="tagset_converter_new_identity_converter" name="tagset_converter_new_identity_converter"></a>
-<h3>7.12.4. tagset_converter::new_identity_converter()</h3>
+<h3>7.15.4. tagset_converter::new_identity_converter()</h3>
 
 <pre>
 static <A HREF="#tagset_converter">tagset_converter</A>* new_identity_converter();
@@ -2902,7 +3135,7 @@ identity converter do nothing. The user should delete the instance after use.
 </p>
 
 <a id="tagset_converter_new_pdt_to_conll2009_converter" name="tagset_converter_new_pdt_to_conll2009_converter"></a>
-<h3>7.12.5. tagset_converter::new_pdt_to_conll2009_converter()</h3>
+<h3>7.15.5. tagset_converter::new_pdt_to_conll2009_converter()</h3>
 
 <pre>
 static <A HREF="#tagset_converter">tagset_converter</A>* new_pdt_to_conll2009_converter();
@@ -2919,7 +3152,7 @@ together by using <code>Pos=?|FEAT</code>, i.e., the POS is stored as a first FE
 </p>
 
 <a id="tagset_converter_new_strip_lemma_comment_converter" name="tagset_converter_new_strip_lemma_comment_converter"></a>
-<h3>7.12.6. tagset_converter::new_strip_lemma_comment_converter()</h3>
+<h3>7.15.6. tagset_converter::new_strip_lemma_comment_converter()</h3>
 
 <pre>
 static <A HREF="#tagset_converter">tagset_converter</A>* new_strip_lemma_comment_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
@@ -2933,7 +3166,7 @@ should delete the tag set converter instance after use.
 </p>
 
 <a id="tagset_converter_new_strip_lemma_id_converter" name="tagset_converter_new_strip_lemma_id_converter"></a>
-<h3>7.12.7. tagset_converter::new_strip_lemma_id_converter()</h3>
+<h3>7.15.7. tagset_converter::new_strip_lemma_id_converter()</h3>
 
 <pre>
 static <A HREF="#tagset_converter">tagset_converter</A>* new_strip_lemma_id_converter(const <A HREF="#morpho">morpho</A>&amp; dictionary);
@@ -2947,7 +3180,7 @@ should delete the tag set converter instance after use.
 </p>
 
 <a id="cpp_bindings_api" name="cpp_bindings_api"></a>
-<h2>7.13. C++ Bindings API</h2>
+<h2>7.16. C++ Bindings API</h2>
 
 <p>
 Bindings for other languages than C++ are created using SWIG from the C++
@@ -2958,7 +3191,7 @@ declaration:
 </p>
 
 <a id="bindings_helper_structures" name="bindings_helper_structures"></a>
-<h3>7.13.1. Helper Structures</h3>
+<h3>7.16.1. Helper Structures</h3>
 
 <pre>
 typedef vector&lt;int&gt; Indices;
@@ -2989,10 +3222,15 @@ struct TokenRange {
   size_t length;
 };
 typedef vector&lt;TokenRange&gt; TokenRanges;
+
+struct DerivatedLemma {
+  std::string lemma;
+};
+typedef vector&lt;DerivatedLemma&gt; DerivatedLemmas;
 </pre>
 
 <a id="bindings_main_classes" name="bindings_main_classes"></a>
-<h3>7.13.2. Main Classes</h3>
+<h3>7.16.2. Main Classes</h3>
 
 <pre>
 class Version {
@@ -3016,6 +3254,23 @@ class Tokenizer {
   static Tokenizer* newGenericTokenizer();
 };
 
+class Derivator {
+ public:
+  virtual bool parent(const char* lemma, DerivatedLemma&amp; parent) const;
+  virtual bool children(const char* lemma, DerivatedLemmas&amp; children) const;
+};
+
+class DerivationFormatter {
+ public:
+  virtual string formatDerivation(const char* lemma) const;
+
+  static DerivationFormatter* newNoneDerivationFormatter();
+  static DerivationFormatter* newRootDerivationFormatter(const Derivator* derivator);
+  static DerivationFormatter* newPathDerivationFormatter(const Derivator* derivator);
+  static DerivationFormatter* newTreeDerivationFormatter(const Derivator* derivator);
+  static DerivationFormatter* newDerivationFormatter(const char* name, const Derivator* derivator);
+};
+
 class Morpho {
  public:
   static Morpho* load(const char* fname);
@@ -3029,6 +3284,8 @@ class Morpho {
   virtual string rawForm(const char* form) const;
 
   virtual Tokenizer* newTokenizer() const;
+
+  virtual Derivator* getDerivator() const;
 };
 
 class Tagger {
@@ -3058,7 +3315,7 @@ class TagsetConverter {
 </pre>
 
 <a id="csharp_bindings" name="csharp_bindings"></a>
-<h2>7.14. C# Bindings</h2>
+<h2>7.17. C# Bindings</h2>
 
 <p>
 MorphoDiTa library bindings is available in the <code>Ufal.MorphoDiTa</code> namespace.
@@ -3070,7 +3327,7 @@ The bindings requires native C++ library <code>libmorphodita_csharp</code> (call
 </p>
 
 <a id="java_bindings" name="java_bindings"></a>
-<h2>7.15. Java Bindings</h2>
+<h2>7.18. Java Bindings</h2>
 
 <p>
 MorphoDiTa library bindings is available in the <code>cz.cuni.mff.ufal.morphodita</code>
@@ -3090,7 +3347,7 @@ directory, it is used, otherwise standard library search process is used.
 </p>
 
 <a id="perl_bindings" name="perl_bindings"></a>
-<h2>7.16. Perl Bindings</h2>
+<h2>7.19. Perl Bindings</h2>
 
 <p>
 MorphoDiTa library bindings is available in the
@@ -3106,7 +3363,7 @@ module, not through object instance.
 </p>
 
 <a id="python_bindings" name="python_bindings"></a>
-<h2>7.17. Python Bindings</h2>
+<h2>7.20. Python Bindings</h2>
 
 <p>
 MorphoDiTa library bindings is available in the

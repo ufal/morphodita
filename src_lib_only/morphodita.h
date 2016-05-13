@@ -60,6 +60,10 @@ struct token_range {
   token_range(size_t start, size_t length) : start(start), length(length) {}
 };
 
+struct derivated_lemma {
+  std::string lemma;
+};
+
 class version {
  public:
   unsigned major;
@@ -84,6 +88,35 @@ class tokenizer {
   static tokenizer* new_czech_tokenizer();
   static tokenizer* new_english_tokenizer();
   static tokenizer* new_generic_tokenizer();
+};
+
+class derivator {
+ public:
+  virtual ~derivator() {}
+
+  // For given lemma, return the parent in the derivation graph.
+  // The lemma is assumed to be lemma id and any lemma comments are ignored.
+  virtual bool parent(string_piece lemma, derivated_lemma& parent) const = 0;
+
+  // For given lemma, return the children in the derivation graph.
+  // The lemma is assumed to be lemma id and any lemma comments are ignored.
+  virtual bool children(string_piece lemma, std::vector<derivated_lemma>& children) const = 0;
+};
+
+class derivation_formatter {
+ public:
+  virtual ~derivation_formatter() {}
+
+  // Perform the required derivation and store it directly in the lemma.
+  virtual void format_derivation(std::string& lemma) const = 0;
+
+  // Static factory methods.
+  static derivation_formatter* new_none_derivation_formatter();
+  static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
+  static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
+  static derivation_formatter* new_tree_derivation_formatter(const derivator* derinet);
+  // String version of static factory method.
+  static derivation_formatter* new_derivation_formatter(string_piece name, const derivator* derinet);
 };
 
 class morpho {
@@ -139,6 +172,10 @@ class morpho {
   // Construct a new tokenizer instance appropriate for this morphology.
   // Can return NULL if no such tokenizer exists.
   virtual tokenizer* new_tokenizer() const = 0;
+
+  // Return a derivator for this morphology, or NULL if it does not exist.
+  // The returned instance is owned by the morphology and should not be deleted.
+  virtual const derivator* get_derivator() const;
 };
 
 class tagger {
