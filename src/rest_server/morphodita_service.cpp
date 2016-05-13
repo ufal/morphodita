@@ -168,12 +168,13 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
+  unique_ptr<derivation_formatter> derivation(get_derivation_formatter(req, *model->get_morpho(), error)); if (!derivation) return req.respond_error(error);
   rest_output_mode output(XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
-    generator(const model_info* model, const char* data, const Tagger* tagger, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter, rest_output_mode output)
-        : rest_response_generator(model, output), tagger(tagger), guesser(guesser), tokenizer(tokenizer), converter(converter), unprinted(data) {
+    generator(const model_info* model, const char* data, const Tagger* tagger, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter, derivation_formatter* derivation, rest_output_mode output)
+        : rest_response_generator(model, output), tagger(tagger), guesser(guesser), tokenizer(tokenizer), converter(converter), derivation(derivation), unprinted(data) {
       tokenizer->set_text(data);
     }
 
@@ -189,6 +190,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
 
       for (unsigned i = 0; i < forms.size(); i++) {
         converter->convert(tags[i]);
+        derivation->format_derivation(tags[i].lemma);
         switch (output.mode) {
           case VERTICAL:
             json.value(sp(forms[i]), true).value("\t", true)
@@ -225,11 +227,12 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
     vector<tagged_lemma> analyses;
     unique_ptr<Tokenizer> tokenizer;
     unique_ptr<tagset_converter> converter;
+    unique_ptr<derivation_formatter> derivation;
     const char* unprinted;
     vector<string_piece> forms;
     vector<tagged_lemma> tags;
   };
-  return req.respond(json_mime, new generator(model, data, model->get_tagger(), guesser, tokenizer.release(), converter.release(), output));
+  return req.respond(json_mime, new generator(model, data, model->get_tagger(), guesser, tokenizer.release(), converter.release(), derivation.release(), output));
 }
 
 bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
@@ -243,12 +246,13 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
+  unique_ptr<derivation_formatter> derivation(get_derivation_formatter(req, *model->get_morpho(), error)); if (!derivation) return req.respond_error(error);
   rest_output_mode output(XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
-    generator(const model_info* model, const char* data, rest_output_mode output, const Morpho* morpho, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter)
-        : rest_response_generator(model, output), morpho(morpho), guesser(guesser), tokenizer(tokenizer), converter(converter), unprinted(data) {
+    generator(const model_info* model, const char* data, rest_output_mode output, const Morpho* morpho, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter, derivation_formatter* derivation)
+        : rest_response_generator(model, output), morpho(morpho), guesser(guesser), tokenizer(tokenizer), converter(converter), derivation(derivation), unprinted(data) {
       tokenizer->set_text(data);
     }
 
@@ -263,6 +267,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
       for (unsigned i = 0; i < forms.size(); i++) {
         morpho->analyze(forms[i], guesser, tags);
         converter->convert_analyzed(tags);
+        for (auto&& tag : tags) derivation->format_derivation(tag.lemma);
         switch (output.mode) {
           case VERTICAL:
             json.value(sp(forms[i]), true);
@@ -303,11 +308,12 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
     Guesser guesser;
     unique_ptr<Tokenizer> tokenizer;
     unique_ptr<tagset_converter> converter;
+    unique_ptr<derivation_formatter> derivation;
     const char* unprinted;
     vector<string_piece> forms;
     vector<tagged_lemma> tags;
   };
-  return req.respond(json_mime, new generator(model, data, output, model->get_morpho(), guesser, tokenizer.release(), converter.release()));
+  return req.respond(json_mime, new generator(model, data, output, model->get_morpho(), guesser, tokenizer.release(), converter.release(), derivation.release()));
 }
 
 bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
@@ -474,6 +480,20 @@ tagset_converter* morphodita_service::get_convert_tagset(microrestd::rest_reques
   if (convert_tagset_it->second.compare("strip_lemma_comment") == 0) return tagset_converter::new_strip_lemma_comment_converter(morpho);
   if (convert_tagset_it->second.compare("strip_lemma_id") == 0) return tagset_converter::new_strip_lemma_id_converter(morpho);
   return error.assign("Unknown tag set converter '").append(convert_tagset_it->second).append("'.\n"), nullptr;
+}
+
+derivation_formatter* morphodita_service::get_derivation_formatter(microrestd::rest_request& req, const Morpho& morpho, string& error) {
+  auto derivation_it = req.params.find("derivation");
+  if (derivation_it == req.params.end() || derivation_it->second.compare("none") == 0)
+    return derivation_formatter::new_none_derivation_formatter();
+
+  if (!morpho.get_derivator())
+    return error.assign("The model does not include a morphological derivator, cannot perform requested derivation!\n"), nullptr;
+
+  derivation_formatter* formatter = derivation_formatter::new_derivation_formatter(derivation_it->second, morpho.get_derivator());
+  if (!formatter)
+    return error.assign("Cannot create requested derivation formatter '").append(derivation_it->second).append("!\n"), nullptr;
+  return formatter;
 }
 
 bool morphodita_service::get_output_mode(microrestd::rest_request& req, rest_output_mode& output, string& error) {
