@@ -193,7 +193,7 @@ conversions are:
 - ``strip_lemma_id``: strip lemma id (see Lemma Structure in API Reference).
 
 
-=== Morphological Derivation ===[run_morpho_analyze_derivation]
+==== Morphological Derivation ====[run_morpho_analyze_derivation]
 
 If the morphological model includes a morphological derivator, some morphological
 derivation operation may be performed on lemmas:
