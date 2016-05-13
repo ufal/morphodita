@@ -109,9 +109,11 @@
       </li>
       <li><a href="#tagger_tagset_conversion">5.3.2. Tag Set Conversion</a>
       </li>
-      <li><a href="#tagger_morpho_guesser">5.3.3. Morphological Guesser</a>
+      <li><a href="#tagger_derivation">5.3.3. Morphological Derivation</a>
       </li>
-      <li><a href="#tagger_output_formats">5.3.4. Output Formats</a>
+      <li><a href="#tagger_morpho_guesser">5.3.4. Morphological Guesser</a>
+      </li>
+      <li><a href="#tagger_output_formats">5.3.5. Output Formats</a>
       </li>
       </ul>
     </li>
@@ -119,9 +121,11 @@
       <ul>
       <li><a href="#run_morpho_analyze">5.4.1. Morphological Analysis</a>
       </li>
-      <li><a href="#run_morpho_generate">5.4.2. Morphological Generation</a>
+      <li><a href="#run_morpho_analyze_derivation">5.4.2. Morphological Derivation</a>
       </li>
-      <li><a href="#run_morpho_cli">5.4.3. Interactive Morphological Analysis and Generation</a>
+      <li><a href="#run_morpho_generate">5.4.3. Morphological Generation</a>
+      </li>
+      <li><a href="#run_morpho_cli">5.4.4. Interactive Morphological Analysis and Generation</a>
       </li>
       </ul>
     </li>
@@ -1081,6 +1085,7 @@ The full command syntax of <code>run_tagger</code> is
 run_tagger [options] tagger_file [file[:output_file]]...
 Options: --input=untokenized|vertical
          --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
+         --derivation=none|root|path|tree
          --guesser=0|1 (should morphological guesser be used)
          --output=vertical|xml
 </pre>
@@ -1117,8 +1122,31 @@ conversions are:
 </li>
 </ul>
 
+<a id="tagger_derivation" name="tagger_derivation"></a>
+<h3>5.3.3. Morphological Derivation</h3>
+
+<p style="margin-bottom:0">
+If the morphological model includes a morphological derivator, some morphological
+derivation operation may be performed on lemmas:
+</p>
+<ul style="margin-top:0">
+<li><code>none</code> (default): no morphological derivation is performed
+</li>
+<li><code>root</code>: lemma is replaced by its root in the morphological derivation tree
+</li>
+<li><code>path</code>: lemma is replaced by a space separated path to its root in the
+  morphological derivation tree (the original lemma is first, followed by its parent,
+  with the root being the last one)
+</li>
+<li><code>tree</code>: whole morphological derivation tree is appended after the lemma,
+  encoded in the following way: root node is the first, then the subtrees of
+  the root children are encoded recursively (each after one space), followed by
+  a final space (which denotes that the children are complete)
+</li>
+</ul>
+
 <a id="tagger_morpho_guesser" name="tagger_morpho_guesser"></a>
-<h3>5.3.3. Morphological Guesser</h3>
+<h3>5.3.4. Morphological Guesser</h3>
 
 <p>
 By default, every tagger model uses the morphological guesser settings employed
@@ -1127,7 +1155,7 @@ overridden by the <code>guesser</code> parameter.
 </p>
 
 <a id="tagger_output_formats" name="tagger_output_formats"></a>
-<h3>5.3.4. Output Formats</h3>
+<h3>5.3.5. Output Formats</h3>
 
 <p style="margin-bottom:0">
 The output format is specified using the <code>--output</code> option. Currently
@@ -1223,6 +1251,7 @@ The full command syntax of <code>run_morpho_analyze</code> is
 run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
 Options: --input=untokenized|vertical
          --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
+         --derivation=none|root|path|tree
          --output=vertical|xml
          --from_tagger
 </pre>
@@ -1265,8 +1294,31 @@ conversions are:
 </li>
 </ul>
 
+<a id="run_morpho_analyze_derivation" name="run_morpho_analyze_derivation"></a>
+<h3>5.4.2. Morphological Derivation</h3>
+
+<p style="margin-bottom:0">
+If the morphological model includes a morphological derivator, some morphological
+derivation operation may be performed on lemmas:
+</p>
+<ul style="margin-top:0">
+<li><code>none</code> (default): no morphological derivation is performed
+</li>
+<li><code>root</code>: lemma is replaced by its root in the morphological derivation tree
+</li>
+<li><code>path</code>: lemma is replaced by a space separated path to its root in the
+  morphological derivation tree (the original lemma is first, followed by its parent,
+  with the root being the last one)
+</li>
+<li><code>tree</code>: whole morphological derivation tree is appended after the lemma,
+  encoded in the following way: root node is the first, then the subtrees of
+  the root children are encoded recursively (each after one space), followed by
+  a final space (which denotes that the children are complete)
+</li>
+</ul>
+
 <a id="run_morpho_analyze_output_formats" name="run_morpho_analyze_output_formats"></a>
-<h4>5.4.1.3. Output Formats</h4>
+<h4>5.4.2.1. Output Formats</h4>
 
 <p style="margin-bottom:0">
 The output format is specified using the <code>--output</code> option. Currently
@@ -1315,7 +1367,7 @@ těší	těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
 </ul>
 
 <a id="run_morpho_generate" name="run_morpho_generate"></a>
-<h3>5.4.2. Morphological Generation</h3>
+<h3>5.4.3. Morphological Generation</h3>
 
 <p style="margin-bottom:0">
 The morphological generation can be performed by running
@@ -1376,7 +1428,7 @@ babičce babička NNFS3-----A----
 </pre>
 
 <a id="run_morpho_generate_tagset_conversion" name="run_morpho_generate_tagset_conversion"></a>
-<h4>5.4.2.1. Tag Set Conversion</h4>
+<h4>5.4.3.1. Tag Set Conversion</h4>
 
 <p style="margin-bottom:0">
 Some tag sets can be converted to different ones. Currently supported tag set
@@ -1397,7 +1449,7 @@ input lemmas and wildcards.
 </p>
 
 <a id="run_morpho_generate_tag_wildcard" name="run_morpho_generate_tag_wildcard"></a>
-<h4>5.4.2.2. Tag Wildcards</h4>
+<h4>5.4.3.2. Tag Wildcards</h4>
 
 <p>
 When only forms with a specific tag should be generated for a given lemma, tag
@@ -1418,7 +1470,7 @@ Most characters of a tag wildcard match corresponding characters of a tag, with 
  </ul>
 
 <a id="run_morpho_cli" name="run_morpho_cli"></a>
-<h3>5.4.3. Interactive Morphological Analysis and Generation</h3>
+<h3>5.4.4. Interactive Morphological Analysis and Generation</h3>
 
 <p style="margin-bottom:0">
 Morphological analysis and generation which is interactive and more human readable
@@ -2715,7 +2767,7 @@ static <A HREF="#derivation_formatter">derivation_formatter</A>* new_path_deriva
 
 <p>
 Return a new <a href="#derivation_formatter"><code>derivation_formatter</code></a> instance which replaces
-a lemma by a space separated path in the morphological derivation tree (the original
+a lemma by a space separated path to the root in the morphological derivation tree (the original
 lemma is first, followed by its parent, with the root being the last one).
 </p>
 

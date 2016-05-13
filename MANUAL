@@ -665,6 +665,7 @@ The full command syntax of run_tagger is
   run_tagger [options] tagger_file [file[:output_file]]...
   Options: --input=untokenized|vertical
            --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
+           --derivation=none|root|path|tree
            --guesser=0|1 (should morphological guesser be used)
            --output=vertical|xml
 
@@ -689,6 +690,22 @@ conversions are:
 - strip_lemma_comment: strip lemma comment (see Lemma Structure in API
   Reference),
 - strip_lemma_id: strip lemma id (see Lemma Structure in API Reference).
+
+
+Morphological Derivation
+------------------------
+
+If the morphological model includes a morphological derivator, some
+morphological derivation operation may be performed on lemmas:
+- none (default): no morphological derivation is performed
+- root: lemma is replaced by its root in the morphological derivation tree
+- path: lemma is replaced by a space separated path to its root in the
+  morphological derivation tree (the original lemma is first, followed by its
+  parent, with the root being the last one)
+- tree: whole morphological derivation tree is appended after the lemma,
+  encoded in the following way: root node is the first, then the subtrees of the
+  root children are encoded recursively (each after one space), followed by a
+  final space (which denotes that the children are complete)
 
 
 Morphological Guesser
@@ -773,6 +790,7 @@ The full command syntax of run_morpho_analyze is
   run_morpho_analyze [options] morphology_model use_guesser [file[:output_file]]...
   Options: --input=untokenized|vertical
            --convert_tagset=pdt_to_conll2009|strip_lemma_comment|strip_lemma_id
+           --derivation=none|root|path|tree
            --output=vertical|xml
            --from_tagger
 
@@ -801,6 +819,22 @@ conversions are:
 - strip_lemma_comment: strip lemma comment (see Lemma Structure in API
   Reference),
 - strip_lemma_id: strip lemma id (see Lemma Structure in API Reference).
+
+
+Morphological Derivation
+------------------------
+
+If the morphological model includes a morphological derivator, some
+morphological derivation operation may be performed on lemmas:
+- none (default): no morphological derivation is performed
+- root: lemma is replaced by its root in the morphological derivation tree
+- path: lemma is replaced by a space separated path to its root in the
+  morphological derivation tree (the original lemma is first, followed by its
+  parent, with the root being the last one)
+- tree: whole morphological derivation tree is appended after the lemma,
+  encoded in the following way: root node is the first, then the subtrees of the
+  root children are encoded recursively (each after one space), followed by a
+  final space (which denotes that the children are complete)
 
 
 Output Formats
@@ -1921,8 +1955,8 @@ derivation_formatter::new_path_derivation_formatter
   static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
 
 Return a new derivation_formatter instance which replaces a lemma by a space
-separated path in the morphological derivation tree (the original lemma is
-first, followed by its parent, with the root being the last one).
+separated path to the root in the morphological derivation tree (the original
+lemma is first, followed by its parent, with the root being the last one).
 
 
 derivation_formatter::new_tree_derivation_formatter

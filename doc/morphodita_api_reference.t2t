@@ -313,7 +313,7 @@ a lemma by the corresponding root in the derivation tree.
 ``` static [derivation_formatter #derivation_formatter]* new_path_derivation_formatter(const [derivator #derivator]* derinet);
 
 Return a new [``derivation_formatter`` #derivation_formatter] instance which replaces
-a lemma by a space separated path in the morphological derivation tree (the original
+a lemma by a space separated path to the root in the morphological derivation tree (the original
 lemma is first, followed by its parent, with the root being the last one).
 
 === derivation_formatter::new_tree_derivation_formatter ===[derivation_formatter_new_tree_derivation_formatter]
