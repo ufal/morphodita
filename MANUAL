@@ -461,6 +461,16 @@ czech-morfflex-pdt-160310-no_dia-pos_only.tagger
   removed. Model speed: ~130k words/s, model size: 9MB.
 
 
+Morphological Derivation Model using DeriNet
+--------------------------------------------
+
+All version 160310 models are available also with morphological derivator using
+DeriNet (http://ufal.mff.cuni.cz/derinet) version 1.1. The models which include
+DeriNet require MorphoDiTa 1.9 or later.
+
+In the future, only the models with DeriNet will be released.
+
+
 Models with Raw Lemmas
 ----------------------
 

@@ -185,6 +185,15 @@ We provide the ``no_dia`` variants for all four models described above:
   Model speed: ~130k words/s, model size: 9MB.
 
 
+=== Morphological Derivation Model using DeriNet ===[czech-morfflex-derinet_variant]
+
+All version 160310 models are available also with morphological derivator
+using [DeriNet http://ufal.mff.cuni.cz/derinet] version 1.1.
+The models which include DeriNet require MorphoDiTa 1.9 or later.
+
+In the future, only the models with DeriNet will be released.
+
+
 === Models with Raw Lemmas ===[czech-morfflex-pdt_raw_lemmas_variant]
 
 The Czech morphological system distinguish different meanings of same lemmas by
