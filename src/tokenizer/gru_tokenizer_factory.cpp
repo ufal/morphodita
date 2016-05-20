@@ -14,7 +14,7 @@ namespace ufal {
 namespace morphodita {
 
 tokenizer* gru_tokenizer_factory::new_tokenizer() const {
-  return new gru_tokenizer(version, 1);
+  return new gru_tokenizer(2);
 }
 
 bool gru_tokenizer_factory::load(istream& is) {

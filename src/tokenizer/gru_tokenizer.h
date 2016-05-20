@@ -22,11 +22,8 @@ class gru_tokenizer : public unicode_tokenizer {
   virtual bool next_sentence(vector<token_range>& tokens) override;
 
  private:
-  gru_tokenizer(unsigned version, unsigned url_email_tokenizer);
+  gru_tokenizer(unsigned url_email_tokenizer) : unicode_tokenizer(url_email_tokenizer) {}
   friend class gru_tokenizer_factory;
-
- private:
-  unsigned url_email_tokenizer;
 };
 
 } // namespace morphodita
