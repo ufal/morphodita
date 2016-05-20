@@ -15,7 +15,7 @@
 namespace ufal {
 namespace morphodita {
 
-class tokenized_sentence {
+struct tokenized_sentence {
   u32string sentence;
   vector<token_range> tokens;
 };
