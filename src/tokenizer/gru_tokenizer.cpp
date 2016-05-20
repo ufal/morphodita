@@ -13,6 +13,9 @@
 namespace ufal {
 namespace morphodita {
 
+gru_tokenizer::gru_tokenizer(unsigned /*version*/, unsigned url_email_tokenizer)
+    : url_email_tokenizer(url_email_tokenizer) {}
+
 bool gru_tokenizer::next_sentence(vector<token_range>& /*tokens*/) {
   // TODO
 
