@@ -20,12 +20,14 @@ class tokenizer_ids {
     CZECH = 0,
     ENGLISH = 1,
     GENERIC = 2,
+    GRU = 3,
   };
 
   static bool parse(const string& str, tokenizer_id& id) {
     if (str == "czech") return id = CZECH, true;
     if (str == "english") return id = ENGLISH, true;
     if (str == "generic") return id = GENERIC, true;
+    if (str == "gru") return id = GRU, true;
     return false;
   }
 };
