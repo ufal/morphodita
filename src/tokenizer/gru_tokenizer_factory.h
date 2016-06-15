@@ -11,6 +11,7 @@
 
 #include "common.h"
 #include "tokenizer_factory.h"
+#include "gru_tokenizer.h"
 
 namespace ufal {
 namespace morphodita {
@@ -24,6 +25,9 @@ class gru_tokenizer_factory : public tokenizer_factory {
 
  private:
   unsigned url_email_tokenizer;
+  unsigned segment;
+
+  unique_ptr<gru_tokenizer_network> network;
 };
 
 } // namespace morphodita

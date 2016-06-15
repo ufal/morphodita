@@ -1,6 +1,6 @@
 // This file is part of MorphoDiTa <http://github.com/ufal/morphodita/>.
 //
-// Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
+// Copyright 2016 Institute of Formal and Applied Linguistics, Faculty of
 // Mathematics and Physics, Charles University in Prague, Czech Republic.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
@@ -10,7 +10,6 @@
 #pragma once
 
 #include "common.h"
-#include "tokenizer.h"
 #include "unicode_tokenizer.h"
 
 namespace ufal {
@@ -21,11 +20,14 @@ struct tokenized_sentence {
   vector<token_range> tokens;
 };
 
-class gru_tokenizer_factory_trainer {
+class gru_tokenizer_trainer {
  public:
-  enum { LATEST = 1, URL_EMAIL_LATEST = unicode_tokenizer::URL_EMAIL_LATEST };
+  enum { URL_EMAIL_LATEST = unicode_tokenizer::URL_EMAIL_LATEST };
 
-  static bool train(unsigned version, unsigned url_email_tokenizer, const vector<tokenized_sentence>& data, ostream& os, string& error);
+  static bool train(unsigned url_email_tokenizer, unsigned segment, unsigned dimension, unsigned epochs,
+                    unsigned batch_size, float learning_rate, float learning_rate_final, float dropout,
+                    bool early_stopping, const vector<tokenized_sentence>& data, const vector<tokenized_sentence>& heldout,
+                    ostream& os, string& error);
 };
 
 } // namespace morphodita

@@ -9,25 +9,34 @@
 
 #include "gru_tokenizer.h"
 #include "gru_tokenizer_factory.h"
+#include "utils/binary_decoder.h"
+#include "utils/compressor.h"
 
 namespace ufal {
 namespace morphodita {
 
 tokenizer* gru_tokenizer_factory::new_tokenizer() const {
-  return new gru_tokenizer(url_email_tokenizer);
+  return new gru_tokenizer(url_email_tokenizer, segment, *network);
 }
 
 bool gru_tokenizer_factory::load(istream& is) {
   char version;
   if (!is.get(version)) return false;
 
-  char url_email;
-  if (!is.get(url_email)) return false;
-  this->url_email_tokenizer = url_email;
+  binary_decoder data;
+  if (!compressor::load(is, data)) return false;
 
-  // TODO
+  try {
+    url_email_tokenizer = data.next_1B();
+    segment = data.next_2B();
 
-  return true;
+    network.reset(gru_tokenizer_network::load(data));
+    if (!network) return false;
+  } catch (binary_decoder_error&) {
+    return false;
+  }
+
+  return data.is_end();
 }
 
 } // namespace morphodita

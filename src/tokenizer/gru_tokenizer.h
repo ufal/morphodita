@@ -11,19 +11,27 @@
 
 #include "common.h"
 #include "unicode_tokenizer.h"
+#include "gru_tokenizer_network.h"
 
 namespace ufal {
 namespace morphodita {
 
-class gru_tokenizer_factory;
-
 class gru_tokenizer : public unicode_tokenizer {
  public:
+  gru_tokenizer(unsigned url_email_tokenizer, unsigned segment, const gru_tokenizer_network& network)
+      : unicode_tokenizer(url_email_tokenizer), segment(segment), network_index(0), network_length(0), network(network) {}
+
   virtual bool next_sentence(vector<token_range>& tokens) override;
 
  private:
-  gru_tokenizer(unsigned url_email_tokenizer) : unicode_tokenizer(url_email_tokenizer) {}
-  friend class gru_tokenizer_factory;
+  inline bool is_space(size_t index);
+  int next_outcome();
+
+  unsigned segment, network_index, network_length;
+  vector<gru_tokenizer_network::char_info> network_chars;
+  vector<gru_tokenizer_network::outcome_t> network_outcomes;
+  vector<size_t> network_offsets;
+  const gru_tokenizer_network& network;
 };
 
 } // namespace morphodita
