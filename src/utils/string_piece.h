@@ -15,6 +15,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 struct string_piece {
   const char* str;
@@ -38,5 +39,6 @@ inline bool operator!=(const string_piece& a, const string_piece& b) {
   return a.len != b.len || memcmp(a.str, b.str, a.len) != 0;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

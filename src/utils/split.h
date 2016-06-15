@@ -16,6 +16,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -51,5 +52,6 @@ void split(string_piece text, char sep, vector<string_piece>& tokens) {
   tokens.emplace_back(str, text.str + text.len - str);
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

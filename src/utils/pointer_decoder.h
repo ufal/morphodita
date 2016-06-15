@@ -13,6 +13,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -65,5 +66,6 @@ template <class T> const T* pointer_decoder::next(unsigned elements) {
   return result;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

@@ -18,6 +18,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -52,5 +53,6 @@ void iostreams_init_binary_output() {
 #endif
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

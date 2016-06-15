@@ -22,6 +22,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 using namespace std;
 
@@ -35,5 +36,6 @@ static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, "Only little endian sys
 
 #define runtime_failure(message) exit((cerr << message << endl, 1))
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

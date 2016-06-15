@@ -13,6 +13,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -56,5 +57,6 @@ ostream& operator<<(ostream& os, xml_encoded data) {
   return os;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

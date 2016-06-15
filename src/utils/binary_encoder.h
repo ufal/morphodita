@@ -14,6 +14,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -87,5 +88,6 @@ void binary_encoder::add_data(const T* data, size_t elements) {
   this->data.insert(this->data.end(), (const unsigned char*) data, (const unsigned char*) (data + elements));
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

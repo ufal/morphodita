@@ -11,6 +11,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 
 static const char _url_detector_actions[] = {
@@ -1389,5 +1390,6 @@ _again:
   return length || result_length == str.len ? result : NO_URL;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

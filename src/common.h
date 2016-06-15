@@ -10,3 +10,11 @@
 #pragma once
 
 #include "utils/common.h"
+
+namespace ufal {
+namespace morphodita {
+
+using namespace utils;
+
+} // namespace morphodita
+} // namespace ufal

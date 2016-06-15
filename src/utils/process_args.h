@@ -16,6 +16,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 // Call a given processor on specified arguments. Every argument can be
 // either input_file or input_file:output_file. If not output_file is specified,
@@ -98,5 +99,6 @@ void process_args_with_output_template(int argi, int argc, char* argv[], const s
   }
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

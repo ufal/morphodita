@@ -16,6 +16,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -86,5 +87,6 @@ int parse_int(string_piece str, const char* value_name) {
   return result;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

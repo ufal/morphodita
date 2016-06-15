@@ -17,6 +17,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 class options {
  public:
@@ -44,5 +45,6 @@ class options {
 };
 
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

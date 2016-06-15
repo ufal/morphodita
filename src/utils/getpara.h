@@ -13,6 +13,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -39,5 +40,6 @@ istream& getpara(istream& is, string& para) {
   return is;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

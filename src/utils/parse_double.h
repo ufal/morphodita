@@ -14,6 +14,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -93,5 +94,6 @@ double parse_double(string_piece str, const char* value_name) {
   return result;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

@@ -15,6 +15,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -102,5 +103,6 @@ void binary_decoder::seek(unsigned pos) throw (binary_decoder_error) {
   data = buffer.data() + pos;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

@@ -15,6 +15,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -56,5 +57,6 @@ T* threadsafe_stack<T>::pop() {
   return res;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

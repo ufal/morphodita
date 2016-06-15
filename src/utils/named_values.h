@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <fstream>
 #include <unordered_map>
 
@@ -17,6 +18,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 //
 // Declarations
@@ -88,5 +90,6 @@ bool named_values::parse(const string& values, map& parsed_values, string& error
   return true;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

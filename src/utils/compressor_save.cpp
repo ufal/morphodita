@@ -14,6 +14,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 // Start of LZMA compression library by Igor Pavlov
 namespace lzma {
@@ -3330,5 +3331,6 @@ bool compressor::save(ostream& os, const binary_encoder& enc) {
   return true;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal

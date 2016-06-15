@@ -13,6 +13,7 @@
 
 namespace ufal {
 namespace morphodita {
+namespace utils {
 
 const options::value options::value::none(NONE);
 const options::value options::value::any(ANY);
@@ -54,5 +55,6 @@ bool options::parse(const unordered_map<string, value>& allowed, int& argc, char
   return true;
 }
 
+} // namespace utils
 } // namespace morphodita
 } // namespace ufal
