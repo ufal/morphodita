@@ -225,7 +225,7 @@ class tagger {
   }
 
   %extend {
-    void tag_analyzed(const std::vector<std::string>& forms, const std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const {
+    void tagAnalyzed(const std::vector<std::string>& forms, const std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const {
       std::vector<string_piece> string_pieces;
       string_pieces.reserve(forms.size());
       for (auto&& form : forms)

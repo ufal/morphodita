@@ -3372,7 +3372,7 @@ class Tagger {
 
   virtual void tag(const Forms&amp; forms, TaggedLemmas&amp; tags, int guesser = -1) const;
 
-  virtual void tag_analyzed(const Forms&amp; forms, const Analyses&amp; analyses, Indices&amp; tags) const;
+  virtual void tagAnalyzed(const Forms&amp; forms, const Analyses&amp; analyses, Indices&amp; tags) const;
 
   Tokenizer* newTokenizer() const;
 };
