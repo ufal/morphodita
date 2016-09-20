@@ -2,7 +2,7 @@ Version 1.9.1-devel
 -------------------
 
 
-Version 1.9.0-prerelease [15 May 15]
+Version 1.9.0-prerelease [15 May 16]
 ------------------------------------
 - Use t2t_docsys http://github.com/ufal/t2t_docsys as documentation system.
 - Use C++ Builtem http://github.com/ufal/cpp_builtem as build system.
