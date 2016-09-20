@@ -1,3 +1,7 @@
+Version 1.9.2-devel
+-------------------
+
+
 Version 1.9.1 [20 Sep 16]
 -------------------------
 - Allow loading larger dictionaries by increasing the internal
