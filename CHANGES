@@ -1,5 +1,8 @@
-Version 1.9.1-devel
--------------------
+Version 1.9.1 [20 Sep 16]
+-------------------------
+- Allow loading larger dictionaries by increasing the internal
+  limit of size of search structures created during loading.
+- Export string_piece using correct namespace in src_lib_only/morphodita.h.
 
 
 Version 1.9.0-prerelease [15 May 16]
