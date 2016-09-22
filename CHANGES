@@ -1,5 +1,7 @@
-Version 1.9.2-devel
--------------------
+Version 1.9.2 [22 Sep 16]
+-------------------------
+- Fix regression in morpho::generate caused in 1.9.1.
+- Add check in encode_dictionary that no lemma is repeated.
 
 
 Version 1.9.1 [20 Sep 16]
