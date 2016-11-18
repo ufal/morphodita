@@ -58,7 +58,9 @@ int main(int argc, char* argv[]) {
     if (tokens.size() != 3) runtime_failure("The line " << line << " does not contain three columns!");
 
     // Analyse
-    dictionary->analyze(tokens[0], morpho::NO_GUESSER, lemmas);
+    if (dictionary->analyze(tokens[0], morpho::NO_GUESSER, lemmas) < 0)
+      lemmas.clear();
+
     int rawlemma_len = dictionary->raw_lemma_len(tokens[1]);
     int lemmaid_len = dictionary->lemma_id_len(tokens[1]);
 
@@ -102,7 +104,9 @@ int main(int argc, char* argv[]) {
       total_matches[RAWLEMMA]++;
       cout << tokens[0] << '\t' << matching_lemmas[RAWLEMMA][0].lemma << '\t' << matching_lemmas[RAWLEMMA][0].tag << '\n';
     } else if (lemmas.size() == 1 &&
-               lemmas[0].tag.compare(0, 1, tokens[2], 0, 1) == 0 &&
+               // We are now remapping even if tag[0] does not match, because there are
+               // lots of "valid" II<->TT<->Db<->J, changes (and quite little incorrect changes)
+               // lemmas[0].tag.compare(0, 1, tokens[2], 0, 1) == 0 &&
                lemmas[0].lemma.compare(0, dictionary->lemma_id_len(lemmas[0].lemma), tokens[1], 0, lemmaid_len) == 0) {
       if (lemma_mappings[TAG].emplace(tokens[1], lemmas[0].tag).first->second != lemmas[0].tag)
         {} //cerr("Two different tag mappings for " << tokens[1] << '-' << tokens[2] << ": " << lemmas[0].tag << " and " << lemma_mappings[TAG][tokens[1]] << '.' << endl;
