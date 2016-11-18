@@ -350,16 +350,14 @@ Mathematics and Physics, Charles University in Prague, Czech Republic.
 <h2>2.1. Online Demo</h2>
 
 <p>
-<a href="http://lindat.mff.cuni.cz/services/morphodita/">Online demo</a> is available as
-one of <a href="http://lindat.mff.cuni.cz/services/">LINDAT/CLARIN services</a>.
+<a href="http://lindat.cz">LINDAT/CLARIN</a> hosts <a href="http://lindat.mff.cuni.cz/services/morphodita/">MorphoDiTa Online Demo</a>.
 </p>
 
 <a id="web_service" name="web_service"></a>
 <h2>2.2. Web Service</h2>
 
 <p>
-<a href="http://lindat.mff.cuni.cz/services/morphodita/api-reference.php">Web service</a> is also
-available as one of <a href="http://lindat.mff.cuni.cz/services/">LINDAT/CLARIN services</a>.
+<a href="http://lindat.cz">LINDAT/CLARIN</a> also hosts <a href="http://lindat.mff.cuni.cz/services/morphodita/api-reference.php">MorphoDiTa Web Service</a>.
 </p>
 
 <a id="release" name="release"></a>
@@ -3420,6 +3418,9 @@ wrappers.
 The bindings require native C++ library <code>libmorphodita_java</code> (called
 <code>morphodita_java</code> on Windows). If the library is found in the current
 directory, it is used, otherwise standard library search process is used.
+The path to the C++ library can also be specified using static
+<code>morphodita_java.setLibraryPath(String path)</code> call (before the first call
+inside the C++ library, of course).
 </p>
 
 <a id="perl_bindings" name="perl_bindings"></a>
