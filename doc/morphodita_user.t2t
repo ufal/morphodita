@@ -437,7 +437,7 @@ encoded and every line should be a tab separated triplet
 should appear more than once (``sort -u`` can be used to achieve this).
 
 Run ``encode_dictionary`` with the following options:
-``` encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag
+``` encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag [statistical_guesser]
 - ``generic``: This parameter defines tokenizer and other language specific
   behaviour. Other values than ``generic`` take different options and are not
   documented.
@@ -461,6 +461,9 @@ Run ``encode_dictionary`` with the following options:
   in the dictionary and it consists of Unicode characters in the Symbol
   category. Can be the same as ``unknown_tag``.
 
+- ``statistical_guesser``: Optional file containing statistical guesser generated
+  using the ``train_guesser`` binary (see below).
+
 
 Example input data:
 ```
@@ -475,6 +478,36 @@ go	VBD	went
 
 Example command line:
 ``` encode_dictionary generic 8 UNK NUM PUNC SYM <input_data >output_model
+
+
+==== Training Statistical Guesser ====[training_statistical_guesser]
+
+Optionally, statistical guesser might be trained on disambiguated
+data using the ``train_guesser`` binary.
+
+The input data is in the same format as the training data for the tagger,
+i.e., every word on a line (each line containing tab separated triplet
+``form \t lemma \t tag`` in UTF-8 encoding), with end of sentence denoted
+by an empty line. Note that the input data must not contain spaces.
+
+The full command syntax of ``train_guesser`` is:
+```
+train_guesser [options] suffix_len rules_per_suffix <input_data >output_guesser
+Options: --max_prefixes=maximum number of prefixes to create
+         --min_prefix_count=minimum count to create a prefix
+```
+- ``suffix_len``: Generate guesser rules using suffixes of length at most
+  ``suffix_len``(for Czech we use 3).
+- ``rules_per_suffix``: Maximum number of guesser rules generated per suffix
+  (for Czech we use 8 for a rich tag set [more than a thousand tags] and 6 for
+  a coarse tag set [67 tags]).
+- ``max_prefixes``: The guesser rules might also be specific for several prefixes.
+  There might be at most ``max_prefixes`` such prefixes. Note that the more
+  prefixes are allowed, the large the guesser is (for Czech we set this to 0,
+  but for some other languages we also use 4).
+- ``min_prefix_count``: In order for a prefix to be considered, it has to occur
+  at most the specified number of times in the data.
+-
 
 
 ==== Using External Morphology ====[using_external_morphology]
