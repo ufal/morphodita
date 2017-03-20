@@ -499,8 +499,8 @@ Options: --max_prefixes=maximum number of prefixes to create
 - ``suffix_len``: Generate guesser rules using suffixes of length at most
   ``suffix_len``(for Czech we use 3).
 - ``rules_per_suffix``: Maximum number of guesser rules generated per suffix
-  (for Czech we use 8 for a rich tag set [more than a thousand tags] and 6 for
-  a coarse tag set [67 tags]).
+  (for Czech we use 8 for a rich tag set (more than a thousand tags) and 6 for
+  a coarse tag set (67 tags)).
 - ``max_prefixes``: The guesser rules might also be specific for several prefixes.
   There might be at most ``max_prefixes`` such prefixes. Note that the more
   prefixes are allowed, the large the guesser is (for Czech we set this to 0,
