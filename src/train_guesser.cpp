@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 
   int suffix_len = parse_int(argv[1], "suffix_len");
   int rules_per_suffix = parse_int(argv[2], "rules_per_suffix");
-  int max_prefixes = options.count("max_prefixes") ? parse_int(options["max_prefixes"], "max_prefixes") : 10;
+  int max_prefixes = options.count("max_prefixes") ? parse_int(options["max_prefixes"], "max_prefixes") : 0;
   int min_prefix_count = options.count("min_prefix_count") ? parse_int(options["min_prefix_count"], "min_prefix_count") : 5;
 
   if (suffix_len < 0) runtime_failure("The suffix_len cannot be negative!");

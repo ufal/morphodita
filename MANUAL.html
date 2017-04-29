@@ -1648,7 +1648,7 @@ should appear more than once (<code>sort -u</code> can be used to achieve this).
 Run <code>encode_dictionary</code> with the following options:
 </p>
 <pre style="margin-top:0">
-encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag
+encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag symbol_tag [statistical_guesser]
 </pre>
 
 <ul>
@@ -1679,6 +1679,10 @@ encode_dictionary generic max_suffix_len unknown_tag number_tag punctuation_tag 
 <li><code>symbol_tag</code>: Assigned to a form during analysis if the form was not found
   in the dictionary and it consists of Unicode characters in the Symbol
   category. Can be the same as <code>unknown_tag</code>.
+<p></p>
+</li>
+<li><code>statistical_guesser</code>: Optional file containing statistical guesser generated
+  using the <code>train_guesser</code> binary (see below).
 </li>
 </ul>
 
@@ -1702,8 +1706,48 @@ Example command line:
 encode_dictionary generic 8 UNK NUM PUNC SYM &lt;input_data &gt;output_model
 </pre>
 
+<a id="training_statistical_guesser" name="training_statistical_guesser"></a>
+<h4>5.7.1.1. Training Statistical Guesser</h4>
+
+<p>
+Optionally, statistical guesser might be trained on disambiguated
+data using the <code>train_guesser</code> binary.
+</p>
+<p>
+The input data is in the same format as the training data for the tagger,
+i.e., every word on a line (each line containing tab separated triplet
+<code>form \t lemma \t tag</code> in UTF-8 encoding), with end of sentence denoted
+by an empty line. Note that the input data must not contain spaces.
+</p>
+<p style="margin-bottom:0">
+The full command syntax of <code>train_guesser</code> is:
+</p>
+<pre style="margin-top:0">
+train_guesser [options] suffix_len rules_per_suffix &lt;input_data &gt;output_guesser
+Options: --max_prefixes=maximum number of prefixes to create
+         --min_prefix_count=minimum count to create a prefix
+</pre>
+
+<ul>
+<li><code>suffix_len</code>: Generate guesser rules using suffixes of length at most
+  <code>suffix_len</code>(for Czech we use 3).
+</li>
+<li><code>rules_per_suffix</code>: Maximum number of guesser rules generated per suffix
+  (for Czech we use 8 for a rich tag set (more than a thousand tags) and 6 for
+  a coarse tag set (67 tags)).
+</li>
+<li><code>max_prefixes</code>: The guesser rules might also be specific for several prefixes.
+  There might be at most <code>max_prefixes</code> such prefixes. Note that the more
+  prefixes are allowed, the large the guesser is (for Czech we set this to 0,
+  but for some other languages we also use 4).
+</li>
+<li><code>min_prefix_count</code>: In order for a prefix to be considered, it has to occur
+  at most the specified number of times in the data.
+</li>
+</ul>
+
 <a id="using_external_morphology" name="using_external_morphology"></a>
-<h4>5.7.1.1. Using External Morphology</h4>
+<h4>5.7.1.2. Using External Morphology</h4>
 
 <p>
 Sometimes it is useful to train MorphoDiTa tagger using external morphological
