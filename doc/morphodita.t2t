@@ -20,7 +20,9 @@ source code and as a pre-compiled binary package. The binary package contains Li
 Windows and OS X binaries, Java bindings binary, C# bindings binary, and source
 code of MorphoDiTa and all language bindings). While the binary
 packages do not contain compiled Python or Perl bindings, packages for those
-languages are available in standard package repositories, i.e. on PyPI and CPAN.
+languages are available in standard package repositories,
+i.e. on [PyPI https://pypi.python.org/pypi/ufal.morphodita/]
+and [CPAN https://metacpan.org/pod/Ufal::MorphoDiTa].
 
 - [Latest release http://github.com/ufal/morphodita/releases/latest]
 - [All releases http://github.com/ufal/morphodita/releases], [Changelog https://github.com/ufal/morphodita/blob/master/CHANGES]
