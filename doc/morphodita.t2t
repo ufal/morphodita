@@ -6,7 +6,7 @@ Version 1.9.3-devel
 %!include: morphodita_about.t2t
 
 
-= Online =[online]
+= Online Web Application and Web Service =[online]
 
 %!include: morphodita_online.t2t
 
