@@ -170,7 +170,7 @@ class morpho {
   %newobject load;
   static morpho* load(const char* fname);
 
-  enum { NO_GUESSER = 0, GUESSER = 1 };
+  enum { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
   typedef int guesser_mode;
 
   virtual int analyze(const char* form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const;

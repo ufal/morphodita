@@ -347,7 +347,7 @@ class morpho {
   static [morpho #morpho]* [load #morpho_load_cstring](const char* fname);
   static [morpho #morpho]* [load #morpho_load_istream](istream& is);
 
-  enum [guesser_mode #morpho_guesser_mode] { NO_GUESSER = 0, GUESSER = 1 };
+  enum [guesser_mode #morpho_guesser_mode] { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
   virtual int [analyze #morpho_analyze]([string_piece #string_piece] form, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma #tagged_lemma]>& lemmas) const = 0;
   virtual int [generate #morpho_generate]([string_piece #string_piece] lemma, const char* tag_wildcard, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma_forms #tagged_lemma_forms]>& forms) const = 0;
@@ -381,11 +381,16 @@ model. Returns a pointer to an instance of [``morpho`` #morpho] which the user s
 delete after use.
 
 === morpho::guesser_mode ===[morpho_guesser_mode]
-``` enum [guesser_mode #morpho_guesser_mode] { NO_GUESSER = 0, GUESSER = 1 };
+``` enum [guesser_mode #morpho_guesser_mode] { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
 Guesser mode defines behavior in case of unknown words. When set to
 ``GUESSER``, morpho tries to guess unknown words. When set to ``NO_GUESSER``,
 morpho does not guess unknown words.
+
+The ``GUESSER_UNSPECIFIED`` mode denotes a default behaviour, which:
+- for [``morpho`` #morpho] means ``NO_GUESSER``
+- for [``tagger`` #tagger] means the default specified during tagger training
+-
 
 === morpho::analyze() ===[morpho_analyze]
 ``` virtual int analyze([string_piece #string_piece] form, [guesser_mode #morpho_guesser_mode] guesser, std::vector<[tagged_lemma #tagged_lemma]>& lemmas) const = 0;

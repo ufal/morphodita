@@ -2865,7 +2865,7 @@ class morpho {
   static <A HREF="#morpho">morpho</A>* <A HREF="#morpho_load_cstring">load</A>(const char* fname);
   static <A HREF="#morpho">morpho</A>* <A HREF="#morpho_load_istream">load</A>(istream&amp; is);
 
-  enum <A HREF="#morpho_guesser_mode">guesser_mode</A> { NO_GUESSER = 0, GUESSER = 1 };
+  enum <A HREF="#morpho_guesser_mode">guesser_mode</A> { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
   virtual int <A HREF="#morpho_analyze">analyze</A>(<A HREF="#string_piece">string_piece</A> form, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; lemmas) const = 0;
   virtual int <A HREF="#morpho_generate">generate</A>(<A HREF="#string_piece">string_piece</A> lemma, const char* tag_wildcard, <A HREF="#morpho_guesser_mode">guesser_mode</A> guesser, std::vector&lt;<A HREF="#tagged_lemma_forms">tagged_lemma_forms</A>&gt;&amp; forms) const = 0;
@@ -2916,7 +2916,7 @@ delete after use.
 <h3>7.13.3. morpho::guesser_mode</h3>
 
 <pre>
-enum <A HREF="#morpho_guesser_mode">guesser_mode</A> { NO_GUESSER = 0, GUESSER = 1 };
+enum <A HREF="#morpho_guesser_mode">guesser_mode</A> { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 </pre>
 
 <p>
@@ -2924,6 +2924,15 @@ Guesser mode defines behavior in case of unknown words. When set to
 <code>GUESSER</code>, morpho tries to guess unknown words. When set to <code>NO_GUESSER</code>,
 morpho does not guess unknown words.
 </p>
+<p style="margin-bottom:0">
+The <code>GUESSER_UNSPECIFIED</code> mode denotes a default behaviour, which:
+</p>
+<ul style="margin-top:0">
+<li>for <a href="#morpho"><code>morpho</code></a> means <code>NO_GUESSER</code>
+</li>
+<li>for <a href="#tagger"><code>tagger</code></a> means the default specified during tagger training
+</li>
+</ul>
 
 <a id="morpho_analyze" name="morpho_analyze"></a>
 <h3>7.13.4. morpho::analyze()</h3>
@@ -3371,7 +3380,7 @@ class Morpho {
  public:
   static Morpho* load(const char* fname);
 
-  enum { NO_GUESSER = 0, GUESSER = 1 };
+  enum { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
   virtual int analyze(const char* form, int guesser, TaggedLemmas&amp; lemmas) const;
   virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms&amp; forms) const;
@@ -3390,7 +3399,7 @@ class Tagger {
 
   virtual const Morpho* getMorpho() const;
 
-  virtual void tag(const Forms&amp; forms, TaggedLemmas&amp; tags, int guesser = -1) const;
+  virtual void tag(const Forms&amp; forms, TaggedLemmas&amp; tags, int guesser = Morpho::GUESSER_UNSPECIFIED) const;
 
   virtual void tagAnalyzed(const Forms&amp; forms, const Analyses&amp; analyses, Indices&amp; tags) const;
 

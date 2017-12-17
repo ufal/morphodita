@@ -129,7 +129,7 @@ class morpho {
   static morpho* load(const char* fname);
   static morpho* load(std::istream& is);
 
-  enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
+  enum guesser_mode { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
   // Perform morphologic analysis of a form. The form is given by a pointer and
   // length and therefore does not need to be '\0' terminated.  The guesser
@@ -193,7 +193,7 @@ class tagger {
   virtual const morpho* get_morpho() const = 0;
 
   // Perform morphologic analysis and subsequent disambiguation.
-  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags, morpho::guesser_mode guesser = morpho::guesser_mode(-1)) const = 0;
+  virtual void tag(const std::vector<string_piece>& forms, std::vector<tagged_lemma>& tags, morpho::guesser_mode guesser = morpho::GUESSER_UNSPECIFIED) const = 0;
 
   // Perform disambiguation only on given analyses.
   virtual void tag_analyzed(const std::vector<string_piece>& forms, const std::vector<std::vector<tagged_lemma> >& analyses, std::vector<int>& tags) const = 0;

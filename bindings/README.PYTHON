@@ -113,7 +113,7 @@ Main Classes
    public:
     static Morpho* load(const char* fname);
 
-    enum { NO_GUESSER = 0, GUESSER = 1 };
+    enum { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
     virtual int analyze(const char* form, int guesser, TaggedLemmas& lemmas) const;
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
@@ -132,7 +132,7 @@ Main Classes
 
     virtual const Morpho* getMorpho() const;
 
-    virtual void tag(const Forms& forms, TaggedLemmas& tags, int guesser = -1) const;
+    virtual void tag(const Forms& forms, TaggedLemmas& tags, int guesser = Morpho::GUESSER_UNSPECIFIED) const;
 
     virtual void tagAnalyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 

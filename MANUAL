@@ -2036,7 +2036,7 @@ Class morpho
     static morpho* load(const char* fname);
     static morpho* load(istream& is);
 
-    enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
+    enum guesser_mode { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
     virtual int analyze(string_piece form, guesser_mode guesser, std::vector<tagged_lemma>& lemmas) const = 0;
     virtual int generate(string_piece lemma, const char* tag_wildcard, guesser_mode guesser, std::vector<tagged_lemma_forms>& forms) const = 0;
@@ -2077,11 +2077,15 @@ pointer to an instance of morpho which the user should delete after use.
 morpho::guesser_mode
 --------------------
 
-  enum guesser_mode { NO_GUESSER = 0, GUESSER = 1 };
+  enum guesser_mode { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
 Guesser mode defines behavior in case of unknown words. When set to GUESSER,
 morpho tries to guess unknown words. When set to NO_GUESSER, morpho does not
 guess unknown words.
+
+The GUESSER_UNSPECIFIED mode denotes a default behaviour, which:
+- for morpho means NO_GUESSER
+- for tagger means the default specified during tagger training
 
 
 morpho::analyze()
@@ -2447,7 +2451,7 @@ Main Classes
    public:
     static Morpho* load(const char* fname);
 
-    enum { NO_GUESSER = 0, GUESSER = 1 };
+    enum { NO_GUESSER = 0, GUESSER = 1, GUESSER_UNSPECIFIED = -1 };
 
     virtual int analyze(const char* form, int guesser, TaggedLemmas& lemmas) const;
     virtual int generate(const char* lemma, const char* tag_wildcard, int guesser, TaggedLemmasForms& forms) const;
@@ -2466,7 +2470,7 @@ Main Classes
 
     virtual const Morpho* getMorpho() const;
 
-    virtual void tag(const Forms& forms, TaggedLemmas& tags, int guesser = -1) const;
+    virtual void tag(const Forms& forms, TaggedLemmas& tags, int guesser = Morpho::GUESSER_UNSPECIFIED) const;
 
     virtual void tagAnalyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 
