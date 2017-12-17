@@ -47,7 +47,7 @@ inline bool tag_filter::matches(const char* tag) const {
 
     // We assume filter.chars_len >= 1.
     bool matched = (wildcard[filter.chars_offset] == tag[tag_pos]) ^ filter.negate;
-    for (int i = 1; i < filter.chars_len && !matched; i++)
+    for (int i = 1; i < filter.chars_len && ((!matched) ^ filter.negate); i++)
       matched = (wildcard[filter.chars_offset + i] == tag[tag_pos]) ^ filter.negate;
     if (!matched) return false;
   }
