@@ -33,11 +33,11 @@ inline void unaligned_store(P* ptr, T value);
 template<class T, class P>
 inline void unaligned_store_inc(P*& ptr, T value);
 
-template<class T, class P>
-P* unaligned_lower_bound(P* first, size_t size, T val);
+template<class T>
+T* unaligned_lower_bound(T* first, size_t size, T val);
 
-template<class T, class P>
-P* unaligned_upper_bound(P* first, size_t size, T val);
+template<class T>
+T* unaligned_upper_bound(T* first, size_t size, T val);
 
 //
 // Definitions
@@ -69,8 +69,8 @@ inline void unaligned_store_inc(P*& ptr, T value) {
   ((char*&)ptr) += sizeof(T);
 }
 
-template<class T, class P>
-P* unaligned_lower_bound(P* first, size_t size, T val) {
+template<class T>
+T* unaligned_lower_bound(T* first, size_t size, T val) {
   while (size) {
     size_t step = size >> 1;
     if (unaligned_load<T>(first + step) < val) {
@@ -83,8 +83,8 @@ P* unaligned_lower_bound(P* first, size_t size, T val) {
   return first;
 }
 
-template<class T, class P>
-P* unaligned_upper_bound(P* first, size_t size, T val) {
+template<class T>
+T* unaligned_upper_bound(T* first, size_t size, T val) {
   while (size) {
     size_t step = size >> 1;
     if (!(val < unaligned_load<T>(first + step))) {

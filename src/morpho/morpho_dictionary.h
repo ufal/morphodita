@@ -172,7 +172,7 @@ void morpho_dictionary<LemmaAddinfo>::analyze(string_piece form, vector<tagged_l
       uint16_t* suff_data = suff[suff_len] + 1;
 
       roots.iter(form.str, root_len, [&](const char* root, pointer_decoder& root_data) {
-        unsigned root_class = root_data.next_2B();
+        uint16_t root_class = root_data.next_2B();
         unsigned lemma_offset = root_data.next_4B();
         unsigned lemma_len = root_data.next_1B();
 
