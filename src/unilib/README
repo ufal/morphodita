@@ -14,8 +14,7 @@ If currently offers:
 
 It is tested on the following compilers and platforms:
 - Linux using gcc
-- Windows using tdm-gcc
-- Windows using Visual C++ 2013
+- Windows using Visual C++ 2015
 - OS X using clang
 
 Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
