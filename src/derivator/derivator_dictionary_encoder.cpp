@@ -12,11 +12,13 @@
 #include <map>
 #include <unordered_map>
 
+#include "derivator_dictionary.h"
 #include "derivator_dictionary_encoder.h"
 #include "morpho/morpho.h"
 #include "morpho/morpho_ids.h"
 #include "utils/binary_encoder.h"
 #include "utils/compressor.h"
+#include "utils/new_unique_ptr.h"
 #include "utils/split.h"
 
 namespace ufal {
@@ -26,6 +28,14 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
   // Load the morphology
   cerr << "Loading morphology: ";
   auto dictionary_start = dictionary.tellg();
+
+  if (dictionary.peek() == morpho_ids::DERIVATOR_DICTIONARY) {
+    cerr << "The given model already has a derivator, dropping it." << endl;
+    (void)dictionary.get();
+    auto derinet = new_unique_ptr<derivator_dictionary>();
+    if (!derinet->load(dictionary)) runtime_failure("Could not load the derivator of the given morpho model!");
+  }
+
   unique_ptr<morpho> morpho(morpho::load(dictionary));
   if (!morpho) runtime_failure("Cannot load morpho model from given file!");
   if (morpho->get_derivator()) runtime_failure("The given morpho model already has a derivator!");
