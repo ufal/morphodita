@@ -7,7 +7,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-BUILTEM_VERSION := 1.1.2
+BUILTEM_VERSION := 1.2.0
 
 ###########
 # PATFORM #
@@ -170,7 +170,7 @@ ifneq ($(filter linux-gcc linux-clang win-gcc,$(PLATFORM)),)
   ifneq ($(filter undefined default,$(origin CXX)),)
     CXX = $(if $(filter %-gcc,$(PLATFORM)),g++,clang++)
   endif
-  C_FLAGS += -std=c++11 -W -Wall -mtune=generic -msse -msse2 -mfpmath=sse -fvisibility=hidden -U_FORTIFY_SOURCE
+  C_FLAGS += -std=c++11 -W -Wall -mtune=generic -msse -msse2 -mfpmath=sse -fvisibility=hidden
   DYN_C_FLAGS += $(if $(filter linux-%,$(PLATFORM)),-fPIC)
   DYN_LD_FLAGS += -shared
 
@@ -183,7 +183,7 @@ ifneq ($(filter linux-gcc linux-clang win-gcc,$(PLATFORM)),)
   ifeq ($(MODE),normal)
     C_FLAGS += -O3
   else ifeq ($(MODE),debug)
-    C_FLAGS += -g -DDEBUG -D_GLIBCXX_DEBUG
+    C_FLAGS += -g -DDEBUG
   else ifeq ($(MODE),profile)
     C_FLAGS += -O3 $(if $(filter %-gcc,$(PLATFORM)),-g1 -pg,-gline-tables-only)
     LD_FLAGS += $(if $(filter %-gcc,$(PLATFORM)),-pg)
@@ -214,7 +214,7 @@ else ifeq ($(PLATFORM),osx-clang)
   ifneq ($(filter undefined default,$(origin CXX)),)
     CXX = clang++
   endif
-  C_FLAGS += -std=c++11 -W -Wall -mtune=generic -fvisibility=hidden -mmacosx-version-min=10.7 -stdlib=libc++
+  C_FLAGS += -std=c++11 -W -Wall -mtune=generic -fvisibility=hidden -mmacosx-version-min=10.9 -stdlib=libc++
   DYN_LD_FLAGS += -dynamiclib
 
   ifeq ($(BITS),32)
@@ -278,11 +278,13 @@ ifeq ($(PLATFORM),win-vs)
   use_library = $(1:%=%.lib)
   define_macro = /D $(1)$(if $(2),=$(2))
   disable_assert = /D NDEBUG
+  treat_warnings_as_errors = /WX
 else
   include_dir = $(1:%=-I%)
   use_library = $(1:%=-l%)
   define_macro = -D$(1)$(if $(2),=$(2))
   disable_assert = -DNDEBUG
+  treat_warnings_as_errors = -Werror
 endif
 
 ifneq ($(filter linux-%,$(PLATFORM)),)
