@@ -1,4 +1,0 @@
-{
-  global: initufal_morphodita; PyInit_ufal_morphodita;
-  local: *;
-};
