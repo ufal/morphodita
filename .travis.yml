@@ -41,6 +41,6 @@ before_script:
 script:
   - if [ $PLATFORM == win-vs ]; then cmd.exe //C 'C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat' amd64 '&&' make PLATFORM=$PLATFORM -k -C src full; fi
   - if [ $PLATFORM != win-vs ]; then make -k -C src full; fi
-  - if [ $PLATFORM == win-vs ]; then cmd.exe //C 'C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat' amd64 '&&' make PLATFORM=$PLATFORM -k -C tests tagger_bundle; fi
-  - if [ $PLATFORM != win-vs ]; then make -k -C tests tagger_bundle; fi
+  - if [ $PLATFORM == win-vs ]; then cmd.exe //C 'C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat' amd64 '&&' make PLATFORM=$PLATFORM -k -C tests all; fi
+  - if [ $PLATFORM != win-vs ]; then make -k -C tests all; fi
   - python3 tests/ascii_only.py
