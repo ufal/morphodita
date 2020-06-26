@@ -1595,7 +1595,13 @@ The full command syntax of <code>morphodita_server</code> is
 </p>
 <pre style="margin-top:0">
 morphodita_server [options] port (model_name weblicht_id model_file acknowledgements)*
-Options: --daemon
+Options: --connection_timeout=maximum connection timeout [s] (default 60)
+         --daemon (daemonize after start, supported on Linux only)
+         --log_file=file path (no logging if empty, default morphodita_server.log)
+         --log_request_max_size=max req log size [kB] (0 unlimited, default 64)
+         --max_connections=maximum network connections (default 256)
+         --max_request_size=maximum request size [kB] (default 1024)
+         --threads=threads to use (default 0 means unlimitted)
 </pre>
 
 <p>

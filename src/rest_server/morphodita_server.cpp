@@ -59,13 +59,25 @@ int main(int argc, char* argv[]) {
   iostreams_init();
 
   options::map options;
-  if (!options::parse({{"daemon",options::value::none},
+  if (!options::parse({{"connection_timeout", options::value::any},
+                       {"daemon", options::value::none},
+                       {"log_file", options::value::any},
+                       {"log_request_max_size", options::value::any},
+                       {"max_connections", options::value::any},
+                       {"max_request_size", options::value::any},
+                       {"threads", options::value::any},
                        {"version", options::value::none},
                        {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
       ((argc < 2 || (argc % 4) != 2) && !options.count("version")))
     runtime_failure("Usage: " << argv[0] << " [options] port (model_name model_weblicht_id model_file acknowledgements)*\n"
-                    "Options: --daemon\n"
+                    "Options: --connection_timeout=maximum connection timeout [s] (default 60)\n"
+                    "         --daemon (daemonize after start, supported on Linux only)\n"
+                    "         --log_file=file path (no logging if empty, default morphodita_server.log)\n"
+                    "         --log_request_max_size=max req log size [kB] (0 unlimited, default 64)\n"
+                    "         --max_connections=maximum network connections (default 256)\n"
+                    "         --max_request_size=maximum request size [kB] (default 1024)\n"
+                    "         --threads=threads to use (default 0 means unlimitted)\n"
                     "         --version\n"
                     "         --help");
   if (options.count("version")) {
@@ -77,6 +89,11 @@ int main(int argc, char* argv[]) {
 
   // Process options
   int port = parse_int(argv[1], "port number");
+  int connection_timeout = options.count("connection_timeout") ? parse_int(options["connection_timeout"], "connection timeout") : 60;
+  int log_request_max_size = options.count("log_request_max_size") ? parse_int(options["log_request_max_size"], "log request maximum size") : 64;
+  int max_connections = options.count("max_connections") ? parse_int(options["max_connections"], "maximum connections") : 256;
+  int max_request_size = options.count("max_request_size") ? parse_int(options["max_request_size"], "maximum request size") : 1024;
+  int threads = options.count("threads") ? parse_int(options["threads"], "number of threads") : 0;
 
 #ifndef __linux__
   if (options.count("daemon")) runtime_failure("The --daemon option is currently supported on Linux only!");
@@ -91,9 +108,12 @@ int main(int argc, char* argv[]) {
     runtime_failure("Cannot load specified models!");
 
   // Open log file
-  string log_file_name = string(argv[0]) + ".log";
-  ofstream log_file(log_file_name.c_str(), ofstream::app);
-  if (!log_file) runtime_failure("Cannot open log file '" << log_file_name << "' for writing!");
+  ofstream log_file;
+  string log_file_name = options.count("log_file") ? options["log_file"] : string(argv[0]) + ".log";
+  if (!log_file_name.empty()) {
+    log_file.open(log_file_name.c_str(), ofstream::app);
+    if (!log_file) runtime_failure("Cannot open log file '" << log_file_name << "' for writing!");
+  }
 
   // Daemonize if requested
 #ifdef __linux__
@@ -109,12 +129,13 @@ int main(int argc, char* argv[]) {
 #endif
 
   // Start the server
-  server.set_log_file(&log_file);
-  server.set_max_connections(256);
-  server.set_max_request_body_size(1<<20);
-  server.set_min_generated(32 * (1<<10));
-  server.set_threads(0);
-  server.set_timeout(60);
+  if (!log_file_name.empty())
+    server.set_log_file(&log_file, log_request_max_size << 10);
+  server.set_max_connections(max_connections);
+  server.set_max_request_body_size(max_request_size << 10);
+  server.set_min_generated(32 << 10);
+  server.set_threads(threads);
+  server.set_timeout(connection_timeout);
 
   if (!server.start(&service, port))
     runtime_failure("Cannot start morphodita_server'!");
