@@ -1,27 +1,46 @@
-dist: trusty
-sudo: false
 language: cpp
-matrix:
+jobs:
   include:
     - compiler: gcc
-      env: COMPILER=g++-4.7
-      addons: {apt: {packages: [g++-4.7], sources: [ubuntu-toolchain-r-test]}}
-    - compiler: gcc
-      env: COMPILER=g++-4.8
-      addons: {apt: {packages: [g++-4.8], sources: [ubuntu-toolchain-r-test]}}
-    - compiler: gcc
-      env: COMPILER=g++-4.9
+      env: PLATFORM=linux-gcc CXX=g++-4.9
       addons: {apt: {packages: [g++-4.9], sources: [ubuntu-toolchain-r-test]}}
     - compiler: gcc
-      env: COMPILER=g++-5
+      env: PLATFORM=linux-gcc CXX=g++-5
       addons: {apt: {packages: [g++-5], sources: [ubuntu-toolchain-r-test]}}
     - compiler: gcc
-      env: COMPILER=g++-6
+      env: PLATFORM=linux-gcc CXX=g++-6
       addons: {apt: {packages: [g++-6], sources: [ubuntu-toolchain-r-test]}}
+    - compiler: gcc
+      env: PLATFORM=linux-gcc CXX=g++-7
+      addons: {apt: {packages: [g++-7], sources: [ubuntu-toolchain-r-test]}}
+    - compiler: gcc
+      env: PLATFORM=linux-gcc CXX=g++-8
+      addons: {apt: {packages: [g++-8], sources: [ubuntu-toolchain-r-test]}}
+    - compiler: gcc
+      env: PLATFORM=linux-gcc CXX=g++-9
+      addons: {apt: {packages: [g++-9], sources: [ubuntu-toolchain-r-test]}}
+    - compiler: gcc
+      env: PLATFORM=linux-gcc CXX=g++-10
+      dist: bionic
+      addons: {apt: {packages: [g++-10], sources: [ubuntu-toolchain-r-test]}}
     - compiler: clang
-      env: COMPILER=clang++
+      env: PLATFORM=linux-clang CXX=clang++
+    - os: osx
+      env: PLATFORM=osx-clang CXX=clang++
+    - os: windows
+      env: PLATFORM=win-vs CXX=cl BITS=64
+      install:
+        - choco install make --no-progress -y
+        - choco install python3 --version 3.8.2 --no-progress -y
+        - export PATH=/c/Python38:/c/Python38/Scripts:$PATH
+        - if [ ! -f /c/Python38/python3 ]; then ln -s /c/Python38/python.exe /c/Python38/python3; fi
+
+before_script:
+  - export C_FLAGS='$(treat_warnings_as_errors)'
+
 script:
-  - if test "$COMPILER" = "g++-4.7"; then COMPILER="g++-4.7 -D_GLIBCXX_USE_NANOSLEEP"; fi
-  - CXX=$COMPILER C_FLAGS=-Werror make -k -C src full
-  - CXX=$COMPILER C_FLAGS=-Werror make -k -C tests tagger_bundle
+  - if [ $PLATFORM == win-vs ]; then cmd.exe //C 'C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat' amd64 '&&' make PLATFORM=$PLATFORM -k -C src full; fi
+  - if [ $PLATFORM != win-vs ]; then make -k -C src full; fi
+  - if [ $PLATFORM == win-vs ]; then cmd.exe //C 'C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat' amd64 '&&' make PLATFORM=$PLATFORM -k -C tests tagger_bundle; fi
+  - if [ $PLATFORM != win-vs ]; then make -k -C tests tagger_bundle; fi
   - python3 tests/ascii_only.py
