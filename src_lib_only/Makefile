@@ -17,7 +17,7 @@ morphodita.cpp: $(MERGE) force
 	@$(call echo,>>$@,//)
 	@$(call echo,>>$@,// This file is a bundle of all sources and headers of MorphoDiTa library.)
 	@$(call echo,>>$@,// Comments and copyrights of all individual files are kept.)
-	$(call platform_name,$(MERGE)) ufal::morphodita ../src/ $(patsubst %,%.cpp,$(MORPHODITA_OBJECTS)) >>$@
+	$(MERGE) ufal::morphodita ../src/ $(patsubst %,%.cpp,$(MORPHODITA_OBJECTS)) >>$@
 
 $(MERGE):$(call exe,%):$$(call obj,%)
 	$(call link_exe,$@,$^,$(call win_subsystem,console))
