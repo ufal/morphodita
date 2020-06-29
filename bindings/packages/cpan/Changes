@@ -1,0 +1,40 @@
+Revision history for Ufal-MorphoDiTa
+
+1.9.2.1 [22 Sep 16]
+        Update MorphoDiTa to version 1.9.2.
+
+1.9.1.1 [20 Sep 16]
+        Update MorphoDiTa to version 1.9.1.
+
+1.9.0.0 [not released]
+        Remove the :all export tag.
+
+1.3.0.1 [30 Aug 14]
+        Update MorphoDiTa to version 1.3.0.
+        Add basic tests.
+        Add support for OS X.
+        Silence warnings during compilation.
+
+1.2.0.1 [22 Apr 14]
+        Update MorphoDiTa to version 1.2.0.
+
+1.1.0.1 [09 Apr 14]
+        Update MorphoDiTa to version 1.1.0.
+
+1.0.0.5 [07 Apr 14]
+        Update MorphoDiTa sources to version 1.0.0.
+        Earlier releases contained pre-release of MorphoDiTa.
+
+1.0.0.4 [03 Apr 14]
+        Move documentation to separate pod file.
+        Remove -xc++ option and change --std=c++11 to -std=c++11.
+        Really change AUTHOR to AUTHORS.
+
+1.0.0.3 [02 Apr 14]
+        Specify pod encoding and change AUTHOR to AUTHORS.
+
+1.0.0.2 [02 Apr 14]
+        Fix typo in NAME section of pod documentation.
+
+1.0.0.1 [02 Apr 14]
+        First version bindings for MorphoDiTa 1.0.0.

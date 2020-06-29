@@ -1,0 +1,46 @@
+Ufal-MorphoDiTa
+
+Ufal-MorphoDiTa package is a Perl bindings for MorphoDiTa library
+http://ufal.mff.cuni.cz/morphodita.
+
+In order to compile the package, compiler supporting C++11 is required,
+either g++ 4.9 or newer, or clang++ 3.2 or newer.
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Build.PL
+	./Build
+	./Build install
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Ufal::MorphoDiTa
+
+You can also look for information at:
+
+    RT, CPAN's request tracker (report bugs here)
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Ufal-MorphoDiTa
+
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/Ufal-MorphoDiTa
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/Ufal-MorphoDiTa
+
+    Search CPAN
+        http://search.cpan.org/dist/Ufal-MorphoDiTa/
+
+
+LICENSE AND COPYRIGHT
+
+Copyright 2015 Institute of Formal and Applied Linguistics, Faculty of
+Mathematics and Physics, Charles University in Prague, Czech Republic.
+
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
