@@ -102,8 +102,7 @@ void tag_vertical(istream& is, ostream& os, const tagger& tagger, tokenizer& tok
       tagger.tag(forms, tags, guesser);
 
       for (unsigned i = 0; i < tags.size(); i++) {
-        tagset_converter.convert(tags[i]);
-        derivation.format_derivation(tags[i].lemma);
+        derivation.format_tagged_lemma(tags[i], &tagset_converter);
         os << forms[i] << '\t' << tags[i].lemma << '\t' << tags[i].tag << '\n';
       }
       os << endl;
@@ -124,8 +123,7 @@ void tag_xml(istream& is, ostream& os, const tagger& tagger, tokenizer& tokenize
       tagger.tag(forms, tags, guesser);
 
       for (unsigned i = 0; i < forms.size(); i++) {
-        tagset_converter.convert(tags[i]);
-        derivation.format_derivation(tags[i].lemma);
+        derivation.format_tagged_lemma(tags[i], &tagset_converter);
 
         os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";

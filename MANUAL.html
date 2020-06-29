@@ -207,15 +207,19 @@
       <ul>
       <li><a href="#derivation_formatter_format_derivation">7.12.1. derivation_formatter::format_derivation</a>
       </li>
-      <li><a href="#derivation_formatter_new_none_derivation_formatter">7.12.2. derivation_formatter::new_none_derivation_formatter</a>
+      <li><a href="#derivation_formatter_format_tagged_lemma">7.12.2. derivation_formatter::format_tagged_lemma</a>
       </li>
-      <li><a href="#derivation_formatter_new_root_derivation_formatter">7.12.3. derivation_formatter::new_root_derivation_formatter</a>
+      <li><a href="#derivation_formatter_format_tagged_lemmas">7.12.3. derivation_formatter::format_tagged_lemmas</a>
       </li>
-      <li><a href="#derivation_formatter_new_path_derivation_formatter">7.12.4. derivation_formatter::new_path_derivation_formatter</a>
+      <li><a href="#derivation_formatter_new_none_derivation_formatter">7.12.4. derivation_formatter::new_none_derivation_formatter</a>
       </li>
-      <li><a href="#derivation_formatter_new_tree_derivation_formatter">7.12.5. derivation_formatter::new_tree_derivation_formatter</a>
+      <li><a href="#derivation_formatter_new_root_derivation_formatter">7.12.5. derivation_formatter::new_root_derivation_formatter</a>
       </li>
-      <li><a href="#derivation_formatter_new_derivation_formatter">7.12.6. derivation_formatter::new_derivation_formatter</a>
+      <li><a href="#derivation_formatter_new_path_derivation_formatter">7.12.6. derivation_formatter::new_path_derivation_formatter</a>
+      </li>
+      <li><a href="#derivation_formatter_new_tree_derivation_formatter">7.12.7. derivation_formatter::new_tree_derivation_formatter</a>
+      </li>
+      <li><a href="#derivation_formatter_new_derivation_formatter">7.12.8. derivation_formatter::new_derivation_formatter</a>
       </li>
       </ul>
     </li>
@@ -2756,7 +2760,9 @@ class derivation_formatter {
  public:
   virtual ~derivation_formatter() {}
 
-  virtual void <A HREF="#derivation_formatter_format_derivation">format_derivation</A>(std::string&amp; lemma) const = 0;
+  virtual void <A HREF="#derivation_formatter_format_derivation">format_derivation</A>(std::string&amp; lemma) const;
+  virtual void <A HREF="#derivation_formatter_format_tagged_lemma">format_tagged_lemma</A>(<A HREF="#tagged_lemma">tagged_lemma</A>&amp; tagged_lemma, const <A HREF="#tagset_converter">tagset_converter</A>&amp; converter = nullptr) const = 0;
+  virtual void <A HREF="#derivation_formatter_format_tagged_lemmas">format_tagged_lemmas</A>(std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tagged_lemmas, const <A HREF="#tagset_converter">tagset_converter</A>&amp; converter = nullptr) const = 0;
 
   static <A HREF="#derivation_formatter">derivation_formatter</A>* <A HREF="#derivation_formatter_new_none_derivation_formatter">new_none_derivation_formatter</A>();
   static <A HREF="#derivation_formatter">derivation_formatter</A>* <A HREF="#derivation_formatter_new_root_derivation_formatter">new_root_derivation_formatter</A>(const <A HREF="#derivator">derivator</A>* derinet);
@@ -2776,7 +2782,7 @@ morphological derivation and formats the results using a single string field
 <h3>7.12.1. derivation_formatter::format_derivation</h3>
 
 <pre>
-virtual void format_derivation(std::string&amp; lemma) const = 0;
+virtual void format_derivation(std::string&amp; lemma) const;
 </pre>
 
 <p>
@@ -2784,8 +2790,30 @@ Perform the required morphological derivation and format the result back directl
 in the lemma.
 </p>
 
+<a id="derivation_formatter_format_tagged_lemma" name="derivation_formatter_format_tagged_lemma"></a>
+<h3>7.12.2. derivation_formatter::format_tagged_lemma</h3>
+
+<pre>
+virtual void format_tagged_lemma(<A HREF="#tagged_lemma">tagged_lemma</A>&amp; tagged_lemma, const <A HREF="#tagset_converter">tagset_converter</A>&amp; converter = nullptr) const = 0;
+</pre>
+
+<p>
+Perform the required derivation and store it directly in the <a href="#tagged_lemma"><code>tagged_lemma</code></a>. If a <a href="#tagset_converter"><code>tagset_converter</code></a> is given, it is also applied.
+</p>
+
+<a id="derivation_formatter_format_tagged_lemmas" name="derivation_formatter_format_tagged_lemmas"></a>
+<h3>7.12.3. derivation_formatter::format_tagged_lemmas</h3>
+
+<pre>
+virtual void format_tagged_lemmas(std::vector&lt;<A HREF="#tagged_lemma">tagged_lemma</A>&gt;&amp; tagged_lemmas, const <A HREF="#tagset_converter">tagset_converter</A>&amp; converter = nullptr) const;
+</pre>
+
+<p>
+Perform the required derivation on a list of <a href="#tagged_lemma"><code>tagged_lemma</code></a>s. If a <a href="#tagset_converter"><code>tagset_converter</code></a> is given, it is also applied. Either way, only unique entries are returned.
+</p>
+
 <a id="derivation_formatter_new_none_derivation_formatter" name="derivation_formatter_new_none_derivation_formatter"></a>
-<h3>7.12.2. derivation_formatter::new_none_derivation_formatter</h3>
+<h3>7.12.4. derivation_formatter::new_none_derivation_formatter</h3>
 
 <pre>
 static <A HREF="#derivation_formatter">derivation_formatter</A>* new_none_derivation_formatter();
@@ -2797,7 +2825,7 @@ Return a new <a href="#derivation_formatter"><code>derivation_formatter</code></
 </p>
 
 <a id="derivation_formatter_new_root_derivation_formatter" name="derivation_formatter_new_root_derivation_formatter"></a>
-<h3>7.12.3. derivation_formatter::new_root_derivation_formatter</h3>
+<h3>7.12.5. derivation_formatter::new_root_derivation_formatter</h3>
 
 <pre>
 static <A HREF="#derivation_formatter">derivation_formatter</A>* new_root_derivation_formatter(const <A HREF="#derivator">derivator</A>* derinet);
@@ -2809,7 +2837,7 @@ a lemma by the corresponding root in the derivation tree.
 </p>
 
 <a id="derivation_formatter_new_path_derivation_formatter" name="derivation_formatter_new_path_derivation_formatter"></a>
-<h3>7.12.4. derivation_formatter::new_path_derivation_formatter</h3>
+<h3>7.12.6. derivation_formatter::new_path_derivation_formatter</h3>
 
 <pre>
 static <A HREF="#derivation_formatter">derivation_formatter</A>* new_path_derivation_formatter(const <A HREF="#derivator">derivator</A>* derinet);
@@ -2822,7 +2850,7 @@ lemma is first, followed by its parent, with the root being the last one).
 </p>
 
 <a id="derivation_formatter_new_tree_derivation_formatter" name="derivation_formatter_new_tree_derivation_formatter"></a>
-<h3>7.12.5. derivation_formatter::new_tree_derivation_formatter</h3>
+<h3>7.12.7. derivation_formatter::new_tree_derivation_formatter</h3>
 
 <pre>
 static <A HREF="#derivation_formatter">derivation_formatter</A>* new_tree_derivation_formatter(const <A HREF="#derivator">derivator</A>* derinet);
@@ -2839,7 +2867,7 @@ space (which denotes that the children are complete).
 </p>
 
 <a id="derivation_formatter_new_derivation_formatter" name="derivation_formatter_new_derivation_formatter"></a>
-<h3>7.12.6. derivation_formatter::new_derivation_formatter</h3>
+<h3>7.12.8. derivation_formatter::new_derivation_formatter</h3>
 
 <pre>
 static <A HREF="#derivation_formatter">derivation_formatter</A>* new_derivation_formatter(<A HREF="#string_piece">string_piece</A> name, const <A HREF="#derivator">derivator</A>* derinet);
@@ -3365,6 +3393,18 @@ class Tokenizer {
   static Tokenizer* newGenericTokenizer();
 };
 
+class TagsetConverter {
+ public:
+  static TagsetConverter* newIdentityConverter();
+  static TagsetConverter* newPdtToConll2009Converter();
+  static TagsetConverter* newStripLemmaCommentConverter(const Morpho&amp; morpho);
+  static TagsetConverter* newStripLemmaIdConverter(const Morpho&amp; morpho);
+
+  virtual void convert(TaggedLemma&amp; lemma) const;
+  virtual void convertAnalyzed(TaggedLemmas&amp; lemmas) const;
+  virtual void convertGenerated(TaggedLemmasForms&amp; forms) const;
+};
+
 class Derivator {
  public:
   virtual bool parent(const char* lemma, DerivatedLemma&amp; parent) const;
@@ -3374,6 +3414,8 @@ class Derivator {
 class DerivationFormatter {
  public:
   virtual string formatDerivation(const char* lemma) const;
+  virtual void formatTaggedLemma(TaggedLemma&amp; tagged_lemma, const TagsetConverter* converter = nullptr) const;
+  virtual void formatTaggedLemmas(TaggedLemmas&amp; tagged_lemma, const TagsetConverter* converter = nullptr) const;
 
   static DerivationFormatter* newNoneDerivationFormatter();
   static DerivationFormatter* newRootDerivationFormatter(const Derivator* derivator);
@@ -3410,18 +3452,6 @@ class Tagger {
   virtual void tagAnalyzed(const Forms&amp; forms, const Analyses&amp; analyses, Indices&amp; tags) const;
 
   Tokenizer* newTokenizer() const;
-};
-
-class TagsetConverter {
- public:
-  static TagsetConverter* newIdentityConverter();
-  static TagsetConverter* newPdtToConll2009Converter();
-  static TagsetConverter* newStripLemmaCommentConverter(const Morpho&amp; morpho);
-  static TagsetConverter* newStripLemmaIdConverter(const Morpho&amp; morpho);
-
-  virtual void convert(TaggedLemma&amp; lemma) const;
-  virtual void convertAnalyzed(TaggedLemmas&amp; lemmas) const;
-  virtual void convertGenerated(TaggedLemmasForms&amp; forms) const;
 };
 </pre>
 
@@ -3481,12 +3511,12 @@ module, not through object instance.
 
 <p>
 MorphoDiTa library bindings is available in the
-<a href="http://pypi.python.org/pypi/ufal.morphodita"><code>ufal.morphodita</code></a> module.
+<a href="http://pypi.python.org/pypi/ufal.morphodita"><code>ufal.morphodita</code></a> module,
+with binary wheels provided for Linux, Windows and OS X.
 </p>
 <p>
 The bindings is a straightforward conversion of the <code>C++</code> bindings API.
-In Python 2, strings can be both <code>unicode</code> and UTF-8 encoded <code>str</code>, and the
-library always produces <code>unicode</code>. In Python 3, strings must be only <code>str</code>.
+Only Python &gt;=3 is supported.
 </p>
 
 <a id="contact" name="contact"></a>

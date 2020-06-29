@@ -277,7 +277,9 @@ class derivation_formatter {
  public:
   virtual ~derivation_formatter() {}
 
-  virtual void [format_derivation #derivation_formatter_format_derivation](std::string& lemma) const = 0;
+  virtual void [format_derivation #derivation_formatter_format_derivation](std::string& lemma) const;
+  virtual void [format_tagged_lemma #derivation_formatter_format_tagged_lemma]([tagged_lemma #tagged_lemma]& tagged_lemma, const [tagset_converter #tagset_converter]& converter = nullptr) const = 0;
+  virtual void [format_tagged_lemmas #derivation_formatter_format_tagged_lemmas](std::vector<[tagged_lemma #tagged_lemma]>& tagged_lemmas, const [tagset_converter #tagset_converter]& converter = nullptr) const = 0;
 
   static [derivation_formatter #derivation_formatter]* [new_none_derivation_formatter #derivation_formatter_new_none_derivation_formatter]();
   static [derivation_formatter #derivation_formatter]* [new_root_derivation_formatter #derivation_formatter_new_root_derivation_formatter](const [derivator #derivator]* derinet);
@@ -292,10 +294,20 @@ morphological derivation and formats the results using a single string field
 (i.e., directly in the lemma).
 
 === derivation_formatter::format_derivation ===[derivation_formatter_format_derivation]
-``` virtual void format_derivation(std::string& lemma) const = 0;
+``` virtual void format_derivation(std::string& lemma) const;
 
 Perform the required morphological derivation and format the result back directly
 in the lemma.
+
+=== derivation_formatter::format_tagged_lemma ===[derivation_formatter_format_tagged_lemma]
+``` virtual void format_tagged_lemma([tagged_lemma #tagged_lemma]& tagged_lemma, const [tagset_converter #tagset_converter]& converter = nullptr) const = 0;
+
+Perform the required derivation and store it directly in the [``tagged_lemma`` #tagged_lemma]. If a [``tagset_converter`` #tagset_converter] is given, it is also applied.
+
+=== derivation_formatter::format_tagged_lemmas ===[derivation_formatter_format_tagged_lemmas]
+``` virtual void format_tagged_lemmas(std::vector<[tagged_lemma #tagged_lemma]>& tagged_lemmas, const [tagset_converter #tagset_converter]& converter = nullptr) const;
+
+Perform the required derivation on a list of [``tagged_lemma`` #tagged_lemma]s. If a [``tagset_converter`` #tagset_converter] is given, it is also applied. Either way, only unique entries are returned.
 
 === derivation_formatter::new_none_derivation_formatter ===[derivation_formatter_new_none_derivation_formatter]
 ``` static [derivation_formatter #derivation_formatter]* new_none_derivation_formatter();

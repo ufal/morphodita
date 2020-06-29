@@ -100,6 +100,18 @@ Main Classes
     static Tokenizer* newGenericTokenizer();
   };
 
+  class TagsetConverter {
+   public:
+    static TagsetConverter* newIdentityConverter();
+    static TagsetConverter* newPdtToConll2009Converter();
+    static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
+    static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
+
+    virtual void convert(TaggedLemma& lemma) const;
+    virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
+    virtual void convertGenerated(TaggedLemmasForms& forms) const;
+  };
+
   class Derivator {
    public:
     virtual bool parent(const char* lemma, DerivatedLemma& parent) const;
@@ -109,6 +121,8 @@ Main Classes
   class DerivationFormatter {
    public:
     virtual string formatDerivation(const char* lemma) const;
+    virtual void formatTaggedLemma(TaggedLemma& tagged_lemma, const TagsetConverter* converter = nullptr) const;
+    virtual void formatTaggedLemmas(TaggedLemmas& tagged_lemma, const TagsetConverter* converter = nullptr) const;
 
     static DerivationFormatter* newNoneDerivationFormatter();
     static DerivationFormatter* newRootDerivationFormatter(const Derivator* derivator);
@@ -145,16 +159,4 @@ Main Classes
     virtual void tagAnalyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 
     Tokenizer* newTokenizer() const;
-  };
-
-  class TagsetConverter {
-   public:
-    static TagsetConverter* newIdentityConverter();
-    static TagsetConverter* newPdtToConll2009Converter();
-    static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
-    static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
-
-    virtual void convert(TaggedLemma& lemma) const;
-    virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
-    virtual void convertGenerated(TaggedLemmasForms& forms) const;
   };

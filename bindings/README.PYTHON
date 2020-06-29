@@ -19,11 +19,11 @@ Python Bindings API
 ===================
 
 MorphoDiTa library bindings is available in the ufal.morphodita
-(http://pypi.python.org/pypi/ufal.morphodita) module.
+(http://pypi.python.org/pypi/ufal.morphodita) module, with binary wheels
+provided for Linux, Windows and OS X.
 
-The bindings is a straightforward conversion of the C++ bindings API. In Python
-2, strings can be both unicode and UTF-8 encoded str, and the library always
-produces unicode. In Python 3, strings must be only str.
+The bindings is a straightforward conversion of the C++ bindings API. Only
+Python >=3 is supported.
 
 
 C++ Bindings API
@@ -92,6 +92,18 @@ Main Classes
     static Tokenizer* newGenericTokenizer();
   };
 
+  class TagsetConverter {
+   public:
+    static TagsetConverter* newIdentityConverter();
+    static TagsetConverter* newPdtToConll2009Converter();
+    static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
+    static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
+
+    virtual void convert(TaggedLemma& lemma) const;
+    virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
+    virtual void convertGenerated(TaggedLemmasForms& forms) const;
+  };
+
   class Derivator {
    public:
     virtual bool parent(const char* lemma, DerivatedLemma& parent) const;
@@ -101,6 +113,8 @@ Main Classes
   class DerivationFormatter {
    public:
     virtual string formatDerivation(const char* lemma) const;
+    virtual void formatTaggedLemma(TaggedLemma& tagged_lemma, const TagsetConverter* converter = nullptr) const;
+    virtual void formatTaggedLemmas(TaggedLemmas& tagged_lemma, const TagsetConverter* converter = nullptr) const;
 
     static DerivationFormatter* newNoneDerivationFormatter();
     static DerivationFormatter* newRootDerivationFormatter(const Derivator* derivator);
@@ -137,16 +151,4 @@ Main Classes
     virtual void tagAnalyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 
     Tokenizer* newTokenizer() const;
-  };
-
-  class TagsetConverter {
-   public:
-    static TagsetConverter* newIdentityConverter();
-    static TagsetConverter* newPdtToConll2009Converter();
-    static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
-    static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
-
-    virtual void convert(TaggedLemma& lemma) const;
-    virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
-    virtual void convertGenerated(TaggedLemmasForms& forms) const;
   };

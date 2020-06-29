@@ -129,42 +129,6 @@ class derivator {
   virtual bool children(const char* lemma, std::vector<derivated_lemma>& children) const = 0;
 };
 
-%rename(DerivationFormatter) derivation_formatter;
-%nodefaultctor derivation_formatter;
-class derivation_formatter {
- public:
-  virtual ~derivation_formatter() {}
-
-  %extend {
-    %rename(formatDerivation) format_derivation;
-    std::string format_derivation(const char* lemma) const {
-      std::string derivation(lemma);
-      $self->format_derivation(derivation);
-      return derivation;
-    }
-  }
-
-  %rename(newNoneDerivationFormatter) new_none_derivation_formatter;
-  %newobject new_none_derivation_formatter;
-  static derivation_formatter* new_none_derivation_formatter();
-
-  %rename(newRootDerivationFormatter) new_root_derivation_formatter;
-  %newobject new_root_derivation_formatter;
-  static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
-
-  %rename(newPathDerivationFormatter) new_path_derivation_formatter;
-  %newobject new_path_derivation_formatter;
-  static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
-
-  %rename(newTreeDerivationFormatter) new_tree_derivation_formatter;
-  %newobject new_tree_derivation_formatter;
-  static derivation_formatter* new_tree_derivation_formatter(const derivator* derinet);
-
-  %rename(newDerivationFormatter) new_derivation_formatter;
-  %newobject new_derivation_formatter;
-  static derivation_formatter* new_derivation_formatter(const char* name, const derivator* derinet);
-};
-
 %rename(Morpho) morpho;
 %nodefaultctor morpho;
 class morpho {
@@ -271,3 +235,46 @@ class tagset_converter {
   %newobject new_strip_lemma_id_converter;
   static tagset_converter* new_strip_lemma_id_converter(const morpho& dictionary);
 };
+
+%rename(DerivationFormatter) derivation_formatter;
+%nodefaultctor derivation_formatter;
+class derivation_formatter {
+ public:
+  virtual ~derivation_formatter() {}
+
+  %extend {
+    %rename(formatDerivation) format_derivation;
+    std::string format_derivation(const char* lemma) const {
+      std::string derivation(lemma);
+      $self->format_derivation(derivation);
+      return derivation;
+    }
+  }
+
+  %rename(formatTaggedLemma) format_tagged_lemma;
+  virtual void format_tagged_lemma(tagged_lemma& lemma, const tagset_converter* converter = nullptr) const = 0;
+
+  %rename(formatTaggedLemmas) format_tagged_lemmas;
+  virtual void format_tagged_lemmas(std::vector<tagged_lemma>& lemmas, const tagset_converter* converter = nullptr) const;
+
+  %rename(newNoneDerivationFormatter) new_none_derivation_formatter;
+  %newobject new_none_derivation_formatter;
+  static derivation_formatter* new_none_derivation_formatter();
+
+  %rename(newRootDerivationFormatter) new_root_derivation_formatter;
+  %newobject new_root_derivation_formatter;
+  static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
+
+  %rename(newPathDerivationFormatter) new_path_derivation_formatter;
+  %newobject new_path_derivation_formatter;
+  static derivation_formatter* new_path_derivation_formatter(const derivator* derinet);
+
+  %rename(newTreeDerivationFormatter) new_tree_derivation_formatter;
+  %newobject new_tree_derivation_formatter;
+  static derivation_formatter* new_tree_derivation_formatter(const derivator* derinet);
+
+  %rename(newDerivationFormatter) new_derivation_formatter;
+  %newobject new_derivation_formatter;
+  static derivation_formatter* new_derivation_formatter(const char* name, const derivator* derinet);
+};
+

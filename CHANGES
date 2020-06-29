@@ -4,6 +4,8 @@ Version 1.9.3-devel
 - Add explicit GUESSER_UNSPECIFIED guesser mode already used by tagger.
 - Fix unaligned pointer access and other UndefinedBehaviourSanitizer findings.
 - Fix bug in tag_filter incorrectly matching negates sets of 2+ characters.
+- Add methods running tagset_converter during derivation_formatter.
+  This allows correct handling of their interactions.
 
 
 Version 1.9.2 [22 Sep 16]

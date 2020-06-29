@@ -189,8 +189,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
       tagger->tag(forms, tags, guesser);
 
       for (unsigned i = 0; i < forms.size(); i++) {
-        converter->convert(tags[i]);
-        derivation->format_derivation(tags[i].lemma);
+        derivation->format_tagged_lemma(tags[i], converter.get());
         switch (output.mode) {
           case VERTICAL:
             json.value(sp(forms[i]), true).value("\t", true)
@@ -266,8 +265,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
 
       for (unsigned i = 0; i < forms.size(); i++) {
         morpho->analyze(forms[i], guesser, tags);
-        converter->convert_analyzed(tags);
-        for (auto&& tag : tags) derivation->format_derivation(tag.lemma);
+        derivation->format_tagged_lemmas(tags, converter.get());
         switch (output.mode) {
           case VERTICAL:
             json.value(sp(forms[i]), true);

@@ -105,11 +105,10 @@ void analyze_vertical(istream& is, ostream& os, const morpho& dictionary, bool u
     while (tokenizer.next_sentence(&forms, nullptr)) {
       for (auto&& form : forms) {
         dictionary.analyze(form, use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
-        tagset_converter.convert_analyzed(lemmas);
+        derivation.format_tagged_lemmas(lemmas, &tagset_converter);
 
         os << form;
         for (auto&& lemma : lemmas) {
-          derivation.format_derivation(lemma.lemma);
           os << '\t' << lemma.lemma << '\t' << lemma.tag;
         }
         os << '\n';
@@ -131,13 +130,12 @@ void analyze_xml(istream& is, ostream& os, const morpho& dictionary, bool use_gu
     while (tokenizer.next_sentence(&forms, nullptr))
       for (unsigned i = 0; i < forms.size(); i++) {
         dictionary.analyze(forms[i], use_guesser ? morpho::GUESSER : morpho::NO_GUESSER, lemmas);
-        tagset_converter.convert_analyzed(lemmas);
+        derivation.format_tagged_lemmas(lemmas, &tagset_converter);
 
         os << xml_encoded(string_piece(unprinted, forms[i].str - unprinted));
         if (!i) os << "<sentence>";
         os << "<token>";
         for (auto&& lemma : lemmas) {
-          derivation.format_derivation(lemma.lemma);
           os << "<analysis lemma=\"" << xml_encoded(lemma.lemma, true) << "\" tag=\"" << xml_encoded(lemma.tag, true) << "\"/>";
         }
         os << xml_encoded(forms[i]) << "</token>";

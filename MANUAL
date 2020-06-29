@@ -1956,7 +1956,9 @@ Class derivation_formatter
    public:
     virtual ~derivation_formatter() {}
 
-    virtual void format_derivation(std::string& lemma) const = 0;
+    virtual void format_derivation(std::string& lemma) const;
+    virtual void format_tagged_lemma(tagged_lemma& tagged_lemma, const tagset_converter& converter = nullptr) const = 0;
+    virtual void format_tagged_lemmas(std::vector<tagged_lemma>& tagged_lemmas, const tagset_converter& converter = nullptr) const = 0;
 
     static derivation_formatter* new_none_derivation_formatter();
     static derivation_formatter* new_root_derivation_formatter(const derivator* derinet);
@@ -1972,10 +1974,29 @@ formats the results using a single string field (i.e., directly in the lemma).
 derivation_formatter::format_derivation
 ---------------------------------------
 
-  virtual void format_derivation(std::string& lemma) const = 0;
+  virtual void format_derivation(std::string& lemma) const;
 
 Perform the required morphological derivation and format the result back
 directly in the lemma.
+
+
+derivation_formatter::format_tagged_lemma
+-----------------------------------------
+
+  virtual void format_tagged_lemma(tagged_lemma& tagged_lemma, const tagset_converter& converter = nullptr) const = 0;
+
+Perform the required derivation and store it directly in the tagged_lemma. If a
+tagset_converter is given, it is also applied.
+
+
+derivation_formatter::format_tagged_lemmas
+------------------------------------------
+
+  virtual void format_tagged_lemmas(std::vector<tagged_lemma>& tagged_lemmas, const tagset_converter& converter = nullptr) const;
+
+Perform the required derivation on a list of tagged_lemmas. If a
+tagset_converter is given, it is also applied. Either way, only unique entries
+are returned.
 
 
 derivation_formatter::new_none_derivation_formatter
@@ -2436,6 +2457,18 @@ Main Classes
     static Tokenizer* newGenericTokenizer();
   };
 
+  class TagsetConverter {
+   public:
+    static TagsetConverter* newIdentityConverter();
+    static TagsetConverter* newPdtToConll2009Converter();
+    static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
+    static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
+
+    virtual void convert(TaggedLemma& lemma) const;
+    virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
+    virtual void convertGenerated(TaggedLemmasForms& forms) const;
+  };
+
   class Derivator {
    public:
     virtual bool parent(const char* lemma, DerivatedLemma& parent) const;
@@ -2445,6 +2478,8 @@ Main Classes
   class DerivationFormatter {
    public:
     virtual string formatDerivation(const char* lemma) const;
+    virtual void formatTaggedLemma(TaggedLemma& tagged_lemma, const TagsetConverter* converter = nullptr) const;
+    virtual void formatTaggedLemmas(TaggedLemmas& tagged_lemma, const TagsetConverter* converter = nullptr) const;
 
     static DerivationFormatter* newNoneDerivationFormatter();
     static DerivationFormatter* newRootDerivationFormatter(const Derivator* derivator);
@@ -2481,18 +2516,6 @@ Main Classes
     virtual void tagAnalyzed(const Forms& forms, const Analyses& analyses, Indices& tags) const;
 
     Tokenizer* newTokenizer() const;
-  };
-
-  class TagsetConverter {
-   public:
-    static TagsetConverter* newIdentityConverter();
-    static TagsetConverter* newPdtToConll2009Converter();
-    static TagsetConverter* newStripLemmaCommentConverter(const Morpho& morpho);
-    static TagsetConverter* newStripLemmaIdConverter(const Morpho& morpho);
-
-    virtual void convert(TaggedLemma& lemma) const;
-    virtual void convertAnalyzed(TaggedLemmas& lemmas) const;
-    virtual void convertGenerated(TaggedLemmasForms& forms) const;
   };
 
 
@@ -2542,11 +2565,11 @@ Python Bindings
 ---------------
 
 MorphoDiTa library bindings is available in the ufal.morphodita
-(http://pypi.python.org/pypi/ufal.morphodita) module.
+(http://pypi.python.org/pypi/ufal.morphodita) module, with binary wheels
+provided for Linux, Windows and OS X.
 
-The bindings is a straightforward conversion of the C++ bindings API. In Python
-2, strings can be both unicode and UTF-8 encoded str, and the library always
-produces unicode. In Python 3, strings must be only str.
+The bindings is a straightforward conversion of the C++ bindings API. Only
+Python >=3 is supported.
 
 
 Contact
