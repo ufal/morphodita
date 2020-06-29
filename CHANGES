@@ -1,5 +1,5 @@
-Version 1.9.3-devel
--------------------
+Version 1.10.1 [29 Jun 20]
+--------------------------
 - Allow overriding path to Java library in the bindings.
 - Document statistical guesser training using train_guesser binary.
 - Improve the GRU tokenizer.

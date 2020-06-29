@@ -1,5 +1,9 @@
 Revision history for ufal.morphodita
 
+1.10.1.1 [29 Jun 20]
+         Update MorphoDiTa to version 1.10.1.
+         Add binary wheels for Linux, Windows and OS X.
+
 1.9.2.3 [18 May 19]
         Improve compilation on OS X.
 

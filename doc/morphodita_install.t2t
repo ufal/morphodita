@@ -19,7 +19,7 @@ and in the repository itself.
 
 == Requirements ==[requirements]
 
-- ``G++ 4.7`` or newer, ``clang 3.2`` or newer, Visual C++ 2015 or newer
+- ``G++ 4.9`` or newer, ``clang 3.2`` or newer, Visual C++ 2015 or newer
 - ``make``
 - ``SWIG`` or newer for language bindings other than ``C++``
 
