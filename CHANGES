@@ -1,3 +1,7 @@
+Version 1.10.2-devel
+--------------------
+
+
 Version 1.10.1 [29 Jun 20]
 --------------------------
 - Allow overriding path to Java library in the bindings.
