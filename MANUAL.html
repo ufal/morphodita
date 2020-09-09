@@ -79,59 +79,75 @@
       </li>
       </ul>
     </li>
-    <li><a href="#english-morphium-wsj">5.2. English MorphoDiTa Models</a>
+    <li><a href="#slovak-morfflex-pdt">5.2. Slovak MorphoDiTa Models</a>
       <ul>
-      <li><a href="#english-morphium-wsj_download">5.2.1. Download</a>
+      <li><a href="#slovak-morfflex-pdt_download">5.2.1. Download</a>
       </li>
-      <li><a href="#english-morphium-wsj_acknowledgements">5.2.2. Acknowledgements</a>
+      <li><a href="#slovak-morfflex-pdt_acknowledgements">5.2.2. Acknowledgements</a>
       </li>
-      <li><a href="#english-morphium-wsj_morphological_system">5.2.3. English Morphological System</a>
+      <li><a href="#slovak_morphological_system">5.2.3. Slovak Morphological System</a>
       </li>
-      <li><a href="#english-morphium-wsj_model">5.2.4. English Model</a>
+      <li><a href="#slovak-morfflex-pdt_model">5.2.4. Main Slovak Model</a>
       </li>
-      <li><a href="#english-morphium-wsj_no_negations_variant">5.2.5. No Negations Variant</a>
+      <li><a href="#slovak-morfflex-pdt_pos_variant">5.2.5. Part of Speech Only Variant</a>
       </li>
-      <li><a href="#english-morphium-wsj_changes">5.2.6. English Model Changes</a>
+      <li><a href="#slovak-morfflex-pdt_no_dia_variant">5.2.6. No Diacritical Marks Variant</a>
       </li>
       </ul>
     </li>
-    <li><a href="#run_tagger">5.3. Running the Tagger</a>
+    <li><a href="#english-morphium-wsj">5.3. English MorphoDiTa Models</a>
       <ul>
-      <li><a href="#tagger_input_formats">5.3.1. Input Formats</a>
+      <li><a href="#english-morphium-wsj_download">5.3.1. Download</a>
       </li>
-      <li><a href="#tagger_tagset_conversion">5.3.2. Tag Set Conversion</a>
+      <li><a href="#english-morphium-wsj_acknowledgements">5.3.2. Acknowledgements</a>
       </li>
-      <li><a href="#tagger_derivation">5.3.3. Morphological Derivation</a>
+      <li><a href="#english-morphium-wsj_morphological_system">5.3.3. English Morphological System</a>
       </li>
-      <li><a href="#tagger_morpho_guesser">5.3.4. Morphological Guesser</a>
+      <li><a href="#english-morphium-wsj_model">5.3.4. English Model</a>
       </li>
-      <li><a href="#tagger_output_formats">5.3.5. Output Formats</a>
+      <li><a href="#english-morphium-wsj_no_negations_variant">5.3.5. No Negations Variant</a>
+      </li>
+      <li><a href="#english-morphium-wsj_changes">5.3.6. English Model Changes</a>
       </li>
       </ul>
     </li>
-    <li><a href="#running_morphology">5.4. Running the Morphology</a>
+    <li><a href="#run_tagger">5.4. Running the Tagger</a>
       <ul>
-      <li><a href="#run_morpho_analyze">5.4.1. Morphological Analysis</a>
+      <li><a href="#tagger_input_formats">5.4.1. Input Formats</a>
       </li>
-      <li><a href="#run_morpho_generate">5.4.2. Morphological Generation</a>
+      <li><a href="#tagger_tagset_conversion">5.4.2. Tag Set Conversion</a>
       </li>
-      <li><a href="#run_morpho_cli">5.4.3. Interactive Morphological Analysis and Generation</a>
+      <li><a href="#tagger_derivation">5.4.3. Morphological Derivation</a>
+      </li>
+      <li><a href="#tagger_morpho_guesser">5.4.4. Morphological Guesser</a>
+      </li>
+      <li><a href="#tagger_output_formats">5.4.5. Output Formats</a>
       </li>
       </ul>
     </li>
-    <li><a href="#run_tokenizer">5.5. Running the Tokenizer</a>
+    <li><a href="#running_morphology">5.5. Running the Morphology</a>
       <ul>
-      <li><a href="#run_tokenizer_output_formats">5.5.1. Output Formats</a>
+      <li><a href="#run_morpho_analyze">5.5.1. Morphological Analysis</a>
+      </li>
+      <li><a href="#run_morpho_generate">5.5.2. Morphological Generation</a>
+      </li>
+      <li><a href="#run_morpho_cli">5.5.3. Interactive Morphological Analysis and Generation</a>
       </li>
       </ul>
     </li>
-    <li><a href="#rest_server">5.6. Running REST Server</a>
-    </li>
-    <li><a href="#custom_models">5.7. Custom Morphological and Tagging Models</a>
+    <li><a href="#run_tokenizer">5.6. Running the Tokenizer</a>
       <ul>
-      <li><a href="#custom_morphological_models">5.7.1. Custom Morphological Models</a>
+      <li><a href="#run_tokenizer_output_formats">5.6.1. Output Formats</a>
       </li>
-      <li><a href="#custom_tagging_models">5.7.2. Custom Tagging Models</a>
+      </ul>
+    </li>
+    <li><a href="#rest_server">5.7. Running REST Server</a>
+    </li>
+    <li><a href="#custom_models">5.8. Custom Morphological and Tagging Models</a>
+      <ul>
+      <li><a href="#custom_morphological_models">5.8.1. Custom Morphological Models</a>
+      </li>
+      <li><a href="#custom_tagging_models">5.8.2. Custom Tagging Models</a>
       </li>
       </ul>
     </li>
@@ -386,6 +402,8 @@ Currently the following language models are available:
 
 <ul>
 <li>Czech: <a href="http://hdl.handle.net/11234/1-1836">czech-morfflex-pdt-161115</a> (requires MorphoDiTa 1.9, <a href="http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt">documentation</a>); older versions: <a href="http://hdl.handle.net/11234/1-1674">czech-morfflex-pdt-160310</a> (<a href="http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt_changes">documentation</a>), <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1">czech-morfflex-pdt-131112</a> (<a href="http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt_changes">documentation</a>)
+</li>
+<li>Slovak: <a href="http://hdl.handle.net/11234/1-3278">slovak-morfflex-pdt-170914</a> (requires MorphoDiTa 1.9, <a href="http://ufal.mff.cuni.cz/morphodita/users-manual#slovak-morfflex-pdt">documentation</a>)
 </li>
 <li>English: <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0">english-morphium-wsj-140407</a> (<a href="http://ufal.mff.cuni.cz/morphodita/users-manual#english-morphium-wsj">documentation</a>)
 </li>
@@ -882,8 +900,191 @@ anymore.
 </dd>
 </dl>
 
+<a id="slovak-morfflex-pdt" name="slovak-morfflex-pdt"></a>
+<h2>5.2. Slovak MorphoDiTa Models</h2>
+
+<p>
+Slovak models are distributed under the
+<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA</a> licence.
+The Slovak morphology uses the
+<a href="http://hdl.handle.net/11234/1-3277">MorfFlex SK 170914</a>
+Slovak morphological dictionary and the Slovak tagger is trained on
+automatically translated <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a>.
+Slovak models work in MorphoDiTa version 1.9 or later.
+</p>
+<p>
+Apart from MorfFlex SK dictionary, a statistical guesser is implemented and can
+be optionally used when performing morphological analysis.
+</p>
+<p>
+Slovak models are versioned according to the version of the MorfFlex SK
+morphological dictionary used, the version format is <code>YYMMDD</code>, where <code>YY</code>,
+<code>MM</code> and <code>DD</code> are two-digit representation of year, month and day,
+respectively. The latest version is 170914.
+</p>
+
+<a id="slovak-morfflex-pdt_download" name="slovak-morfflex-pdt_download"></a>
+<h3>5.2.1. Download</h3>
+
+<p>
+The latest version 170914 of the Slovak MorphoDiTa models can be downloaded
+from <a href="http://hdl.handle.net/11234/1-3278">LINDAT/CLARIN repository</a>.
+</p>
+
+<a id="slovak-morfflex-pdt_acknowledgements" name="slovak-morfflex-pdt_acknowledgements"></a>
+<h3>5.2.2. Acknowledgements</h3>
+
+<p>
+This work has also been supported by the LINDAT/CLARIAH-CZ Research
+Infrastructure (<a href="https://lindat.cz">https://lindat.cz</a>), supported by the Ministry of Education,
+Youth and Sports of the Czech Republic (Project No. <i>LM2018101</i>).
+It has also been using language resources developed and stored and
+distributed by the LINDAT/CLARIN project of the Ministry of Education of the
+Czech Republic (project <i>LM2015071</i>).
+</p>
+<p>
+The Czech morphological system was devised by Jan Hajič.
+</p>
+<p>
+The MorfFlex SK dictionary was created by Jan Hajič and Jan Hric.
+</p>
+<p>
+The tagger algorithm and feature set research was supported by the projects
+<i>MSM0021620838</i> and <i>LC536</i> of Ministry of Education, Youth and Sports of the Czech Republic,
+<i>GA405/09/0278</i> of the Grant Agency of the Czech Republic and <i>1ET101120503</i> of
+Academy of Sciences of the Czech Republic. The research was performed by
+Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
+</p>
+<p>
+The tagger is trained on morphological layer of Prague Dependency Treebank PDT
+3.0, which was supported by the projects <i>LM2010013</i>, <i>LC536</i>,
+<i>LN00A063</i> and <i>MSM0021620838</i> of Ministry of Education, Youth and Sports
+of the Czech Republic, and developed by Martin Buben, Jan Hajič, Jiří Hana,
+Hana Hanová, Barbora Hladká, Emil Jeřábek, Lenka Kebortová, Kristýna Kupková,
+Pavel Květoň, Jiří Mírovský, Andrea Pfimpfrová, Jan Štěpánek and Daniel Zeman.
+</p>
+
+<a id="slovak-morfflex-pdt_publications" name="slovak-morfflex-pdt_publications"></a>
+<h4>5.2.2.1. Publications</h4>
+
+<ul>
+<li>(Hajič 2004) Jan Hajič. <i><a href="http://books.google.cz/books?id=sB63AAAACAAJ">Disambiguation of Rich Inflection: Computational Morphology of Czech.</a></i> Karolinum Press (2004).
+<p></p>
+</li>
+<li>(Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. <i><a href="http://aclweb.org/anthology//E/E09/E09-1087.pdf">Semi-Supervised Training for the Averaged Perceptron POS Tagger.</a></i> In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
+<p></p>
+</li>
+<li>(Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan. <i><a href="http://www.aclweb.org/anthology/P/P14/P14-5003.pdf">Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity Recognition.</a></i> In Proceedings of 52nd Annual Meeting of the Association for Computational Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014. Association for Computational Linguistics.
+</li>
+</ul>
+
+<a id="slovak_morphological_system" name="slovak_morphological_system"></a>
+<h3>5.2.3. Slovak Morphological System</h3>
+
+<p>
+In the Slovak language, MorphoDiTa uses the
+<a href="#czech_morphological_system">same morphological system as Czech</a>.
+</p>
+
+<a id="slovak-morfflex-pdt_model" name="slovak-morfflex-pdt_model"></a>
+<h3>5.2.4. Main Slovak Model</h3>
+
+<p>
+The main Slovak model contains the following files:
+</p>
+
+<dl>
+<dt><code>slovak-morfflex-170914.dict</code></dt><dd>
+  Morphological dictionary based on the Jan Hajič's (<a href="http://books.google.cz/books?id=sB63AAAACAAJ">Hajič 2004</a>)
+  system with PDT tag set created from
+  <a href="http://hdl.handle.net/11234/1-3277">MorfFlex SK 170914</a> morphological dictionary.
+<p></p>
+</dd>
+<dt><code>slovak-morfflex-pdt-170914.tagger</code></dt><dd>
+  Tagger trained on the training portion
+  of automatically translated <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> using
+  the <code>neopren</code> feature set. It contains the <code>slovak-morfflex-170914.dict</code>
+  morphological dictionary. and reaches 92.8% tag accuracy, 96.3% lemma
+  accuracy and 92.0% overall accuracy on
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> etest data (whose morphological tags and
+  lemmas were remapped using the <code>slovak-morfflex-170914.dict</code> dictionary).
+  Model speed: ~5k words/s, model size: 17MB.
+</dd>
+</dl>
+
+<a id="slovak-morfflex-pdt_pos_variant" name="slovak-morfflex-pdt_pos_variant"></a>
+<h3>5.2.5. Part of Speech Only Variant</h3>
+
+<p>
+The PDT tag set used by the main Slovak model is very fine-grained. In many
+situations, only the part of speech tags would be sufficient. Therefore, we
+provide a variant of the model, denoted as <code>pos_only</code>, where only the first
+two characters of the fifteen-letter tags are used, representing the part of
+speech and detailed part of speech, respectively. There are 67 such two-letter tags.
+</p>
+
+<dl>
+<dt><code>slovak-morfflex-170914-pos_only.dict</code></dt><dd>
+  A variant of `slovak-morfflex-170914.dict`, where only the first two tag
+  characters are used.
+<p></p>
+</dd>
+<dt><code>slovak-morfflex-pdt-170914-pos_only.tagger</code></dt><dd>
+  Very fast variant of <code>slovak-morfflex-170914.tagger</code> predicting
+  only two-character tags. It reaches 98.3% tag accuracy, 97.4% lemma
+  accuracy and 96.8% overall accuracy on <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a>
+  etest data (which morphological tags and lemmas were remapped using the
+  <code>slovak-morfflex-170914-pos_only.dict</code> dictionary).
+  Model speed: ~200k words/s, model size: 4MB.
+</dd>
+</dl>
+
+<a id="slovak-morfflex-pdt_no_dia_variant" name="slovak-morfflex-pdt_no_dia_variant"></a>
+<h3>5.2.6. No Diacritical Marks Variant</h3>
+
+<p>
+Sometimes the text to be analyzed does not contain diacritical marks.
+We therefore provide variants of the morphological dictionary and tagger
+for this purpose &ndash; morphological analysis, morphological generation and
+tagging employ forms without diacritical marks. Note that the lemmas do
+have diacritical marks.
+</p>
+<p>
+We provide the <code>no_dia</code> variants for all four models described above:
+</p>
+
+<dl>
+<dt><code>slovak-morfflex-170914-no_dia.dict</code></dt><dd>
+  No diacritical marks variant of <code>slovak-morfflex-170914.dict</code>.
+<p></p>
+</dd>
+<dt><code>slovak-morfflex-pdt-170914-no_dia.tagger</code></dt><dd>
+  No diacritical marks variant of <code>slovak-morfflex-170914.tagger</code>.
+  It reaches 91.4% tag
+  accuracy, 92.8% lemma accuracy and 89.0% overall accuracy on
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> etest data (which morphological tags and lemmas
+  were remapped using the <code>slovak-morfflex-170914-no_dia.dict</code> dictionary)
+  with diacritical marks removed.
+  Model speed: ~5k words/s, model size: 18MB.
+<p></p>
+</dd>
+<dt><code>slovak-morfflex-170914-no_dia-pos_only.dict</code></dt><dd>
+  No diacritical marks variant of <code>slovak-morfflex-170914-pos_only.dict</code>.
+<p></p>
+</dd>
+<dt><code>slovak-morfflex-pdt-170914-no_dia-pos_only.tagger</code></dt><dd>
+  No diacritical marks variant of <code>slovak-morfflex-170914-pos_only.tagger</code>.
+  It reaches 97.5% tag
+  accuracy, 93.9% lemma accuracy and 93.2% overall accuracy on
+  <a href="http://ufal.mff.cuni.cz/pdt3.0">PDT 3.0</a> etest data (which morphological tags and lemmas
+  were remapped using the <code>slovak-morfflex-170914-no_dia-pos_only.dict</code> dictionary)
+  with diacritical marks removed.
+  Model speed: ~200k words/s, model size: 7MB.
+</dd>
+</dl>
+
 <a id="english-morphium-wsj" name="english-morphium-wsj"></a>
-<h2>5.2. English MorphoDiTa Models</h2>
+<h2>5.3. English MorphoDiTa Models</h2>
 
 <p style="margin-bottom:0">
 English models are created using the following data:
@@ -916,7 +1117,7 @@ representation of year, month and day, respectively. The latest version is
 </p>
 
 <a id="english-morphium-wsj_download" name="english-morphium-wsj_download"></a>
-<h3>5.2.1. Download</h3>
+<h3>5.3.1. Download</h3>
 
 <p>
 The latest version 140407 of the English MorphoDiTa models can be downloaded
@@ -924,7 +1125,7 @@ from <a href="http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0">LINDAT/CLARI
 </p>
 
 <a id="english-morphium-wsj_acknowledgements" name="english-morphium-wsj_acknowledgements"></a>
-<h3>5.2.2. Acknowledgements</h3>
+<h3>5.3.2. Acknowledgements</h3>
 
 <p>
 This work has been using language resources developed and/or stored and/or
@@ -950,7 +1151,7 @@ Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
 </p>
 
 <a id="englich-morphium-wsj_publications" name="englich-morphium-wsj_publications"></a>
-<h4>5.2.2.1. Publications</h4>
+<h4>5.3.2.1. Publications</h4>
 
 <ul>
 <li>(Popel 2009) Martin Popel. <i><a href="http://ufal.mff.cuni.cz/~popel/papers/master_thesis.pdf">Ways to Improve the Quality of English-Czech Machine Translation.</a></i> Master Thesis at Institute of Formal and Applied Linguistics, Faculty of Mathematics and Physics, Charles University in Prague (2009).
@@ -967,7 +1168,7 @@ Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
 </ul>
 
 <a id="english-morphium-wsj_morphological_system" name="english-morphium-wsj_morphological_system"></a>
-<h3>5.2.3. English Morphological System</h3>
+<h3>5.3.3. English Morphological System</h3>
 
 <p style="margin-bottom:0">
 The English morphology uses standard Penn Treebank POS tags. Nevertheless,
@@ -993,7 +1194,7 @@ to generate all forms without any negative prefix by appending <code>+</code> af
 </p>
 
 <a id="english-morphium-wsj_model" name="english-morphium-wsj_model"></a>
-<h3>5.2.4. English Model</h3>
+<h3>5.3.4. English Model</h3>
 
 <p>
 The English model contains the following files:
@@ -1018,7 +1219,7 @@ The English model contains the following files:
 </dl>
 
 <a id="english-morphium-wsj_no_negations_variant" name="english-morphium-wsj_no_negations_variant"></a>
-<h3>5.2.5. No Negations Variant</h3>
+<h3>5.3.5. No Negations Variant</h3>
 
 <p>
 Stripping of negative prefixes (or handling the lemmas with negative prefixes
@@ -1048,7 +1249,7 @@ from lemmas.
 </dl>
 
 <a id="english-morphium-wsj_changes" name="english-morphium-wsj_changes"></a>
-<h3>5.2.6. English Model Changes</h3>
+<h3>5.3.6. English Model Changes</h3>
 
 <dl>
 <dt><code>english-morphium-140407</code> and <code>english-morphium-wsj-140407</code> (require MorphoDiTa 1.1 or later)</dt><dd>
@@ -1061,7 +1262,7 @@ from lemmas.
 </dl>
 
 <a id="run_tagger" name="run_tagger"></a>
-<h2>5.3. Running the Tagger</h2>
+<h2>5.4. Running the Tagger</h2>
 
 <p style="margin-bottom:0">
 Probably the most common usage of MorphoDita is running a tagger to tag your data using
@@ -1095,7 +1296,7 @@ Options: --input=untokenized|vertical
 </pre>
 
 <a id="tagger_input_formats" name="tagger_input_formats"></a>
-<h3>5.3.1. Input Formats</h3>
+<h3>5.4.1. Input Formats</h3>
 
 <p style="margin-bottom:0">
 The input format is specified using the <code>--input</code> option. Currently supported
@@ -1111,7 +1312,7 @@ input formats are:
 </ul>
 
 <a id="tagger_tagset_conversion" name="tagger_tagset_conversion"></a>
-<h3>5.3.2. Tag Set Conversion</h3>
+<h3>5.4.2. Tag Set Conversion</h3>
 
 <p style="margin-bottom:0">
 Some tag sets can be converted to different ones. Currently supported tag set
@@ -1127,7 +1328,7 @@ conversions are:
 </ul>
 
 <a id="tagger_derivation" name="tagger_derivation"></a>
-<h3>5.3.3. Morphological Derivation</h3>
+<h3>5.4.3. Morphological Derivation</h3>
 
 <p style="margin-bottom:0">
 If the morphological model includes a morphological derivator, some morphological
@@ -1150,7 +1351,7 @@ derivation operation may be performed on lemmas:
 </ul>
 
 <a id="tagger_morpho_guesser" name="tagger_morpho_guesser"></a>
-<h3>5.3.4. Morphological Guesser</h3>
+<h3>5.4.4. Morphological Guesser</h3>
 
 <p>
 By default, every tagger model uses the morphological guesser settings employed
@@ -1159,7 +1360,7 @@ overridden by the <code>guesser</code> parameter.
 </p>
 
 <a id="tagger_output_formats" name="tagger_output_formats"></a>
-<h3>5.3.5. Output Formats</h3>
+<h3>5.4.5. Output Formats</h3>
 
 <p style="margin-bottom:0">
 The output format is specified using the <code>--output</code> option. Currently
@@ -1209,7 +1410,7 @@ těší	těšit_:T	VB-S---3P-AA---
 </ul>
 
 <a id="running_morphology" name="running_morphology"></a>
-<h2>5.4. Running the Morphology</h2>
+<h2>5.5. Running the Morphology</h2>
 
 <p>
 There are multiple commands performing morphological tasks.
@@ -1223,7 +1424,7 @@ but is designed to be used interactively and produces more human-readable output
 </p>
 
 <a id="run_morpho_analyze" name="run_morpho_analyze"></a>
-<h3>5.4.1. Morphological Analysis</h3>
+<h3>5.5.1. Morphological Analysis</h3>
 
 <p style="margin-bottom:0">
 The morphological analysis can be performed by running
@@ -1261,7 +1462,7 @@ Options: --input=untokenized|vertical
 </pre>
 
 <a id="run_morpho_analyze_input_formats" name="run_morpho_analyze_input_formats"></a>
-<h4>5.4.1.1. Input Formats</h4>
+<h4>5.5.1.1. Input Formats</h4>
 
 <p style="margin-bottom:0">
 The input format is specified using the <code>--input</code> option. Currently supported
@@ -1283,7 +1484,7 @@ by an empty line).
 </p>
 
 <a id="run_morpho_analyze_tagset_conversion" name="run_morpho_analyze_tagset_conversion"></a>
-<h4>5.4.1.2. Tag Set Conversion</h4>
+<h4>5.5.1.2. Tag Set Conversion</h4>
 
 <p style="margin-bottom:0">
 Some tag sets can be converted to different ones. Currently supported tag set
@@ -1299,7 +1500,7 @@ conversions are:
 </ul>
 
 <a id="run_morpho_analyze_derivation" name="run_morpho_analyze_derivation"></a>
-<h4>5.4.1.3. Morphological Derivation</h4>
+<h4>5.5.1.3. Morphological Derivation</h4>
 
 <p style="margin-bottom:0">
 If the morphological model includes a morphological derivator, some morphological
@@ -1322,7 +1523,7 @@ derivation operation may be performed on lemmas:
 </ul>
 
 <a id="run_morpho_analyze_output_formats" name="run_morpho_analyze_output_formats"></a>
-<h4>5.4.1.4. Output Formats</h4>
+<h4>5.5.1.4. Output Formats</h4>
 
 <p style="margin-bottom:0">
 The output format is specified using the <code>--output</code> option. Currently
@@ -1371,7 +1572,7 @@ těší	těšit_:T	VB-P---3P-AA---	těšit_:T	VB-S---3P-AA---
 </ul>
 
 <a id="run_morpho_generate" name="run_morpho_generate"></a>
-<h3>5.4.2. Morphological Generation</h3>
+<h3>5.5.2. Morphological Generation</h3>
 
 <p style="margin-bottom:0">
 The morphological generation can be performed by running
@@ -1432,7 +1633,7 @@ babičce babička NNFS3-----A----
 </pre>
 
 <a id="run_morpho_generate_tagset_conversion" name="run_morpho_generate_tagset_conversion"></a>
-<h4>5.4.2.1. Tag Set Conversion</h4>
+<h4>5.5.2.1. Tag Set Conversion</h4>
 
 <p style="margin-bottom:0">
 Some tag sets can be converted to different ones. Currently supported tag set
@@ -1453,7 +1654,7 @@ input lemmas and wildcards.
 </p>
 
 <a id="run_morpho_generate_tag_wildcard" name="run_morpho_generate_tag_wildcard"></a>
-<h4>5.4.2.2. Tag Wildcards</h4>
+<h4>5.5.2.2. Tag Wildcards</h4>
 
 <p>
 When only forms with a specific tag should be generated for a given lemma, tag
@@ -1474,7 +1675,7 @@ Most characters of a tag wildcard match corresponding characters of a tag, with 
  </ul>
 
 <a id="run_morpho_cli" name="run_morpho_cli"></a>
-<h3>5.4.3. Interactive Morphological Analysis and Generation</h3>
+<h3>5.5.3. Interactive Morphological Analysis and Generation</h3>
 
 <p style="margin-bottom:0">
 Morphological analysis and generation which is interactive and more human readable
@@ -1505,7 +1706,7 @@ Options: --from_tagger
 </pre>
 
 <a id="run_tokenizer" name="run_tokenizer"></a>
-<h2>5.5. Running the Tokenizer</h2>
+<h2>5.6. Running the Tokenizer</h2>
 
 <p>
 Using the <code>run_tokenizer</code> executable it is possible to perform only
@@ -1542,7 +1743,7 @@ Options: --tokenizer=czech|english|generic
 </pre>
 
 <a id="run_tokenizer_output_formats" name="run_tokenizer_output_formats"></a>
-<h3>5.5.1. Output Formats</h3>
+<h3>5.6.1. Output Formats</h3>
 
 <p style="margin-bottom:0">
 The output format is specified using the <code>--output</code> option. Currently
@@ -1586,7 +1787,7 @@ těší
 </ul>
 
 <a id="rest_server" name="rest_server"></a>
-<h2>5.6. Running REST Server</h2>
+<h2>5.7. Running REST Server</h2>
 
 <p>
 MorphoDiTa also provides REST server binary <code>morphodita_server</code>.
@@ -1616,14 +1817,14 @@ models on demand.
 </p>
 
 <a id="custom_models" name="custom_models"></a>
-<h2>5.7. Custom Morphological and Tagging Models</h2>
+<h2>5.8. Custom Morphological and Tagging Models</h2>
 
 <p>
 It is possible to create custom morphological and tagging models.
 </p>
 
 <a id="custom_morphological_models" name="custom_morphological_models"></a>
-<h3>5.7.1. Custom Morphological Models</h3>
+<h3>5.8.1. Custom Morphological Models</h3>
 
 <p>
 Custom morphological models can be created using <code>encode_dictionary</code> binary.
@@ -1699,7 +1900,7 @@ encode_dictionary generic 8 UNK NUM PUNC SYM &lt;input_data &gt;output_model
 </pre>
 
 <a id="training_statistical_guesser" name="training_statistical_guesser"></a>
-<h4>5.7.1.1. Training Statistical Guesser</h4>
+<h4>5.8.1.1. Training Statistical Guesser</h4>
 
 <p>
 Optionally, statistical guesser might be trained on disambiguated
@@ -1739,7 +1940,7 @@ Options: --max_prefixes=maximum number of prefixes to create
 </ul>
 
 <a id="using_external_morphology" name="using_external_morphology"></a>
-<h4>5.7.1.2. Using External Morphology</h4>
+<h4>5.8.1.2. Using External Morphology</h4>
 
 <p>
 Sometimes it is useful to train MorphoDiTa tagger using external morphological
@@ -1791,7 +1992,7 @@ go go VB go VBP goes VBZ going VBG went VBG
 </pre>
 
 <a id="custom_tagging_models" name="custom_tagging_models"></a>
-<h3>5.7.2. Custom Tagging Models</h3>
+<h3>5.8.2. Custom Tagging Models</h3>
 
 <p style="margin-bottom:0">
 Custom tagging models can be trained using <code>train_tagger</code> binary, which has
@@ -1862,7 +2063,7 @@ See next sections for examples of input data and feature files.
 </p>
 
 <a id="tagger_input_format" name="tagger_input_format"></a>
-<h4>5.7.2.1. Input Data Format</h4>
+<h4>5.8.2.1. Input Data Format</h4>
 
 <p>
 The input data (and the heldout data) represent a sequence of sentences.
@@ -1888,7 +2089,7 @@ těší	těšit_:T	VB-S---3P-AA---
 </pre>
 
 <a id="tagger_feature_file_format" name="tagger_feature_file_format"></a>
-<h4>5.7.2.2. Feature File Format</h4>
+<h4>5.8.2.2. Feature File Format</h4>
 
 <p style="margin-bottom:0">
 The features used in the tagger have major influence on tagging performance.
@@ -2095,7 +2296,7 @@ Tag 0,Dash 0
 </pre>
 
 <a id="tagger_accuracy" name="tagger_accuracy"></a>
-<h4>5.7.2.3. Measuring Tagger Accuracy</h4>
+<h4>5.8.2.3. Measuring Tagger Accuracy</h4>
 
 <p style="margin-bottom:0">
 Measuring custom tagger accuracy can be performed by running:

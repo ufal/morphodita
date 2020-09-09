@@ -23,6 +23,9 @@ MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 %!include: morphodita_model_czech-morfflex-pdt.t2t
 
 
+%!include: morphodita_model_slovak-morfflex-pdt.t2t
+
+
 %!include: morphodita_model_english-morphium-wsj.t2t
 
 

@@ -1,0 +1,146 @@
+Slovak MorphoDiTa Models
+========================
+
+== Slovak MorphoDiTa Models ==[slovak-morfflex-pdt]
+
+Slovak models are distributed under the
+[CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/4.0/] licence.
+The Slovak morphology uses the
+[MorfFlex SK 170914 http://hdl.handle.net/11234/1-3277]
+Slovak morphological dictionary and the Slovak tagger is trained on
+automatically translated [PDT 3.0 http://ufal.mff.cuni.cz/pdt3.0].
+Slovak models work in MorphoDiTa version 1.9 or later.
+
+Apart from MorfFlex SK dictionary, a statistical guesser is implemented and can
+be optionally used when performing morphological analysis.
+
+Slovak models are versioned according to the version of the MorfFlex SK
+morphological dictionary used, the version format is ``YYMMDD``, where ``YY``,
+``MM`` and ``DD`` are two-digit representation of year, month and day,
+respectively. The latest version is 170914.
+
+
+=== Download ===[slovak-morfflex-pdt_download]
+
+The latest version 170914 of the Slovak MorphoDiTa models can be downloaded
+from [LINDAT/CLARIN repository http://hdl.handle.net/11234/1-3278].
+
+
+=== Acknowledgements ===[slovak-morfflex-pdt_acknowledgements]
+
+This work has also been supported by the LINDAT/CLARIAH-CZ Research
+Infrastructure (https://lindat.cz), supported by the Ministry of Education,
+Youth and Sports of the Czech Republic (Project No. //LM2018101//).
+It has also been using language resources developed and stored and
+distributed by the LINDAT/CLARIN project of the Ministry of Education of the
+Czech Republic (project //LM2015071//).
+
+The Czech morphological system was devised by Jan Hajič.
+
+The MorfFlex SK dictionary was created by Jan Hajič and Jan Hric.
+
+The tagger algorithm and feature set research was supported by the projects
+//MSM0021620838// and //LC536// of Ministry of Education, Youth and Sports of the Czech Republic,
+//GA405/09/0278// of the Grant Agency of the Czech Republic and //1ET101120503// of
+Academy of Sciences of the Czech Republic. The research was performed by
+Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab and Miroslav Spousta.
+
+The tagger is trained on morphological layer of Prague Dependency Treebank PDT
+3.0, which was supported by the projects //LM2010013//, //LC536//,
+//LN00A063// and //MSM0021620838// of Ministry of Education, Youth and Sports
+of the Czech Republic, and developed by Martin Buben, Jan Hajič, Jiří Hana,
+Hana Hanová, Barbora Hladká, Emil Jeřábek, Lenka Kebortová, Kristýna Kupková,
+Pavel Květoň, Jiří Mírovský, Andrea Pfimpfrová, Jan Štěpánek and Daniel Zeman.
+
+
+==== Publications ====[slovak-morfflex-pdt_publications]
+
+- (Hajič 2004) Jan Hajič. //[Disambiguation of Rich Inflection: Computational Morphology of Czech. http://books.google.cz/books?id=sB63AAAACAAJ]// Karolinum Press (2004).
+
+- (Spoustová et al. 2009) Drahomíra "johanka" Spoustová, Jan Hajič, Jan Raab, Miroslav Spousta. 2009. //[Semi-Supervised Training for the Averaged Perceptron POS Tagger. http://aclweb.org/anthology//E/E09/E09-1087.pdf]// In Proceedings of the 12th Conference of the European Chapter of the ACL (EACL 2009), pages 763-771, Athens, Greece, March. Association for Computational Linguistics.
+
+- (Straková et al. 2014) Straková Jana, Straka Milan and Hajič Jan. //[Open-Source Tools for Morphology, Lemmatization, POS Tagging and Named Entity Recognition. http://www.aclweb.org/anthology/P/P14/P14-5003.pdf]// In Proceedings of 52nd Annual Meeting of the Association for Computational Linguistics: System Demonstrations, pages 13-18, Baltimore, Maryland, June 2014. Association for Computational Linguistics.
+
+
+=== Slovak Morphological System ===[slovak_morphological_system]
+
+In the Slovak language, MorphoDiTa uses the
+[same morphological system as Czech #czech_morphological_system].
+
+
+=== Main Slovak Model ===[slovak-morfflex-pdt_model]
+
+The main Slovak model contains the following files:
+
+: ``slovak-morfflex-170914.dict``
+  Morphological dictionary based on the Jan Hajič's ([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ])
+  system with PDT tag set created from
+  [MorfFlex SK 170914 http://hdl.handle.net/11234/1-3277] morphological dictionary.
+
+: ``slovak-morfflex-pdt-170914.tagger``
+  Tagger trained on the training portion
+  of automatically translated [PDT 3.0 http://ufal.mff.cuni.cz/pdt3.0] using
+  the ``neopren`` feature set. It contains the ``slovak-morfflex-170914.dict``
+  morphological dictionary. and reaches 92.8% tag accuracy, 96.3% lemma
+  accuracy and 92.0% overall accuracy on
+  [PDT 3.0 http://ufal.mff.cuni.cz/pdt3.0] etest data (whose morphological tags and
+  lemmas were remapped using the ``slovak-morfflex-170914.dict`` dictionary).
+  Model speed: ~5k words/s, model size: 17MB.
+
+
+=== Part of Speech Only Variant ===[slovak-morfflex-pdt_pos_variant]
+
+The PDT tag set used by the main Slovak model is very fine-grained. In many
+situations, only the part of speech tags would be sufficient. Therefore, we
+provide a variant of the model, denoted as ``pos_only``, where only the first
+two characters of the fifteen-letter tags are used, representing the part of
+speech and detailed part of speech, respectively. There are 67 such two-letter tags.
+
+: ``slovak-morfflex-170914-pos_only.dict``
+  A variant of `slovak-morfflex-170914.dict`, where only the first two tag
+  characters are used.
+
+: ``slovak-morfflex-pdt-170914-pos_only.tagger``
+  Very fast variant of ``slovak-morfflex-170914.tagger`` predicting
+  only two-character tags. It reaches 98.3% tag accuracy, 97.4% lemma
+  accuracy and 96.8% overall accuracy on [PDT 3.0 http://ufal.mff.cuni.cz/pdt3.0]
+  etest data (which morphological tags and lemmas were remapped using the
+  ``slovak-morfflex-170914-pos_only.dict`` dictionary).
+  Model speed: ~200k words/s, model size: 4MB.
+
+
+=== No Diacritical Marks Variant ===[slovak-morfflex-pdt_no_dia_variant]
+
+Sometimes the text to be analyzed does not contain diacritical marks.
+We therefore provide variants of the morphological dictionary and tagger
+for this purpose -- morphological analysis, morphological generation and
+tagging employ forms without diacritical marks. Note that the lemmas do
+have diacritical marks.
+
+We provide the ``no_dia`` variants for all four models described above:
+
+: ``slovak-morfflex-170914-no_dia.dict``
+  No diacritical marks variant of ``slovak-morfflex-170914.dict``.
+
+: ``slovak-morfflex-pdt-170914-no_dia.tagger``
+  No diacritical marks variant of ``slovak-morfflex-170914.tagger``.
+  It reaches 91.4% tag
+  accuracy, 92.8% lemma accuracy and 89.0% overall accuracy on
+  [PDT 3.0 http://ufal.mff.cuni.cz/pdt3.0] etest data (which morphological tags and lemmas
+  were remapped using the ``slovak-morfflex-170914-no_dia.dict`` dictionary)
+  with diacritical marks removed.
+  Model speed: ~5k words/s, model size: 18MB.
+
+: ``slovak-morfflex-170914-no_dia-pos_only.dict``
+  No diacritical marks variant of ``slovak-morfflex-170914-pos_only.dict``.
+
+: ``slovak-morfflex-pdt-170914-no_dia-pos_only.tagger``
+  No diacritical marks variant of ``slovak-morfflex-170914-pos_only.tagger``.
+  It reaches 97.5% tag
+  accuracy, 93.9% lemma accuracy and 93.2% overall accuracy on
+  [PDT 3.0 http://ufal.mff.cuni.cz/pdt3.0] etest data (which morphological tags and lemmas
+  were remapped using the ``slovak-morfflex-170914-no_dia-pos_only.dict`` dictionary)
+  with diacritical marks removed.
+  Model speed: ~200k words/s, model size: 7MB.
+
+
