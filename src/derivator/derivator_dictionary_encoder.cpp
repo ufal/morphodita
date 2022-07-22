@@ -98,6 +98,19 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
       continue;
     }
 
+    // Ignore self-loops, i.e., when any parent is equal to any child.
+    bool self_loop = false;
+    for (auto&& lemma : matched[0])
+      if (matched[1].count(lemma.first)) {
+        self_loop = true;
+        break;
+      }
+    if (self_loop) {
+      if (verbose)
+        cerr << "Ignoring self-loop from line '" << line << "', skipping." << endl;
+      continue;
+    }
+
     // Store the possible parents
     derinet.insert(matched[0].begin(), matched[0].end());
     derinet.insert(matched[1].begin(), matched[1].end());
@@ -136,7 +149,7 @@ void derivator_dictionary_encoder::encode(istream& is, istream& dictionary, bool
       node = derinet.find(node->second.parent);
       if (node->second.mark) {
         if (node->second.mark == mark)
-          runtime_failure("The derivator data contains a cycle with lemma '" << lemma.first << "'!");
+          runtime_failure("The derivator data contains a cycle with lemma '" << node->first << "' starting from '" << lemma.first << "'!");
         break;
       }
       node->second.mark = mark;
