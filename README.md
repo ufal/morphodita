@@ -18,7 +18,7 @@ Mathematics and Physics, Charles University in Prague, Czech Republic.
 
 MorphoDiTa website http://ufal.mff.cuni.cz/morphodita contains download links
 of both the released packages and trained models, hosts documentation and
-offers online demo.
+offers online web service.
 
 MorphoDiTa development repository http://github.com/ufal/morphodita is hosted
 on GitHub.

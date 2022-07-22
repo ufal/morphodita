@@ -78,9 +78,9 @@ int main(int argc, char* argv[]) {
 
   unique_ptr<derivation_formatter> derivation;
   if (options.count("derivation")) {
-    if (!options["derivation"].empty() && options["derivation"] != "none" && !morpho->get_derivator())
+    if (!options["derivation"].empty() && options["derivation"] != "none" && !dictionary.get_derivator())
       runtime_failure("No derivator is defined for the supplied model!");
-    derivation.reset(derivation_formatter::new_derivation_formatter(options["derivation"], morpho->get_derivator()));
+    derivation.reset(derivation_formatter::new_derivation_formatter(options["derivation"], dictionary.get_derivator()));
     if (!derivation) runtime_failure("Cannot create derivation formatter '" << options["derivation"] << "' for the supplied model!");
   } else {
     derivation.reset(derivation_formatter::new_none_derivation_formatter());
