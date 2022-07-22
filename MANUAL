@@ -61,8 +61,8 @@ from LINDAT/CLARIN (http://www.lindat.cz) infrastructure and described further
 in the MorphoDiTa User's Manual. Currently the following language models are
 available:
 
-- Czech: czech-morfflex-pdt-161115 (http://hdl.handle.net/11234/1-1836)
-  (requires MorphoDiTa 1.9, documentation
+- Czech MorfFlex+PDT: czech-morfflex-pdt-161115
+  (http://hdl.handle.net/11234/1-1836) (requires MorphoDiTa 1.9, documentation
   (http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt)); older
   versions: czech-morfflex-pdt-160310 (http://hdl.handle.net/11234/1-1674)
   (documentation
@@ -70,10 +70,10 @@ available:
   czech-morfflex-pdt-131112
   (http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1) (documentation
   (http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt_changes))
-- Slovak: slovak-morfflex-pdt-170914 (http://hdl.handle.net/11234/1-3278)
-  (requires MorphoDiTa 1.9, documentation
+- Slovak MorfFlex+PDT: slovak-morfflex-pdt-170914
+  (http://hdl.handle.net/11234/1-3278) (requires MorphoDiTa 1.9, documentation
   (http://ufal.mff.cuni.cz/morphodita/users-manual#slovak-morfflex-pdt))
-- English: english-morphium-wsj-140407
+- English Morphium+WSJ: english-morphium-wsj-140407
   (http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0) (documentation
   (http://ufal.mff.cuni.cz/morphodita/users-manual#english-morphium-wsj))
 
@@ -242,8 +242,8 @@ commandline tools and interfaces. The C++ library is described elsewhere, either
 in MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 
 
-Czech MorphoDiTa Models
------------------------
+Czech MorfFlex+PDT Models
+-------------------------
 
 Czech models are distributed under the CC BY-NC-SA
 (http://creativecommons.org/licenses/by-nc-sa/4.0/) licence. The Czech
@@ -269,8 +269,8 @@ and 10 times smaller.
 Download
 --------
 
-The latest version 161115 of the Czech MorphoDiTa models can be downloaded from
-LINDAT/CLARIN repository (http://hdl.handle.net/11234/1-1836).
+The latest version 161115 of the Czech MorfFlex+PDT models can be downloaded
+from LINDAT/CLARIN repository (http://hdl.handle.net/11234/1-1836).
 
 
 Previous Versions
@@ -490,8 +490,8 @@ czech-morfflex-131112 and czech-morfflex-pdt-131112 (require MorphoDiTa 1.0 or l
   (http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1).
 
 
-Slovak MorphoDiTa Models
-------------------------
+Slovak MorfFlex+PDT Models
+--------------------------
 
 Slovak models are distributed under the CC BY-NC-SA
 (http://creativecommons.org/licenses/by-nc-sa/4.0/) licence. The Slovak
@@ -512,8 +512,8 @@ version is 170914.
 Download
 --------
 
-The latest version 170914 of the Slovak MorphoDiTa models can be downloaded from
-LINDAT/CLARIN repository (http://hdl.handle.net/11234/1-3278).
+The latest version 170914 of the Slovak MorfFlex+PDT models can be downloaded
+from LINDAT/CLARIN repository (http://hdl.handle.net/11234/1-3278).
 
 
 Acknowledgements
@@ -648,8 +648,8 @@ slovak-morfflex-pdt-170914-no_dia-pos_only.tagger
   size: 7MB.
 
 
-English MorphoDiTa Models
--------------------------
+English Morphium+WSJ Models
+---------------------------
 
 English models are created using the following data:
 - SCOWL (Spell Checker Oriented Word Lists): This word list is used in
@@ -681,7 +681,7 @@ day, respectively. The latest version is 140407.
 Download
 --------
 
-The latest version 140407 of the English MorphoDiTa models can be downloaded
+The latest version 140407 of the English Morphium+WSJ models can be downloaded
 from LINDAT/CLARIN repository
 (http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0).
 
