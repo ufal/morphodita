@@ -9,7 +9,7 @@
 
 include ../common/Makefile.common
 
-BINDING_MODULE=$(if $(filter osx-%,$(PLATFORM)),ufal/_morphodita.so,$(call dynlib,ufal/_morphodita))
+BINDING_MODULE=$(if $(filter osx-%,$(PLATFORM)),ufal/morphodita/_morphodita.so,$(call dynlib,ufal/morphodita/_morphodita))
 BINDING_C_FLAGS+=$(if $(PYTHON_INCLUDE),,$(error PYTHON_INCLUDE must be set to the directory containing Python.h))
 BINDING_C_FLAGS+=$(call include_dir,$(PYTHON_INCLUDE))
 BINDING_C_FLAGS+=$(if $(filter %-gcc %-clang,$(PLATFORM)),-w)
@@ -23,7 +23,11 @@ $(BINDING_MODULE): $(call dynobj,morphodita_python) $(BINDING_MORPHODITA_OBJECTS
 morphodita_python.cpp: morphodita_python.i ../common/morphodita.i
 	@$(call mkdir,ufal)
 	@$(call echo,>ufal/__init__.py)
-	swig $(SWIG_FLAGS) -python -outdir ufal -o $@ -builtin $<
+	@$(call mkdir,ufal/morphodita)
+	swig $(SWIG_FLAGS) -python -outdir ufal/morphodita -o $@ -builtin $<
+	@$(call mv,ufal/morphodita/morphodita.py,ufal/morphodita/__init__.py)
+	@$(call cp,morphodita.pyi,ufal/morphodita/__init__.pyi)
+	@$(call echo,>ufal/morphodita/py.typed)
 
 .PHONY: clean
 clean:
