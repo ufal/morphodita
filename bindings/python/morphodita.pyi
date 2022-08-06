@@ -37,9 +37,6 @@ class Version:
   def current() -> Version: ...
 
 class Tokenizer:
-  # NOTE: Is there a way to statically warn about the usage of the default constructor,
-  # which is not available? This doesn't seem to work.
-  def __init__(self) -> t.NoReturn: ...
   @staticmethod
   def newVerticalTokenizer() -> Tokenizer: ...
   @staticmethod
