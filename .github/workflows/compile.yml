@@ -1,0 +1,52 @@
+name: Compile
+
+on: push
+
+jobs:
+  compile:
+    name: Compile
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            flags: CXX=g++-9 PLATFORM=linux-gcc
+          - os: ubuntu-22.04
+            flags: CXX=g++-10 PLATFORM=linux-gcc
+          - os: ubuntu-22.04
+            flags: CXX=g++-11 PLATFORM=linux-gcc
+          - os: ubuntu-22.04
+            flags: PLATFORM=linux-gcc
+            container: quay.io/pypa/manylinux2014_x86_64
+          - os: windows-2019
+            flags: BITS=32 PLATFORM=win-vs
+          - os: windows-2019
+            flags: BITS=64 PLATFORM=win-vs
+          - os: windows-2022
+            flags: BITS=32 PLATFORM=win-vs
+          - os: windows-2022
+            flags: BITS=64 PLATFORM=win-vs
+          - os: macos-11
+            flags: BITS=64 PLATFORM=osx-clang
+          - os: macos-11
+            flags: BITS=arm64 PLATFORM=osx-clang
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - if: startsWith(matrix.os, 'windows')
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ contains(matrix.flags, 'BITS=32') && 'x86' || 'x64' }}
+
+      - if: startsWith(matrix.os, 'windows')
+        name: Install make
+        run: choco install --no-progress -y make
+
+      - name: Compile src
+        run: make ${{ matrix.flags }} -k -C src full
+
+      - name: Compile tests
+        run: make ${{ matrix.flags }} -k -C tests all
