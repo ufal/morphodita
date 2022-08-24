@@ -47,6 +47,8 @@ jobs:
 
       - name: Compile src
         run: make ${{ matrix.flags }} -k -C src full
+        env:
+          C_FLAGS: $(treat_warnings_as_errors)
 
       - name: Compile tests
         run: make ${{ matrix.flags }} -k -C tests all
