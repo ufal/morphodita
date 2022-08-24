@@ -1,3 +1,9 @@
+Version 3.5.0 [24 Aug 2022]
+---------------------------
+- Add path_from_utf8.h header.
+- Add win_wmain_utf8.cpp source.
+
+
 Version 3.4.3 [24 Jun 2020]
 ---------------------------
 - Fix the error message in add_2B and add_4B.
