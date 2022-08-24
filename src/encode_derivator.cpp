@@ -15,6 +15,7 @@
 #include "morpho/morpho_ids.h"
 #include "utils/iostreams.h"
 #include "utils/options.h"
+#include "utils/path_from_utf8.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
@@ -40,7 +41,7 @@ int main(int argc, char* argv[]) {
   // Switch stdout to binary mode.
   iostreams_init_binary_output();
 
-  ifstream dictionary(argv[1]);
+  ifstream dictionary(path_from_utf8(argv[1]).c_str());
   if (!dictionary.is_open()) runtime_failure("Cannot open mode file '" << argv[1] << "'!");
 
   if (options.count("from_tagger"))

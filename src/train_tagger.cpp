@@ -20,6 +20,7 @@
 #include "utils/iostreams.h"
 #include "utils/options.h"
 #include "utils/parse_int.h"
+#include "utils/path_from_utf8.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
@@ -67,15 +68,15 @@ int main(int argc, char* argv[]) {
         bool early_stopping = argc >= 9 ? parse_int(argv[8], "early_stopping") : false;
 
         // Open needed files
-        ifstream dict(dict_file, ifstream::binary);
+        ifstream dict(path_from_utf8(dict_file).c_str(), ifstream::binary);
         if (!dict) runtime_failure("Cannot open dictionary file '" << dict_file << "'!");
 
-        ifstream feature_templates(features_file);
+        ifstream feature_templates(path_from_utf8(features_file).c_str());
         if (!feature_templates) runtime_failure("Cannot open feature template file '" << features_file << "'!");
 
         ifstream heldout;
         if (heldout_file && strlen(heldout_file)) {
-          heldout.open(heldout_file);
+          heldout.open(path_from_utf8(heldout_file).c_str());
           if (!heldout) runtime_failure("Cannot open heldout file '" << heldout_file << "'!");
         } else {
           heldout.setstate(ios::failbit);

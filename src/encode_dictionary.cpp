@@ -18,6 +18,7 @@
 #include "utils/iostreams.h"
 #include "utils/options.h"
 #include "utils/parse_int.h"
+#include "utils/path_from_utf8.h"
 #include "version/version.h"
 
 using namespace ufal::morphodita;
@@ -50,7 +51,7 @@ int main(int argc, char* argv[]) {
 
         ifstream prefix_guesser;
         if (argc > 3 && strlen(argv[3])) {
-          prefix_guesser.open(argv[3]);
+          prefix_guesser.open(path_from_utf8(argv[3]).c_str());
           if (!prefix_guesser) runtime_failure("Cannot open prefix guesser file '" << argv[3] << "'!");
         } else {
           prefix_guesser.setstate(ios::failbit);
@@ -58,7 +59,7 @@ int main(int argc, char* argv[]) {
 
         ifstream statistical_guesser;
         if (argc > 4 && strlen(argv[4])) {
-          statistical_guesser.open(argv[4]);
+          statistical_guesser.open(path_from_utf8(argv[4]).c_str());
           if (!statistical_guesser) runtime_failure("Cannot open statistical guesser file '" << argv[4] << "'!");
         } else {
           statistical_guesser.setstate(ios::failbit);
@@ -74,12 +75,12 @@ int main(int argc, char* argv[]) {
         if (argc < 4) runtime_failure("Usage: " << argv[0] << " english max_suffix_len english_guesser_file [english_negation_prefixes]");
         int max_suffix_len = parse_int(argv[2], "max_suffix_len");
 
-        ifstream guesser(argv[3]);
+        ifstream guesser(path_from_utf8(argv[3]).c_str());
         if (!guesser) runtime_failure("Cannot open guesser file '" << argv[3] << "'!");
 
         ifstream negations;
         if (argc > 4 && strlen(argv[4])) {
-          negations.open(argv[4]);
+          negations.open(path_from_utf8(argv[4]).c_str());
           if (!negations) runtime_failure("Cannot open negations file '" << argv[4] << "'!");
         } else {
           negations.setstate(ios::failbit);
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]) {
         tags.symbol_tag = argv[6];
         ifstream statistical_guesser;
         if (argc > 7 && strlen(argv[7])) {
-          statistical_guesser.open(argv[7]);
+          statistical_guesser.open(path_from_utf8(argv[7]).c_str());
           if (!statistical_guesser) runtime_failure("Cannot open statistical guesser file '" << argv[7] << "'!");
         } else {
           statistical_guesser.setstate(ios::failbit);
@@ -129,7 +130,7 @@ int main(int argc, char* argv[]) {
 
         ifstream statistical_guesser;
         if (argc > 3 && strlen(argv[3])) {
-          statistical_guesser.open(argv[3]);
+          statistical_guesser.open(path_from_utf8(argv[3]).c_str());
           if (!statistical_guesser) runtime_failure("Cannot open statistical guesser file '" << argv[3] << "'!");
         } else {
           statistical_guesser.setstate(ios::failbit);
