@@ -49,8 +49,8 @@ $(call exe,tools/morpho_accuracy): $(call obj,$(MORPHODITA_OBJECTS))
 $(call exe,tools/remap_tags): $(call obj,$(MORPHODITA_OBJECTS))
 $(call exe,tools/strip_combining_marks): $(call obj,unilib/utf8 unilib/unistrip unilib/version version/version)
 $(call exe,tools/test_dictionary): $(call obj,$(MORPHODITA_OBJECTS) morpho/raw_morpho_dictionary_reader)
-$(EXECUTABLES) $(SERVER) $(TOOLS):$(call exe,%): $$(call obj,% utils/options)
-	$(call link_exe,$@,$^,$(call win_subsystem,console))
+$(EXECUTABLES) $(SERVER) $(TOOLS):$(call exe,%): $$(call obj,% utils/options utils/win_wmain_utf8)
+	$(call link_exe,$@,$^,$(call win_subsystem,console,wmain))
 
 # cleaning
 .PHONY: clean
