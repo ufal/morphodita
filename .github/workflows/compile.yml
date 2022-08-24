@@ -52,3 +52,4 @@ jobs:
 
       - name: Compile tests
         run: make ${{ matrix.flags }} -k -C tests all
+        if: matrix.flags != 'BITS=arm64 PLATFORM=osx-clang'
