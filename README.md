@@ -1,5 +1,5 @@
 # MorphoDiTa
-[![Build Status](https://travis-ci.org/ufal/morphodita.svg?branch=master)](https://travis-ci.org/ufal/morphodita)
+[![Compile Status](https://github.com/ufal/morphodita/actions/workflows/compile.yml/badge.svg)](https://github.com/ufal/morphodita/actions/workflows/compile.yml)
 
 MorphoDiTa: Morphological Dictionary and Tagger is an open-source tool for
 morphological analysis of natural language texts. It performs morphological

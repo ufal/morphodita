@@ -1,4 +1,4 @@
 MorphoDiTa
-[![Build Status](https://travis-ci.org/ufal/morphodita.svg?branch=master)](https://travis-ci.org/ufal/morphodita)
+[![Compile Status](https://github.com/ufal/morphodita/actions/workflows/compile.yml/badge.svg)](https://github.com/ufal/morphodita/actions/workflows/compile.yml)
 
 %!include: morphodita_readme.t2t
