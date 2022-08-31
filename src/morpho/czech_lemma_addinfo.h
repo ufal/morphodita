@@ -88,9 +88,13 @@ int czech_lemma_addinfo::parse(string_piece lemma, bool die_on_failure) {
     const char* lemma_additional_info = lemma_info;
 
     if (*lemma_info == '-') {
-      lemma_num = strtol(lemma_info + 1, (char**) &lemma_additional_info, 10);
+      lemma_num = 0;
+      for (lemma_additional_info = lemma_info + 1;
+           lemma_additional_info < lemma.str + lemma.len && (*lemma_additional_info >= '0' && *lemma_additional_info <= '9');
+           lemma_additional_info++)
+        lemma_num = 10 * lemma_num + (*lemma_additional_info - '0');
 
-      if (lemma_additional_info == lemma_info + 1 || (*lemma_additional_info != '\0' && *lemma_additional_info != '`' && *lemma_additional_info != '_') || lemma_num < 0 || lemma_num >= 255) {
+      if (lemma_additional_info == lemma_info + 1 || (lemma_additional_info < lemma.str + lemma.len && *lemma_additional_info != '`' && *lemma_additional_info != '_') || lemma_num >= 255) {
         if (die_on_failure)
           runtime_failure("Lemma number " << lemma_num << " in lemma " << lemma << " out of range!");
         else

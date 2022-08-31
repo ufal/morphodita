@@ -2,6 +2,7 @@ Version 1.10.2-devel
 --------------------
 - When analyzing numerals, if the form ends with a dot, keep the dot
   in the lemma (previously the dot was discarded).
+- Correctly handle lemma number which is not null-terminated in `generate`.
 - On Windows, the file paths are now UTF-8 encoded, instead of ANSI.
   This change affects the API, binary arguments, and program outputs.
 - Add ARM64 macOS build.
