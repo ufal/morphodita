@@ -70,8 +70,8 @@ int main(int argc, char* argv[]) {
                        {"version", options::value::none},
                        {"help", options::value::none}}, argc, argv, options) ||
       options.count("help") ||
-      ((argc < 2 || (argc % 4) != 2) && !options.count("version")))
-    runtime_failure("Usage: " << argv[0] << " [options] port (model_name model_weblicht_id model_file acknowledgements)*\n"
+      ((argc < 2 || (argc % 3) != 2) && !options.count("version")))
+    runtime_failure("Usage: " << argv[0] << " [options] port (model_name model_file acknowledgements)*\n"
                     "Options: --connection_timeout=maximum connection timeout [s] (default 60)\n"
                     "         --daemon (daemonize after start, supported on Linux only)\n"
                     "         --log_file=file path (no logging if empty, default morphodita_server.log)\n"
@@ -102,8 +102,8 @@ int main(int argc, char* argv[]) {
 
   // Initialize the service
   vector<morphodita_service::model_description> models;
-  for (int i = 2; i < argc; i += 4)
-    models.emplace_back(argv[i], argv[i + 1], argv[i + 2], argv[i + 3]);
+  for (int i = 2; i < argc; i += 3)
+    models.emplace_back(argv[i], argv[i + 1], argv[i + 2]);
 
   if (!service.init(models))
     runtime_failure("Cannot load specified models!");

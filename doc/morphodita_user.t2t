@@ -414,7 +414,7 @@ server implementation and provides
 
 The full command syntax of ``morphodita_server`` is
 ```
-morphodita_server [options] port (model_name weblicht_id model_file acknowledgements)*
+morphodita_server [options] port (model_name model_file acknowledgements)*
 Options: --connection_timeout=maximum connection timeout [s] (default 60)
          --daemon (daemonize after start, supported on Linux only)
          --log_file=file path (no logging if empty, default morphodita_server.log)

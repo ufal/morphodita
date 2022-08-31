@@ -19,7 +19,6 @@ bool morphodita_service::init(const vector<model_description>& model_description
   // Load models
   models.clear();
   rest_models_map.clear();
-  weblicht_models_map.clear();
   for (auto& model_description : model_descriptions) {
     Morpho* morpho = nullptr;
     Tagger* tagger = nullptr;
@@ -33,7 +32,7 @@ bool morphodita_service::init(const vector<model_description>& model_description
     if (!morpho && !tagger) return false;
 
     // Store the model
-    models.emplace_back(model_description.rest_id, model_description.weblicht_id, tagger, morpho, model_description.acknowledgements);
+    models.emplace_back(model_description.rest_id, tagger, morpho, model_description.acknowledgements);
   }
 
   // Fill rest_models_map with model name and aliases
@@ -59,12 +58,6 @@ bool morphodita_service::init(const vector<model_description>& model_description
   // Default model
   rest_models_map.emplace(string(), &models.front());
 
-  // Fill weblicht_models_map with weblicht_id
-  for (auto& model : models)
-    if (!model.weblicht_id.empty())
-      // Fail if model with same weblicht_id already exists.
-      if (!weblicht_models_map.emplace(model.weblicht_id, &model).second) return false;
-
   // Init REST service
   json_models.clear().object().indent().key("models").indent().object();
   for (auto& model : models) {
@@ -88,8 +81,6 @@ unordered_map<string, bool (morphodita_service::*)(microrestd::rest_request&)> m
   {"/analyze", &morphodita_service::handle_rest_analyze},
   {"/generate", &morphodita_service::handle_rest_generate},
   {"/tokenize", &morphodita_service::handle_rest_tokenize},
-  // WebLicht service
-  {"/weblicht/tokenize", &morphodita_service::handle_weblicht_tokenize},
 };
 
 // Handle a request using the specified URL/handler map
@@ -103,13 +94,6 @@ const morphodita_service::model_info* morphodita_service::load_rest_model(const 
   auto model_it = rest_models_map.find(rest_id);
   if (model_it == rest_models_map.end())
     return error.assign("Requested model '").append(rest_id).append("' does not exist.\n"), nullptr;
-
-  return model_it->second;
-}
-const morphodita_service::model_info* morphodita_service::load_weblicht_model(const string& weblicht_id, string& error) {
-  auto model_it = weblicht_models_map.find(weblicht_id);
-  if (model_it == weblicht_models_map.end())
-    return error.assign("Requested model '").append(weblicht_id).append("' does not exist.\n"), nullptr;
 
   return model_it->second;
 }
@@ -518,53 +502,6 @@ bool morphodita_service::get_line(const char*& data, string_piece& line) {
     if (*data == '\r') data++;
   }
   return true;
-}
-
-// WebLicht service
-const char* morphodita_service::tcf_mime = "text/tcf+xml";
-
-bool morphodita_service::handle_weblicht_tokenize(microrestd::rest_request& req) {
-  string error;
-  microrestd::pugi::xml_document tcf;
-  if (!parse_tcf(req, tcf, error)) return req.respond_error(error);
-
-  return respond_tcf(req, tcf);
-}
-
-bool morphodita_service::parse_tcf(const microrestd::rest_request& req, microrestd::pugi::xml_document& tcf, string& error) {
-  if (req.content_type.find(tcf_mime) == string::npos)
-    return error.assign("Unsupported content type'").append(req.content_type).append("', expected text/tcf+xml.\n"), false;
-
-  auto result = tcf.load_buffer_inplace((void*) req.body.c_str(), req.body.size());
-  if (result.status != microrestd::pugi::status_ok) return error.assign("Cannot parse the TCF: ").append(result.description()).append(".\n"), false;
-
-  return true;
-}
-
-bool morphodita_service::respond_tcf(microrestd::rest_request& req, const microrestd::pugi::xml_document& tcf) {
-  // Compute size of resulting XML
-  struct size_writer : public microrestd::pugi::xml_writer {
-    virtual void write(const void*, size_t size) override { this->size += size; }
-    size_t get_size() const { return size; }
-   private:
-    size_t size = 0;
-  };
-  size_writer tcf_size;
-  tcf.save(tcf_size);
-
-  // Allocate the memory using malloc and transfer ownership to the response
-  microrestd::string_piece tcf_buffer((const char*) malloc(tcf_size.get_size()), 0);
-  if (!tcf_buffer.str) return req.respond_error("Cannot allocate memory for resulting TCF.\n");
-  struct string_piece_writer : public microrestd::pugi::xml_writer {
-    string_piece_writer(microrestd::string_piece& output) : output(output) { }
-    virtual void write(const void* data, size_t size) override { memcpy((void*) (output.str + output.len), data, size); output.len += size; }
-   private:
-    microrestd::string_piece& output;
-  };
-  string_piece_writer tcf_buffer_writer(tcf_buffer);
-  tcf.save(tcf_buffer_writer);
-
-  return req.respond(tcf_mime, tcf_buffer, false);
 }
 
 } // namespace morphodita

@@ -14,7 +14,6 @@
 #include "common.h"
 #include "derivator/derivation_formatter.h"
 #include "microrestd/microrestd.h"
-#include "microrestd/pugixml.h"
 #include "morpho/morpho.h"
 #include "tagger/tagger.h"
 #include "tagset_converter/tagset_converter.h"
@@ -33,10 +32,10 @@ class morphodita_service : public microrestd::rest_service {
   typedef ufal::morphodita::tokenizer Tokenizer;
 
   struct model_description {
-    string rest_id, weblicht_id, file, acknowledgements;
+    string rest_id, file, acknowledgements;
 
-    model_description(const string& rest_id, const string& weblicht_id, const string& file, const string& acknowledgements)
-        : rest_id(rest_id), weblicht_id(weblicht_id), file(file), acknowledgements(acknowledgements) {}
+    model_description(const string& rest_id, const string& file, const string& acknowledgements)
+        : rest_id(rest_id), file(file), acknowledgements(acknowledgements) {}
   };
 
   bool init(const vector<model_description>& model_descriptions);
@@ -48,14 +47,13 @@ class morphodita_service : public microrestd::rest_service {
 
   // Models
   struct model_info {
-    model_info(const string& rest_id, const string& weblicht_id, Tagger* tagger, Morpho* morpho, const string& acknowledgements)
-        : rest_id(rest_id), weblicht_id(weblicht_id), acknowledgements(acknowledgements), tagger(tagger), morpho(morpho) {
+    model_info(const string& rest_id, Tagger* tagger, Morpho* morpho, const string& acknowledgements)
+        : rest_id(rest_id), acknowledgements(acknowledgements), tagger(tagger), morpho(morpho) {
       unique_ptr<Tokenizer> tokenizer(get_tokenizer());
       can_tokenize = tokenizer != nullptr;
     }
 
     string rest_id;
-    string weblicht_id;
     const Tagger* get_tagger() const { return tagger.get(); }
     const Morpho* get_morpho() const { return tagger ? tagger->get_morpho() : morpho.get(); }
     Tokenizer* get_tokenizer() const { return tagger ? tagger->new_tokenizer() : morpho ? morpho->new_tokenizer() : nullptr; }
@@ -68,10 +66,8 @@ class morphodita_service : public microrestd::rest_service {
   };
   vector<model_info> models;
   unordered_map<string, const model_info*> rest_models_map;
-  unordered_map<string, const model_info*> weblicht_models_map;
 
   const model_info* load_rest_model(const string& rest_id, string& error);
-  const model_info* load_weblicht_model(const string& weblicht_id, string& error);
 
   // REST service
   enum rest_output_mode_t {
@@ -116,14 +112,6 @@ class morphodita_service : public microrestd::rest_service {
   microrestd::json_builder json_models;
   static const char* json_mime;
   static const char* operation_not_supported;
-
-  // WebLicht service
-  bool handle_weblicht_tokenize(microrestd::rest_request& req);
-
-  bool parse_tcf(const microrestd::rest_request& req, microrestd::pugi::xml_document& tcf, string& error);
-  bool respond_tcf(microrestd::rest_request& req, const microrestd::pugi::xml_document& tcf);
-
-  static const char* tcf_mime;
 };
 
 } // namespace morphodita
