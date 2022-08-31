@@ -8,6 +8,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include "morphodita_service.h"
+#include "unilib/unicode.h"
+#include "unilib/uninorms.h"
+#include "unilib/utf8.h"
 
 namespace ufal {
 namespace morphodita {
@@ -104,6 +107,7 @@ inline microrestd::string_piece sp(const char* str, size_t len) { return microre
 
 const char* morphodita_service::json_mime = "application/json";
 const char* morphodita_service::operation_not_supported = "Required operation is not supported by the chosen model.\n";
+const char* morphodita_service::infclen_header = "X-Billing-Input-NFC-Len";
 
 morphodita_service::rest_response_generator::rest_response_generator(const model_info* model, rest_output_mode output)
   : first(true), last(false), output(output) {
@@ -148,7 +152,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
   if (!model) return req.respond_error(error);
   if (!model->get_tagger()) return req.respond_error(operation_not_supported);
 
-  auto data = get_data(req, error); if (!data) return req.respond_error(error);
+  string data; int infclen; if (!get_data(req, data, infclen, error)) return req.respond_error(error);
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
@@ -157,9 +161,9 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
 
   class generator : public rest_response_generator {
    public:
-    generator(const model_info* model, const char* data, const Tagger* tagger, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter, derivation_formatter* derivation, rest_output_mode output)
-        : rest_response_generator(model, output), tagger(tagger), guesser(guesser), tokenizer(tokenizer), converter(converter), derivation(derivation), unprinted(data) {
-      tokenizer->set_text(data);
+    generator(const model_info* model, string&& data, const Tagger* tagger, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter, derivation_formatter* derivation, rest_output_mode output)
+        : rest_response_generator(model, output), data(data), tagger(tagger), guesser(guesser), tokenizer(tokenizer), converter(converter), derivation(derivation), unprinted(this->data.c_str()) {
+      tokenizer->set_text(this->data);
     }
 
     bool next(bool first) {
@@ -205,6 +209,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
     }
 
    private:
+    string data;
     const Tagger* tagger;
     Guesser guesser;
     vector<tagged_lemma> analyses;
@@ -215,7 +220,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
     vector<string_piece> forms;
     vector<tagged_lemma> tags;
   };
-  return req.respond(json_mime, new generator(model, data, model->get_tagger(), guesser, tokenizer.release(), converter.release(), derivation.release(), output));
+  return req.respond(json_mime, new generator(model, move(data), model->get_tagger(), guesser, tokenizer.release(), converter.release(), derivation.release(), output), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
@@ -225,7 +230,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
   if (!model) return req.respond_error(error);
   if (!model->get_morpho()) return req.respond_error(operation_not_supported);
 
-  auto data = get_data(req, error); if (!data) return req.respond_error(error);
+  string data; int infclen; if (!get_data(req, data, infclen, error)) return req.respond_error(error);
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<Tokenizer> tokenizer(get_tokenizer(req, model, error)); if (!tokenizer) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
@@ -234,9 +239,9 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
 
   class generator : public rest_response_generator {
    public:
-    generator(const model_info* model, const char* data, rest_output_mode output, const Morpho* morpho, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter, derivation_formatter* derivation)
-        : rest_response_generator(model, output), morpho(morpho), guesser(guesser), tokenizer(tokenizer), converter(converter), derivation(derivation), unprinted(data) {
-      tokenizer->set_text(data);
+    generator(const model_info* model, string&& data, rest_output_mode output, const Morpho* morpho, Guesser guesser, Tokenizer* tokenizer, tagset_converter* converter, derivation_formatter* derivation)
+        : rest_response_generator(model, output), data(data), morpho(morpho), guesser(guesser), tokenizer(tokenizer), converter(converter), derivation(derivation), unprinted(this->data.c_str()) {
+      tokenizer->set_text(this->data);
     }
 
     bool next(bool first) {
@@ -286,6 +291,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
     }
 
    private:
+    string data;
     const Morpho* morpho;
     Guesser guesser;
     unique_ptr<Tokenizer> tokenizer;
@@ -295,7 +301,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
     vector<string_piece> forms;
     vector<tagged_lemma> tags;
   };
-  return req.respond(json_mime, new generator(model, data, output, model->get_morpho(), guesser, tokenizer.release(), converter.release(), derivation.release()));
+  return req.respond(json_mime, new generator(model, move(data), output, model->get_morpho(), guesser, tokenizer.release(), converter.release(), derivation.release()), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
@@ -305,7 +311,7 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
   if (!model) return req.respond_error(error);
   if (!model->get_morpho()) return req.respond_error(operation_not_supported);
 
-  auto data = get_data(req, error); if (!data) return req.respond_error(error);
+  string data; int infclen; if (!get_data(req, data, infclen, error)) return req.respond_error(error);
   auto guesser = get_guesser(req, error); if (guesser < 0) return req.respond_error(error);
   unique_ptr<tagset_converter> converter(get_convert_tagset(req, *model->get_morpho(), error)); if (!converter) return req.respond_error(error);
   rest_output_mode output(VERTICAL); if (!get_output_mode(req, output, error)) return req.respond_error(error);
@@ -313,12 +319,12 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
 
   class generator : public rest_response_generator {
    public:
-    generator(const model_info* model, const char* data, rest_output_mode output, const Morpho* morpho, Guesser guesser, tagset_converter* converter)
-        : rest_response_generator(model, output), data(data), morpho(morpho), guesser(guesser), converter(converter) {}
+    generator(const model_info* model, string&& data, rest_output_mode output, const Morpho* morpho, Guesser guesser, tagset_converter* converter)
+        : rest_response_generator(model, output), data(data), data_unprocessed(this->data.c_str()), morpho(morpho), guesser(guesser), converter(converter) {}
 
     bool next(bool /*first*/) {
       string_piece line;
-      if (!get_line(data, line)) return false;
+      if (!get_line(data_unprocessed, line)) return false;
 
       if (output.mode == JSON) json.array();
       if (line.len) {
@@ -353,13 +359,13 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
     }
 
    private:
-    const char* data;
+    string data; const char* data_unprocessed;
     const Morpho* morpho;
     Guesser guesser;
     unique_ptr<tagset_converter> converter;
     vector<tagged_lemma_forms> forms;
   };
-  return req.respond(json_mime, new generator(model, data, output, model->get_morpho(), guesser, converter.release()));
+  return req.respond(json_mime, new generator(model, move(data), output, model->get_morpho(), guesser, converter.release()), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
@@ -369,14 +375,14 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
   if (!model) return req.respond_error(error);
   if (!model->can_tokenize) return req.respond_error(operation_not_supported);
 
-  auto data = get_data(req, error); if (!data) return req.respond_error(error);
+  string data; int infclen; if (!get_data(req, data, infclen, error)) return req.respond_error(error);
   rest_output_mode output(XML); if (!get_output_mode(req, output, error)) return req.respond_error(error);
 
   class generator : public rest_response_generator {
    public:
-    generator(const model_info* model, const char* data, rest_output_mode output, Tokenizer* tokenizer)
-        : rest_response_generator(model, output), tokenizer(tokenizer), unprinted(data) {
-      tokenizer->set_text(data);
+    generator(const model_info* model, string&& data, rest_output_mode output, Tokenizer* tokenizer)
+        : rest_response_generator(model, output), data(data), tokenizer(tokenizer), unprinted(this->data.c_str()) {
+      tokenizer->set_text(this->data);
     }
 
     bool next(bool first) {
@@ -414,11 +420,12 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
     }
 
    private:
+    string data;
     unique_ptr<Tokenizer> tokenizer;
     const char* unprinted;
     vector<string_piece> forms;
   };
-  return req.respond(json_mime, new generator(model, data, output, model->get_tokenizer()));
+  return req.respond(json_mime, new generator(model, move(data), output, model->get_tokenizer()), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 // REST service helpers
@@ -430,11 +437,18 @@ const string& morphodita_service::get_rest_model_id(microrestd::rest_request& re
   return model_it == req.params.end() ? empty : model_it->second;
 }
 
-const char* morphodita_service::get_data(microrestd::rest_request& req, string& error) {
+bool morphodita_service::get_data(microrestd::rest_request& req, string& data, int& infclen, string& error) {
   auto data_it = req.params.find("data");
-  if (data_it == req.params.end()) return error.assign("Required argument 'data' is missing.\n"), nullptr;
+  if (data_it == req.params.end()) return error.assign("Required argument 'data' is missing.\n"), false;
 
-  return data_it->second.c_str();
+  u32string codepoints;
+  unilib::utf8::decode(data_it->second, codepoints);
+  unilib::uninorms::nfc(codepoints);
+  infclen = 0;
+  for (auto&& codepoint : codepoints)
+    infclen += !(unilib::unicode::category(codepoint) & (unilib::unicode::C | unilib::unicode::Z));
+  unilib::utf8::encode(codepoints, data);
+  return true;
 }
 
 morpho::guesser_mode morphodita_service::get_guesser(microrestd::rest_request& req, string& error) {

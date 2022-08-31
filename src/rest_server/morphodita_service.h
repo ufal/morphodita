@@ -101,7 +101,7 @@ class morphodita_service : public microrestd::rest_service {
   bool handle_rest_tokenize(microrestd::rest_request& req);
 
   const string& get_rest_model_id(microrestd::rest_request& req);
-  const char* get_data(microrestd::rest_request& req, string& error);
+  bool get_data(microrestd::rest_request& req, string& data, int& infclen, string& error);
   morpho::guesser_mode get_guesser(microrestd::rest_request& req, string& error);
   tokenizer* get_tokenizer(microrestd::rest_request& req, const model_info* model, string& error);
   tagset_converter* get_convert_tagset(microrestd::rest_request& req, const Morpho& morpho, string& error);
@@ -112,6 +112,7 @@ class morphodita_service : public microrestd::rest_service {
   microrestd::json_builder json_models;
   static const char* json_mime;
   static const char* operation_not_supported;
+  static const char* infclen_header;
 };
 
 } // namespace morphodita
