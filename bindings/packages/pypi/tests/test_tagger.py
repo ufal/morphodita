@@ -2,13 +2,14 @@
 # vim:fileencoding=utf8
 from __future__ import unicode_literals
 
+import os
 import unittest
 
 class TestTagger(unittest.TestCase):
     def test_tagger(self):
         import ufal.morphodita
 
-        tagger = ufal.morphodita.Tagger.load('test/data/test.tagger')
+        tagger = ufal.morphodita.Tagger.load(os.path.join(os.path.dirname(__file__),  "data", "test.tagger"))
         self.assertTrue(tagger)
 
         def tag(self, sentence, results):

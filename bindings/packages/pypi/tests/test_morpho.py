@@ -2,13 +2,14 @@
 # vim:fileencoding=utf8
 from __future__ import unicode_literals
 
+import os
 import unittest
 
 class TestTagger(unittest.TestCase):
     def test_tagger(self):
         import ufal.morphodita
 
-        morpho = ufal.morphodita.Morpho.load('test/data/test.dict')
+        morpho = ufal.morphodita.Morpho.load(os.path.join(os.path.dirname(__file__),  "data", "test.dict"))
         self.assertTrue(morpho)
 
         def analyze(self, word, results, found = morpho.NO_GUESSER):

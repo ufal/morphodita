@@ -1,5 +1,3 @@
 #!/bin/sh
 
-for test in test/*.py; do
-  PYTHONPATH=`echo build/lib.*` python $test
-done
+PYTHONPATH=`echo ufal.morphodita/build/lib.*` python3 -m unittest discover -s ufal.morphodita/tests
