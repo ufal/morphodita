@@ -1,3 +1,7 @@
+Version 1.11.1-dev
+------------------
+
+
 Version 1.11.0 [01 Sep 22]
 --------------------------
 - When analyzing numerals, if the form ends with a dot, keep the dot

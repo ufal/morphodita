@@ -16,7 +16,7 @@ namespace ufal {
 namespace morphodita {
 
 version version::current() {
-  return {1, 11, 0, ""};
+  return {1, 11, 1, "dev"};
 }
 
 // Returns multi-line formated version and copyright string.
