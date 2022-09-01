@@ -37,6 +37,7 @@ in the
 %manual% [MorphoDiTa User's Manual #users_manual].
 Currently the following language models are available:
 
+- Czech MorfFlex2+PDT-C: [czech-morfflex2.0-pdtc1.0-220710 http://hdl.handle.net/11234/1-4794] (requires MorphoDiTa 1.9, [documentation http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex2-pdtc])
 - Czech MorfFlex+PDT: [czech-morfflex-pdt-161115 http://hdl.handle.net/11234/1-1836] (requires MorphoDiTa 1.9, [documentation http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt]); older versions: [czech-morfflex-pdt-160310 http://hdl.handle.net/11234/1-1674] ([documentation http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt_changes]), [czech-morfflex-pdt-131112 http://hdl.handle.net/11858/00-097C-0000-0023-68D8-1] ([documentation http://ufal.mff.cuni.cz/morphodita/users-manual#czech-morfflex-pdt_changes])
 - Slovak MorfFlex+PDT: [slovak-morfflex-pdt-170914 http://hdl.handle.net/11234/1-3278] (requires MorphoDiTa 1.9, [documentation http://ufal.mff.cuni.cz/morphodita/users-manual#slovak-morfflex-pdt])
 - English Morphium+WSJ: [english-morphium-wsj-140407 http://hdl.handle.net/11858/00-097C-0000-0023-68D9-0] ([documentation http://ufal.mff.cuni.cz/morphodita/users-manual#english-morphium-wsj])

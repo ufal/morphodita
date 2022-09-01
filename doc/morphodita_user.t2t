@@ -20,6 +20,9 @@ tools and interfaces. The C++ library is described elsewhere, either in
 MorphoDiTa API Tutorial or in MorphoDiTa API Reference.
 
 
+%!include: morphodita_model_czech-morfflex2-pdtc.t2t
+
+
 %!include: morphodita_model_czech-morfflex-pdt.t2t
 
 
