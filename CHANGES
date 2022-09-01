@@ -1,5 +1,5 @@
-Version 1.10.2-devel
---------------------
+Version 1.11.0 [01 Sep 22]
+--------------------------
 - When analyzing numerals, if the form ends with a dot, keep the dot
   in the lemma (previously the dot was discarded).
 - Correctly handle lemma number which is not null-terminated in `generate`.
@@ -8,6 +8,7 @@ Version 1.10.2-devel
 - Add ARM64 macOS build.
 - The Windows binaries are now compiled with VS 2019, older systems
   than Windows 7 are no longer supported.
+- Add billing information to the REST server.
 - Add type information to the Python package.
 - The Python wheels are provided for Pythons 3.6-3.11.
 
