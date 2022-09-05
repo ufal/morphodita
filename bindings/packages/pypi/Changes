@@ -1,5 +1,8 @@
 Revision history for ufal.morphodita
 
+1.11.0.3 [05 Sep 22]
+         In the type stubs, mark arguments to nextSentence as optional.
+
 1.11.0.1 [01 Sep 22]
          Update MorphoDiTa to version 1.11.0.
          Add type information to the Python package.
