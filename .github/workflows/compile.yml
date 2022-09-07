@@ -59,4 +59,4 @@ jobs:
 
       - name: Compile tests
         run: make PLATFORM=${{ matrix.platform }} -k -C tests all
-        if: matrix.platform != 'macos-clang-64'
+        if: matrix.platform != 'macos-clang-arm64'
