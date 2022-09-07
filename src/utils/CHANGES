@@ -1,3 +1,8 @@
+Version 3.5.2 [07 Sep 2022]
+---------------------------
+- Fix warning on clang in compressor_save.cpp.
+
+
 Version 3.5.1 [25 Aut 2022]
 ---------------------------
 - Correctly use path_from_utf8.h in named_values.h and process_args.h.
