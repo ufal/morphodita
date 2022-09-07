@@ -1,13 +1,13 @@
 # This file is part of C++-Builtem <http://github.com/ufal/cpp_builtem/>.
 #
-# Copyright 2014 Institute of Formal and Applied Linguistics, Faculty of
+# Copyright 2022 Institute of Formal and Applied Linguistics, Faculty of
 # Mathematics and Physics, Charles University in Prague, Czech Republic.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-BUILTEM_VERSION := 1.3.0
+BUILTEM_VERSION := 2.0.0-dev
 
 ############
 # PLATFORM #
@@ -18,7 +18,7 @@ ifndef PLATFORM
   ifeq ($(OS),Windows_NT)
     PLATFORM=win
   else ifeq ($(shell uname),Darwin)
-    PLATFORM=osx
+    PLATFORM=macos
   else
     PLATFORM=linux
   endif
@@ -28,14 +28,77 @@ endif
 ifeq ($(PLATFORM),linux)
   override PLATFORM=linux-gcc
 else ifeq ($(PLATFORM),win)
-  override PLATFORM=win-gcc
-else ifeq ($(PLATFORM),osx)
-  override PLATFORM=osx-clang
+  override PLATFORM=win-vs
+else ifeq ($(PLATFORM),macos)
+  override PLATFORM=macos-clang
+endif
+
+# expand architecture if not specified
+ifneq ($(filter linux-gcc linux-clang,$(PLATFORM)),)
+  PLATFORM_ARCH:=$(shell uname -m)
+  ifneq ($(filter x86_64,$(PLATFORM_ARCH)),)
+    override PLATFORM:=$(PLATFORM)-64
+  else ifneq ($(filter i386 i686,$(PLATFORM_ARCH)),)
+    override PLATFORM:=$(PLATFORM)-32
+  else
+    $(error Architecture $(PLATFORM_ARCH) is currently unsupported on platform $(PLATFORM))
+  endif
+else ifneq ($(filter win-vs win-gcc,$(PLATFORM)),)
+  ifneq ($(filter AMD64,$(PROCESSOR_ARCHITECTURE))$(filter AMD64,$(PROCESSOR_ARCHITEW6432)),)
+    override PLATFORM:=$(PLATFORM)-64
+  else ifeq ($(filter x86,$(PROCESSOR_ARCHITECTURE))$(PROCESSOR_ARCHITEW6432),x86-)
+    override PLATFORM:=$(PLATFORM)-32
+  else
+    $(error Architecture $(PROCESSOR_ARCHITECTURE) is currently unsupported on platform $(PLATFORM))
+  endif
+else ifneq ($(filter macos-clang,$(PLATFORM)),)
+  PLATFORM_ARCH:=$(shell uname -m)
+  ifneq ($(filter x86_64,$(PLATFORM_ARCH)),)
+    override PLATFORM:=$(PLATFORM)-64
+  else ifneq ($(filter arm64,$(PLATFORM_ARCH)),)
+    override PLATFORM:=$(PLATFORM)-arm64
+  else
+    $(error Architecture $(PLATFORM_ARCH) is currently unsupported on platform $(PLATFORM))
+  endif
 endif
 
 # fail for unknown platforms
-ifeq ($(filter linux-gcc linux-clang win-gcc win-vs osx-clang,$(PLATFORM)),)
-  $(error Unsupported platform $(PLATFORM), only linux[-gcc], linux-clang, win[-gcc], win-vs and osx[-clang] are supported)
+PLATFORMS = linux-gcc-64 linux-gcc-32 linux-clang-64 linux-clang-32
+PLATFORMS += win-vs-64 win-vs-32 win-gcc-64 win-gcc-32
+PLATFORMS += macos-clang-64 macos-clang-arm64
+ifeq ($(filter $(PLATFORMS),$(PLATFORM)),)
+  $(error Unsupported platform $(PLATFORM), only $(PLATFORMS) are supported)
+endif
+
+################
+# CPP STANDARD #
+################
+ifndef CPP_STANDARD
+  CPP_STANDARD=c++11
+endif
+
+# fail for unknown standards
+ifeq ($(filter c++11 c++14 c++17,$(CPP_STANDARD)),)
+  $(error Unsupported C++ standard $(CPP_STANDARD), only [c++11], c++17, c++17 are supported)
+endif
+
+####################
+# COMPILATION MODE #
+####################
+
+# set default mode if unspecified
+ifndef MODE
+  MODE=normal
+endif
+
+# fail for unknown modes
+ifeq ($(filter normal release debug profile,$(MODE)),)
+  $(error Unsupported compilation mode $(MODE), only [normal], release, debug, profile supported)
+endif
+ifeq ($(MODE),profile)
+  ifneq ($(filter win-vs-%,$(PLATFORM)),)
+    $(error Profile mode is currently not supported on win-vs platform)
+  endif
 endif
 
 ##################
@@ -73,53 +136,9 @@ else ifeq ($(PLATFORM_SHELL),cmd)
   rm = $(foreach f,$(subst /,\,$(wildcard $(1))),if exist $(f) del /q $(f)& if exist $(f) rd /s /q $(f)& )
 endif
 
-####################
-# COMPILATION MODE #
-####################
-
-# set default mode if unspecified
-ifndef MODE
-  MODE=normal
-endif
-
-# fail for unknown modes
-ifeq ($(filter normal release debug profile,$(MODE)),)
-  $(error Unsupported compilation mode $(MODE), only [normal], release, debug and profile supported)
-endif
-ifeq ($(MODE),profile)
-  ifeq ($(PLATFORM),win-vs)
-    $(error Profile mode is currently not supported on win-vs platform)
-  endif
-endif
-
-###########
-# BITNESS #
-###########
-
-# fail for unknown bitness or unsupported platform
-ifndef BITS
-  ifeq ($(PLATFORM),win-vs)
-    $(error Bitness not specified, but one of 32 and 64 is required on $(PLATFORM))
-  endif
-endif
-
-ifdef BITS
-  ifneq ($(filter linux-% win-%,$(PLATFORM)),)
-    ifeq ($(filter 32 64,$(BITS)),)
-      $(error Unsupported bitness $(BITS), only 32 and 64 supported on $(PLATFORM))
-    endif
-  else ifneq ($(filter osx-%,$(PLATFORM)),)
-    ifeq ($(filter 64 arm64,$(BITS)),)
-      $(error Unsupported bitness $(BITS), only 64 and arm64 supported on $(PLATFORM))
-    endif
-  else
-    $(error Unsupported bitness $(BITS), no bitness is supported on $(PLATFORM))
-  endif
-endif
-
 # Report PLATFORM, PLATFORM_SHELL, MODE and BITNESS if requested
 ifdef VERBOSE
-  $(info Build $(MODE)$(if $(BITS),-$(BITS),) on platform $(PLATFORM) with shell $(PLATFORM_SHELL))
+  $(info Build $(MODE) with $(CPP_STANDARD) on platform $(PLATFORM) with shell $(PLATFORM_SHELL))
 endif
 
 #####################
@@ -129,26 +148,26 @@ endif
 # executable and library namings
 builtem_mangle = $(subst /,-,$(subst /_,-__,$(subst /-,-_-,$(subst //,-_-_,$(subst -,--,$(1))))))
 builtem_demangle = $(subst /_,/,$(subst //,-,$(subst -,/,$(1))))
-builtem_obj = .build/$(call builtem_mangle,$(1)).$(PLATFORM)-$(MODE)$(BITS)
+builtem_obj = .build/$(call builtem_mangle,$(1)).$(PLATFORM)-$(MODE)
 ifneq ($(filter linux-%,$(PLATFORM)),)
   exe = $(1)
   lib = $(1:=.a)
   dynlib = $(1:=.so)
   obj = $(foreach obj,$(1),$(call builtem_obj,$(obj)).o)
   dynobj = $(call obj,$(1:%=%.dyn))
-else ifeq ($(PLATFORM),win-vs)
+else ifneq ($(filter win-vs-%,$(PLATFORM)),)
   exe = $(1:=.exe)
   lib = $(1:=.lib)
   dynlib = $(1:=.dll)
   obj = $(foreach obj,$(1),$(call builtem_obj,$(obj)).obj)
   dynobj = $(call obj,$(1:%=%.dyn))
-else ifeq ($(PLATFORM),win-gcc)
+else ifneq ($(filter win-gcc-%,$(PLATFORM)),)
   exe = $(1:=.exe)
   lib = $(1:=.a)
   dynlib = $(1:=.dll)
   obj = $(foreach obj,$(1),$(call builtem_obj,$(obj)).o)
   dynobj = $(call obj,$(1:%=%.dyn))
-else ifneq ($(filter osx-%,$(PLATFORM)),)
+else ifneq ($(filter macos-%,$(PLATFORM)),)
   exe = $(1)
   lib = $(1:=.a)
   dynlib = $(1:=.dylib)
@@ -167,18 +186,18 @@ else
 endif
 
 # switches
-ifneq ($(filter linux-gcc linux-clang win-gcc,$(PLATFORM)),)
+ifneq ($(filter linux-gcc-% linux-clang-% win-gcc-%,$(PLATFORM)),)
   ifneq ($(filter undefined default,$(origin CXX)),)
-    CXX = $(if $(filter %-gcc,$(PLATFORM)),g++,clang++)
+    CXX = $(if $(findstring -gcc-,$(PLATFORM)),g++,clang++)
   endif
-  C_FLAGS += -std=c++11 -W -Wall -mtune=generic -msse -msse2 -mfpmath=sse -fvisibility=hidden
+  C_FLAGS += -std=$(CPP_STANDARD) -W -Wall -mtune=generic -msse -msse2 -mfpmath=sse -fvisibility=hidden
   C_FLAGS += $(if $(filter win-%,$(PLATFORM)),-DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0601)
   DYN_C_FLAGS += $(if $(filter linux-%,$(PLATFORM)),-fPIC)
   DYN_LD_FLAGS += -shared
 
-  ifeq ($(BITS),32)
+  ifneq ($(filter %-32,$(PLATFORM)),)
     C_FLAGS += -m32
-  else ifeq ($(BITS),64)
+  else ifneq ($(filter %-64,$(PLATFORM)),)
     C_FLAGS += -m64
   endif
 
@@ -187,18 +206,18 @@ ifneq ($(filter linux-gcc linux-clang win-gcc,$(PLATFORM)),)
   else ifeq ($(MODE),debug)
     C_FLAGS += -g -DDEBUG
   else ifeq ($(MODE),profile)
-    C_FLAGS += -O3 $(if $(filter %-gcc,$(PLATFORM)),-g1 -pg,-gline-tables-only)
-    LD_FLAGS += $(if $(filter %-gcc,$(PLATFORM)),-pg)
+    C_FLAGS += -O3 $(if $(findstring -gcc-,$(PLATFORM)),-g1 -pg,-gline-tables-only)
+    LD_FLAGS += $(if $(findstring -gcc-,$(PLATFORM)),-pg)
   else ifeq ($(MODE),release)
     C_FLAGS += -O3 -flto
     LD_FLAGS += -s -static-libgcc -static-libstdc++
   endif
-else ifeq ($(PLATFORM),win-vs)
+else ifneq ($(filter win-vs-%,$(PLATFORM)),)
   ifneq ($(filter undefined default,$(origin CXX)),)
     CXX = cl
   endif
-  C_FLAGS += /nologo /W 2 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=0x0601 /EHsc /utf-8
-  LD_FLAGS += /MANIFEST:EMBED /MACHINE:$(if $(filter 32,$(BITS)),X86,X64)
+  C_FLAGS += /nologo $(if $(filter c++11,$(CPP_STANDARD)),,/std:$(CPP_STANDARD)) /W 2 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=0x0601 /EHsc /utf-8
+  LD_FLAGS += /MANIFEST:EMBED /MACHINE:$(if $(filter %-32,$(PLATFORM)),X86,X64)
 
   ifeq ($(MODE),normal)
     C_FLAGS += /O2 /MT
@@ -212,16 +231,23 @@ else ifeq ($(PLATFORM),win-vs)
     DYN_C_FLAGS += /LDd
     LD_FLAGS += /DEBUG
   endif
-else ifeq ($(PLATFORM),osx-clang)
+else ifneq ($(filter macos-clang-%,$(PLATFORM)),)
   ifneq ($(filter undefined default,$(origin CXX)),)
     CXX = clang++
   endif
-  C_FLAGS += -std=c++11 -W -Wall -mtune=generic -fvisibility=hidden -stdlib=libc++
+  C_FLAGS += -std=$(CPP_STANDARD) -W -Wall -mtune=generic -fvisibility=hidden -stdlib=libc++
   DYN_LD_FLAGS += -dynamiclib
 
-  ifeq ($(BITS),64)
-    C_FLAGS += -target x86_64-apple-macos10.9
-  else ifeq ($(BITS),arm64)
+
+  ifneq ($(filter %-32,$(PLATFORM)),)
+    C_FLAGS += -m32
+  else ifneq ($(filter %-64,$(PLATFORM)),)
+    C_FLAGS += -m64
+  endif
+
+  ifneq ($(filter %-64,$(PLATFORM)),)
+    C_FLAGS += -target x86_64-apple-macos$(if $(filter c++11 c++14,$(CPP_STANDARD)),10.9,10.14)
+  else ifneq ($(filter %-arm64,$(PLATFORM)),)
     C_FLAGS += -target arm64-apple-macos11
   endif
 
@@ -238,8 +264,8 @@ else ifeq ($(PLATFORM),osx-clang)
 endif
 
 # build commands
-builtem_link_deps = @$(call echo,>.build/$(call builtem_mangle,$(1)).link.d,.PHONY: $$(if $$(filter $(PLATFORM)-$(MODE)$(BITS),$$(PLATFORM)-$$(MODE)$$(BITS)),,$(1)))
-ifeq ($(PLATFORM),win-vs)
+builtem_link_deps = @$(call echo,>.build/$(call builtem_mangle,$(1)).link.d,.PHONY: $$(if $$(filter $(PLATFORM)-$(MODE),$$(PLATFORM)-$$(MODE)),,$(1)))
+ifneq ($(filter win-vs-%,$(PLATFORM)),)
   compile = .build/cl_deps $(1) $(CXX) /Fo$(1) $(C_FLAGS) /c $(2)
   compile_dyn = .build/cl_deps $(1) $(CXX) /Fo$(1) $(C_FLAGS) $(DYN_C_FLAGS) /c $(2)
   define link_exe
@@ -273,7 +299,7 @@ else
 endif
 
 # flag methods
-ifeq ($(PLATFORM),win-vs)
+ifneq ($(filter win-vs-%,$(PLATFORM)),)
   include_dir = $(1:%=/I %)
   use_library = $(1:%=%.lib)
   define_macro = /D $(1)$(if $(2),=$(2))
@@ -292,13 +318,13 @@ ifneq ($(filter linux-%,$(PLATFORM)),)
   use_threads = -pthread
 endif
 
-ifneq ($(filter %-gcc,$(PLATFORM)),)
+ifneq ($(findstring -gcc-,$(PLATFORM)),)
   use_linker = -fuse-ld=$(1)
 endif
 
-ifeq ($(PLATFORM),win-vs)
+ifneq ($(filter win-vs-%,$(PLATFORM)),)
   win_subsystem = /SUBSYSTEM:$(1),6 /ENTRY:$(if $(2),$(2),main)CRTStartup
-else ifeq ($(PLATFORM),win-gcc)
+else ifneq ($(filter win-gcc-%,$(PLATFORM)),)
   win_subsystem = -Wl,--subsystem=$(1) $(if $(filter wmain,$(2)),-municode,)
 endif
 
@@ -318,11 +344,11 @@ COMPILE_DEPS += $(BUILTEM_MAKEFILE_PATH)
 	@$(call mkdir,.build)
 
 # compile and use cl_deps on win-vs
-ifeq ($(PLATFORM),win-vs)
+ifneq ($(filter win-vs-%,$(PLATFORM)),)
 COMPILE_DEPS += .build/cl_deps.exe
 .build/cl_deps.exe: .build/cl_deps.cpp
 	@$(info Compiling cl_deps.exe)
-	@$(CXX) /Fe$@ /Fo$@.obj /nologo /W 2 /O1 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=0x0601 /EHsc /utf-8 /MT $< /link /MANIFEST:EMBED /MACHINE:$(if $(filter 32,$(BITS)),X86,X64) /SUBSYSTEM:console,6
+	@$(CXX) /Fe$@ /Fo$@.obj /nologo /W 2 /O1 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=0x0601 /EHsc /utf-8 /MT $< /link /MANIFEST:EMBED /SUBSYSTEM:console,6
 .build/cl_deps.cpp: | .build
 	@$(info Generating cl_deps.cpp)
 	@$(call echo,>$@,#include <ctype.h>)
