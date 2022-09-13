@@ -7,7 +7,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-BUILTEM_VERSION := 2.0.0-dev
+BUILTEM_VERSION := 2.0.0
 
 ############
 # PLATFORM #
@@ -41,15 +41,15 @@ ifneq ($(filter linux-gcc linux-clang,$(PLATFORM)),)
   else ifneq ($(filter i386 i686,$(PLATFORM_ARCH)),)
     override PLATFORM:=$(PLATFORM)-32
   else
-    $(error Architecture $(PLATFORM_ARCH) is currently unsupported on platform $(PLATFORM))
+    $(error Architecture $(PLATFORM_ARCH) is currently not supported on platform $(PLATFORM))
   endif
 else ifneq ($(filter win-vs win-gcc,$(PLATFORM)),)
   ifneq ($(filter AMD64,$(PROCESSOR_ARCHITECTURE))$(filter AMD64,$(PROCESSOR_ARCHITEW6432)),)
     override PLATFORM:=$(PLATFORM)-64
-  else ifeq ($(filter x86,$(PROCESSOR_ARCHITECTURE))$(PROCESSOR_ARCHITEW6432),x86-)
+  else ifeq ($(filter x86,$(PROCESSOR_ARCHITECTURE))$(PROCESSOR_ARCHITEW6432),x86)
     override PLATFORM:=$(PLATFORM)-32
   else
-    $(error Architecture $(PROCESSOR_ARCHITECTURE) is currently unsupported on platform $(PLATFORM))
+    $(error Architecture $(PROCESSOR_ARCHITECTURE) is currently not supported on platform $(PLATFORM))
   endif
 else ifneq ($(filter macos-clang,$(PLATFORM)),)
   PLATFORM_ARCH:=$(shell uname -m)
@@ -58,7 +58,7 @@ else ifneq ($(filter macos-clang,$(PLATFORM)),)
   else ifneq ($(filter arm64,$(PLATFORM_ARCH)),)
     override PLATFORM:=$(PLATFORM)-arm64
   else
-    $(error Architecture $(PLATFORM_ARCH) is currently unsupported on platform $(PLATFORM))
+    $(error Architecture $(PLATFORM_ARCH) is currently not supported on platform $(PLATFORM))
   endif
 endif
 
@@ -191,14 +191,14 @@ ifneq ($(filter linux-gcc-% linux-clang-% win-gcc-%,$(PLATFORM)),)
     CXX = $(if $(findstring -gcc-,$(PLATFORM)),g++,clang++)
   endif
   C_FLAGS += -std=$(CPP_STANDARD) -W -Wall -mtune=generic -msse -msse2 -mfpmath=sse -fvisibility=hidden
-  C_FLAGS += $(if $(filter win-%,$(PLATFORM)),-DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0601)
+  C_FLAGS += $(if $(filter win-%,$(PLATFORM)),-DWIN32 -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0601)
   DYN_C_FLAGS += $(if $(filter linux-%,$(PLATFORM)),-fPIC)
   DYN_LD_FLAGS += -shared
 
-  ifneq ($(filter %-32,$(PLATFORM)),)
-    C_FLAGS += -m32
-  else ifneq ($(filter %-64,$(PLATFORM)),)
+  ifneq ($(filter %-64,$(PLATFORM)),)
     C_FLAGS += -m64
+  else ifneq ($(filter %-32,$(PLATFORM)),)
+    C_FLAGS += -m32
   endif
 
   ifeq ($(MODE),normal)
@@ -217,7 +217,7 @@ else ifneq ($(filter win-vs-%,$(PLATFORM)),)
     CXX = cl
   endif
   C_FLAGS += /nologo $(if $(filter c++11,$(CPP_STANDARD)),,/std:$(CPP_STANDARD)) /W 2 /D WIN32 /D UNICODE /D _UNICODE /D _WIN32_WINNT=0x0601 /EHsc /utf-8
-  LD_FLAGS += /MANIFEST:EMBED /MACHINE:$(if $(filter %-32,$(PLATFORM)),X86,X64)
+  LD_FLAGS += /MANIFEST:EMBED /MACHINE:$(if $(filter %-64,$(PLATFORM)),X64,X86)
 
   ifeq ($(MODE),normal)
     C_FLAGS += /O2 /MT
@@ -237,13 +237,6 @@ else ifneq ($(filter macos-clang-%,$(PLATFORM)),)
   endif
   C_FLAGS += -std=$(CPP_STANDARD) -W -Wall -mtune=generic -fvisibility=hidden -stdlib=libc++
   DYN_LD_FLAGS += -dynamiclib
-
-
-  ifneq ($(filter %-32,$(PLATFORM)),)
-    C_FLAGS += -m32
-  else ifneq ($(filter %-64,$(PLATFORM)),)
-    C_FLAGS += -m64
-  endif
 
   ifneq ($(filter %-64,$(PLATFORM)),)
     C_FLAGS += -target x86_64-apple-macos$(if $(filter c++11 c++14,$(CPP_STANDARD)),10.9,10.14)
