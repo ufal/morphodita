@@ -1,5 +1,10 @@
 Revision history for ufal.morphodita
 
+1.11.0.4 [18 Feb 23]
+         Do not assume char is signed; fixes silent errors on aarch64
+           when compiled from the source (e.g. in Docker on ARM macOS).
+         Also provide aarch64 wheels.
+
 1.11.0.3 [05 Sep 22]
          In the type stubs, mark arguments to nextSentence as optional.
 
