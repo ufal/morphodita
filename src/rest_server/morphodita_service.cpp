@@ -169,7 +169,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
     bool next(bool first) {
       if (!tokenizer->next_sentence(&forms, nullptr)) {
         if (output.mode == XML && *unprinted) json.value_xml_escape(unprinted, true);
-        if (output.mode == JSON && !first && *unprinted) json.key("spaces").value(unprinted);
+        if (output.mode == JSON && !first && *unprinted) json.key("space").value(unprinted);
         if (output.mode == JSON && !first) json.close().close();
         return false;
       }
@@ -247,7 +247,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
     bool next(bool first) {
       if (!tokenizer->next_sentence(&forms, nullptr)) {
         if (output.mode == XML && *unprinted) json.value_xml_escape(unprinted, true);
-        if (output.mode == JSON && !first && *unprinted) json.key("spaces").value(unprinted);
+        if (output.mode == JSON && !first && *unprinted) json.key("space").value(unprinted);
         if (output.mode == JSON && !first) json.close().close();
         return false;
       }
@@ -388,7 +388,7 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
     bool next(bool first) {
       if (!tokenizer->next_sentence(&forms, nullptr)) {
         if (output.mode == XML && *unprinted) json.value_xml_escape(unprinted, true);
-        if (output.mode == JSON && !first && *unprinted) json.key("spaces").value(unprinted);
+        if (output.mode == JSON && !first && *unprinted) json.key("space").value(unprinted);
         if (output.mode == JSON && !first) json.close().close();
         return false;
       }
