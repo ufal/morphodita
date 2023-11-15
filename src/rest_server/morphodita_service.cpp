@@ -220,7 +220,7 @@ bool morphodita_service::handle_rest_tag(microrestd::rest_request& req) {
     vector<string_piece> forms;
     vector<tagged_lemma> tags;
   };
-  return req.respond(json_mime, new generator(model, move(data), model->get_tagger(), guesser, tokenizer.release(), converter.release(), derivation.release(), output), {{infclen_header, to_string(infclen).c_str()}});
+  return req.respond(json_mime, new generator(model, std::move(data), model->get_tagger(), guesser, tokenizer.release(), converter.release(), derivation.release(), output), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
@@ -301,7 +301,7 @@ bool morphodita_service::handle_rest_analyze(microrestd::rest_request& req) {
     vector<string_piece> forms;
     vector<tagged_lemma> tags;
   };
-  return req.respond(json_mime, new generator(model, move(data), output, model->get_morpho(), guesser, tokenizer.release(), converter.release(), derivation.release()), {{infclen_header, to_string(infclen).c_str()}});
+  return req.respond(json_mime, new generator(model, std::move(data), output, model->get_morpho(), guesser, tokenizer.release(), converter.release(), derivation.release()), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
@@ -365,7 +365,7 @@ bool morphodita_service::handle_rest_generate(microrestd::rest_request& req) {
     unique_ptr<tagset_converter> converter;
     vector<tagged_lemma_forms> forms;
   };
-  return req.respond(json_mime, new generator(model, move(data), output, model->get_morpho(), guesser, converter.release()), {{infclen_header, to_string(infclen).c_str()}});
+  return req.respond(json_mime, new generator(model, std::move(data), output, model->get_morpho(), guesser, converter.release()), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
@@ -425,7 +425,7 @@ bool morphodita_service::handle_rest_tokenize(microrestd::rest_request& req) {
     const char* unprinted;
     vector<string_piece> forms;
   };
-  return req.respond(json_mime, new generator(model, move(data), output, model->get_tokenizer()), {{infclen_header, to_string(infclen).c_str()}});
+  return req.respond(json_mime, new generator(model, std::move(data), output, model->get_tokenizer()), {{infclen_header, to_string(infclen).c_str()}});
 }
 
 // REST service helpers

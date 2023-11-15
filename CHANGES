@@ -4,6 +4,7 @@ Version 1.11.2-dev
   empty line if the preceding line ended with whitespace. However,
   only the REST server and the API was affected; the `run_*` binaries
   read input a paragraph at a time, and so circumvent the problem.
+- Fix warnings in Clang 15 by qualifying `std::move`.
 
 
 Version 1.11.1 [18 Feb 23]
