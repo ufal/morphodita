@@ -1,5 +1,13 @@
 Revision history for ufal.morphodita
 
+1.11.2.1 [15 Nov 23]
+         Update MorphoDiTa to version 1.11.2.
+         Fix a bug in the tokenizers, which did not end a sentence on an
+           empty line if the preceding line ended with whitespace. However,
+           only the REST server and the API was affected; the `run_*` binaries
+           read input a paragraph at a time, and so circumvent the problem.
+         Fix warnings in Clang 15 by qualifying `std::move`.
+
 1.11.1.1 [18 Feb 23]
          Do not assume char is signed; fixes silent errors on aarch64
            when compiled from the source (e.g. in Docker on ARM macOS).
