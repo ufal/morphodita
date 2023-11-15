@@ -1,5 +1,5 @@
-Version 1.11.2-dev
-------------------
+Version 1.11.2 [15 Nov 23]
+--------------------------
 - Fix a bug in the tokenizers, which did not end a sentence on an
   empty line if the preceding line ended with whitespace. However,
   only the REST server and the API was affected; the `run_*` binaries
