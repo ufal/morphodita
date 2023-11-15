@@ -1,3 +1,7 @@
+Version 1.11.3-dev
+------------------
+
+
 Version 1.11.2 [15 Nov 23]
 --------------------------
 - Fix a bug in the tokenizers, which did not end a sentence on an
