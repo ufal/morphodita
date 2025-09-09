@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 
   cerr << "Processing data: ";
 
-  int forms = 0;
+  int forms = 0, zero_results = 0;
   enum match_type { COMPLETE = 0, LEMMA_ID = 1, RAWLEMMA = 2, TAG = 3, MATCH_TYPES = 4 };
   int total_matches[MATCH_TYPES] = {};
   vector<tagged_lemma> lemmas;
@@ -58,8 +58,10 @@ int main(int argc, char* argv[]) {
     if (tokens.size() != 3) runtime_failure("The line " << line << " does not contain three columns!");
 
     // Analyse
-    if (dictionary->analyze(tokens[0], morpho::NO_GUESSER, lemmas) < 0)
+    if (dictionary->analyze(tokens[0], morpho::NO_GUESSER, lemmas) < 0) {
       lemmas.clear();
+      zero_results++;
+    }
 
     int rawlemma_len = dictionary->raw_lemma_len(tokens[1]);
     int lemmaid_len = dictionary->lemma_id_len(tokens[1]);
@@ -132,6 +134,7 @@ int main(int argc, char* argv[]) {
   cerr << "Accuracy of tli: " << 100 * ((total_matches[COMPLETE] + total_matches[LEMMA_ID]) / double(forms)) << '%' << endl;
   cerr << "Accuracy of trl: " << 100 * ((total_matches[COMPLETE] + total_matches[LEMMA_ID] + total_matches[RAWLEMMA]) / double(forms)) << '%' << endl;
   cerr << "Accuracy of t:   " << 100 * ((total_matches[COMPLETE] + total_matches[LEMMA_ID] + total_matches[RAWLEMMA] + total_matches[TAG]) / double(forms)) << '%' << endl;
+  cerr << "Accuracy of t/0: " << 100 * ((total_matches[COMPLETE] + total_matches[LEMMA_ID] + total_matches[RAWLEMMA] + total_matches[TAG] + zero_results) / double(forms)) << '%' << endl;
 
   return 0;
 }
