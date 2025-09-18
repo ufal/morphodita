@@ -4,13 +4,13 @@ Czech MorfFlex2+PDT-C Models
 == Czech MorfFlex2+PDT-C Models ==[czech-morfflex2-pdtc]
 
 Czech models are distributed under the
-[CC BY-NC-SA http://creativecommons.org/licenses/by-nc-sa/4.0/] licence.
+[CC BY-NC-SA https://creativecommons.org/licenses/by-nc-sa/4.0/] licence.
 The Czech morphology uses the
-[MorfFlex CZ 2.0 http://hdl.handle.net/11234/1-3186]
+[MorfFlex CZ 2.1 https://hdl.handle.net/11234/1-5833]
 Czech morphological dictionary and the Czech tagger is trained on
-[PDT-C 1.0 http://hdl.handle.net/11234/1-3185]. The morpholodical derivator
-is uses the [DeriNet 2.1 http://hdl.handle.net/11234/1-3765].
-Czech models work in MorphoDiTa version 1.9 or later.
+[PDT-C 2.0 https://hdl.handle.net/11234/1-5813]. The morpholodical derivator
+is uses the [DeriNet 2.3 https://hdl.handle.net/11234/1-5846].
+The models work in MorphoDiTa version 1.9 or later.
 
 Apart from MorfFlex CZ dictionary, a prefix guesser and statistical guesser
 are implemented and can be optionally used when performing morphological analysis.
@@ -18,8 +18,8 @@ are implemented and can be optionally used when performing morphological analysi
 
 === Download ===[czech-morfflex2-pdtc_download]
 
-The latest version 220710 of the Czech MorfFlex+PDT models can be downloaded
-from [LINDAT/CLARIN repository http://hdl.handle.net/11234/1-4794].
+The latest version 250909 of the Czech MorfFlex2+PDT-C models can be downloaded
+from [LINDAT/CLARIN repository https://hdl.handle.net/11234/1-5985].
 
 
 === Acknowledgements ===[czech-morfflex2-pdtc_acknowledgements]
@@ -39,11 +39,11 @@ by Ministry of Education, Youth and Sports of the Czech Republic (project
 - (Marie Mikulová et al., 2022) Mikulová Marie, Hajič Jan, Hana Jiří, Hanová Hana, Hlaváčová Jaroslava, Jeřábek Emil, Štěpánková Barbora, Vidová Hladká Barbora, Zeman Daniel. //[Manual for Morphological Annotation, Revision for the Prague Dependency Treebank - Consolidated 2020 release https://ufal.mff.cuni.cz/techrep/tr64.pdf].// Technical report no. TR-2020-64, Institute of Formal and Applied Linguistics, Charles University, Prague, Czechia, 2020.
 
 
-=== MorfFlex CZ 2.0 Morphological System ===[czech_morfflex2_system]
+=== MorfFlex CZ 2 Morphological System ===[czech_morfflex2_system]
 
-The MorfFlex CZ 2.0 uses a so-called //PDT-C tag set//, which is an evolution
+The MorfFlex CZ 2 uses a so-called //PDT-C tag set//, which is an evolution
 of the original //PDT tag set// devised by Jan Hajič
-([Hajič 2004 http://books.google.cz/books?id=sB63AAAACAAJ]).
+([Hajič 2004 https://books.google.cz/books?id=sB63AAAACAAJ]).
 The tags are positional with 15 positions corresponding to part of speech,
 detailed part of speech, gender, number, case, etc. (e.g. ``NNFS1-----A----``).
 Different meanings of same lemmas are distinguished and additional comments can
@@ -60,19 +60,17 @@ The complete reference can be found in the
 [Manual for Morphological Annotation, Revision for the Prague Dependency Treebank - Consolidated 2020 release https://ufal.mff.cuni.cz/techrep/tr64.pdf].
 
 
-=== PDT-C 1.0 Train/Dev/Test Split ===[czech-morfflex2-pdtc_split]
+=== PDT-C 2.0 Train/Dev/Test Split ===[czech-morfflex2-pdtc_split]
 
-The PDT-C corpus consists of four datasets, but some of them do not have
-an official train/dev/test split. We therefore used the following split:
+The PDT-C 2.0 corpus contains four datasets, each with an official train/dev/test split.
 
-- PDT dataset is already split into train, dev (``dtest``), and test (``etest``).
-- PCEDT dataset is a translated version of the Wall Street Journal, so we used
-  the usual split into train (sections 0-18), dev (sections 19-21), and test
-  (sections 22-24).
-- PDTSC and FAUST datasets have no split, so we split it into dev (documents
-  with identifiers ending with 6), test (documents with identifiers ending with 7),
-  and train (all the remaining documents).
-
+Note that this is different to PDT-C 1.0, where some datasets do not have an
+official split. The PDT-C 2.0 official splits are nearly identical to the ones
+used in MorhoDiTa PDT-C 1.0 models, with the exception of PCEDT, which is
+a translated version of the Wall Street Journal. Unfortunately, WSJ has several
+splits; PDT-C 2.0 uses sections 02-21 as train, sections 00, 01, 22, 24 as dev,
+and section 23 as test, while MorphoDiTa PDT-C 1.0 models use sections 0-18 as
+train, sections 19-21 as dev, and sections 22-24 as test.
 
 === Model Variants ===[czech-morfflex2-pdtc_variants]
 
@@ -90,6 +88,39 @@ texts with diacritics, we also provide several variants:
 
 === Model Performance ===[czech-morfflex2-pdtc_performance]
 
+||                                                      | Tags                                 ||||| Lemmas                               ||||| Performance         ||
+|| Model                                                | PDT   | PCEDT | PDTSC | Faust | MacroAvg | PDT   | PCEDT | PDTSC | Faust | MacroAvg | Speed       | Size   |
+ | ``czech-morfflex2.1-pdtc2.0-250909``                 | 95.95 | 97.24 | 97.63 | 95.08 | 96.47    | 98.29 | 98.98 | 98.83 | 97.69 | 98.45    | 26k toks/s  | 25.0MB |
+ | ``czech-morfflex2.1-pdtc2.0-250909-pos_only``        | 98.61 | 99.30 | 99.10 | 98.24 | 98.81    | 98.10 | 98.79 | 98.69 | 97.31 | 98.22    | 328k toks/s | 10.1MB |
+ | ``czech-morfflex2.1-pdtc2.0-250909-no_dia``          | 95.19 | 96.54 | 97.19 | 94.18 | 95.78    | 97.48 | 98.25 | 98.37 | 97.05 | 97.79    | 13k toks/s  | 31.7MB |
+ | ``czech-morfflex2.1-pdtc2.0-250909-no_dia-pos_only`` | 98.18 | 98.96 | 98.75 | 97.95 | 98.46    | 97.21 | 98.06 | 98.13 | 96.54 | 97.48    | 186k toks/s | 14.9MB |
+
+=== Czech Model History ===[czech-morfflex2-pdtc_changes]
+
+==== czech-morfflex2.0-pdtc1.0-220710 ====
+
+The ``czech-morfflex2.0-pdtc1.0-220710`` models use the
+[MorfFlex CZ 2.0 https://hdl.handle.net/11234/1-3186]
+Czech morphological dictionary and the Czech tagger is trained on
+[PDT-C 1.0 https://hdl.handle.net/11234/1-3185]. The morpholodical derivator
+is uses the [DeriNet 2.1 https://hdl.handle.net/11234/1-3765].
+The models work in MorphoDiTa version 1.9 or later and can be downloaded
+from [LINDAT/CLARIN repository https://hdl.handle.net/11234/1-4794].
+
+The PDT-C 1.0 corpus consists of four datasets, but some of them do not have an
+official train/dev/test split. We therefore used the following split (which is
+identical to PDT-C 2.0 official split, with the exception of PCEDT split):
+
+- PDT dataset is already split into train, dev (``dtest``), and test (``etest``).
+- PCEDT dataset is a translated version of the Wall Street Journal, so we used
+  the usual split into train (sections 0-18), dev (sections 19-21), and test
+  (sections 22-24).
+- PDTSC and FAUST datasets have no split, so we split it into dev (documents
+  with identifiers ending with 6), test (documents with identifiers ending with 7),
+  and train (all the remaining documents).
+
+
+The model performance using the PDT-C 1.0 train/dev/test split is the following:
 ||                                                      | Tags                                 ||||| Lemmas                               ||||| Performance           ||
 || Model                                                | PDT   | PCEDT | PDTSC | Faust | MacroAvg | PDT   | PCEDT | PDTSC | Faust | MacroAvg | Speed        | Size    |
  | ``czech-morfflex2.0-pdtc1.0-220710``                 | 96.29 | 97.00 | 96.90 | 94.87 | 96.27    | 98.69 | 98.85 | 98.18 | 97.53 | 98.31    |   19k toks/s |  24.4MB |
