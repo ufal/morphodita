@@ -1,5 +1,6 @@
 Version 1.11.3-dev
 ------------------
+- Update UFAL C++ Utils to 3.5.4 to silence g++ warning.
 
 
 Version 1.11.2 [15 Nov 23]
