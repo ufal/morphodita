@@ -29,4 +29,4 @@ sed "s/^# *__version__ *=.*$/__version__ = \"$1\"/" $dir/ufal/morphodita/__init_
 ./README.sh >$dir/README
 
 # Generate sdist
-(cd ufal.morphodita && python3 setup.py sdist && cd dist && tar xf ufal.morphodita-$1.tar.gz)
+(cd ufal.morphodita && python3 setup.py sdist && cd dist && tar xf ufal_morphodita-$1.tar.gz)
