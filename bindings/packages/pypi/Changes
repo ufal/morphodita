@@ -1,5 +1,8 @@
 Revision history for ufal.morphodita
 
+1.11.3.1 [24 Nov 25]
+         Update MorphoDiTa to version 1.11.3.
+
 1.11.2.1 [15 Nov 23]
          Update MorphoDiTa to version 1.11.2.
          Fix a bug in the tokenizers, which did not end a sentence on an
