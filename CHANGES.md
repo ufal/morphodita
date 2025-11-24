@@ -2,6 +2,7 @@ Version 1.11.3-dev
 ------------------
 - Update UFAL C++ Utils to 3.5.5 to silence g++ warning and fix UBSan errors.
 - Update MicroRestD to 1.2.4 to avoid Clang warning.
+- Fix UBSan errors.
 
 
 Version 1.11.2 [15 Nov 23]
