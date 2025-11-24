@@ -34,7 +34,7 @@ morphodita_java.cpp: morphodita_java.i ../common/morphodita.i
 	swig $(SWIG_FLAGS) -java -package cz.cuni.mff.ufal.morphodita -outdir $(call platform_name,cz/cuni/mff/ufal/morphodita) -o $@ $<
 
 morphodita.jar: morphodita_java.cpp
-	javac -source 7 -Xlint:-options $(wildcard cz/cuni/mff/ufal/morphodita/*.java)
+	javac -source 8 -Xlint:-options $(wildcard cz/cuni/mff/ufal/morphodita/*.java)
 	jar cf $@ $(patsubst %.java,%.class,$(wildcard cz/cuni/mff/ufal/morphodita/*.java))
 
 .PHONY: clean
