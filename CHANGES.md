@@ -1,5 +1,6 @@
 Version 1.11.4-dev
 ------------------
+- Fix compilation and avoid warnings in C++20.
 
 
 Version 1.11.3 [24 Nov 25]
